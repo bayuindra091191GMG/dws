@@ -43,39 +43,44 @@ class LoginController extends Controller
     }
 
     public function login(Request $request){
-        $rules = array(
-            'email'                 => 'required|email',
-            'password'              => 'required',
-        );
+        try{
+            $rules = array(
+                'email'                 => 'required|email',
+                'password'              => 'required',
+            );
 
-        $validator = Validator::make($request->all(), $rules);
+            $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            return View("auth.login")->withErrors(['msg' => ['Wrong Username or Password!']]);
+            if ($validator->fails()) {
+                return View("auth.login")->withErrors(['msg' => ['Wrong Username or Password!']]);
+            }
+
+            if ($this->hasTooManyLoginAttempts($request)) {
+                $this->fireLockoutEvent($request);
+
+                return $this->sendLockoutResponse($request);
+            }
+
+            if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                return redirect()->back()->withErrors('Wrong Email or Password!!', 'default')->withInput($request->only('email'));
+            }
+
+            $credentials = $this->credentials($request);
+            $userData = User::where('email', $request->email)->first();
+
+            if($userData->status_id == 4){
+                $email = $userData->email;
+                return View('auth.send-email', compact('email'));
+            }
+
+            if ($this->guard()->attempt($credentials, $request->has('remember'))) {
+                return $this->sendLoginResponse($request);
+            }
+
+            return Redirect::route('index');
         }
-
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-
-            return $this->sendLockoutResponse($request);
+        catch (\Exception $ex){
+            dd($ex);
         }
-
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->back()->withErrors('Wrong Email or Password!!', 'default')->withInput($request->only('email'));
-        }
-
-        $credentials = $this->credentials($request);
-        $userData = User::where('email', $request->email)->first();
-
-        if($userData->status_id == 4){
-            $email = $userData->email;
-            return View('auth.send-email', compact('email'));
-        }
-
-        if ($this->guard()->attempt($credentials, $request->has('remember'))) {
-            return $this->sendLoginResponse($request);
-        }
-
-        return Redirect::route('index');
     }
 }
