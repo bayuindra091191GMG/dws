@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Laravel\Passport\HasApiTokens;
 use Reliese\Database\Eloquent\Model as Eloquent;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -39,6 +40,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
+    use HasApiTokens;
 	protected $casts = [
 		'status_id' => 'int'
 	];
