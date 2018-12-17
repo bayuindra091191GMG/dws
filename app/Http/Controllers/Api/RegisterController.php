@@ -77,4 +77,19 @@ class RegisterController extends Controller
             'cities'    => $cities
         ], 200);
     }
+
+
+    /**
+     * Function to Send OTP to User Phone Number
+     */
+    public function sendOtp(){
+
+    }
+
+    /**
+     * Function to Verify OTP That Sent to User
+    */
+    public function verifyOtp(){
+
+    }
 }

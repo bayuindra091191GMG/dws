@@ -23,6 +23,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $email_token
  * @property string $phone
  * @property int $status_id
+ * @property int $routine_pickup
+ * @property double $wallet
+ * @property double $point
  * @property string $tax_no
  * @property \Carbon\Carbon $email_verified_at
  * @property string $remember_token
@@ -67,7 +70,10 @@ class User extends Authenticatable
 		'status_id',
 		'tax_no',
 		'email_verified_at',
-		'remember_token'
+		'remember_token',
+        'routine_pickup',
+        'wallet',
+        'point'
 	];
 
 	public function status()
