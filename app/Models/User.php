@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * 
  * @property int $id
  * @property string $first_name
+ * @property string $last_name
  * @property string $email
  * @property string $password
  * @property string $image_path
