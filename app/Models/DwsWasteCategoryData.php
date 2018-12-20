@@ -20,7 +20,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $img_path
  * @property string $description
  * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property int $created_by
+ * @property int $updated_by
  *
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
@@ -43,7 +45,10 @@ class DwsWasteCategoryData extends Eloquent
 		'sub_title',
 		'img_path',
 		'description',
-		'created_by'
+		'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
 	];
 
     public function createdBy()

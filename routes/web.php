@@ -87,7 +87,13 @@ Route::prefix('admin')->group(function(){
     Route::post('/waste-banks/update', 'Admin\WasteBankController@update')->name('admin.waste-banks.update');
     Route::post('/waste-banks/delete', 'Admin\WasteBankController@destroy')->name('admin.waste-banks.destroy');
 
-
+    // Dws Waste
+    Route::get('/dws-wastes', 'Admin\DwsWasteController@index')->name('admin.dws-wastes.index');
+    Route::get('/dws-wastes/create', 'Admin\DwsWasteController@create')->name('admin.dws-wastes.create');
+    Route::post('/dws-wastes/store', 'Admin\DwsWasteController@store')->name('admin.dws-wastes.store');
+    Route::get('/dws-wastes/edit/{item}', 'Admin\DwsWasteController@edit')->name('admin.dws-wastes.edit');
+    Route::post('/dws-wastes/update', 'Admin\DwsWasteController@update')->name('admin.dws-wastes.update');
+    Route::post('/dws-wastes/delete', 'Admin\DwsWasteController@destroy')->name('admin.dws-wastes.destroy');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -106,6 +112,7 @@ Route::get('/datatables-subscribes', 'Admin\SubscribeController@getIndex')->name
 Route::get('/datatables-vouchers', 'Admin\VoucherController@getIndex')->name('datatables.vouchers');
 Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables.faqs');
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
+Route::get('/datatables-dws-wastes', 'Admin\DwsWasteController@getIndex')->name('datatables.dws-wastes');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
