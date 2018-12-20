@@ -6,7 +6,7 @@
             <div class="card-body">
                 <h2 class="card-title m-b-0">Wastebanks</h2>
                 <div class="ml-auto text-right">
-                    <a href="{{ route('admin.admin-users.create') }}" class="btn btn-success">
+                    <a href="{{ route('admin.waste-banks.create') }}" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                 </div>
@@ -15,11 +15,11 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Address</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>PIC</th>
                         <th>Phone</th>
-                        <th>Address</th>
                         <th>Status</th>
                         <th>Created At</th>
                         <th>Created By</th>
@@ -46,14 +46,16 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
-            ajax: '{!! route('datatables.waste_banks') !!}',
+            ajax: '{!! route('datatables.waste-banks') !!}',
             order: [ [0, 'asc'] ],
             columns: [
-                { data: 'email', name: 'email', class: 'text-center'},
                 { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'superadmin', name: 'superadmin', class: 'text-center'},
-                { data: 'role', name: 'role', class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center'},
+                { data: 'address', name: 'address', class: 'text-center'},
+                { data: 'latitude', name: 'latitude', class: 'text-center'},
+                { data: 'longitude', name: 'longitude', class: 'text-center'},
+                { data: 'pic', name: 'pic', class: 'text-center'},
+                { data: 'phone', name: 'phone', class: 'text-center'},
+                { data: 'city', name: 'city', class: 'text-center'},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
@@ -62,6 +64,7 @@
                         return data;
                     }
                 },
+                { data: 'created_by', name: 'created_by', class: 'text-center'},
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
         });
@@ -75,5 +78,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.admin-users.destroy', 'redirectUrl' => 'admin.admin-users.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.waste-banks.destroy', 'redirectUrl' => 'admin.waste-banks.index'])
 @endsection

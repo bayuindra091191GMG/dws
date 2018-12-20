@@ -6,7 +6,7 @@
             <div class="card-body">
                 <h2 class="card-title m-b-0">Create New Waste Bank</h2>
 
-                {{ Form::open(['route'=>['admin.waste-bank.store'],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -25,17 +25,9 @@
                                                     </span>
                                                     </li>
                                                 </ul>
-                                            @endforeach
+                                            @endForeach
                                         <!-- Input -->
                                             <div class="body">
-                                                <div class="col-sm-12">
-                                                    <div class="form-check mb-2 mr-sm-2">
-                                                        <input type="checkbox" id="is_super_admin" name="is_super_admin" class="form-check-input"/>
-                                                        <label class="form-check-label" for="is_super_admin">
-                                                            Superadmin
-                                                        </label>
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
@@ -60,8 +52,8 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="name">MAPS (LATITUDE LONGITUDE) *</label>
-                                                            GOOGLE MAPS
+                                                            <label class="form-label" for="address">Address *</label>
+                                                            <textarea name="address" id="address" class="form-control" rows="10">{{ old('address') }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -69,18 +61,35 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="address">Name *</label>
-                                                            <textarea name="address" id="address" class="form-control" rows="10">
-                                                                {{ old('address') }}
-                                                            </textarea>
+                                                            <label class="form-label" for="searchmap">Location *</label>
+                                                            <input type="text" name="location" id="searchmap" class="form-control"/>
+                                                        </div>
+                                                        <div id="map-canvas" style="height: 200px;"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="latitude">Latitude</label>
+                                                            <input type="text" name="latitude" id="latitude" class="form-control" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="longitude">Longitude</label>
+                                                            <input type="text" name="longitude" id="longitude" class="form-control" readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="role">Role *</label>
-                                                        <select id="role" name="role" class="form-control"></select>
+                                                        <label for="pic">PIC *</label>
+                                                        <select id="pic" name="pic" class="form-control"></select>
                                                     </div>
                                                 </div>
 
@@ -88,13 +97,15 @@
                                                     <div class="form-group">
                                                         <label for="city">City *</label>
                                                         <select id="city" name="city" class="form-control">
-                                                            {{--CITY GAN--}}
+                                                            @foreach($cities as $city)
+                                                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                                <a href="{{ route('admin.waste-bank.index') }}" class="btn btn-danger">Exit</a>
+                                                <a href="{{ route('admin.waste-banks.index') }}" class="btn btn-danger">Exit</a>
                                                 <input type="submit" class="btn btn-success" value="Save">
                                             </div>
                                             <!-- #END# Input -->
@@ -114,22 +125,24 @@
 @endsection
 
 @section('styles')
-    <link href="{{ asset('css/select2-bootstrap41.min.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script type="text/javascript">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqhoPugts6VVh4RvBuAvkRqBz7yhdpKnQ&libraries=places"
+            type="text/javascript"></script>
 
-        $('#role').select2({
+    <script type="text/javascript">
+        $('#pic').select2({
             placeholder: {
                 id: '-1',
-                text: 'Choose Role...'
+                text: 'Choose Pic...'
             },
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.roles') }}',
+                url: '{{ route('select.admin-users') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -142,6 +155,47 @@
                     };
                 }
             }
+        });
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'), {
+            center:{
+                lat: -6.180495,
+                lng: 106.82834149999996
+            },
+            zoom: 15
+        });
+
+        var marker = new google.maps.Marker({
+            position:{
+                lat: -6.180495,
+                lng: 106.82834149999996
+            },
+            map: map,
+            draggable: true
+        });
+
+        var searchBox = new google.maps.places.SearchBox(document.getElementById('searchmap'));
+
+        google.maps.event.addListener(searchBox, 'places_changed', function(){
+            var places = searchBox.getPlaces();
+            var bounds = new google.maps.LatLngBounds();
+            var i, place;
+
+            for(i=0; place=places[i]; i++){
+                bounds.extend(place.geometry.location);
+                marker.setPosition(place.geometry.location);
+            }
+
+            map.fitBounds(bounds);
+            map.setZoom(15);
+        });
+
+        google.maps.event.addListener(marker, 'position_changed', function(){
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
+
+            $('#latitude').val(lat);
+            $('#longitude').val(lng);
         });
     </script>
 @endsection

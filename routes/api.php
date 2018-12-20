@@ -23,5 +23,7 @@ Route::middleware('auth:api')->get('/get-users', 'Api\UserController@index');
 Route::middleware('auth:api')->group(function(){
     Route::get('/get-users', 'Api\UserController@index');
     Route::get('/registration', 'Api\RegisterController@registrationData');
-    Route::post('/register', 'Api\RegisterController@register');
+    Route::get('/waste-banks', 'Api\WasteBankController@getData');
 });
+
+Route::post('/register', 'Api\RegisterController@register');

@@ -14,7 +14,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $name
- * @property string $latittude
+ * @property string $latitude
  * @property string $longitude
  * @property int $pic_id
  * @property string $phone
@@ -28,6 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\City $city
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
+ * @property \App\Models\AdminUser $pic
  *
  * @package App\Models
  */
@@ -42,7 +43,7 @@ class WasteBank extends Eloquent
 
 	protected $fillable = [
 		'name',
-		'latittude',
+		'latitude',
 		'longitude',
 		'pic_id',
 		'phone',
@@ -56,6 +57,11 @@ class WasteBank extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\City::class);
 	}
+
+    public function pic()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
+    }
 
     public function createdBy()
     {

@@ -53,28 +53,11 @@ Route::prefix('admin')->group(function(){
     Route::post('/categories/update', 'Admin\CategoryController@update')->name('admin.categories.update');
     Route::post('/categories/delete', 'Admin\CategoryController@destroy')->name('admin.categories.destroy');
 
-    // Currency
-    Route::get('/currencies', 'Admin\CurrencyController@index')->name('admin.currencies.index');
-
     // Contact Message
     Route::get('/contact-messages', 'Admin\ContactMessageController@index')->name('admin.contact-messages.index');
 
     // Subscribes
     Route::get('/subscribes', 'Admin\SubscribeController@index')->name('admin.subscribes.index');
-
-    // Store Address
-    Route::get('/store-address', 'Admin\StoreAddressController@index')->name('admin.store-address.index');
-    Route::get('/store-address/create', 'Admin\StoreAddressController@create')->name('admin.store-address.create');
-    Route::post('/store-address/delete', 'Admin\StoreAddressController@destroy')->name('admin.store-address.destroy');
-
-    // Voucher
-    Route::get('/vouchers/', 'Admin\VoucherController@index')->name('admin.vouchers.index');
-    Route::get('/vouchers/show/{item}', 'Admin\VoucherController@show')->name('admin.vouchers.show');
-    Route::get('/vouchers/create', 'Admin\VoucherController@create')->name('admin.vouchers.create');
-    Route::post('/vouchers/store', 'Admin\VoucherController@store')->name('admin.vouchers.store');
-    Route::get('/vouchers/edit/{item}', 'Admin\VoucherController@edit')->name('admin.vouchers.edit');
-    Route::post('/vouchers/update', 'Admin\VoucherController@update')->name('admin.vouchers.update');
-    Route::post('/vouchers/delete', 'Admin\VoucherController@destroy')->name('admin.vouchers.destroy');
 
     // FAQ
     Route::get('/faqs', 'Admin\FaqController@index')->name('admin.faqs.index');
@@ -95,6 +78,16 @@ Route::prefix('admin')->group(function(){
     Route::get('/product/edit-customize/{item}', 'Admin\ProductController@editCustomize')->name('admin.product.edit.customize');
     Route::post('/product/update-customize/{item}', 'Admin\ProductController@updateCustomize')->name('admin.product.update.customize');
     Route::get('/product/edit/{item}', 'Admin\ProductController@edit')->name('admin.product.edit');
+
+    // Wastebanks
+    Route::get('/waste-banks', 'Admin\WasteBankController@index')->name('admin.waste-banks.index');
+    Route::get('/waste-banks/create', 'Admin\WasteBankController@create')->name('admin.waste-banks.create');
+    Route::post('/waste-banks/store', 'Admin\WasteBankController@store')->name('admin.waste-banks.store');
+    Route::get('/waste-banks/edit/{item}', 'Admin\WasteBankController@edit')->name('admin.waste-banks.edit');
+    Route::post('/waste-banks/update', 'Admin\WasteBankController@update')->name('admin.waste-banks.update');
+    Route::post('/waste-banks/delete', 'Admin\WasteBankController@destroy')->name('admin.waste-banks.destroy');
+
+
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -112,11 +105,13 @@ Route::get('/datatables-contact-message', 'Admin\ContactMessageController@getInd
 Route::get('/datatables-subscribes', 'Admin\SubscribeController@getIndex')->name('datatables.subscribes');
 Route::get('/datatables-vouchers', 'Admin\VoucherController@getIndex')->name('datatables.vouchers');
 Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables.faqs');
+Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
 Route::get('/select-categories', 'Admin\CategoryController@getCategories')->name('select.categories');
 Route::get('/select-products', 'Admin\ProductController@getProducts')->name('select.products');
+Route::get('/select-admin-users', 'Admin\AdminUserController@getAdminUsers')->name('select.admin-users');
 
 // Third Party API
 Route::get('/update-currency', 'Admin\CurrencyController@getCurrenciesUpdate')->name('update-currencies');

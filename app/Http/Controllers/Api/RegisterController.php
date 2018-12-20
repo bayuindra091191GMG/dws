@@ -32,7 +32,7 @@ class RegisterController extends Controller
     public function register(Request $request){
         $rules = array(
             'email'                 => 'required|email|max:100|unique:users',
-            'name'            => 'required|max:100',
+            'name'                  => 'required|max:100',
             'phone'                 => 'required|unique:users',
             'password'              => 'required|min:6|max:20|same:password',
             'password_confirmation' => 'required|same:password'

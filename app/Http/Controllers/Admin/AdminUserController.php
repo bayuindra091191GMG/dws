@@ -25,6 +25,23 @@ class AdminUserController extends Controller
         $this->middleware('auth:admin');
     }
 
+    public function getAdminUsers(Request $request){
+        $term = trim($request->q);
+        $adminUsers = AdminUser::where(function ($q) use ($term) {
+            $q->where('first_name', 'LIKE', '%' . $term . '%')
+            ->where('last_name', 'LIKE', '%' . $term . '%');
+        })
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($adminUsers as $adminUser) {
+            $formatted_tags[] = ['id' => $adminUser->id, 'text' => $adminUser->first_name . ' ' . $adminUser->last_name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function getIndex(Request $request){
         $users = AdminUser::query();
         return DataTables::of($users)

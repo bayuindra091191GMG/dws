@@ -4,9 +4,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Edit Admin Users</h2>
+                <h2 class="card-title m-b-0">Edit Waste Bank</h2>
 
-                {{ Form::open(['route'=>['admin.admin-users.update'],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.waste-banks.update'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -16,27 +16,26 @@
                                 <div class="card-body b-b">
                                     <div class="tab-content pb-3" id="v-pills-tabContent">
                                         <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
-                                            <!-- Input -->
+                                            @include('partials.admin._messages')
+                                            @foreach($errors->all() as $error)
+                                                <ul>
+                                                    <li>
+                                                    <span class="help-block">
+                                                        <strong style="color: #ff3d00;"> {{ $error }} </strong>
+                                                    </span>
+                                                    </li>
+                                                </ul>
+                                        @endForeach
+                                        <!-- Input -->
                                             <div class="body">
-                                                <div class="col-sm-12">
-                                                    <div class="form-check mb-2 mr-sm-2">
-                                                        @if($adminUser->is_super_admin == 1)
-                                                            <input type="checkbox" id="is_super_admin" name="is_super_admin" value="true" class="form-check-input" checked/>
-                                                        @else
-                                                            <input type="checkbox" id="is_super_admin" name="is_super_admin" value="true" class="form-check-input"/>
-                                                        @endif
-                                                        <label class="form-check-label" for="is_super_admin">
-                                                            Superadmin
-                                                        </label>
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="email">Email *</label>
-                                                            <input id="email" type="email" class="form-control"
-                                                                   name="email" value="{{ $adminUser->email }}">
+                                                            <label class="form-label" for="name">Name *</label>
+                                                            <input id="name" type="text" class="form-control"
+                                                                   name="name" value="{{ $wasteBank->name }}">
+                                                            <input type="hidden" value="{{ $wasteBank->id }}" name="id"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -44,9 +43,9 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="password">Password *</label>
-                                                            <input id="password" type="password" class="form-control"
-                                                                   name="password" required>
+                                                            <label class="form-label" for="phone">Phone *</label>
+                                                            <input id="phone" type="text" class="form-control"
+                                                                   name="phone" value="{{ $wasteBank->phone }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -54,9 +53,8 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="password_confirmation">Password Confirmation *</label>
-                                                            <input id="password_confirmation" type="password" class="form-control"
-                                                                   name="password_confirmation" required>
+                                                            <label class="form-label" for="address">Address *</label>
+                                                            <textarea name="address" id="address" class="form-control" rows="10">{{ $wasteBank->address }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -64,9 +62,18 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="first_name">First Name *</label>
-                                                            <input id="first_name" name="first_name" type="text" value="{{ $adminUser->first_name }}"
-                                                                   class="form-control" required>
+                                                            <label class="form-label" for="searchmap">Location *</label>
+                                                            <input type="text" name="location" id="searchmap" class="form-control"/>
+                                                        </div>
+                                                        <div id="map-canvas" style="height: 200px;"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="latitude">Latitude</label>
+                                                            <input type="text" name="latitude" id="latitude" class="form-control" value="{{ $wasteBank->latitude }}" readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -74,39 +81,38 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="last_name">Last Name *</label>
-                                                            <input id="last_name" name="last_name" type="text" value="{{ $adminUser->last_name }}"
-                                                                   class="form-control" required>
+                                                            <label class="form-label" for="longitude">Longitude</label>
+                                                            <input type="text" name="longitude" id="longitude" class="form-control" value="{{ $wasteBank->longitude }}" readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="role">Role *</label>
-                                                        <select id="role" name="role" class="form-control">
-                                                            <option value="{{ $adminUser->role_id }}">{{ $adminUser->role->name }}</option>
+                                                        <label for="pic">PIC *</label>
+                                                        <select id="pic" name="pic" class="form-control">
+                                                            <option value="{{ $wasteBank->pic_id }}">{{ $wasteBank->pic->first_name . ' ' . $wasteBank->pic->last_name }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="status">Status *</label>
-                                                        <select id="status" name="status" class="form-control">
-                                                            @if($adminUser->status_id == 1)
-                                                                <option value="1" selected>Active</option>
-                                                                <option value="2">Not Active</option>
-                                                            @else
-                                                                <option value="1">Active</option>
-                                                                <option value="2" selected>Not Active</option>
-                                                            @endif
+                                                        <label for="city">City *</label>
+                                                        <select id="city" name="city" class="form-control">
+                                                            @foreach($cities as $city)
+                                                                @if($city->id == $wasteBank->city_id)
+                                                                    <option value="{{ $city->id }}" selected>{{ $city->name }}</option>
+                                                                @else
+                                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                                @endif
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                                <a href="{{ route('admin.admin-users.index') }}" class="btn btn-danger">Exit</a>
+                                                <a href="{{ route('admin.waste-banks.index') }}" class="btn btn-danger">Exit</a>
                                                 <input type="submit" class="btn btn-success" value="Save">
                                             </div>
                                             <!-- #END# Input -->
@@ -123,31 +129,27 @@
         </div>
     </div>
 
-
 @endsection
 
 @section('styles')
-    <link href="{{ asset('css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
-    <style>
-        .select2-container--default .select2-search--dropdown::before {
-            content: "";
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script type="text/javascript">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqhoPugts6VVh4RvBuAvkRqBz7yhdpKnQ&libraries=places"
+            type="text/javascript"></script>
 
-        $('#role').select2({
+    <script type="text/javascript">
+        $('#pic').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Role...'
+                text: 'Choose Pic...'
             },
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.roles') }}',
+                url: '{{ route('select.admin-users') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -160,6 +162,52 @@
                     };
                 }
             }
+        });
+
+        var lats = '{{ $wasteBank->latitude }}';
+        var lngs = '{{ $wasteBank->longitude }}';
+        var latitude = parseFloat(lats);
+        var longitude = parseFloat(lngs);
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'), {
+            center:{
+                lat: latitude,
+                lng: longitude
+            },
+            zoom: 15
+        });
+
+        var marker = new google.maps.Marker({
+            position:{
+                lat: latitude,
+                lng: longitude
+            },
+            map: map,
+            draggable: true
+        });
+
+        var searchBox = new google.maps.places.SearchBox(document.getElementById('searchmap'));
+
+        google.maps.event.addListener(searchBox, 'places_changed', function(){
+            var places = searchBox.getPlaces();
+            var bounds = new google.maps.LatLngBounds();
+            var i, place;
+
+            for(i=0; place=places[i]; i++){
+                bounds.extend(place.geometry.location);
+                marker.setPosition(place.geometry.location);
+            }
+
+            map.fitBounds(bounds);
+            map.setZoom(15);
+        });
+
+        google.maps.event.addListener(marker, 'position_changed', function(){
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
+
+            $('#latitude').val(lat);
+            $('#longitude').val(lng);
         });
     </script>
 @endsection
