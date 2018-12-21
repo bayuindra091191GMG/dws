@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,13 +12,20 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return User[]|\Illuminate\Database\Eloquent\Collection
+     * @return UserResource
      */
     public function index()
     {
-        $users = User::all();
+        error_log("exception");
+        try{
 
-        return $users;
+            $users = User::all();
+
+            return new UserResource($users);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
     }
 
     /**

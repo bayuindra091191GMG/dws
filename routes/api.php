@@ -17,7 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->get('/get-users', 'Api\UserController@index');
+Route::middleware('auth:api')->get('/users', 'Api\UserController@index');
+Route::get('/noauth/users', 'Api\UserController@index');
 
 //User Management
 Route::middleware('auth:api')->group(function(){
