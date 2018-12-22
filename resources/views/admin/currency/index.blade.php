@@ -61,6 +61,9 @@
                     }
                 }
             ],
+            language: {
+                url: "{{ asset('indonesian.json') }}"
+            }
         });
     </script>
 @endsection

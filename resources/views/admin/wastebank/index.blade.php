@@ -67,6 +67,9 @@
                 { data: 'created_by', name: 'created_by', class: 'text-center'},
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
+            language: {
+                url: "{{ asset('indonesian.json') }}"
+            }
         });
 
         $(document).on('click', '.delete-modal', function(){

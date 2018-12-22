@@ -53,6 +53,9 @@
                 },
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
+            language: {
+                url: "{{ asset('indonesian.json') }}"
+            }
         });
 
         $(document).on('click', '.delete-modal', function(){
