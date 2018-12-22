@@ -2,7 +2,7 @@
 <!-- footer -->
 <!-- ============================================================== -->
 <footer class="footer text-center">
-    All Rights Reserved by Matrix-admin. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+    All Rights Reserved by XXX. Designed and Developed by <a href="https://google.com">XXXX</a>.
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->
