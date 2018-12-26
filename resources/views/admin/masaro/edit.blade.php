@@ -92,11 +92,14 @@
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
     <script type="text/javascript">
-        $("#main_image")
-            .fileinput({
-                allowedFileExtensions: ["jpg", "jpeg", "png"],
-                showUpload: false,
-            });
+        // Add autonumeric
+        priceFormat = new AutoNumeric('#price', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0,
+            modifyValueOnWheel: false
+        });
     </script>
 @endsection

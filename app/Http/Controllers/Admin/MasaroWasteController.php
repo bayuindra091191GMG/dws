@@ -136,7 +136,6 @@ class MasaroWasteController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
-            'golongan'      => 'required',
             'price'         => 'required',
             'description'   => 'required',
         ]);

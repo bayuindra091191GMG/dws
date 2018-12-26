@@ -23,6 +23,7 @@ Route::get('/noauth/users', 'Api\UserController@index');
 //User Management
 Route::middleware('auth:api')->group(function(){
     Route::get('/get-users', 'Api\UserController@index');
+    Route::post('/get-user-data', 'Api\UserController@show');
     Route::get('/registration', 'Api\RegisterController@registrationData');
     Route::get('/waste-banks', 'Api\WasteBankController@getData');
     Route::get('/check-category', 'Api\GeneralController@checkCategory');

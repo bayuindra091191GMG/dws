@@ -52,12 +52,20 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return UserResource
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        error_log("exception");
+        try{
+            $users = User::find($request->input('user_id'));
+
+            return new UserResource($users);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
     }
 
     /**

@@ -98,7 +98,11 @@
                                                         <label for="city">City *</label>
                                                         <select id="city" name="city" class="form-control">
                                                             @foreach($cities as $city)
-                                                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                                @if($city->id == 152)
+                                                                    <option value="{{ $city->id }}" selected>{{ $city->name }}</option>
+                                                                @else
+                                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
