@@ -25,6 +25,9 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/get-users', 'Api\UserController@index');
     Route::get('/registration', 'Api\RegisterController@registrationData');
     Route::get('/waste-banks', 'Api\WasteBankController@getData');
+    Route::get('/check-category', 'Api\GeneralController@checkCategory');
+    Route::get('/dws-category', 'Api\DwsWasteController@getData');
+    Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
 });
 
 Route::post('/register', 'Api\RegisterController@register');

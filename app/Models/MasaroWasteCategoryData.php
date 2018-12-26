@@ -41,7 +41,9 @@ class MasaroWasteCategoryData extends Eloquent
 		'img_path',
 		'price',
 		'created_by',
-		'updated_by'
+		'updated_by',
+        'created_at',
+        'updated_at'
 	];
 
     public function createdBy()
