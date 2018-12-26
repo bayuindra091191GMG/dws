@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Dws Waste Category</h2>
-                {{ Form::open(['route'=>['admin.dws-wastes.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
+                <h2 class="card-title m-b-0">Create New Masaro Waste Category</h2>
+                {{ Form::open(['route'=>['admin.masaro-wastes.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -40,16 +40,6 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="title">Golongan *</label>
-                                                            <input id="golongan" type="text" class="form-control"
-                                                                   name="golongan" value="{{ old('golongan') }}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12">
-                                                    <div class="form-group form-float form-group-lg">
-                                                        <div class="form-line">
                                                             <label class="form-label" for="price">Price *</label>
                                                             <input id="price" type="text" class="form-control"
                                                                    name="price" value="{{ old('price') }}">
@@ -70,14 +60,13 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="description">Description *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ old('description') }}</textarea>
-                                                            <div id="editor" style="height: 300px;">{{ old('description') }}</div>
+                                                            <textarea name="description" id="description" class="form-control" rows="10">{{ old('description') }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                                <a href="{{ route('admin.dws-wastes.index') }}" class="btn btn-danger">Exit</a>
+                                                <a href="{{ route('admin.masaro-wastes.index') }}" class="btn btn-danger">Exit</a>
                                                 <input type="submit" class="btn btn-success" value="Save">
                                             </div>
                                             <!-- #END# Input -->
@@ -98,21 +87,15 @@
 
 @section('styles')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/libs/quill/dist/quill.snow.css') }}">
 @endsection
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script src="{{ asset('backend/assets/libs/quill/dist/quill.min.js') }}"></script>
     <script type="text/javascript">
-        var quill = new Quill('#editor', {
-            theme: 'snow'
-        });
-
-        $('#general-form').submit(function() {
-            $('#description').val(quill.root.innerHTML);
-
-            return true; // return false to cancel form action
-        });
+        $("#main_image")
+            .fileinput({
+                allowedFileExtensions: ["jpg", "jpeg", "png"],
+                showUpload: false,
+            });
     </script>
 @endsection

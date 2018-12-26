@@ -6,7 +6,7 @@
             <div class="card-body">
                 <h2 class="card-title m-b-0">Dws Waste Category</h2>
                 <div class="ml-auto text-right">
-                    <a href="{{ route('admin.dws-wastes.create') }}" class="btn btn-success">
+                    <a href="{{ route('admin.masaro-wastes.create') }}" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                 </div>
@@ -15,7 +15,6 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Golongan</th>
                         <th>Price</th>
                         <th>Description</th>
                         <th>Image</th>
@@ -44,11 +43,10 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
-            ajax: '{!! route('datatables.dws-wastes') !!}',
+            ajax: '{!! route('datatables.masaro-wastes') !!}',
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'golongan', name: 'golongan', class: 'text-center'},
                 { data: 'price', name: 'price', class: 'text-center'},
                 { data: 'description', name: 'description', class: 'text-center'},
                 { data: 'image', name: 'image', class: 'text-center'},
@@ -77,5 +75,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deletejs', ['routeUrl' => 'admin.dws-wastes.destroy', 'redirectUrl' => 'admin.dws-wastes.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.masaro-wastes.destroy', 'redirectUrl' => 'admin.masaro-wastes.index'])
 @endsection

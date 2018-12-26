@@ -25,8 +25,7 @@ class DwsWasteCategoryTransformer extends TransformerAbstract
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $dwsWaste->id ."' ><i class='fas fa-trash-alt'></i></a>";
 
             return[
-                'title'             => $dwsWaste->title,
-                'sub_title'         => $dwsWaste->sub_title,
+                'golongan'          => $dwsWaste->golongan,
                 'name'              => $dwsWaste->name,
                 'price'             => $dwsWaste->price,
                 'description'       => $dwsWaste->description,

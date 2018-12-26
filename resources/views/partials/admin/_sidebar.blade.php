@@ -72,6 +72,12 @@
                                 <span class="hide-menu"> Dws Waste Categories </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.masaro-wastes.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-note-plus"></i>
+                                <span class="hide-menu"> Masaro Waste Categories </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

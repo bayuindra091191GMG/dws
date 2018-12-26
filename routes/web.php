@@ -94,6 +94,14 @@ Route::prefix('admin')->group(function(){
     Route::get('/dws-wastes/edit/{item}', 'Admin\DwsWasteController@edit')->name('admin.dws-wastes.edit');
     Route::post('/dws-wastes/update', 'Admin\DwsWasteController@update')->name('admin.dws-wastes.update');
     Route::post('/dws-wastes/delete', 'Admin\DwsWasteController@destroy')->name('admin.dws-wastes.destroy');
+
+    // Masaro Waste
+    Route::get('/masaro-wastes', 'Admin\MasaroWasteController@index')->name('admin.masaro-wastes.index');
+    Route::get('/masaro-wastes/create', 'Admin\MasaroWasteController@create')->name('admin.masaro-wastes.create');
+    Route::post('/masaro-wastes/store', 'Admin\MasaroWasteController@store')->name('admin.masaro-wastes.store');
+    Route::get('/masaro-wastes/edit/{item}', 'Admin\MasaroWasteController@edit')->name('admin.masaro-wastes.edit');
+    Route::post('/masaro-wastes/update', 'Admin\MasaroWasteController@update')->name('admin.masaro-wastes.update');
+    Route::post('/masaro-wastes/delete', 'Admin\MasaroWasteController@destroy')->name('admin.masaro-wastes.destroy');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -113,6 +121,7 @@ Route::get('/datatables-vouchers', 'Admin\VoucherController@getIndex')->name('da
 Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables.faqs');
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
 Route::get('/datatables-dws-wastes', 'Admin\DwsWasteController@getIndex')->name('datatables.dws-wastes');
+Route::get('/datatables-masaro-wastes', 'Admin\MasaroWasteController@getIndex')->name('datatables.masaro-wastes');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 26 Dec 2018 04:18:30 +0000.
+ * Date: Wed, 26 Dec 2018 05:43:16 +0000.
  */
 
 namespace App\Models;
@@ -19,18 +19,20 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $price
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
- * 
- * @property \App\Models\AdminUser $admin_user
+ * @property int $updated_by
+ * @property \Carbon\Carbon $updated_at
+ *
+ * @property \App\Models\AdminUser $createdBy
+ * @property \App\Models\AdminUser $updatedBy
  *
  * @package App\Models
  */
 class MasaroWasteCategoryData extends Eloquent
 {
-	public $timestamps = false;
-
 	protected $casts = [
 		'price' => 'float',
-		'created_by' => 'int'
+		'created_by' => 'int',
+		'updated_by' => 'int'
 	];
 
 	protected $fillable = [
@@ -38,11 +40,17 @@ class MasaroWasteCategoryData extends Eloquent
 		'description',
 		'img_path',
 		'price',
-		'created_by'
+		'created_by',
+		'updated_by'
 	];
 
-	public function admin_user()
-	{
-		return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+    }
 }
