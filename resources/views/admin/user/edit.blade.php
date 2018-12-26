@@ -36,7 +36,7 @@
                                                         <div class="form-line">
                                                             <label class="form-label" for="password">Password *</label>
                                                             <input id="password" type="password" class="form-control"
-                                                                   name="password" required>
+                                                                   name="password">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -46,7 +46,7 @@
                                                         <div class="form-line">
                                                             <label class="form-label" for="password_confirmation">Password Confirmation *</label>
                                                             <input id="password_confirmation" type="password" class="form-control"
-                                                                   name="password_confirmation" required>
+                                                                   name="password_confirmation">
                                                         </div>
                                                     </div>
                                                 </div>
