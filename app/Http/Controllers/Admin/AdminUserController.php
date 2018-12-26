@@ -151,27 +151,27 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|max:100',
             'last_name'         => 'required|max:100',
             'email'             => 'required|regex:/^\S*$/u|unique:admin_users|max:50',
-            'role'              => 'required',
-            'password'          => 'required'
+            'role'              => 'required'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!'
         ]);
 
-        $validator->sometimes('password', 'min:6|confirmed', function ($input) {
-            return $input->password;
-        });
+        if(!ctype_space($request->input('password'))){
+            $validator->sometimes('password', 'min:6|confirmed', function ($input) {
+                return $input->password;
+            });
+        }
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         //Create Admin
-        $user = Auth::guard('admin')->user();
         if($request->input('is_super_admin') == 'on'){
             $superAdmin = 1;
         }
@@ -179,7 +179,7 @@ class AdminUserController extends Controller
             $superAdmin = 0;
         }
 
-        $adminUser = AdminUser::find($id);
+        $adminUser = AdminUser::find($request->input('id'));
         $adminUser->email = $request->input('email');
         $adminUser->first_name = $request->input('first_name');
         $adminUser->last_name = $request->input('last_name');

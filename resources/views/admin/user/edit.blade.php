@@ -26,6 +26,7 @@
                                                             <label class="form-label" for="email">Email *</label>
                                                             <input id="email" type="email" class="form-control"
                                                                    name="email" value="{{ $user->email }}">
+                                                            <input type="hidden" value="{{ $user->id }}" name="id"/>
                                                         </div>
                                                     </div>
                                                 </div>

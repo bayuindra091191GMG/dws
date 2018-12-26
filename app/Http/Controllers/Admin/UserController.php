@@ -94,27 +94,28 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|max:100',
             'last_name'         => 'required|max:100',
             'email'             => 'required|regex:/^\S*$/u|unique:users|max:50',
-            'phone'             => 'required',
-            'password'          => 'required'
+            'phone'             => 'required'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!'
         ]);
 
-        $validator->sometimes('password', 'min:6|confirmed', function ($input) {
-            return $input->password;
-        });
+        if(!ctype_space($request->input('password'))){
+            $validator->sometimes('password', 'min:6|confirmed', function ($input) {
+                return $input->password;
+            });
+        }
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        $user = User::find($id);
+        $user = User::find($request->input('id'));
         $user->email = $request->input('email');
         $user->name = $request->input('name');
         $user->phone = $request->input('phone');

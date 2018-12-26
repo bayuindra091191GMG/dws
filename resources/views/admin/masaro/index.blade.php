@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Dws Waste Category</h2>
+                <h2 class="card-title m-b-0">Masaro Waste Category</h2>
                 <div class="ml-auto text-right">
                     <a href="{{ route('admin.masaro-wastes.create') }}" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah
