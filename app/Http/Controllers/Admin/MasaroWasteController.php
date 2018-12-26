@@ -179,7 +179,7 @@ class MasaroWasteController extends Controller
             $masaroWaste = MasaroWasteCategoryData::find($masaroWasteid);
             $masaroWaste->delete();
 
-            $image_path = "storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
+            $image_path = public_path()."/storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
             if(File::exists($image_path)) {
                 File::delete($image_path);
             }

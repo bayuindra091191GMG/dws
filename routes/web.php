@@ -29,6 +29,10 @@ Route::prefix('admin')->group(function(){
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
 
+    // Setting
+    Route::get('/setting', 'Admin\AdminController@showSetting')->name('admin.setting');
+    Route::post('/setting-update', 'Admin\AdminController@saveSetting')->name('admin.setting.update');
+
     // Admin User
     Route::get('/admin-users', 'Admin\AdminUserController@index')->name('admin.admin-users.index');
     Route::get('/admin-users/create', 'Admin\AdminUserController@create')->name('admin.admin-users.create');

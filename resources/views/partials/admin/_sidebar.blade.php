@@ -67,6 +67,12 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ route('admin.setting') }}" class="sidebar-link">
+                                <i class="mdi mdi-note-plus"></i>
+                                <span class="hide-menu"> Category Setting </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('admin.dws-wastes.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
                                 <span class="hide-menu"> Dws Waste Categories </span>
