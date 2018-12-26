@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Mail\EmailVerification;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -17,6 +20,18 @@ class HomeController extends Controller
 //        $this->middleware('auth');
     }
 
+    public function testEmail(){
+        try{
+            $user = User::find('9');
+            $emailVerify = new EmailVerification($user);
+            Mail::to($user->email)->send($emailVerify);
+            return true;
+        }
+        catch(\Exception $ex){
+            return $ex;
+        }
+
+    }
     /**
      * Show the application dashboard.
      *
