@@ -30,7 +30,6 @@ class HomeController extends Controller
         catch(\Exception $ex){
             return $ex;
         }
-
     }
     /**
      * Show the application dashboard.
