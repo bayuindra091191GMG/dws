@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Mail\EmailVerification;
+use App\Models\Address;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Province;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +22,8 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
@@ -32,7 +35,8 @@ class RegisterController extends Controller
     public function register(Request $request){
         $rules = array(
             'email'                 => 'required|email|max:100|unique:users',
-            'name'                  => 'required|max:100',
+            'first_name'            => 'required|max:100',
+            'last_name'             => 'required|max:100',
             'phone'                 => 'required|unique:users',
             'password'              => 'required|min:6|max:20|same:password',
             'password_confirmation' => 'required|same:password'
@@ -52,6 +56,18 @@ class RegisterController extends Controller
         try{
             $user = $this->create($request->all());
 
+            //Save Address
+            $address = Address::create([
+                'user_id'  => $user->id,
+                'description'   => $request->input('description'),
+                'latitude'      => $request->input('latitude'),
+                'longitude'     => $request->input('longitude'),
+                'city'          => $request->input('city'),
+                'province'      => $request->input('province'),
+                'postal_code'   => $request->input('postal_code'),
+                'created_at'    => Carbon::now('Asia/Jakarta')
+            ]);
+
             $emailVerify = new EmailVerification($user);
             Mail::to($user->email)->send($emailVerify);
 
@@ -67,12 +83,10 @@ class RegisterController extends Controller
     }
 
     public function registrationData(){
-        $countries = Country::all();
         $provinces = Province::all();
         $cities = City::all();
 
         return Response::json([
-            'countries' => $countries,
             'provinces' => $provinces,
             'cities'    => $cities
         ], 200);

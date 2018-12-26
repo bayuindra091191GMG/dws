@@ -14,9 +14,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $name
- * @property string $title
+ * @property string $golongan
  * @property float $price
- * @property string $sub_title
  * @property string $img_path
  * @property string $description
  * @property \Carbon\Carbon $created_at
@@ -40,9 +39,8 @@ class DwsWasteCategoryData extends Eloquent
 
 	protected $fillable = [
 		'name',
-		'title',
+		'golongan',
 		'price',
-		'sub_title',
 		'img_path',
 		'description',
 		'created_by',

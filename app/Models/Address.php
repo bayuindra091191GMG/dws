@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 11 Dec 2018 08:39:37 +0000.
+ * Date: Wed, 26 Dec 2018 04:00:13 +0000.
  */
 
 namespace App\Models;
@@ -23,6 +23,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $recipient_name
  * @property string $recipient_phone
  * @property string $name
+ * @property string $latitude
+ * @property string $longitude
+ * @property \Carbon\Carbon $created_at
  * 
  * @property \App\Models\User $user
  *
@@ -52,7 +55,9 @@ class Address extends Eloquent
 		'postal_code',
 		'recipient_name',
 		'recipient_phone',
-		'name'
+		'name',
+		'latitude',
+		'longitude'
 	];
 
 	public function city()

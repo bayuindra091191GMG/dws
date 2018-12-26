@@ -17,6 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $name
  * @property string $address
  * @property string $description
+ * @property int $is_masaro
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
@@ -39,6 +40,7 @@ class Company extends Eloquent
 		'name',
 		'address',
 		'description',
+        'is_masaro',
 		'created_by',
 		'updated_by'
 	];
