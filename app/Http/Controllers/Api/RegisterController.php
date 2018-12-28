@@ -38,8 +38,7 @@ class RegisterController extends Controller
             'first_name'            => 'required|max:100',
             'last_name'             => 'required|max:100',
             'phone'                 => 'required|unique:users',
-            'password'              => 'required|min:6|max:20|same:password',
-            'password_confirmation' => 'required|same:password'
+            'password'              => 'required|min:6|max:20',
         );
 
         $messages = array(
@@ -56,14 +55,19 @@ class RegisterController extends Controller
         try{
             $user = $this->create($request->all());
 
+//            return Response::json([
+//                'message' => $user,
+//                'Request'   => $request->all()
+//            ], 200);
+
             //Save Address
             $address = Address::create([
-                'user_id'  => $user->id,
+                'user_id'       => $user->id,
                 'description'   => $request->input('description'),
                 'latitude'      => $request->input('latitude'),
                 'longitude'     => $request->input('longitude'),
-                'city'          => $request->input('city'),
-                'province'      => $request->input('province'),
+                'city'          => (int)$request->input('city'),
+                'province'      => (int)$request->input('province'),
                 'postal_code'   => $request->input('postal_code'),
                 'created_at'    => Carbon::now('Asia/Jakarta')
             ]);
@@ -77,7 +81,8 @@ class RegisterController extends Controller
         }
         catch (\Exception $exception){
             return Response::json([
-                'message' => "Something went Wrong!"
+                'message' => "Something went Wrong!",
+                'exception' => $exception
             ], 500);
         }
     }

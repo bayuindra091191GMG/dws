@@ -57,7 +57,8 @@ class Address extends Eloquent
 		'recipient_phone',
 		'name',
 		'latitude',
-		'longitude'
+		'longitude',
+        'created_at'
 	];
 
 	public function city()

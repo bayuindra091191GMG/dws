@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         error_log("exception");
         try{
-            $users = User::find($request->input('user_id'));
+            $users = User::where('email', $request->input('email'))->first();
 
             return new UserResource($users);
         }
