@@ -14,9 +14,7 @@ class MasaroWasteController extends Controller
         try{
             $masaroWaste = MasaroWasteCategoryData::all();
 
-            return Response::json([
-                'masaro_wastes' => $masaroWaste,
-            ], 200);
+            return Response::json($masaroWaste);
         }
         catch (\Exception $ex){
             return Response::json([

@@ -14,9 +14,7 @@ class DwsWasteController extends Controller
         try{
             $dwsWastes = DwsWasteCategoryData::all();
 
-            return Response::json([
-                'dws_wastes' => $dwsWastes,
-            ], 200);
+            return Response::json($dwsWastes);
         }
         catch (\Exception $ex){
             return Response::json([
