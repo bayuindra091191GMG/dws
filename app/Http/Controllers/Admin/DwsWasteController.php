@@ -183,8 +183,8 @@ class DwsWasteController extends Controller
             $dwsWaste->delete();
 
             $image_path = "storage/admin/dwscategory/" . $dwsWaste->img_path;  // Value is not URL but directory file path
-            if(File::exists($image_path)) {
-                File::delete($image_path);
+            if(file_exists($image_path)) {
+                unlink($image_path);
             }
 
             Session::flash('success', 'Success Deleting Dws Waste Category ' . $dwsWaste->name);

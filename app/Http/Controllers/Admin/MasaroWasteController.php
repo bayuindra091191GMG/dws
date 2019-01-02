@@ -179,8 +179,8 @@ class MasaroWasteController extends Controller
             $masaroWaste->delete();
 
             $image_path = public_path()."/storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
-            if(File::exists($image_path)) {
-                File::delete($image_path);
+            if(file_exists($image_path)) {
+                unlink($image_path);
             }
 
             Session::flash('success', 'Success Deleting Masaro Waste Category ' . $masaroWaste->name);
