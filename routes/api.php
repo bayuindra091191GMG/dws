@@ -29,6 +29,8 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
     Route::get('/dws-category', 'Api\DwsWasteController@getData');
     Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
+    Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
+    Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
 });
 
 Route::post('/register', 'Api\RegisterController@register');

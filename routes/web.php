@@ -106,6 +106,10 @@ Route::prefix('admin')->group(function(){
     Route::get('/masaro-wastes/edit/{item}', 'Admin\MasaroWasteController@edit')->name('admin.masaro-wastes.edit');
     Route::post('/masaro-wastes/update', 'Admin\MasaroWasteController@update')->name('admin.masaro-wastes.update');
     Route::post('/masaro-wastes/delete', 'Admin\MasaroWasteController@destroy')->name('admin.masaro-wastes.destroy');
+
+    // Transactions
+    Route::get('/transactions', 'Admin\TransactionHeaderController@index')->name('admin.transactions.index');
+    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.create');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -126,6 +130,7 @@ Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
 Route::get('/datatables-dws-wastes', 'Admin\DwsWasteController@getIndex')->name('datatables.dws-wastes');
 Route::get('/datatables-masaro-wastes', 'Admin\MasaroWasteController@getIndex')->name('datatables.masaro-wastes');
+Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@getIndex')->name('datatables.transactions');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');

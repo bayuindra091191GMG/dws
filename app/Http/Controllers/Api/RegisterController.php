@@ -21,6 +21,13 @@ class RegisterController extends Controller
 {
     protected function create(array $data)
     {
+        if($data['referral'] != null && $data['referral'] != ''){
+            $categoryId = 2;
+        }
+        else{
+            $categoryId = 1;
+        }
+
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -28,7 +35,8 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'email_token' => base64_encode($data['email']),
-            'status_id' => 4
+            'status_id' => 4,
+            'waste_category_id' => $categoryId
         ]);
     }
 

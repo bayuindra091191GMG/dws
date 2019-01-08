@@ -96,7 +96,7 @@ class DwsWasteController extends Controller
 
         $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save(public_path('storage/admin/dwscategory/'. $filename), 75);
+        $img->save('home/dwstesti/public_html/storage/admin/dwscategory/'. $filename, 75);
 
         $dwsWaste->img_path = $filename;
         $dwsWaste->save();

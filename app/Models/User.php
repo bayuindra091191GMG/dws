@@ -2,14 +2,12 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 07 Dec 2018 08:44:36 +0000.
+ * Date: Tue, 08 Jan 2019 07:19:32 +0000.
  */
 
 namespace App\Models;
 
-use Laravel\Passport\HasApiTokens;
 use Reliese\Database\Eloquent\Model as Eloquent;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
@@ -24,29 +22,38 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $email_token
  * @property string $phone
  * @property int $status_id
- * @property int $routine_pickup
- * @property double $wallet
- * @property double $point
  * @property string $tax_no
+ * @property int $waste_category_id
  * @property \Carbon\Carbon $email_verified_at
  * @property string $remember_token
+ * @property float $wallet
+ * @property float $point
+ * @property int $routine_pickup
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Status $status
+ * @property \App\Models\WasteCategory $waste_category
  * @property \Illuminate\Database\Eloquent\Collection $addresses
+ * @property \Illuminate\Database\Eloquent\Collection $avoredaddresses
  * @property \Illuminate\Database\Eloquent\Collection $orders
+ * @property \Illuminate\Database\Eloquent\Collection $point_histories
  * @property \Illuminate\Database\Eloquent\Collection $product_reviews
+ * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  * @property \Illuminate\Database\Eloquent\Collection $user_user_groups
+ * @property \Illuminate\Database\Eloquent\Collection $wallet_histories
  * @property \Illuminate\Database\Eloquent\Collection $wishlists
  *
  * @package App\Models
  */
-class User extends Authenticatable
+class User extends Eloquent
 {
-    use HasApiTokens;
 	protected $casts = [
-		'status_id' => 'int'
+		'status_id' => 'int',
+		'waste_category_id' => 'int',
+		'wallet' => 'float',
+		'point' => 'float',
+		'routine_pickup' => 'int'
 	];
 
 	protected $dates = [
@@ -61,7 +68,7 @@ class User extends Authenticatable
 
 	protected $fillable = [
 		'first_name',
-        'last_name',
+		'last_name',
 		'email',
 		'password',
 		'image_path',
@@ -70,11 +77,12 @@ class User extends Authenticatable
 		'phone',
 		'status_id',
 		'tax_no',
+		'waste_category_id',
 		'email_verified_at',
 		'remember_token',
-        'routine_pickup',
-        'wallet',
-        'point'
+		'wallet',
+		'point',
+		'routine_pickup'
 	];
 
 	public function status()
@@ -82,9 +90,19 @@ class User extends Authenticatable
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
+	public function waste_category()
+	{
+		return $this->belongsTo(\App\Models\WasteCategory::class);
+	}
+
 	public function addresses()
 	{
 		return $this->hasMany(\App\Models\Address::class);
+	}
+
+	public function avoredaddresses()
+	{
+		return $this->hasMany(\App\Models\Avoredaddress::class);
 	}
 
 	public function orders()
@@ -92,14 +110,29 @@ class User extends Authenticatable
 		return $this->hasMany(\App\Models\Order::class);
 	}
 
+	public function point_histories()
+	{
+		return $this->hasMany(\App\Models\PointHistory::class);
+	}
+
 	public function product_reviews()
 	{
 		return $this->hasMany(\App\Models\ProductReview::class);
 	}
 
+	public function transaction_headers()
+	{
+		return $this->hasMany(\App\Models\TransactionHeader::class);
+	}
+
 	public function user_user_groups()
 	{
 		return $this->hasMany(\App\Models\UserUserGroup::class);
+	}
+
+	public function wallet_histories()
+	{
+		return $this->hasMany(\App\Models\WalletHistory::class);
 	}
 
 	public function wishlists()
