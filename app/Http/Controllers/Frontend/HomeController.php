@@ -6,6 +6,7 @@ use App\Mail\EmailVerification;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
@@ -22,8 +23,10 @@ class HomeController extends Controller
 
     public function testEmail(){
         try{
+            $exitCode = Artisan::call('cache:clear');
             $user = User::find('9');
             $emailVerify = new EmailVerification($user);
+            //dd($user);
             Mail::to($user->email)->send($emailVerify);
             return true;
         }
