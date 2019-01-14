@@ -47,6 +47,12 @@ class RegisterController extends Controller
             'last_name'             => 'required|max:100',
             'phone'                 => 'required|unique:users',
             'password'              => 'required|min:6|max:20',
+            'province'              => 'required',
+            'city'                  => 'required',
+            'postal_code'           => 'required',
+            'description'           => 'required',
+            'latitude'              => 'required',
+            'longitude'             => 'required',
         );
 
         $messages = array(
