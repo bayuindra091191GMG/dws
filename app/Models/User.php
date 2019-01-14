@@ -7,7 +7,8 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User
@@ -46,8 +47,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class User extends Eloquent
+class User extends Authenticatable
 {
+    use HasApiTokens;
+
 	protected $casts = [
 		'status_id' => 'int',
 		'waste_category_id' => 'int',
@@ -98,11 +101,6 @@ class User extends Eloquent
 	public function addresses()
 	{
 		return $this->hasMany(\App\Models\Address::class);
-	}
-
-	public function avoredaddresses()
-	{
-		return $this->hasMany(\App\Models\Avoredaddress::class);
 	}
 
 	public function orders()
