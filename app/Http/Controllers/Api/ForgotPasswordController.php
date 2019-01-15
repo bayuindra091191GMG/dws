@@ -34,7 +34,7 @@ class ForgotPasswordController extends Controller
      * @param  [string] email
      * @return [string] message
      */
-    public function forgetPassword(Request $request)
+    public function forgotPassword(Request $request)
     {
         $request->validate([
             'email' => 'required|string|email',

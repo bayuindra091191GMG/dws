@@ -33,6 +33,7 @@ Route::middleware('auth:api')->group(function(){
 });
 
 Route::post('/register', 'Api\RegisterController@register');
+Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
 
 //Forgot Password
 Route::post('/checkEmail', 'Api\ForgotPasswordController@checkEmail');
@@ -41,7 +42,7 @@ Route::post('/setNewPassword', 'Api\ForgotPasswordController@setNewPassword');
 Route::get('/registration', 'Api\RegisterController@registrationData');
 
 Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'password'], function () {
-    Route::post('forgotPassword', 'ForgotPasswordController@forgotPassword');
+    Route::post('forgotpassword', 'ForgotPasswordController@forgotPassword');
     Route::get('find/{token}', 'ForgotPasswordController@find');
     Route::post('reset', 'ForgotPasswordController@reset');
 });

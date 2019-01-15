@@ -14,7 +14,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -118,5 +120,16 @@ class RegisterController extends Controller
     */
     public function verifyOtp(){
 
+    }
+
+    public function verify($token)
+    {
+        $user = User::where('email_token',$token)->first();
+        $user->status_id = 1;
+        $user->save();
+
+        Session::put("user-data", $user);
+        Session::flash('success', 'Your Email Have been Verified, Please Login');
+        return Redirect::route('login');
     }
 }
