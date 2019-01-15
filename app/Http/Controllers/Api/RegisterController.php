@@ -57,7 +57,7 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
+            return response()->json($validator->messages(), 400);
         }
 
         try{
