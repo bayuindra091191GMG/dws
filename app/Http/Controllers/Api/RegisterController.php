@@ -80,7 +80,7 @@ class RegisterController extends Controller
                 'created_at'    => Carbon::now('Asia/Jakarta')
             ]);
 
-            $emailVerify = new EmailVerification($user);
+            $emailVerify = new EmailVerification($user, 'api');
             Mail::to($user->email)->send($emailVerify);
 
             return Response::json([

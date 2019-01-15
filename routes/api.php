@@ -34,3 +34,8 @@ Route::middleware('auth:api')->group(function(){
 });
 
 Route::post('/register', 'Api\RegisterController@register');
+
+//Forgot Password
+Route::post('/checkEmail', 'Api\ForgotPasswordController@checkEmail');
+Route::post('/sendResetLinkEmail', 'Api\ForgotPasswordController@sendResetLinkEmail');
+Route::post('/setNewPassword', 'Api\ForgotPasswordController@setNewPassword');

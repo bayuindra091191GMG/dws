@@ -103,7 +103,7 @@ class RegisterController extends Controller
 
         $user = $this->create($request->all());
 
-        $emailVerify = new EmailVerification($user);
+        $emailVerify = new EmailVerification($user, '');
         Mail::to($user->email)->send($emailVerify);
 
         return View('auth.send-email', compact('user'));
@@ -124,7 +124,7 @@ class RegisterController extends Controller
 
         $userDB = User::where('email', $email)->first();
 
-        $emailVerify = new EmailVerification($userDB);
+        $emailVerify = new EmailVerification($userDB, '');
         Mail::to($userDB->email)->send($emailVerify);
 
         $email = $userDB->email;
