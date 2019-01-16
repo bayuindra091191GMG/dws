@@ -124,7 +124,7 @@ class RegisterController extends Controller
 
         $userDB = User::where('email', $email)->first();
 
-        $emailVerify = new EmailVerification($userDB);
+        $emailVerify = new EmailVerification($userDB, '');
         Mail::to($userDB->email)->send($emailVerify);
 
         $email = $userDB->email;

@@ -83,7 +83,7 @@ class AdminUserController extends Controller
             'first_name'        => 'required|max:100',
             'last_name'         => 'required|max:100',
             'email'             => 'required|regex:/^\S*$/u|unique:users|max:50',
-            'role_id'           => 'required',
+            'role'              => 'required',
             'password'          => 'required'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
@@ -156,7 +156,6 @@ class AdminUserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|max:100',
             'last_name'         => 'required|max:100',
-            'email'             => 'required|regex:/^\S*$/u|unique:admin_users|max:50',
             'role'              => 'required'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
@@ -180,7 +179,6 @@ class AdminUserController extends Controller
         }
 
         $adminUser = AdminUser::find($request->input('id'));
-        $adminUser->email = $request->input('email');
         $adminUser->first_name = $request->input('first_name');
         $adminUser->last_name = $request->input('last_name');
         $adminUser->is_super_admin = $superAdmin;

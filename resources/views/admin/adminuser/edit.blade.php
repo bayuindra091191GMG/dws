@@ -16,6 +16,15 @@
                                 <div class="card-body b-b">
                                     <div class="tab-content pb-3" id="v-pills-tabContent">
                                         <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
+                                            @foreach($errors->all() as $error)
+                                                <ul>
+                                                    <li>
+                                                        <span class="help-block">
+                                                            <strong style="color: #ff3d00;"> {{ $error }} </strong>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            @endforeach
                                             <!-- Input -->
                                             <div class="body">
                                                 <div class="col-sm-12">
@@ -30,17 +39,7 @@
                                                         </label>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-12">
-                                                    <div class="form-group form-float form-group-lg">
-                                                        <div class="form-line">
-                                                            <label class="form-label" for="email">Email *</label>
-                                                            <input id="email" type="email" class="form-control"
-                                                                   name="email" value="{{ $adminUser->email }}">
-                                                            <input type="hidden" name="id" value="{{ $adminUser->id }}">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <input type="hidden" name="id" value="{{ $adminUser->id }}">
 
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
