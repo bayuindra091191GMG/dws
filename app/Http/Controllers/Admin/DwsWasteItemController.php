@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\DwsWaste;
 use App\Models\DwsWasteCategoryData;
-use App\Transformer\DwsWasteCategoryTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\File;
 use Yajra\DataTables\DataTables;
+use Intervention\Image\Facades\Image;
 
-class DwsWasteController extends Controller
+class DwsWasteItemController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -29,9 +28,9 @@ class DwsWasteController extends Controller
     }
 
     public function getIndex(Request $request){
-        $users = DwsWasteCategoryData::query();
+        $users = DwsWaste::query();
         return DataTables::of($users)
-            ->setTransformer(new DwsWasteCategoryTransformer)
+            ->setTransformer(new DwsWaste)
             ->addIndexColumn()
             ->make(true);
     }
@@ -43,7 +42,7 @@ class DwsWasteController extends Controller
      */
     public function index()
     {
-        return view('admin.dwswaste.index');
+        return view('admin.dwswasteitem.index');
     }
 
     /**
@@ -53,7 +52,9 @@ class DwsWasteController extends Controller
      */
     public function create()
     {
-        return view('admin.dwswaste.create');
+        $categories = DwsWasteCategoryData::all();
+
+        return view('admin.dwswasteitem.create', compact('categories'));
     }
 
     /**
@@ -65,11 +66,12 @@ class DwsWasteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'golongan'      => 'required',
-            'price'         => 'required',
-            'description'   => 'required',
+            'name'              => 'required',
+            'other_description' => 'required',
+            'category'          => 'required',
+            'description'       => 'required',
         ]);
+
         $image = $request->file('img_path');
 
         if($image == null){
@@ -80,13 +82,15 @@ class DwsWasteController extends Controller
 
         $user = Auth::guard('admin')->user();
 
-        $dwsWaste = DwsWasteCategoryData::create([
-            'name'          => $request->input('name'),
-            'golongan'      => $request->input('golongan'),
-            'price'         => $request->input('price'),
-            'description'   => $request->input('description'),
-            'created_at'    => Carbon::now('Asia/Jakarta'),
-            'created_by'    => $user->id
+        $dwsWaste = DwsWaste::create([
+            'dws_waste_category_datas_id'   => $request->input('category'),
+            'name'                          => $request->input('name'),
+            'description'                   => $request->input('description'),
+            'other_description'             => $request->input('other_description'),
+            'created_by'                    => $user->id,
+            'created_at'                    => Carbon::now('Asia/Jakarta'),
+            'updated_by'                    => $user->id,
+            'updated_at'                    => Carbon::now('Asia/Jakarta')
         ]);
 
         //Save Image
@@ -96,13 +100,13 @@ class DwsWasteController extends Controller
 
         $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save('home/dwstesti/public_html/storage/admin/dwscategory/'. $filename, 75);
+        $img->save('home/dwstesti/public_html/storage/admin/dwsitem/'. $filename, 75);
 
         $dwsWaste->img_path = $filename;
         $dwsWaste->save();
 
-        Session::flash('success', 'Success Creating new Dws Waste Category!');
-        return redirect()->route('admin.dws-wastes.index');
+        Session::flash('success', 'Success Creating new Dws Waste Item!');
+        return redirect()->route('admin.dws-waste-items.index');
     }
 
     /**
@@ -124,14 +128,14 @@ class DwsWasteController extends Controller
      */
     public function edit($id)
     {
-        $dwsWaste = DwsWasteCategoryData::find($id);
-        return view('admin.dwswaste.edit', compact('dwsWaste'));
+        $dwsWaste = DwsWaste::find($id);
+        return view('admin.dwswasteitem.edit', compact('dwsWaste'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -148,10 +152,9 @@ class DwsWasteController extends Controller
 
         $user = Auth::guard('admin')->user();
 
-        $dwsWaste = DwsWasteCategoryData::find($request->input('id'));
+        $dwsWaste = DwsWaste::find($request->input('id'));
         $dwsWaste->name = $request->input('name');
-        $dwsWaste->golongan = $request->input('golongan');
-        $dwsWaste->price = $request->input('price');
+        $dwsWaste->other_description = $request->input('other_description');
         $dwsWaste->description = $request->input('description');
         $dwsWaste->updated_at = Carbon::now('Asia/Jakarta');
         $dwsWaste->updated_by = $user->id;
@@ -161,11 +164,11 @@ class DwsWasteController extends Controller
         if($image != null) {
             $img = Image::make($image);
             $filename = $dwsWaste->img_path;
-            $img->save('home/dwstesti/public_html/storage/admin/dwscategory/' . $filename, 75);
+            $img->save('home/dwstesti/public_html/storage/admin/dwsitem/' . $filename, 75);
         }
 
-        Session::flash('success', 'Success Updating new Dws Waste Category!');
-        return redirect()->route('admin.dws-wastes.index');
+        Session::flash('success', 'Success Updating new Dws Waste Item!');
+        return redirect()->route('admin.dws-waste-items.index');
     }
 
     /**
@@ -179,15 +182,15 @@ class DwsWasteController extends Controller
         try {
             //Belum melakukan pengecekan hubungan antar Table
             $dwsWasteId = $request->input('id');
-            $dwsWaste = DwsWasteCategoryData::find($dwsWasteId);
+            $dwsWaste = DwsWaste::find($dwsWasteId);
             $dwsWaste->delete();
 
-            $image_path = "home/dwstesti/public_html/storage/admin/dwscategory/" . $dwsWaste->img_path;  // Value is not URL but directory file path
+            $image_path = "home/dwstesti/public_html/storage/admin/dwsitem/" . $dwsWaste->img_path;  // Value is not URL but directory file path
             if(file_exists($image_path)) {
                 unlink($image_path);
             }
 
-            Session::flash('success', 'Success Deleting Dws Waste Category ' . $dwsWaste->name);
+            Session::flash('success', 'Success Deleting Dws Waste Item ' . $dwsWaste->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
