@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
     Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
     Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
+    Route::post('/get-dws-items', 'Api\DwsWasteController@getItems');
 });
 
 Route::post('/register', 'Api\RegisterController@register');
