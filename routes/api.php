@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
     Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
     Route::post('/get-dws-items', 'Api\DwsWasteController@getItems');
+    Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBanks');
 });
 
 Route::post('/register', 'Api\RegisterController@register');
