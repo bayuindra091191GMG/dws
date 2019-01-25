@@ -48,3 +48,6 @@ Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'password
     Route::get('find/{token}', 'ForgotPasswordController@find');
     Route::post('reset', 'ForgotPasswordController@reset');
 });
+
+//Beta
+Route::get('/subscribe', 'Api\SubscribeController@save');
