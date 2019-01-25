@@ -31,6 +31,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class DwsWaste extends Eloquent
 {
+    protected $appends = [
+        'img_full_path'
+    ];
+
 	protected $casts = [
 		'dws_waste_category_datas_id' => 'int',
 		'created_by' => 'int',
@@ -46,6 +50,10 @@ class DwsWaste extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getImgFullPathAttribute(){
+        return url('') . '/storage/admin/masaroitem/' . $this->attributes['img_path'];
+    }
 
     public function createdBy()
     {

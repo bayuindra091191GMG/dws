@@ -4,8 +4,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Edit Dws Waste Item</h2>
-                {{ Form::open(['route'=>['admin.dws-waste-items.update'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
+                <h2 class="card-title m-b-0">Edit Masaro Waste Item</h2>
+                {{ Form::open(['route'=>['admin.masaro-waste-items.update'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
+                {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
+                {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row">
                         <div class="col-md-12">
@@ -30,7 +32,7 @@
                                                         <div class="form-line">
                                                             <label class="form-label" for="name">Name *</label>
                                                             <input id="name" type="text" class="form-control"
-                                                                   name="name" value="{{ $dwsWaste->name }}">
+                                                                   name="name" value="{{ $masaroWaste->name }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -39,7 +41,7 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="description">Description 1 *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10">{{ $dwsWaste->description }}</textarea>
+                                                            <textarea name="description" id="description" class="form-control" rows="10">{{ $masaroWaste->description }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -48,7 +50,7 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="other_description">Description 2 *</label>
-                                                            <textarea name="other_description" id="other_description" class="form-control" rows="10">{{ $dwsWaste->other_description }}</textarea>
+                                                            <textarea name="other_description" id="other_description" class="form-control" rows="10">{{ $masaroWaste->other_description }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -59,7 +61,7 @@
                                                             <label class="form-label" for="category">Category *</label>
                                                             <select name="category" id="category" class="form-control">
                                                                 @foreach($categories as $category)
-                                                                    @if($category->id == $dwsWaste->dws_waste_category_datas_id)
+                                                                    @if($category->id == $masaroWaste->masaro_waste_category_datas_id)
                                                                         <option value="{{ $category->id }}" selected>{{ $category->description }}</option>
                                                                     @else
                                                                         <option value="{{ $category->id }}">{{ $category->description }}</option>
@@ -81,7 +83,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                                <a href="{{ route('admin.dws-waste-items.index') }}" class="btn btn-danger">Exit</a>
+                                                <a href="{{ route('admin.masaro-waste-items.index') }}" class="btn btn-danger">Exit</a>
                                                 <input type="submit" class="btn btn-success" value="Save">
                                             </div>
                                             <!-- #END# Input -->
@@ -92,6 +94,7 @@
                         </div>
                     </div>
                 </div>
+                {{--</form>--}}
                 {{ Form::close() }}
             </div>
         </div>

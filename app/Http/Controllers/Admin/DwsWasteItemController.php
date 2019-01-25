@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\DwsWaste;
 use App\Models\DwsWasteCategoryData;
+use App\Transformer\DwsWasteTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class DwsWasteItemController extends Controller
     public function getIndex(Request $request){
         $users = DwsWaste::query();
         return DataTables::of($users)
-            ->setTransformer(new DwsWaste)
+            ->setTransformer(new DwsWasteTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -100,7 +101,7 @@ class DwsWasteItemController extends Controller
 
         $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save('home/dwstesti/public_html/storage/admin/dwsitem/'. $filename, 75);
+        $img->save('../public_html/storage/admin/dwsitem/'. $filename, 75);
 
         $dwsWaste->img_path = $filename;
         $dwsWaste->save();

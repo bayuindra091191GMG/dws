@@ -22,14 +22,19 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * 
- * @property \App\Models\AdminUser $admin_user
+ *
+ * @property \App\Models\AdminUser $createdBy
+ * @property \App\Models\AdminUser $updatedBy
  * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
  *
  * @package App\Models
  */
 class MasaroWaste extends Eloquent
 {
+    protected $appends = [
+        'img_full_path'
+    ];
+
 	protected $casts = [
 		'masaro_waste_category_datas_id' => 'int',
 		'created_by' => 'int',
@@ -46,10 +51,19 @@ class MasaroWaste extends Eloquent
 		'updated_by'
 	];
 
-	public function admin_user()
-	{
-		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
-	}
+    public function getImgFullPathAttribute(){
+        return url('') . '/storage/admin/masaroitem/' . $this->attributes['img_path'];
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+    }
 
 	public function masaro_waste_category_data()
 	{

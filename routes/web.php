@@ -115,6 +115,14 @@ Route::prefix('admin')->group(function(){
     Route::post('/masaro-wastes/update', 'Admin\MasaroWasteController@update')->name('admin.masaro-wastes.update');
     Route::post('/masaro-wastes/delete', 'Admin\MasaroWasteController@destroy')->name('admin.masaro-wastes.destroy');
 
+    // Dws Waste Items
+    Route::get('/masaro-waste-items', 'Admin\MasaroWasteItemController@index')->name('admin.masaro-waste-items.index');
+    Route::get('/masaro-waste-items/create', 'Admin\MasaroWasteItemController@create')->name('admin.masaro-waste-items.create');
+    Route::post('/masaro-waste-items/store', 'Admin\MasaroWasteItemController@store')->name('admin.masaro-waste-items.store');
+    Route::get('/masaro-waste-items/edit/{item}', 'Admin\MasaroWasteItemController@edit')->name('admin.masaro-waste-items.edit');
+    Route::post('/masaro-waste-items/update', 'Admin\MasaroWasteItemController@update')->name('admin.masaro-waste-items.update');
+    Route::post('/masaro-waste-items/delete', 'Admin\MasaroWasteItemController@destroy')->name('admin.masaro-waste-items.destroy');
+
     // Transactions
     Route::get('/transactions', 'Admin\TransactionHeaderController@index')->name('admin.transactions.index');
     Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.create');
@@ -140,6 +148,7 @@ Route::get('/datatables-dws-wastes', 'Admin\DwsWasteController@getIndex')->name(
 Route::get('/datatables-masaro-wastes', 'Admin\MasaroWasteController@getIndex')->name('datatables.masaro-wastes');
 Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@getIndex')->name('datatables.transactions');
 Route::get('/datatables-dws-waste-items', 'Admin\DwsWasteItemController@getIndex')->name('datatables.dws-waste-items');
+Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@getIndex')->name('datatables.masaro-waste-items');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
