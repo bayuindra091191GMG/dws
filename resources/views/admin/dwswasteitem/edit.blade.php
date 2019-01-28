@@ -60,9 +60,9 @@
                                                             <select name="category" id="category" class="form-control">
                                                                 @foreach($categories as $category)
                                                                     @if($category->id == $dwsWaste->dws_waste_category_datas_id)
-                                                                        <option value="{{ $category->id }}" selected>{{ $category->description }}</option>
+                                                                        <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
                                                                     @else
-                                                                        <option value="{{ $category->id }}">{{ $category->description }}</option>
+                                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                                                                     @endif
                                                                 @endforeach
                                                             </select>

@@ -8,6 +8,7 @@ use App\Models\WasteBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use phpDocumentor\Reflection\Types\Array_;
 
 class WasteBankController extends Controller
 {
@@ -46,8 +47,17 @@ class WasteBankController extends Controller
                 ->get();
 
             $result = $wasteBank->where('distance', '<=', 5)->all();
+
+            $test = [];
+            $i=0;
+            foreach ($result as $item){
+                $test[$i] = $item;
+                $i++;
+            }
+            $asdf = $result[0];
+
             return Response::json([
-                'waste_banks' => $result,
+                $asdf->name
             ], 200);
         }
         catch (\Exception $ex){

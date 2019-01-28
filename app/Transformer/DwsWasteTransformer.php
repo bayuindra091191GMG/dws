@@ -30,7 +30,7 @@ class DwsWasteTransformer extends TransformerAbstract
                 'description1'      => $dwsWaste->description,
                 'description2'      => $dwsWaste->other_description,
                 'image'             => $dwsWaste->img_path,
-                'category'          => $dwsWaste->dws_waste_category_data->description,
+                'category'          => $dwsWaste->dws_waste_category_data->name,
                 'created_at'        => $createdDate,
                 'created_by'        => $dwsWaste->createdBy->first_name . ' ' . $dwsWaste->createdBy->last_name,
                 'action'            => $action

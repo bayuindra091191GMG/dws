@@ -96,7 +96,7 @@ class DwsWasteController extends Controller
 
         $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save('home/dwstesti/public_html/storage/admin/dwscategory/'. $filename, 75);
+        $img->save('../public_html/storage/admin/dwscategory/'. $filename, 75);
 
         $dwsWaste->img_path = $filename;
         $dwsWaste->save();
@@ -161,7 +161,7 @@ class DwsWasteController extends Controller
         if($image != null) {
             $img = Image::make($image);
             $filename = $dwsWaste->img_path;
-            $img->save('home/dwstesti/public_html/storage/admin/dwscategory/' . $filename, 75);
+            $img->save('../public_html/storage/admin/dwscategory/' . $filename, 75);
         }
 
         Session::flash('success', 'Success Updating new Dws Waste Category!');
@@ -182,7 +182,7 @@ class DwsWasteController extends Controller
             $dwsWaste = DwsWasteCategoryData::find($dwsWasteId);
             $dwsWaste->delete();
 
-            $image_path = "home/dwstesti/public_html/storage/admin/dwscategory/" . $dwsWaste->img_path;  // Value is not URL but directory file path
+            $image_path = "../public_html/storage/admin/dwscategory/" . $dwsWaste->img_path;  // Value is not URL but directory file path
             if(file_exists($image_path)) {
                 unlink($image_path);
             }

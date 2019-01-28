@@ -94,7 +94,7 @@ class MasaroWasteController extends Controller
 
         $filename = $masaroWaste->id.'_main_'.$masaroWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
+        $img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
 
         $masaroWaste->img_path = $filename;
         $masaroWaste->save();
@@ -157,7 +157,7 @@ class MasaroWasteController extends Controller
         if($image != null) {
             $img = Image::make($image);
             $filename = $masaroWaste->img_path;
-            $img->save(public_path('storage/admin/masarocategory/' . $filename), 75);
+            $img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
         }
 
         Session::flash('success', 'Success Updating new Masaro Waste Category!');
@@ -178,7 +178,7 @@ class MasaroWasteController extends Controller
             $masaroWaste = MasaroWasteCategoryData::find($masaroWasteid);
             $masaroWaste->delete();
 
-            $image_path = public_path()."/storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
+            $image_path = "../public_html/storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
             if(file_exists($image_path)) {
                 unlink($image_path);
             }

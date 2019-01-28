@@ -165,7 +165,7 @@ class DwsWasteItemController extends Controller
         if($image != null) {
             $img = Image::make($image);
             $filename = $dwsWaste->img_path;
-            $img->save('home/dwstesti/public_html/storage/admin/dwsitem/' . $filename, 75);
+            $img->save('../public_html/storage/admin/dwsitem/' . $filename, 75);
         }
 
         Session::flash('success', 'Success Updating new Dws Waste Item!');
@@ -186,7 +186,7 @@ class DwsWasteItemController extends Controller
             $dwsWaste = DwsWaste::find($dwsWasteId);
             $dwsWaste->delete();
 
-            $image_path = "home/dwstesti/public_html/storage/admin/dwsitem/" . $dwsWaste->img_path;  // Value is not URL but directory file path
+            $image_path = "../public_html/storage/admin/dwsitem/" . $dwsWaste->img_path;  // Value is not URL but directory file path
             if(file_exists($image_path)) {
                 unlink($image_path);
             }
