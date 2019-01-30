@@ -50,4 +50,4 @@ Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'password
 });
 
 //Beta
-Route::get('/subscribe', 'Api\SubscribeController@save');
+Route::post('/subscribe', 'Api\SubscribeController@save');

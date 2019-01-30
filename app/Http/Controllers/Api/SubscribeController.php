@@ -12,6 +12,13 @@ class SubscribeController extends Controller
     public function save(Request $request)
     {
         try {
+            $subscriber = Subscribe::where('name', $request->input('name'))->where('phone', $request->input('phone'))->get();
+            if($subscriber != null){
+                return Response::json([
+                    'Already Exist!'
+                ], 200);
+            }
+
             Subscribe::create([
                 'name'  => $request->input('name'),
                 'phone' => $request->input('phone')
