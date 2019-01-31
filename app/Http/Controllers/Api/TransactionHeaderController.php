@@ -23,4 +23,26 @@ class TransactionHeaderController extends Controller
 
         return new UserResource($detailTransactions);
     }
+
+    public function createTransaction(Request $request)
+    {
+        $rules = array(
+            'user_id'                 => 'required|email|max:100|unique:users',
+            'transaction_type'            => 'required|max:100',
+            'last_name'             => 'required|max:100',
+            'phone'                 => 'required|unique:users',
+            'password'              => 'required|min:6|max:20',
+        );
+
+        $messages = array(
+            'not_contains'  => 'Email cannot contain these characters +',
+            'phone.unique'  => 'Your phone number already registered!',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+    }
 }

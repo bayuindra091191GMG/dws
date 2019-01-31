@@ -1,6 +1,11 @@
 $(function(e) {
     "use strict";
-    $(".date-inputmask").inputmask("dd/mm/yyyy"), 
+    $(".time-inputmask").inputmask("hh:mm", {
+        placeholder: "HH:MM",
+        insertMode: false,
+        showMaskOnHover: false
+    }),
+        $(".date-inputmask").inputmask("dd/mm/yyyy"),
     $(".phone-inputmask").inputmask("(999) 999-9999"), 
     $(".international-inputmask").inputmask("+9(999)999-9999"), 
     $(".xphone-inputmask").inputmask("(999) 999-9999 / x999999"), 

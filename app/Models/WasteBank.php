@@ -18,6 +18,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $longitude
  * @property int $pic_id
  * @property string $phone
+ * @property string $open_hours
+ * @property string $closed_hours
+ * @property string $open_days
  * @property string $address
  * @property int $city_id
  * @property \Carbon\Carbon $created_at
@@ -49,6 +52,9 @@ class WasteBank extends Eloquent
 		'phone',
 		'address',
 		'city_id',
+        'open_days',
+        'open_hours',
+        'closed_hours',
 		'created_by',
 		'updated_by'
 	];

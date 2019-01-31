@@ -16,6 +16,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Address</th>
+                        <th>Open Days</th>
+                        <th>Open Hours</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>PIC</th>
@@ -51,6 +53,8 @@
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
                 { data: 'address', name: 'address', class: 'text-center'},
+                { data: 'open_days', name: 'open_days', class: 'text-center'},
+                { data: 'open_hours', name: 'open_hours', class: 'text-center'},
                 { data: 'latitude', name: 'latitude', class: 'text-center'},
                 { data: 'longitude', name: 'longitude', class: 'text-center'},
                 { data: 'pic', name: 'pic', class: 'text-center'},

@@ -105,7 +105,8 @@
 <script src="{{ asset('backend/dist/js/sidebarmenu.js') }}"></script>
 <!--Custom JavaScript -->
 <script src="{{ asset('backend/dist/js/custom.min.js') }}"></script>
-
+<script src="{{ asset('backend/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js') }}"></script>
+<script src="{{ asset('backend/dist/js/pages/mask/mask.init.js') }}"></script>
 
 @yield('scripts')
 
