@@ -194,4 +194,6 @@ class DwsWasteController extends Controller
             return Response::json(array('errors' => 'INVALID'));
         }
     }
+
+
 }

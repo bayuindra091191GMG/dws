@@ -125,7 +125,8 @@ Route::prefix('admin')->group(function(){
 
     // Transactions
     Route::get('/transactions', 'Admin\TransactionHeaderController@index')->name('admin.transactions.index');
-    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.create');
+    Route::get('/transactions/create', 'Admin\TransactionHeaderController@create')->name('admin.transactions.index');
+    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.show');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
