@@ -25,7 +25,7 @@ use Laravel\Passport\HasApiTokens;
  * @property string $phone
  * @property int $status_id
  * @property string $tax_no
- * @property int $waste_category_id
+ * @property int $company_id
  * @property \Carbon\Carbon $email_verified_at
  * @property string $remember_token
  * @property float $wallet
@@ -35,7 +35,7 @@ use Laravel\Passport\HasApiTokens;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Status $status
- * @property \App\Models\WasteCategory $waste_category
+ * @property \App\Models\Company $company
  * @property \Illuminate\Database\Eloquent\Collection $addresses
  * @property \Illuminate\Database\Eloquent\Collection $avoredaddresses
  * @property \Illuminate\Database\Eloquent\Collection $orders
@@ -81,7 +81,7 @@ class User extends Authenticatable
 		'phone',
 		'status_id',
 		'tax_no',
-		'waste_category_id',
+		'company_id',
 		'email_verified_at',
 		'remember_token',
 		'wallet',
@@ -94,9 +94,9 @@ class User extends Authenticatable
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function waste_category()
+	public function company()
 	{
-		return $this->belongsTo(\App\Models\WasteCategory::class);
+		return $this->belongsTo(\App\Models\Company::class);
 	}
 
 	public function addresses()

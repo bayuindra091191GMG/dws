@@ -46,19 +46,9 @@ class WasteBankController extends Controller
                     * sin(radians(waste_banks.latitude))) AS distance"))
                 ->get();
 
-            $result = $wasteBank->where('distance', '<=', 5)->all();
+            //$result = $wasteBank->where('distance', '<=', 5);
 
-            $test = [];
-            $i=0;
-            foreach ($result as $item){
-                $test[$i] = $item;
-                $i++;
-            }
-            $asdf = $result[0];
-
-            return Response::json([
-                $asdf->name
-            ], 200);
+            return $wasteBank;
         }
         catch (\Exception $ex){
             return Response::json([
