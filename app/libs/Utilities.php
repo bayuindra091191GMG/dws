@@ -119,10 +119,19 @@ class Utilities
                     break;
             }
 
-            return $prepend. "/". $modulus. $nextNumber;
+            $day = Carbon::today()->format("d");
+
+            return $prepend. $day. "/". $modulus. $nextNumber;
         }
         catch (\Exception $ex){
             throw $ex;
         }
+    }
+
+    public static function toFloat($raw){
+        $valueStr1 = str_replace('.','', $raw);
+        $valueStr2 = str_replace(',', '.', $valueStr1);
+
+        return (double) $valueStr2;
     }
 }

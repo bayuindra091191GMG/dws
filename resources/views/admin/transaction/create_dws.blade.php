@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Buat Transaksi Baru</h2>
+                <h2 class="card-title m-b-0">Buat Transaksi Baru Kategori DWS</h2>
 
-                {{ Form::open(['route'=>['admin.users.update'],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.transactions.store'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -17,6 +17,23 @@
                                 <div class="card-body b-b">
                                     <!-- Input -->
                                     <div class="body">
+
+                                        @if(count($errors))
+                                            <div class="col-md-12">
+                                                <div class="form-group form-float form-group-lg">
+                                                    <div class="form-line">
+                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                            <ul>
+                                                                @foreach($errors->all() as $error)
+                                                                    <li>{{ $error }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         <div class="col-md-12">
                                             <div class="form-group form-float form-group-lg">
                                                 <div class="form-line">
@@ -25,7 +42,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-md-12">
                                             <div class="form-group form-float form-group-lg">
                                                 <div class="form-line">
@@ -92,10 +108,13 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
-                                    <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                        <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">Exit</a>
-                                        <input type="submit" class="btn btn-success" value="Save">
+
+                                        <input type="hidden" name="category_type" value="1"/>
+
+                                        <div class="col-md-11 col-sm-11 col-xs-12">
+                                            <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">Exit</a>
+                                            <input type="submit" class="btn btn-success" value="Save">
+                                        </div>
                                     </div>
                                     <!-- #END# Input -->
                                 </div>
@@ -125,6 +144,7 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="{{ asset('backend/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.2.0"></script>
     <script>
         var categories = [];
         @foreach($wasteCategories as $category)
@@ -156,6 +176,24 @@
             sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + i + ")'><i class='fas fa-minus-circle text-white'></a></td>";
 
             $('#category_table').append(sbAdd);
+
+            new AutoNumeric('#weight_' + i, {
+                minimumValue: '0',
+                maximumValue: '999999',
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0,
+                modifyValueOnWheel: false
+            });
+
+            new AutoNumeric('#price_' + i, {
+                minimumValue: '0',
+                maximumValue: '9999999999',
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0,
+                modifyValueOnWheel: false
+            });
 
             i++;
         }
