@@ -67,6 +67,10 @@
                                 <i class="fas fa-plus"></i>
                                 <span class="hide-menu"> Transaksi Kategori Masaro </span>
                             </a>
+                            <a href="{{ route('admin.points.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Transaksi Point </span>
+                            </a>
                         </li>
                     </ul>
                 </li>
