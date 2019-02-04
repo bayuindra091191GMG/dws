@@ -24,8 +24,10 @@ class HomeController extends Controller
     public function testEmail(){
         try{
             $exitCode = Artisan::call('cache:clear');
+            $exitCode2 = Artisan::call('config:clear');
+
             $user = User::find('9');
-            $emailVerify = new EmailVerification($user);
+            $emailVerify = new EmailVerification($user, '');
             //dd($user);
             Mail::to($user->email)->send($emailVerify);
             return true;
