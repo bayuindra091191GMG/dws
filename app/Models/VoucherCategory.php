@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 17 Dec 2018 09:18:51 +0000.
+ * Date: Fri, 01 Feb 2019 05:04:32 +0000.
  */
 
 namespace App\Models;
@@ -10,64 +10,35 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class WasteBank
+ * Class VoucherCategory
  * 
  * @property int $id
  * @property string $name
- * @property string $latitude
- * @property string $longitude
- * @property int $pic_id
- * @property string $phone
- * @property string $open_hours
- * @property string $closed_hours
- * @property string $open_days
- * @property string $address
- * @property int $city_id
+ * @property string $img_path
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * 
- * @property \App\Models\City $city
+ *
+ * @property \Illuminate\Database\Eloquent\Collection $vouchers
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
- * @property \App\Models\AdminUser $pic
  *
  * @package App\Models
  */
-class WasteBank extends Eloquent
+class VoucherCategory extends Eloquent
 {
 	protected $casts = [
-		'pic_id' => 'int',
-		'city_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
 	protected $fillable = [
 		'name',
-		'latitude',
-		'longitude',
-		'pic_id',
-		'phone',
-		'address',
-		'city_id',
-        'open_days',
-        'open_hours',
-        'closed_hours',
+		'img_path',
 		'created_by',
 		'updated_by'
 	];
-
-	public function city()
-	{
-		return $this->belongsTo(\App\Models\City::class);
-	}
-
-    public function pic()
-    {
-        return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
-    }
 
     public function createdBy()
     {
@@ -78,4 +49,9 @@ class WasteBank extends Eloquent
     {
         return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
     }
+
+	public function vouchers()
+	{
+		return $this->hasMany(\App\Models\Voucher::class, 'category_id');
+	}
 }

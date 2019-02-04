@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 17 Dec 2018 09:18:51 +0000.
+ * Date: Tue, 22 Jan 2019 04:23:09 +0000.
  */
 
 namespace App\Models;
@@ -10,63 +10,49 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class WasteBank
+ * Class MasaroWaste
  * 
  * @property int $id
+ * @property int $masaro_waste_category_datas_id
  * @property string $name
- * @property string $latitude
- * @property string $longitude
- * @property int $pic_id
- * @property string $phone
- * @property string $open_hours
- * @property string $closed_hours
- * @property string $open_days
- * @property string $address
- * @property int $city_id
+ * @property string $description
+ * @property string $other_description
+ * @property string $img_path
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * 
- * @property \App\Models\City $city
+ *
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
- * @property \App\Models\AdminUser $pic
+ * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
  *
  * @package App\Models
  */
-class WasteBank extends Eloquent
+class MasaroWaste extends Eloquent
 {
+    protected $appends = [
+        'img_full_path'
+    ];
+
 	protected $casts = [
-		'pic_id' => 'int',
-		'city_id' => 'int',
+		'masaro_waste_category_datas_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
 	protected $fillable = [
+		'masaro_waste_category_datas_id',
 		'name',
-		'latitude',
-		'longitude',
-		'pic_id',
-		'phone',
-		'address',
-		'city_id',
-        'open_days',
-        'open_hours',
-        'closed_hours',
+		'description',
+		'other_description',
+		'img_path',
 		'created_by',
 		'updated_by'
 	];
 
-	public function city()
-	{
-		return $this->belongsTo(\App\Models\City::class);
-	}
-
-    public function pic()
-    {
-        return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
+    public function getImgFullPathAttribute(){
+        return url('') . '/storage/admin/masaroitem/' . $this->attributes['img_path'];
     }
 
     public function createdBy()
@@ -78,4 +64,9 @@ class WasteBank extends Eloquent
     {
         return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
     }
+
+	public function masaro_waste_category_data()
+	{
+		return $this->belongsTo(\App\Models\MasaroWasteCategoryData::class, 'masaro_waste_category_datas_id');
+	}
 }

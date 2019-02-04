@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property string $phone
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  *
@@ -24,6 +25,7 @@ class Subscribe extends Eloquent
 {
 	protected $fillable = [
 		'name',
-		'email'
+		'email',
+        'phone'
 	];
 }

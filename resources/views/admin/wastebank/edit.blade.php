@@ -88,6 +88,40 @@
                                                 </div>
 
                                                 <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="senin">Open Day</label>
+                                                            <input type="checkbox" name="days[]" id="senin" value="Senin"/> Senin
+                                                            <input type="checkbox" name="days[]" id="selasa" value="Selasa"/> Selasa
+                                                            <input type="checkbox" name="days[]" id="rabu" value="Rabu"/> Rabu
+                                                            <input type="checkbox" name="days[]" id="kamis" value="Kamis"/> Kamis
+                                                            <input type="checkbox" name="days[]" id="jumat" value="Jumat"/> Jumat
+                                                            <input type="checkbox" name="days[]" id="sabtu" value="Sabtu"/> Sabtu
+                                                            <input type="checkbox" name="days[]" id="minggu" value="Minggu"/> Minggu
+                                                            <input type="checkbox" id="selectAllDay" onchange="selectAll()"/> Select/Unselect All
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="open_hours">Open Time</label>
+                                                            <input type="text" name="open_hours" id="open_hours" class="form-control time-inputmask" value="{{ $wasteBank->open_hours }}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="closed_hours">Closed Time</label>
+                                                            <input type="text" name="closed_hours" id="closed_hours" class="form-control time-inputmask" value="{{ $wasteBank->closed_hours }}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="pic">PIC *</label>
                                                         <select id="pic" name="pic" class="form-control">
@@ -209,5 +243,26 @@
             $('#latitude').val(lat);
             $('#longitude').val(lng);
         });
+
+        function selectAll(){
+            if(document.getElementById("selectAllDay").checked){
+                document.getElementById("senin").checked = true;
+                document.getElementById("selasa").checked = true;
+                document.getElementById("rabu").checked = true;
+                document.getElementById("kamis").checked = true;
+                document.getElementById("jumat").checked = true;
+                document.getElementById("sabtu").checked = true;
+                document.getElementById("minggu").checked = true;
+            }
+            else{
+                document.getElementById("senin").checked = false;
+                document.getElementById("selasa").checked = false;
+                document.getElementById("rabu").checked = false;
+                document.getElementById("kamis").checked = false;
+                document.getElementById("jumat").checked = false;
+                document.getElementById("sabtu").checked = false;
+                document.getElementById("minggu").checked = false;
+            }
+        }
     </script>
 @endsection

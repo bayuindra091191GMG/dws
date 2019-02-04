@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->get('/users', 'Api\UserController@index');
 Route::get('/noauth/users', 'Api\UserController@index');
-
+Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBanks');
 //User Management
 Route::middleware('auth:api')->group(function(){
     Route::get('/get-users', 'Api\UserController@index');
@@ -28,8 +28,31 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
     Route::get('/dws-category', 'Api\DwsWasteController@getData');
     Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
+    Route::post('/get-dws-items', 'Api\DwsWasteController@getItems');
+
+    //Transactions
     Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
     Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
+
+    //Antar Sendiri
+    Route::post('/antar-sendiri/admin/set-transaction', 'Api\TransactionHeaderController@setTransactionToUser');
+    Route::post('/antar-sendiri/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserAntarSendiri');
+    Route::post('/antar-sendiri/user/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
+
+    //On Demand
+    Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
+    Route::post('/on-demand/driver/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
+    Route::post('/on-demand/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
+
+    //Voucher
+    Route::get('/voucher-categories', 'Api\VoucherController@getCategories');
+    Route::post('/vouchers', 'Api\VoucherController@get');
+
+    //Routine Pickup
+    Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+
+    //Point
+    Route::post('/redeem-poin', 'Api\PoinController@redeem');
 });
 
 Route::post('/register', 'Api\RegisterController@register');
@@ -46,3 +69,9 @@ Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'password
     Route::get('find/{token}', 'ForgotPasswordController@find');
     Route::post('reset', 'ForgotPasswordController@reset');
 });
+
+//Beta
+Route::post('/subscribe', 'Api\SubscribeController@save');
+
+//Coba2
+Route::post('/test', 'Api\TransactionHeaderController@test');

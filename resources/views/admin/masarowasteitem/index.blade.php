@@ -4,25 +4,21 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Wastebanks</h2>
+                <h2 class="card-title m-b-0">Masaro Wastes</h2>
                 <div class="ml-auto text-right">
-                    <a href="{{ route('admin.waste-banks.create') }}" class="btn btn-success">
+                    <a href="{{ route('admin.masaro-waste-items.create') }}" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                 </div>
                 @include('partials.admin._messages')
-                <table id="waste-bank" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                <table id="masaro-waste" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Address</th>
-                        <th>Open Days</th>
-                        <th>Open Hours</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>PIC</th>
-                        <th>Phone</th>
-                        <th>Status</th>
+                        <th>Deskripsi 1</th>
+                        <th>Deskripsi 2</th>
+                        <th>Gambar</th>
+                        <th>Kategori</th>
                         <th>Created At</th>
                         <th>Created By</th>
                         <th></th>
@@ -44,22 +40,18 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        $('#waste-bank').DataTable({
+        $('#masaro-waste').DataTable({
             processing: true,
             serverSide: true,
             pageLength: 25,
-            ajax: '{!! route('datatables.waste-banks') !!}',
+            ajax: '{!! route('datatables.masaro-waste-items') !!}',
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'address', name: 'address', class: 'text-center'},
-                { data: 'open_days', name: 'open_days', class: 'text-center'},
-                { data: 'open_hours', name: 'open_hours', class: 'text-center'},
-                { data: 'latitude', name: 'latitude', class: 'text-center'},
-                { data: 'longitude', name: 'longitude', class: 'text-center'},
-                { data: 'pic', name: 'pic', class: 'text-center'},
-                { data: 'phone', name: 'phone', class: 'text-center'},
-                { data: 'city', name: 'city', class: 'text-center'},
+                { data: 'description1', name: 'description1', class: 'text-center'},
+                { data: 'description2', name: 'description2', class: 'text-center'},
+                { data: 'image', name: 'image', class: 'text-center'},
+                { data: 'category', name: 'category', class: 'text-center'},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
@@ -85,5 +77,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deletejs', ['routeUrl' => 'admin.waste-banks.destroy', 'redirectUrl' => 'admin.waste-banks.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.masaro-waste-items.destroy', 'redirectUrl' => 'admin.masaro-waste-items.index'])
 @endsection

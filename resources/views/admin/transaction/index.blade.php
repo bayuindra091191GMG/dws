@@ -5,23 +5,41 @@
         <div class="col-12">
             @include('partials.admin._messages')
             <div class="card-body">
-                <h2 class="card-title m-b-0">Transaksi</h2>
-                <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>No Transaksi</th>
-                        <th>Nama User</th>
-                        <th>Tipe</th>
-                        <th>Kategori</th>
-                        <th>Berat Total</th>
-                        <th>Harga Total</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <a href="{{ route('admin.transactions.dws.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus text-white"></i>
+                            <br/>
+                            <span>KATEGORI DWS</span>
+                        </a>
+                        <a href="{{ route('admin.transactions.masaro.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus text-white"></i>
+                            <br/>
+                            <span>KATEGORI MASARO</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="card-title m-b-0">Daftar Transaksi</h2>
+                        <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Tanggal</th>
+                                <th class="text-center">No Transaksi</th>
+                                <th class="text-center">Nama User</th>
+                                <th class="text-center">Tipe</th>
+                                <th class="text-center">Kategori</th>
+                                <th class="text-center">Total Berat (gram)</th>
+                                <th class="text-center">Total Harga (Rp)</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center"></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,16 +58,9 @@
             serverSide: true,
             pageLength: 25,
             ajax: '{!! route('datatables.transactions') !!}',
-            order: [ [0, 'asc'] ],
+            order: [ [0, 'desc'] ],
             columns: [
-                { data: 'transaction_no', name: 'transaction_no', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'type', name: 'type', class: 'text-center'},
-                { data: 'category', name: 'category', class: 'text-center'},
-                { data: 'total_weight', name: 'total_weight', class: 'text-center'},
-                { data: 'total_price', name: 'total_price', class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center'},
-                { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
+                { data: 'date', name: 'date', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
                             return moment(data).format('DD MMM YYYY');
@@ -57,6 +68,33 @@
                         return data;
                     }
                 },
+                { data: 'transaction_no', name: 'transaction_no', class: 'text-center'},
+                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'type', name: 'type', orderable: false, searchable: false, class: 'text-center'},
+                { data: 'category', name: 'category', orderable: false, searchable: false, class: 'text-center'},
+                { data: 'total_weight', name: 'total_weight', class: 'text-right',
+                    render: function ( data, type, row ){
+                        if ( type === 'display' || type === 'filter' ){
+                            return data.toLocaleString(
+                                "de-DE",
+                                {minimumFractionDigits: 2}
+                            );
+                        }
+                        return data;
+                    }
+                },
+                { data: 'total_price', name: 'total_price', class: 'text-right',
+                    render: function ( data, type, row ){
+                        if ( type === 'display' || type === 'filter' ){
+                            return data.toLocaleString(
+                                "de-DE",
+                                {minimumFractionDigits: 2}
+                            );
+                        }
+                        return data;
+                    }
+                },
+                { data: 'status', name: 'status', class: 'text-center'},
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
             language: {

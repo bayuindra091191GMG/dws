@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -25,6 +26,26 @@ class UserController extends Controller
         }
         catch(\Exception $ex){
             error_log($ex);
+        }
+    }
+
+    public function changeRoutinePickup(Request $request)
+    {
+        try{
+            $user = User::where('email', $request->input('email'));
+
+            $user->routine_pickup = $request->input('routine_pickup');
+            $user->save();
+
+            return Response::json([
+                'message' => "Success Changing Routine Pickup Status!",
+            ], 200);
+        }
+        catch(\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
         }
     }
 

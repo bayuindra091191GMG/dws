@@ -19,18 +19,26 @@ class TransactionTransformer extends TransformerAbstract
     public function transform(TransactionHeader $header){
 
         try{
+            $date = Carbon::parse($header->date)->toIso8601String();
             $createdDate = Carbon::parse($header->created_at)->format('d M Y');
             $action = "<a class='btn btn-xs btn-info' href='transactions/show/".$header->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>";
 
+            if(!empty($header->user_id)){
+                $name = $header->user->first_name. " ". $header->user->last_name;
+            }
+            else{
+                $name = "BELUM ASSIGN";
+            }
+
             return[
+                'date'              => $date,
                 'transaction_no'    => $header->transaction_no,
-                'name'              => $header->user->first_name . ' ' . $header->user->last_name,
+                'name'              => $name,
                 'type'              => $header->transaction_type->description,
                 'category'          => $header->waste_category->name,
-                'total_weight'      => $header->total_weight . 'kg',
-                'total_price'       => 'Rp'.$header->total_price,
+                'total_weight'      => $header->total_weight,
+                'total_price'       => $header->total_price,
                 'status'            => $header->status->description,
-                'created_at'        => $createdDate,
                 'action'            => $action
             ];
         }

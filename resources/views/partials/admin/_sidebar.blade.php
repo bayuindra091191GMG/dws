@@ -59,6 +59,14 @@
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Transaksi </span>
                             </a>
+                            <a href="{{ route('admin.transactions.index') }}" class="sidebar-link">
+                                <i class="fas fa-plus"></i>
+                                <span class="hide-menu"> Transaksi Kategori DWS </span>
+                            </a>
+                            <a href="{{ route('admin.transactions.index') }}" class="sidebar-link">
+                                <i class="fas fa-plus"></i>
+                                <span class="hide-menu"> Transaksi Kategori Masaro </span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -66,7 +74,7 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-account-settings-variant"></i>
-                        <span class="hide-menu">Setting </span>
+                        <span class="hide-menu">Master Data </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
@@ -91,6 +99,12 @@
                             <a href="{{ route('admin.dws-wastes.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
                                 <span class="hide-menu"> Dws Waste Categories </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.dws-waste-items.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-note-plus"></i>
+                                <span class="hide-menu"> Dws Waste Items </span>
                             </a>
                         </li>
                         <li class="sidebar-item">

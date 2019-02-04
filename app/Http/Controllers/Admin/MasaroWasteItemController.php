@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MasaroWaste;
 use App\Models\MasaroWasteCategoryData;
-use App\Transformer\MasaroWasteCategoryTransformer;
+use App\Transformer\MasaroWasteTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +14,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Intervention\Image\Facades\Image;
-use Intervention\Image\File;
 
-
-class MasaroWasteController extends Controller
+class MasaroWasteItemController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -29,9 +28,9 @@ class MasaroWasteController extends Controller
     }
 
     public function getIndex(Request $request){
-        $users = MasaroWasteCategoryData::query();
+        $users = MasaroWaste::query();
         return DataTables::of($users)
-            ->setTransformer(new MasaroWasteCategoryTransformer)
+            ->setTransformer(new MasaroWasteTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -43,7 +42,7 @@ class MasaroWasteController extends Controller
      */
     public function index()
     {
-        return view('admin.masaro.index');
+        return view('admin.masaroitem.index');
     }
 
     /**
@@ -53,7 +52,9 @@ class MasaroWasteController extends Controller
      */
     public function create()
     {
-        return view('admin.masaro.create');
+        $categories = MasaroWasteCategoryData::all();
+
+        return view('admin.masaroitem.create', compact('categories'));
     }
 
     /**
@@ -65,10 +66,12 @@ class MasaroWasteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'price'         => 'required',
-            'description'   => 'required',
+            'name'              => 'required',
+            'other_description' => 'required',
+            'category'          => 'required',
+            'description'       => 'required',
         ]);
+
         $image = $request->file('img_path');
 
         if($image == null){
@@ -79,12 +82,15 @@ class MasaroWasteController extends Controller
 
         $user = Auth::guard('admin')->user();
 
-        $masaroWaste = MasaroWasteCategoryData::create([
-            'name'          => $request->input('name'),
-            'price'         => $request->input('price'),
-            'description'   => $request->input('description'),
-            'created_at'    => Carbon::now('Asia/Jakarta'),
-            'created_by'    => $user->id
+        $dwsWaste = MasaroWaste::create([
+            'masaro_waste_category_datas_id'   => $request->input('category'),
+            'name'                          => $request->input('name'),
+            'description'                   => $request->input('description'),
+            'other_description'             => $request->input('other_description'),
+            'created_by'                    => $user->id,
+            'created_at'                    => Carbon::now('Asia/Jakarta'),
+            'updated_by'                    => $user->id,
+            'updated_at'                    => Carbon::now('Asia/Jakarta')
         ]);
 
         //Save Image
@@ -92,15 +98,15 @@ class MasaroWasteController extends Controller
         $extStr = $img->mime();
         $ext = explode('/', $extStr, 2);
 
-        $filename = $masaroWaste->id.'_main_'.$masaroWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+        $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+        $img->save('../public_html/storage/admin/masaroitem/'. $filename, 75);
 
-        $masaroWaste->img_path = $filename;
-        $masaroWaste->save();
+        $dwsWaste->img_path = $filename;
+        $dwsWaste->save();
 
-        Session::flash('success', 'Success Creating new Masaro Waste Category!');
-        return redirect()->route('admin.masaro-wastes.index');
+        Session::flash('success', 'Success Creating new Masaro Waste Item!');
+        return redirect()->route('admin.masaro-waste-items.index');
     }
 
     /**
@@ -122,20 +128,23 @@ class MasaroWasteController extends Controller
      */
     public function edit($id)
     {
-        $masaroWaste = MasaroWasteCategoryData::find($id);
-        return view('admin.masaro.edit', compact('masaroWaste'));
+        $masaroWaste = MasaroWaste::find($id);
+        $categories = MasaroWasteCategoryData::all();
+
+        return view('admin.masaroitem.edit', compact('masaroWaste', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
+            'golongan'      => 'required',
             'price'         => 'required',
             'description'   => 'required',
         ]);
@@ -145,23 +154,23 @@ class MasaroWasteController extends Controller
 
         $user = Auth::guard('admin')->user();
 
-        $masaroWaste = MasaroWasteCategoryData::find($request->input('id'));
-        $masaroWaste->name = $request->input('name');
-        $masaroWaste->price = $request->input('price');
-        $masaroWaste->description = $request->input('description');
-        $masaroWaste->updated_at = Carbon::now('Asia/Jakarta');
-        $masaroWaste->updated_by = $user->id;
-        $masaroWaste->save();
+        $dwsWaste = MasaroWaste::find($request->input('id'));
+        $dwsWaste->name = $request->input('name');
+        $dwsWaste->other_description = $request->input('other_description');
+        $dwsWaste->description = $request->input('description');
+        $dwsWaste->updated_at = Carbon::now('Asia/Jakarta');
+        $dwsWaste->updated_by = $user->id;
+        $dwsWaste->save();
 
         //Save Image
         if($image != null) {
             $img = Image::make($image);
-            $filename = $masaroWaste->img_path;
-            $img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+            $filename = $dwsWaste->img_path;
+            $img->save('../public_html/storage/admin/masaroitem/' . $filename, 75);
         }
 
-        Session::flash('success', 'Success Updating new Masaro Waste Category!');
-        return redirect()->route('admin.masaro-wastes.index');
+        Session::flash('success', 'Success Updating new Masaro Waste Item!');
+        return redirect()->route('admin.masaro-waste-items.index');
     }
 
     /**
@@ -174,16 +183,16 @@ class MasaroWasteController extends Controller
     {
         try {
             //Belum melakukan pengecekan hubungan antar Table
-            $masaroWasteid = $request->input('id');
-            $masaroWaste = MasaroWasteCategoryData::find($masaroWasteid);
-            $masaroWaste->delete();
+            $dwsWasteId = $request->input('id');
+            $dwsWaste = DwsWaste::find($dwsWasteId);
+            $dwsWaste->delete();
 
-            $image_path = "../public_html/storage/admin/masarocategory/" . $masaroWaste->img_path;  // Value is not URL but directory file path
+            $image_path = "../public_html/storage/admin/masaroitem/" . $dwsWaste->img_path;  // Value is not URL but directory file path
             if(file_exists($image_path)) {
                 unlink($image_path);
             }
 
-            Session::flash('success', 'Success Deleting Masaro Waste Category ' . $masaroWaste->name);
+            Session::flash('success', 'Success Deleting Masaro Waste Item ' . $dwsWaste->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){

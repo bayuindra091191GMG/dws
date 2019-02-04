@@ -67,26 +67,44 @@ class WasteBankController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->input('open_hours'), $request->input('days'));
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
             'address'       => 'required',
             'phone'         => 'required',
             'pic'           => 'required',
             'latitude'      => 'required',
-            'longitude'     => 'required'
+            'longitude'     => 'required',
+            'open_hours'    => 'required',
+            'closed_hours'  => 'required',
+            'days'          => 'required',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         //Create Wastebank
+        $dayData = '';
+        $max = count($request->input('days'));
+        $idx = 1;
+        foreach ($request->input('days') as $day){
+            $dayData .= $day;
+            if($idx < $max) {
+                $dayData .= '#';
+                $idx++;
+            }
+        }
+        //dd($dayData, $max, $idx);
         $user = Auth::guard('admin')->user();
-        $wastebank = WasteBank::create([
+        WasteBank::create([
             'name'      => $request->input('name'),
             'address'   => $request->input('address'),
             'phone'     => $request->input('phone'),
             'pic_id'    => $request->input('pic'),
             'latitude'  => $request->input('latitude'),
             'longitude' => $request->input('longitude'),
+            'open_hours'=> $request->input('open_hours'),
+            'closed_hours'=> $request->input('closed_hours'),
+            'open_days' => $dayData,
             'city_id'   => $request->input('city'),
             'created_at'=> Carbon::now('Asia/Jakarta'),
             'created_by'=> $user->id,
@@ -119,6 +137,8 @@ class WasteBankController extends Controller
     {
         $wasteBank = WasteBank::find($id);
         $cities = City::all();
+        $days = explode('#', $wasteBank->open_days);
+        dd($days);
         return view('admin.wastebank.edit', compact('wasteBank', 'cities'));
     }
 

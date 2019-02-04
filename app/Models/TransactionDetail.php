@@ -45,6 +45,19 @@ class TransactionDetail extends Eloquent
 		'price'
 	];
 
+	protected $appends = [
+	    'weight_string',
+        'price_string'
+    ];
+
+    public function getWeightStringAttribute(){
+        return number_format($this->attributes['weight'], 0, ",", ".");
+    }
+
+    public function getPriceStringAttribute(){
+        return number_format($this->attributes['price'], 0, ",", ".");
+    }
+
 	public function dws_waste_category_data()
 	{
 		return $this->belongsTo(\App\Models\DwsWasteCategoryData::class, 'dws_category_id');
