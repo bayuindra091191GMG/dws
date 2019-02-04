@@ -194,7 +194,7 @@ class TransactionHeaderController extends Controller
     public function setTransactionToUser(Request $request)
     {
         $rules = array(
-            'transaction_id'    => 'required',
+            'transaction_no'    => 'required',
             'email'             => 'required'
         );
 
@@ -207,7 +207,7 @@ class TransactionHeaderController extends Controller
         }
 
         $user = User::where('email', $data['email'])->first();
-        $header = TransactionHeader::find($data['transaction_id']);
+        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
         $header->user_id = $user->id;
         $header->save();
 
