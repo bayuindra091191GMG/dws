@@ -59,11 +59,11 @@
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Transaksi </span>
                             </a>
-                            <a href="{{ route('admin.transactions.index') }}" class="sidebar-link">
+                            <a href="{{ route('admin.transactions.dws.create') }}" class="sidebar-link">
                                 <i class="fas fa-plus"></i>
                                 <span class="hide-menu"> Transaksi Kategori DWS </span>
                             </a>
-                            <a href="{{ route('admin.transactions.index') }}" class="sidebar-link">
+                            <a href="{{ route('admin.transactions.masaro.create') }}" class="sidebar-link">
                                 <i class="fas fa-plus"></i>
                                 <span class="hide-menu"> Transaksi Kategori Masaro </span>
                             </a>
