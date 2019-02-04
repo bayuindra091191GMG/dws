@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PointHistory;
+use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
@@ -34,7 +36,20 @@ class PoinController extends Controller
                     'redeem_at'     => Carbon::now('Asia/Jakarta')
                 ]);
 
-                $user->point -= $voucher->required_poin;
+                $userPoint = $user->point - $voucher->required_poin;
+                $transaction = TransactionHeader::find($request->input('transaction_id'));
+                PointHistory::create([
+                    'user_id' => $request->input('user_id'),
+                    'type' => $transaction->transaction_type_id,
+                    'transaction_id' => $request->input('transaction_id'),
+                    'type_transaction' => "debet",
+                    'amount' => $voucher->required_poin,
+                    'saldo' => $userPoint,
+                    'description' => "Pemakaian voucher code ".$voucher->code,
+                    'created_at'     => Carbon::now('Asia/Jakarta')
+                ]);
+
+                $user->point = $userPoint;
                 $user->save();
 
                 return Response::json([

@@ -26,10 +26,10 @@ class PointTransformer extends TransformerAbstract
             $action = "<a class='btn btn-xs btn-info' href='points/show/".$point->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>";
 
             if($point->type_transaction == 'debet'){
-                $amount = $point->amount;
+                $amount = "(".$point->amount.")";
             }
             else{
-                $amount = "(".$point->amount.")";
+                $amount = $point->amount;
             }
 
             if(!empty($point->user_id)){
