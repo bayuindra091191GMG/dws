@@ -125,10 +125,13 @@ Route::prefix('admin')->group(function(){
 
     // Transactions
     Route::get('/transactions', 'Admin\TransactionHeaderController@index')->name('admin.transactions.index');
+    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.show');
     Route::get('/transactions/dws/create', 'Admin\TransactionHeaderController@createDws')->name('admin.transactions.dws.create');
     Route::get('/transactions/masaro/create', 'Admin\TransactionHeaderController@createMasaro')->name('admin.transactions.masaro.create');
     Route::post('/transactions/store', 'Admin\TransactionHeaderController@store')->name('admin.transactions.store');
-    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.show');
+    Route::get('/transactions/dws/edit/{id}', 'Admin\TransactionHeaderController@editDws')->name('admin.transactions.dws.edit');
+    Route::get('/transactions/masaro/edit/{id}', 'Admin\TransactionHeaderController@editMasaro')->name('admin.transactions.masaro.edit');
+    Route::post('/transactions/update/{id}', 'Admin\TransactionHeaderController@update')->name('admin.transactions.update');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');

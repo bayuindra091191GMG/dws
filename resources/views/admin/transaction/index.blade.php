@@ -60,7 +60,7 @@
             ajax: '{!! route('datatables.transactions') !!}',
             order: [ [0, 'desc'] ],
             columns: [
-                { data: 'date', name: 'date', class: 'text-center', orderable: false, searchable: false,
+                { data: 'date', name: 'date', class: 'text-center',
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
                             return moment(data).format('DD MMM YYYY');

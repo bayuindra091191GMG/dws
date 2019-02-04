@@ -7,6 +7,17 @@
         <div class="card-body">
             <h2 class="card-title m-b-0">Detail Transaksi</h2>
             <div class="container-fluid relative animatedParent animateOnce">
+                <div class="row mb-2">
+                    <div class="col-12 text-right">
+
+                        @if($header->waste_category_id == "1")
+                            <a href="{{ route('admin.transactions.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                        @else
+                            <a href="{{ route('admin.transactions.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                        @endif
+
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
