@@ -51,28 +51,54 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-book"></i>
-                        <span class="hide-menu">Transaksi </span>
+                        <span class="hide-menu">Transaksi Antar Sendiri</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="{{ route('admin.transactions.index') }}" class="sidebar-link">
+                            <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Transaksi </span>
                             </a>
-                            <a href="{{ route('admin.transactions.dws.create') }}" class="sidebar-link">
+                            <a href="{{ route('admin.transactions.antar_sendiri.dws.create') }}" class="sidebar-link">
                                 <i class="fas fa-plus"></i>
                                 <span class="hide-menu"> Transaksi Kategori DWS </span>
                             </a>
-                            <a href="{{ route('admin.transactions.masaro.create') }}" class="sidebar-link">
+                            <a href="{{ route('admin.transactions.antar_sendiri.masaro.create') }}" class="sidebar-link">
                                 <i class="fas fa-plus"></i>
                                 <span class="hide-menu"> Transaksi Kategori Masaro </span>
                             </a>
-                            <a href="{{ route('admin.points.index') }}" class="sidebar-link">
-                                <i class="mdi mdi-book-multiple"></i>
-                                <span class="hide-menu"> Daftar Transaksi Point </span>
-                            </a>
                         </li>
                     </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-book"></i>
+                        <span class="hide-menu">Transaksi On Demand</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.transactions.on_demand.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Transaksi </span>
+                            </a>
+                            {{--<a href="{{ route('admin.transactions.on_demand.dws.create') }}" class="sidebar-link">--}}
+                                {{--<i class="fas fa-plus"></i>--}}
+                                {{--<span class="hide-menu"> Transaksi Kategori DWS </span>--}}
+                            {{--</a>--}}
+                            {{--<a href="{{ route('admin.transactions.on_demand.masaro.create') }}" class="sidebar-link">--}}
+                                {{--<i class="fas fa-plus"></i>--}}
+                                {{--<span class="hide-menu"> Transaksi Kategori Masaro </span>--}}
+                            {{--</a>--}}
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.points.index') }}" aria-expanded="false">
+                        <i class="mdi mdi-view-dashboard"></i>
+                        <span class="hide-menu">Point</span>
+                    </a>
                 </li>
 
                 <li class="sidebar-item">

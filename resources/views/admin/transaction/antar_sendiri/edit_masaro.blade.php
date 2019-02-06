@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Buat Transaksi Baru Kategori Masaro</h2>
+                <h2 class="card-title m-b-0">Ubah Transaksi Kategori Masaro</h2>
 
-                {{ Form::open(['route'=>['admin.transactions.store'],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.transactions.antar_sendiri.update', $header->id],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -38,7 +38,7 @@
                                             <div class="form-group form-float form-group-lg">
                                                 <div class="form-line">
                                                     <label class="form-label" for="code">Nomor Transaksi</label>
-                                                    <input id="code" name="code" type="text" class="form-control" value="{{ $code }}" readonly>
+                                                    <input id="code" name="code" type="text" class="form-control" value="{{ $header->transaction_no }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -55,7 +55,7 @@
                                             <div class="form-group form-float form-group-lg">
                                                 <div class="form-line">
                                                     <label class="form-label" for="date">Tanggal *</label>
-                                                    <input id="date" name="date" type="text" class="form-control" autocomplete="off" value="{{ $dateToday }}" required>
+                                                    <input id="date" name="date" type="text" class="form-control" autocomplete="off" value="{{ $date }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,7 +64,7 @@
                                             <div class="form-group form-float form-group-lg">
                                                 <div class="form-line">
                                                     <label class="form-label" for="notes">Catatan</label>
-                                                    <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+                                                    <textarea id="notes" name="notes" class="form-control" rows="3">{{ $header->notes }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,24 +87,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {{--<tr>--}}
-                                            {{--<th scope="row">1</th>--}}
-                                            {{--<td>Mark</td>--}}
-                                            {{--<td>Otto</td>--}}
-                                            {{--<td>@mdo</td>--}}
-                                            {{--</tr>--}}
-                                            {{--<tr>--}}
-                                            {{--<th scope="row">2</th>--}}
-                                            {{--<td>Jacob</td>--}}
-                                            {{--<td>Thornton</td>--}}
-                                            {{--<td>@fat</td>--}}
-                                            {{--</tr>--}}
-                                            {{--<tr>--}}
-                                            {{--<th scope="row">3</th>--}}
-                                            {{--<td>Larry</td>--}}
-                                            {{--<td>the Bird</td>--}}
-                                            {{--<td>@twitter</td>--}}
-                                            {{--</tr>--}}
+                                            @php( $idx = 0 )
+                                            @foreach($header->transaction_details as $detail)
+                                                <tr id="row_{{ $idx }}">
+                                                    <td>
+                                                        <select id="category_{{ $idx }}" name="categories[]" class="form-control">
+                                                            @foreach($wasteCategories as $category)
+                                                                <option value="{{ $category->id }}" {{ $detail->masaro_category_id == $category->id ? "selected" : "" }}>{{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="text" id="weight_{{ $idx }}" name="weights[]" class="form-control text-right"/></td>
+                                                    <td><input type="text" id="price_{{ $idx }}" name="prices[]" class="form-control text-right"/></td>
+                                                    <td class="text-center"><a class="btn btn-danger" style="cursor: pointer;" onclick="deleteRow('{{ $idx }}')"><i class="fas fa-minus-circle text-white"></i></a></td>
+                                                </tr>
+                                                @php( $idx++ )
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -112,8 +110,8 @@
                                     <input type="hidden" name="category_type" value="2"/>
 
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">Exit</a>
-                                        <input type="submit" class="btn btn-success" value="Save">
+                                        <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">KEMBALI</a>
+                                        <input type="submit" class="btn btn-success" value="SIMPAN">
                                     </div>
                                 </div>
                                 <!-- #END# Input -->
@@ -157,8 +155,32 @@
             format: "dd M yyyy"
         });
 
-        var i = 0;
+        // Set autonumeric each row
+        @php( $numericIdx = 0 )
+        @foreach($header->transaction_details as $detail)
+        new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight }}', {
+            minimumValue: '0',
+            maximumValue: '999999',
+            digitGroupSeparator: '.',
+            decimalCharacter: ',',
+            decimalPlaces: 0,
+            modifyValueOnWheel: false
+        });
 
+        new AutoNumeric('#price_{{ $numericIdx }}', '{{ $detail->price }}', {
+            minimumValue: '0',
+            maximumValue: '9999999999',
+            digitGroupSeparator: '.',
+            decimalCharacter: ',',
+            decimalPlaces: 0,
+            modifyValueOnWheel: false
+        });
+                @php( $numericIdx++ )
+                @endforeach
+
+        var i = parseInt("{{ $idx }}");
+
+        // Add new category entry
         function addRow(){
             var sbAdd = "<tr id='row_" + i + "'>";
             sbAdd += "<td><select id='category_" + i + "' name='categories[]' class='form-control'>";
@@ -173,7 +195,7 @@
             sbAdd += "<select/></td>";
             sbAdd += "<td><input type='text' id='weight_" + i + "' name='weights[]' class='form-control text-right' /></td>";
             sbAdd += "<td><input type='text' id='price_" + i + "' name='prices[]' class='form-control text-right' /></td>";
-            sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + i + ")'><i class='fas fa-minus-circle text-white'></a></td>";
+            sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + i + ")'><i class='fas fa-minus-circle text-white'></i></a></td>";
 
             $('#category_table').append(sbAdd);
 

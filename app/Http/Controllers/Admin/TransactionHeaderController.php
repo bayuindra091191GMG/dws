@@ -29,7 +29,7 @@ class TransactionHeaderController extends Controller
     }
 
     public function getIndex(Request $request){
-        $transations = TransactionHeader::query();
+        $transations = TransactionHeader::where('transaction_type_id', 2)->get();
         return DataTables::of($transations)
             ->setTransformer(new TransactionTransformer)
             ->addIndexColumn()
@@ -43,7 +43,7 @@ class TransactionHeaderController extends Controller
      */
     public function index()
     {
-        return view('admin.transaction.index');
+        return view('admin.transaction.antar_sendiri.index');
     }
 
     /**
@@ -69,7 +69,7 @@ class TransactionHeaderController extends Controller
             'wasteCategories'   => $wasteCategories
         ];
 
-        return view('admin.transaction.create_dws')->with($data);
+        return view('admin.transaction.antar_sendiri.create_dws')->with($data);
     }
 
     /**
@@ -95,7 +95,7 @@ class TransactionHeaderController extends Controller
             'wasteCategories'   => $wasteCategories
         ];
 
-        return view('admin.transaction.create_masaro')->with($data);
+        return view('admin.transaction.antar_sendiri.create_masaro')->with($data);
     }
 
     /**
@@ -221,7 +221,7 @@ class TransactionHeaderController extends Controller
             Session::flash('message', 'Berhasil membuat transaksi kategori Masaro!');
         }
 
-        return redirect()->route('admin.transactions.show', ['id' => $trxHeader->id]);
+        return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
     }
 
     /**
@@ -248,7 +248,7 @@ class TransactionHeaderController extends Controller
             'name'          => $name
         ];
 
-        return view('admin.transaction.show')->with($data);
+        return view('admin.transaction.antar_sendiri.show')->with($data);
     }
 
     /**
@@ -269,7 +269,7 @@ class TransactionHeaderController extends Controller
             'wasteCategories'   => $wasteCategories
         ];
 
-        return view('admin.transaction.edit_dws')->with($data);
+        return view('admin.transaction.antar_sendiri.edit_dws')->with($data);
     }
 
     /**
@@ -290,7 +290,7 @@ class TransactionHeaderController extends Controller
             'wasteCategories'   => $wasteCategories
         ];
 
-        return view('admin.transaction.edit_masaro')->with($data);
+        return view('admin.transaction.antar_sendiri.edit_masaro')->with($data);
     }
 
     /**
@@ -435,7 +435,7 @@ class TransactionHeaderController extends Controller
             Session::flash('message', 'Berhasil ubah transaksi kategori Masaro!');
         }
 
-        return redirect()->route('admin.transactions.show', ['id' => $trxHeader->id]);
+        return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
     }
 
     /**

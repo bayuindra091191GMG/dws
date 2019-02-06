@@ -7,7 +7,7 @@
             <div class="card-body">
                 <h2 class="card-title m-b-0">Ubah Transaksi Kategori DWS</h2>
 
-                {{ Form::open(['route'=>['admin.transactions.update', $header->id],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.transactions.antar_sendiri.update', $header->id],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">

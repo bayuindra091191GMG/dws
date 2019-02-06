@@ -123,15 +123,35 @@ Route::prefix('admin')->group(function(){
     Route::post('/masaro-waste-items/update', 'Admin\MasaroWasteItemController@update')->name('admin.masaro-waste-items.update');
     Route::post('/masaro-waste-items/delete', 'Admin\MasaroWasteItemController@destroy')->name('admin.masaro-waste-items.destroy');
 
-    // Transactions
-    Route::get('/transactions', 'Admin\TransactionHeaderController@index')->name('admin.transactions.index');
-    Route::get('/transactions/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.show');
-    Route::get('/transactions/dws/create', 'Admin\TransactionHeaderController@createDws')->name('admin.transactions.dws.create');
-    Route::get('/transactions/masaro/create', 'Admin\TransactionHeaderController@createMasaro')->name('admin.transactions.masaro.create');
-    Route::post('/transactions/store', 'Admin\TransactionHeaderController@store')->name('admin.transactions.store');
-    Route::get('/transactions/dws/edit/{id}', 'Admin\TransactionHeaderController@editDws')->name('admin.transactions.dws.edit');
-    Route::get('/transactions/masaro/edit/{id}', 'Admin\TransactionHeaderController@editMasaro')->name('admin.transactions.masaro.edit');
-    Route::post('/transactions/update/{id}', 'Admin\TransactionHeaderController@update')->name('admin.transactions.update');
+    // Antar Sendiri Transactions
+    Route::get('/transactions/antar_sendiri', 'Admin\TransactionHeaderController@index')->name('admin.transactions.antar_sendiri.index');
+    Route::get('/transactions/antar_sendiri/show/{id}', 'Admin\TransactionHeaderController@show')->name('admin.transactions.antar_sendiri.show');
+    Route::get('/transactions/antar_sendiri/dws/create', 'Admin\TransactionHeaderController@createDws')->name('admin.transactions.antar_sendiri.dws.create');
+    Route::get('/transactions/antar_sendiri/masaro/create', 'Admin\TransactionHeaderController@createMasaro')->name('admin.transactions.antar_sendiri.masaro.create');
+    Route::post('/transactions/antar_sendiri/store', 'Admin\TransactionHeaderController@store')->name('admin.transactions.antar_sendiri.store');
+    Route::get('/transactions/antar_sendiri/dws/edit/{id}', 'Admin\TransactionHeaderController@editDws')->name('admin.transactions.antar_sendiri.dws.edit');
+    Route::get('/transactions/antar_sendiri/masaro/edit/{id}', 'Admin\TransactionHeaderController@editMasaro')->name('admin.transactions.antar_sendiri.masaro.edit');
+    Route::post('/transactions/antar_sendiri/update/{id}', 'Admin\TransactionHeaderController@update')->name('admin.transactions.antar_sendiri.update');
+
+    // On Demand Transactions
+    Route::get('/transactions/on_demand', 'Admin\TransactionHeaderOnDemandController@index')->name('admin.transactions.on_demand.index');
+    Route::get('/transactions/on_demand/show/{id}', 'Admin\TransactionHeaderOnDemandController@show')->name('admin.transactions.on_demand.show');
+    Route::get('/transactions/on_demand/dws/create', 'Admin\TransactionHeaderOnDemandController@createDws')->name('admin.transactions.on_demand.dws.create');
+    Route::get('/transactions/on_demand/masaro/create', 'Admin\TransactionHeaderOnDemandController@createMasaro')->name('admin.transactions.on_demand.masaro.create');
+    Route::post('/transactions/on_demand/store', 'Admin\TransactionHeaderOnDemandController@store')->name('admin.transactions.on_demand.store');
+    Route::get('/transactions/on_demand/dws/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editDws')->name('admin.transactions.dws.on_demand.edit');
+    Route::get('/transactions/on_demand/masaro/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editMasaro')->name('admin.transactions.on_demand.masaro.edit');
+    Route::post('/transactions/on_demand/update/{id}', 'Admin\TransactionHeaderOnDemandController@update')->name('admin.transactions.on_demand.update');
+
+    // Rutin Transactions
+    Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderOnDemandController@index')->name('admin.transactions.penjemputan_rutin.index');
+    Route::get('/transactions/penjemputan_rutin/show/{id}', 'Admin\TransactionHeaderOnDemandController@show')->name('admin.transactions.penjemputan_rutin.show');
+    Route::get('/transactions/penjemputan_rutin/dws/create', 'Admin\TransactionHeaderOnDemandController@createDws')->name('admin.transactions.penjemputan_rutin.dws.create');
+    Route::get('/transactions/penjemputan_rutin/masaro/create', 'Admin\TransactionHeaderOnDemandController@createMasaro')->name('admin.transactions.penjemputan_rutin.masaro.create');
+    Route::post('/transactions/penjemputan_rutin/store', 'Admin\TransactionHeaderOnDemandController@store')->name('admin.transactions.penjemputan_rutin.store');
+    Route::get('/transactions/penjemputan_rutin/dws/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editDws')->name('admin.transactions.dws.penjemputan_rutin.edit');
+    Route::get('/transactions/penjemputan_rutin/masaro/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editMasaro')->name('admin.transactions.penjemputan_rutin.masaro.edit');
+    Route::post('/transactions/penjemputan_rutin/update/{id}', 'Admin\TransactionHeaderOnDemandController@update')->name('admin.transactions.penjemputan_rutin.update');
 
     // Points
     Route::get('/points', 'Admin\PointController@index')->name('admin.points.index');
@@ -156,7 +176,8 @@ Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
 Route::get('/datatables-dws-wastes', 'Admin\DwsWasteController@getIndex')->name('datatables.dws-wastes');
 Route::get('/datatables-masaro-wastes', 'Admin\MasaroWasteController@getIndex')->name('datatables.masaro-wastes');
-Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@getIndex')->name('datatables.transactions');
+Route::get('/datatables-transactions-antar-sendiri', 'Admin\TransactionHeaderController@getIndex')->name('datatables.antar_sendiri.transactions');
+Route::get('/datatables-transactions-on-demand', 'Admin\TransactionHeaderOnDemandController@getIndex')->name('datatables.on_demand.transactions');
 Route::get('/datatables-dws-waste-items', 'Admin\DwsWasteItemController@getIndex')->name('datatables.dws-waste-items');
 Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@getIndex')->name('datatables.masaro-waste-items');
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');

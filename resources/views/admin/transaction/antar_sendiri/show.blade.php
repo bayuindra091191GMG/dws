@@ -11,9 +11,9 @@
                     <div class="col-12 text-right">
 
                         @if($header->waste_category_id == "1")
-                            <a href="{{ route('admin.transactions.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                            <a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
                         @else
-                            <a href="{{ route('admin.transactions.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                            <a href="{{ route('admin.transactions.antar_sendiri.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
                         @endif
 
                     </div>
