@@ -86,6 +86,7 @@ Route::prefix('admin')->group(function(){
     // Wastebanks
     Route::get('/waste-banks', 'Admin\WasteBankController@index')->name('admin.waste-banks.index');
     Route::get('/waste-banks/create', 'Admin\WasteBankController@create')->name('admin.waste-banks.create');
+    Route::get('/waste-banks/create/masaro', 'Admin\WasteBankController@createMasaro')->name('admin.waste-banks.create.masaro');
     Route::post('/waste-banks/store', 'Admin\WasteBankController@store')->name('admin.waste-banks.store');
     Route::get('/waste-banks/edit/{item}', 'Admin\WasteBankController@edit')->name('admin.waste-banks.edit');
     Route::post('/waste-banks/update', 'Admin\WasteBankController@update')->name('admin.waste-banks.update');
@@ -187,6 +188,8 @@ Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles
 Route::get('/select-categories', 'Admin\CategoryController@getCategories')->name('select.categories');
 Route::get('/select-products', 'Admin\ProductController@getProducts')->name('select.products');
 Route::get('/select-admin-users', 'Admin\AdminUserController@getAdminUsers')->name('select.admin-users');
+Route::get('/select-dws-categories', 'Admin\DwsWasteController@getDwsCategories')->name('select.dws-categories');
+Route::get('/select-masaro-categories', 'Admin\MasaroWasteController@getMasaroCategories')->name('select.masaro-categories');
 
 // Third Party API
 Route::get('/update-currency', 'Admin\CurrencyController@getCurrenciesUpdate')->name('update-currencies');

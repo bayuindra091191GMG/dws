@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Waste Bank Dws Version</h2>
+                <h2 class="card-title m-b-0">Create New Waste Bank Masaro Version</h2>
 
                 {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
@@ -17,14 +17,14 @@
                                     <div class="tab-content pb-3" id="v-pills-tabContent">
                                         <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
                                             @include('partials.admin._messages')
-                                            @foreach($errors->all() as $error)
-                                                <ul>
-                                                    <li>
-                                                    <span class="help-block">
-                                                        <strong style="color: #ff3d00;"> {{ $error }} </strong>
-                                                    </span>
-                                                    </li>
-                                                </ul>
+                                                @foreach($errors->all() as $error)
+                                                    <ul>
+                                                        <li>
+                                                        <span class="help-block">
+                                                            <strong style="color: #ff3d00;"> {{ $error }} </strong>
+                                                        </span>
+                                                        </li>
+                                                    </ul>
                                             @endForeach
                                         <!-- Input -->
                                             <div class="body">
@@ -45,7 +45,7 @@
                                                                         <label class="form-label" for="name">Name *</label>
                                                                         <input id="name" type="text" class="form-control"
                                                                                name="name" value="{{ old('name') }}">
-                                                                        <input type="hidden" name="categoryType" value="1" />
+                                                                        <input type="hidden" name="categoryType" value="2" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -188,7 +188,7 @@
                                                                                        name="schTimes[]"/>
                                                                             </td>
                                                                             <td>
-                                                                                <select id="select0" name="dwsTypes[]" class='form-control'></select>
+                                                                                <select id="select0" name="masaroTypes[]" class='form-control'></select>
                                                                             </td>
                                                                         </tr>
                                                                         <tr id='sch1'></tr>
@@ -320,12 +320,12 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: ' - Pilih DWS Kategori - '
+                text: ' - Pilih Masaro Kategori - '
             },
             width: '100%',
             minimumInputLength: 1,
             ajax: {
-                url: '{{ route('select.dws-categories') }}',
+                url: '{{ route('select.masaro-categories') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -353,7 +353,7 @@
                 "<option value='Minggu'>Minggu</option>" +
                 "</select>" +
                 "</td><td><input type='text' id='schTime" + i + "' name='schTimes[]' class='form-control time-inputmask'></td>" +
-                "<td><select id='select" + i +"' name='dwsTypes[]' class='form-control'></select></td>");
+                "<td><select id='select" + i +"' name='masaroTypes[]' class='form-control'></select></td>");
 
             $('#tab_logic').append('<tr id="sch'+(i+1)+'"></tr>');
 
@@ -366,12 +366,12 @@
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: ' - Pilih DWS Kategori - '
+                    text: ' - Pilih Masaro Kategori - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
                 ajax: {
-                    url: '{{ route('select.dws-categories') }}',
+                    url: '{{ route('select.masaro-categories') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

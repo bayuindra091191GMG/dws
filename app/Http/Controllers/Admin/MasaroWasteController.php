@@ -36,6 +36,22 @@ class MasaroWasteController extends Controller
             ->make(true);
     }
 
+    public function getMasaroCategories(Request $request){
+        $term = trim($request->q);
+        $masaroCategories = MasaroWasteCategoryData::where(function ($q) use ($term) {
+            $q->where('code', 'LIKE', '%' . $term . '%')
+                ->orWhere('name', 'LIKE', '%' . $term . '%');
+        })->get();
+
+        $formatted_tags = [];
+
+        foreach ($masaroCategories as $masaroCategory) {
+            $formatted_tags[] = ['id' => $masaroCategory->id, 'text' => $masaroCategory->code . ' - ' . $masaroCategory->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
+
     /**
      * Display a listing of the resource.
      *

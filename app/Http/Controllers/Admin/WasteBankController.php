@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminUser;
 use App\Models\City;
 use App\Models\WasteBank;
+use App\Models\WasteBankSchedule;
 use App\Transformer\WasteBankTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,6 +54,17 @@ class WasteBankController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function createMasaro()
+    {
+        $cities = City::all();
+        return view('admin.wastebank.create-masaro', compact('cities'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $cities = City::all();
@@ -67,7 +79,7 @@ class WasteBankController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->input('open_hours'), $request->input('days'));
+        //dd($request->input('schDays'), $request->input('schTimes'));
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
             'address'       => 'required',
@@ -77,8 +89,21 @@ class WasteBankController extends Controller
             'longitude'     => 'required',
             'open_hours'    => 'required',
             'closed_hours'  => 'required',
-            'days'          => 'required',
+            'days'          => 'required'
         ]);
+
+        $schDays = $request->input('schDays');
+        $timeDays = $request->input('schTimes');
+        if($request->input('categoryType') == 1){
+            $dwsCategories = $request->input('dwsTypes');
+        }
+        else{
+            $masaroCategories = $request->input('masaroTypes');
+        }
+
+        if($timeDays == null){
+            return redirect()->back()->withErrors("Penjemputan Rutin harus diisi!")->withInput($request->all());
+        }
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
@@ -93,9 +118,9 @@ class WasteBankController extends Controller
                 $idx++;
             }
         }
-        //dd($dayData, $max, $idx);
+
         $user = Auth::guard('admin')->user();
-        WasteBank::create([
+        $wasteBank = WasteBank::create([
             'name'      => $request->input('name'),
             'address'   => $request->input('address'),
             'phone'     => $request->input('phone'),
@@ -109,8 +134,41 @@ class WasteBankController extends Controller
             'created_at'=> Carbon::now('Asia/Jakarta'),
             'created_by'=> $user->id,
             'updated_at'=> Carbon::now('Asia/Jakarta'),
-            'updated_by'=> $user->id
+            'updated_by'=> $user->id,
+            'waste_category_id'=> $request->input('categoryType')
         ]);
+
+        //Wastebank Schedules
+        $i = 0;
+        foreach ($schDays as $day){
+            if($request->input('categoryType') == 1)
+            {
+                WasteBankSchedule::create([
+                    'waste_bank_id'         => $wasteBank->id,
+                    'day'                   => $day,
+                    'time'                  => $timeDays[$i],
+                    'dws_waste_category_id' => $dwsCategories[$i],
+                    'created_at'            => Carbon::now('Asia/Jakarta'),
+                    'updated_at'            => Carbon::now('Asia/Jakarta'),
+                    'updated_by'            => $user->id,
+                    'created_by'            => $user->id
+                ]);
+            }
+            else{
+                WasteBankSchedule::create([
+                    'waste_bank_id'             => $wasteBank->id,
+                    'day'                       => $day,
+                    'time'                      => $timeDays[$i],
+                    'masaro_waste_category_id'  => $masaroCategories[$i],
+                    'created_at'                => Carbon::now('Asia/Jakarta'),
+                    'updated_at'                => Carbon::now('Asia/Jakarta'),
+                    'updated_by'                => $user->id,
+                    'created_by'                => $user->id
+                ]);
+            }
+
+            $i++;
+        }
 
         Session::flash('success', 'Success Creating new Waste Bank!');
         return redirect()->route('admin.waste-banks.index');
@@ -137,8 +195,7 @@ class WasteBankController extends Controller
     {
         $wasteBank = WasteBank::find($id);
         $cities = City::all();
-        $days = explode('#', $wasteBank->open_days);
-        dd($days);
+
         return view('admin.wastebank.edit', compact('wasteBank', 'cities'));
     }
 

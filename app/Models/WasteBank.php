@@ -27,11 +27,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * @property int $waste_category_id
  * 
  * @property \App\Models\City $city
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
  * @property \App\Models\AdminUser $pic
+ * @property \App\Models\WasteCategory $wasteCategory
  *
  * @package App\Models
  */
@@ -55,6 +57,7 @@ class WasteBank extends Eloquent
         'open_days',
         'open_hours',
         'closed_hours',
+        'waste_category_id',
 		'created_by',
 		'updated_by'
 	];
@@ -77,5 +80,10 @@ class WasteBank extends Eloquent
     public function updatedBy()
     {
         return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+    }
+
+    public function wasteCategory()
+    {
+        return $this->belongsTo(\App\Models\WasteCategory::class, 'waste_category_id');
     }
 }

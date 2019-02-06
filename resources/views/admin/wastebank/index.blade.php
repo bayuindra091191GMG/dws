@@ -7,7 +7,10 @@
                 <h2 class="card-title m-b-0">Wastebanks</h2>
                 <div class="ml-auto text-right">
                     <a href="{{ route('admin.waste-banks.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Tambah
+                        <i class="fas fa-plus"></i> Tambah DWS
+                    </a>
+                    <a href="{{ route('admin.waste-banks.create.masaro') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Tambah Masaro
                     </a>
                 </div>
                 @include('partials.admin._messages')

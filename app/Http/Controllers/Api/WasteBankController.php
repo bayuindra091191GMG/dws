@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Models\WasteBank;
+use App\Models\WasteBankSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -49,6 +50,21 @@ class WasteBankController extends Controller
             //$result = $wasteBank->where('distance', '<=', 5);
 
             return $wasteBank;
+        }
+        catch (\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    public function getWasteBankSchedules(Request $request)
+    {
+        try{
+            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $request->input('waste_bank_id'))->all();
+
+            return $wasteBankSchedules;
         }
         catch (\Exception $ex){
             return Response::json([

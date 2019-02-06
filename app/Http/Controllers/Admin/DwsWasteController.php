@@ -105,6 +105,22 @@ class DwsWasteController extends Controller
         return redirect()->route('admin.dws-wastes.index');
     }
 
+    public function getDwsCategories(Request $request){
+        $term = trim($request->q);
+        $dwsCategories = DwsWasteCategoryData::where(function ($q) use ($term) {
+            $q->where('code', 'LIKE', '%' . $term . '%')
+                ->orWhere('name', 'LIKE', '%' . $term . '%');
+        })->get();
+
+        $formatted_tags = [];
+
+        foreach ($dwsCategories as $dwsCategory) {
+            $formatted_tags[] = ['id' => $dwsCategory->id, 'text' => $dwsCategory->code . ' - ' . $dwsCategory->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
+
     /**
      * Display the specified resource.
      *
