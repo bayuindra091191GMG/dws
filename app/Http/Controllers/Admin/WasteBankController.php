@@ -114,7 +114,7 @@ class WasteBankController extends Controller
         foreach ($request->input('days') as $day){
             $dayData .= $day;
             if($idx < $max) {
-                $dayData .= '#';
+                $dayData .= ',';
                 $idx++;
             }
         }

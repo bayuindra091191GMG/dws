@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 08 Jan 2019 07:19:32 +0000.
+ * Date: Thu, 07 Feb 2019 04:37:46 +0000.
  */
 
 namespace App\Models;
@@ -37,12 +37,13 @@ use Laravel\Passport\HasApiTokens;
  * @property \App\Models\Status $status
  * @property \App\Models\Company $company
  * @property \Illuminate\Database\Eloquent\Collection $addresses
- * @property \Illuminate\Database\Eloquent\Collection $avoredaddresses
  * @property \Illuminate\Database\Eloquent\Collection $orders
  * @property \Illuminate\Database\Eloquent\Collection $point_histories
  * @property \Illuminate\Database\Eloquent\Collection $product_reviews
  * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  * @property \Illuminate\Database\Eloquent\Collection $user_user_groups
+ * @property \Illuminate\Database\Eloquent\Collection $vouchers
+ * @property \Illuminate\Database\Eloquent\Collection $waste_banks
  * @property \Illuminate\Database\Eloquent\Collection $wallet_histories
  * @property \Illuminate\Database\Eloquent\Collection $wishlists
  *
@@ -51,10 +52,10 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
-
+    
 	protected $casts = [
 		'status_id' => 'int',
-		'waste_category_id' => 'int',
+		'company_id' => 'int',
 		'wallet' => 'float',
 		'point' => 'float',
 		'routine_pickup' => 'int'
@@ -127,6 +128,18 @@ class User extends Authenticatable
 	public function user_user_groups()
 	{
 		return $this->hasMany(\App\Models\UserUserGroup::class);
+	}
+
+	public function vouchers()
+	{
+		return $this->belongsToMany(\App\Models\Voucher::class, 'user_vouchers', 'user_id', 'vouchers_id')
+					->withPivot('id', 'redeem_at', 'is_used');
+	}
+
+	public function waste_banks()
+	{
+		return $this->belongsToMany(\App\Models\WasteBank::class, 'user_waste_banks')
+					->withPivot('id');
 	}
 
 	public function wallet_histories()

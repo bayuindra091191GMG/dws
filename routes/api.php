@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function(){
 
     //Routine Pickup
     Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+    Route::post('waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
 
     //Point
     Route::post('/redeem-poin', 'Api\PoinController@redeem');

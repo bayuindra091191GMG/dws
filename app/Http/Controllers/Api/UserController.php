@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserWasteBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -36,6 +37,11 @@ class UserController extends Controller
 
             $user->routine_pickup = $request->input('routine_pickup');
             $user->save();
+
+            UserWasteBank::create([
+                'user_id'       => $user->id,
+                'waste_bank_id' => $request->input('waste_bank_id')
+            ]);
 
             return Response::json([
                 'message' => "Success Changing Routine Pickup Status!",

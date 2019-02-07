@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\User;
+use App\Models\UserWasteBank;
 use App\Models\WasteBank;
 use App\Models\WasteBankSchedule;
 use Illuminate\Http\Request;
@@ -62,7 +64,10 @@ class WasteBankController extends Controller
     public function getWasteBankSchedules(Request $request)
     {
         try{
-            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $request->input('waste_bank_id'))->all();
+            $user = User::where('email', $request->input('email'))->first();
+            $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
+
+            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->all();
 
             return $wasteBankSchedules;
         }
