@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Sat, 02 Feb 2019 03:36:37 +0000.
+ * Date: Thu, 07 Feb 2019 07:30:24 +0000.
  */
 
 namespace App\Models;
@@ -20,8 +20,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $total_weight
  * @property float $total_price
  * @property int $waste_category_id
- * @property int $status_id
+ * @property int $waste_bank_id
+ * @property int $waste_collector_id
  * @property string $notes
+ * @property int $status_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by_admin
  * @property int $created_by_user
@@ -33,7 +35,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\User $user
  * @property \App\Models\Status $status
  * @property \App\Models\TransactionType $transaction_type
+ * @property \App\Models\WasteBank $waste_bank
  * @property \App\Models\WasteCategory $waste_category
+ * @property \App\Models\WasteCollector $waste_collector
+ * @property \Illuminate\Database\Eloquent\Collection $point_histories
  * @property \Illuminate\Database\Eloquent\Collection $transaction_details
  *
  * @package App\Models
@@ -46,6 +51,8 @@ class TransactionHeader extends Eloquent
 		'total_weight' => 'float',
 		'total_price' => 'float',
 		'waste_category_id' => 'int',
+		'waste_bank_id' => 'int',
+		'waste_collector_id' => 'int',
 		'status_id' => 'int',
 		'created_by_admin' => 'int',
 		'created_by_user' => 'int',
@@ -65,16 +72,18 @@ class TransactionHeader extends Eloquent
 		'total_weight',
 		'total_price',
 		'waste_category_id',
-		'status_id',
+		'waste_bank_id',
+		'waste_collector_id',
 		'notes',
+		'status_id',
 		'created_by_admin',
 		'created_by_user',
 		'updated_by_admin',
 		'updated_by_user'
 	];
 
-	protected $appends = [
-	    'total_weight_string',
+    protected $appends = [
+        'total_weight_string',
         'total_price_string'
     ];
 
@@ -86,8 +95,7 @@ class TransactionHeader extends Eloquent
         return number_format($this->attributes['total_price'], 0, ",", ".");
     }
 
-
-    public function admin_user()
+	public function admin_user()
 	{
 		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by_admin');
 	}
@@ -107,9 +115,24 @@ class TransactionHeader extends Eloquent
 		return $this->belongsTo(\App\Models\TransactionType::class);
 	}
 
+	public function waste_bank()
+	{
+		return $this->belongsTo(\App\Models\WasteBank::class);
+	}
+
 	public function waste_category()
 	{
 		return $this->belongsTo(\App\Models\WasteCategory::class);
+	}
+
+	public function waste_collector()
+	{
+		return $this->belongsTo(\App\Models\WasteCollector::class);
+	}
+
+	public function point_histories()
+	{
+		return $this->hasMany(\App\Models\PointHistory::class, 'transaction_id');
 	}
 
 	public function transaction_details()
