@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 07 Feb 2019 04:38:57 +0000.
+ * Date: Thu, 07 Feb 2019 08:08:09 +0000.
  */
 
 namespace App\Models;
@@ -30,11 +30,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\City $city
- * @property \App\Models\AdminUser $createdBy
- * @property \App\Models\AdminUser $updatedBy
+ * @property \App\Models\AdminUser $admin_user
  * @property \App\Models\WasteCategory $waste_category
+ * @property \Illuminate\Database\Eloquent\Collection $admin_users
+ * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property \Illuminate\Database\Eloquent\Collection $waste_bank_schedules
+ * @property \Illuminate\Database\Eloquent\Collection $waste_collectors
  *
  * @package App\Models
  */
@@ -69,19 +71,24 @@ class WasteBank extends Eloquent
 		return $this->belongsTo(\App\Models\City::class);
 	}
 
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
-    }
+	public function admin_user()
+	{
+		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+	}
 
 	public function waste_category()
 	{
 		return $this->belongsTo(\App\Models\WasteCategory::class);
+	}
+
+	public function admin_users()
+	{
+		return $this->hasMany(\App\Models\AdminUser::class);
+	}
+
+	public function transaction_headers()
+	{
+		return $this->hasMany(\App\Models\TransactionHeader::class);
 	}
 
 	public function users()
@@ -93,5 +100,11 @@ class WasteBank extends Eloquent
 	public function waste_bank_schedules()
 	{
 		return $this->hasMany(\App\Models\WasteBankSchedule::class);
+	}
+
+	public function waste_collectors()
+	{
+		return $this->belongsToMany(\App\Models\WasteCollector::class, 'waste_collector_waste_banks')
+					->withPivot('id');
 	}
 }

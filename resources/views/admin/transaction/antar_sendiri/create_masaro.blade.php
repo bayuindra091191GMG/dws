@@ -112,7 +112,7 @@
                                     <input type="hidden" name="category_type" value="2"/>
 
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">Exit</a>
+                                        <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-danger">Exit</a>
                                         <input type="submit" class="btn btn-success" value="Save">
                                     </div>
                                 </div>

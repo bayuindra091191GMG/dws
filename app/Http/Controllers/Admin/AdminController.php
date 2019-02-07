@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
+use App\Models\WasteCollector;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -48,5 +49,17 @@ class AdminController extends Controller
         $configuration->save();
 
         return redirect()->route('admin.setting');
+    }
+
+    public function test(){
+//        $collector = WasteCollector::find(1);
+//        dd($collector->waste_banks);
+
+        $wasteCollectors = WasteCollector::where('status_id', 1)
+            ->whereHas('waste_banks', function($query){
+                $query->where('waste_bank_id', 1);
+            })->get();
+
+        dd($wasteCollectors);
     }
 }

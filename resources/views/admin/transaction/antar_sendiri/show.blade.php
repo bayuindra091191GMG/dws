@@ -156,7 +156,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group form-float form-group-lg">
                                         <div class="form-line">
-                                            <a href="{{ route('admin.transactions.index') }}" class="btn btn-danger">Exit</a>
+                                            <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-danger">Exit</a>
                                         </div>
                                     </div>
                                 </div>

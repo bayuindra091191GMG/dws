@@ -17,6 +17,7 @@
 
 Auth::routes();
 
+
 Route::get('/', 'Frontend\HomeController@index')->name('home');
 Route::get('/test-email', 'Frontend\HomeController@testEmail')->name('testEmail');
 Route::get('/test-location', 'Frontend\HomeController@getLocation')->name('getLocation');
@@ -25,6 +26,7 @@ Route::get('/test-province', 'Frontend\HomeController@getProvince')->name('getPr
 // ====================================================================================================================
 
 Route::prefix('admin')->group(function(){
+    Route::get('/testing', 'Admin\AdminController@test')->name('admin.test');
     Route::get('/', 'Admin\AdminController@index')->name('admin.dashboard');
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
@@ -143,6 +145,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/transactions/on_demand/dws/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editDws')->name('admin.transactions.dws.on_demand.edit');
     Route::get('/transactions/on_demand/masaro/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editMasaro')->name('admin.transactions.on_demand.masaro.edit');
     Route::post('/transactions/on_demand/update/{id}', 'Admin\TransactionHeaderOnDemandController@update')->name('admin.transactions.on_demand.update');
+    Route::post('/transactions/on_demand/assign/{id}', 'Admin\TransactionHeaderOnDemandController@assignWasteCollector')->name('admin.transactions.on_demand.assign');
 
     // Rutin Transactions
     Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderOnDemandController@index')->name('admin.transactions.penjemputan_rutin.index');

@@ -36,6 +36,8 @@
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Total Berat (gram)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
+                                <th class="text-center">Waste Bank</th>
+                                <th class="text-center">Waste Collector</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center"></th>
                             </tr>
@@ -97,6 +99,8 @@
                         return data;
                     }
                 },
+                { data: 'waste_bank', name: 'waste_bank', orderable: false, searchable: false, class: 'text-center'},
+                { data: 'waste_collector', name: 'waste_collector', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'status', name: 'status', class: 'text-center'},
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
