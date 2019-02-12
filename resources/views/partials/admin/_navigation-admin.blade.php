@@ -79,6 +79,11 @@
 
                     <ul class="treeview-menu">
                         <li>
+                            <a href="{{ route('admin.vouchers-categories.index') }}">
+                                <i class="icon icon-vcard text-green"></i>Voucher Categories
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('admin.vouchers.index') }}">
                                 <i class="icon icon-vcard text-green"></i>Vouchers
                             </a>

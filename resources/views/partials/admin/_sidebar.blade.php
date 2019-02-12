@@ -82,14 +82,27 @@
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Transaksi </span>
                             </a>
-                            {{--<a href="{{ route('admin.transactions.on_demand.dws.create') }}" class="sidebar-link">--}}
-                                {{--<i class="fas fa-plus"></i>--}}
-                                {{--<span class="hide-menu"> Transaksi Kategori DWS </span>--}}
-                            {{--</a>--}}
-                            {{--<a href="{{ route('admin.transactions.on_demand.masaro.create') }}" class="sidebar-link">--}}
-                                {{--<i class="fas fa-plus"></i>--}}
-                                {{--<span class="hide-menu"> Transaksi Kategori Masaro </span>--}}
-                            {{--</a>--}}
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-book"></i>
+                        <span class="hide-menu">Vouchers</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.vouchers.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Voucher </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.voucher-categories.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Kategori Voucher </span>
+                            </a>
                         </li>
                     </ul>
                 </li>
