@@ -9,19 +9,19 @@
             <!-- ============================================================== -->
             <!-- Logo -->
             <!-- ============================================================== -->
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
                 <!-- Logo icon -->
                 <b class="logo-icon p-l-10">
                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                     <!-- Dark Logo icon -->
-                    <img src="{{ asset('backend/assets/images/logo-icon.png') }}" alt="homepage" class="light-logo" />
+                    <img src="{{ asset('images/dws_logo_normal.png') }}" alt="homepage" class="light-logo" height="55" />
 
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
                 <span class="logo-text">
                              <!-- dark Logo text -->
-                             <img src="{{ asset('backend/assets/images/logo-text.png') }}" alt="homepage" class="light-logo" />
+                             {{--<img src="{{ asset('backend/assets/images/logo-text.png') }}" alt="homepage" class="light-logo" />--}}
 
                         </span>
                 <!-- Logo icon -->
