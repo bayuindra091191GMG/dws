@@ -30,9 +30,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\City $city
- * @property \App\Models\AdminUser $admin_user
+ * @property \App\Models\AdminUser $createdBy
+ * @property \App\Models\AdminUser $updatedBy
+ * @property \App\Models\AdminUser $pic
  * @property \App\Models\WasteCategory $waste_category
- * @property \Illuminate\Database\Eloquent\Collection $admin_users
  * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property \Illuminate\Database\Eloquent\Collection $waste_bank_schedules
@@ -71,9 +72,9 @@ class WasteBank extends Eloquent
 		return $this->belongsTo(\App\Models\City::class);
 	}
 
-	public function admin_user()
+	public function pic()
 	{
-		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+		return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
 	}
 
 	public function waste_category()
@@ -81,10 +82,15 @@ class WasteBank extends Eloquent
 		return $this->belongsTo(\App\Models\WasteCategory::class);
 	}
 
-	public function admin_users()
-	{
-		return $this->hasMany(\App\Models\AdminUser::class);
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+    }
 
 	public function transaction_headers()
 	{

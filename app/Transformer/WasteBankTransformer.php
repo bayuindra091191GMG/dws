@@ -32,7 +32,7 @@ class WasteBankTransformer extends TransformerAbstract
                 'open_hours'        => $wasteBank->open_hours . ' - ' . $wasteBank->closed_hours,
                 'latitude'          => $wasteBank->latitude,
                 'longitude'         => $wasteBank->longitude,
-                'pic'               => $wasteBank->admin_user->first_name . ' ' . $wasteBank->admin_user->last_name,
+                'pic'               => $wasteBank->pic->first_name . ' ' . $wasteBank->pic->last_name,
                 'city'              => $wasteBank->city->name,
                 'phone'             => $wasteBank->phone,
                 'created_at'        => $createdDate,
