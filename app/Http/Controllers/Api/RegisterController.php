@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\EmailVerification;
 use App\Models\Address;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Country;
 use App\Models\Province;
 use App\Models\User;
@@ -23,11 +24,15 @@ class RegisterController extends Controller
 {
     protected function create(array $data)
     {
+        $companyId = 0;
         if($data['referral'] != null && $data['referral'] != ''){
-            $categoryId = 2;
-        }
-        else{
-            $categoryId = 1;
+            //Check if it is Company Code
+            $companyData = Company::where('code', $data['referral'])->first();
+            if($companyData != null){
+                $companyId = $companyData->id;
+            }
+
+            //Check for Referral
         }
 
         return User::create([
@@ -38,7 +43,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'email_token' => base64_encode($data['email']),
             'status_id' => 4,
-            'waste_category_id' => $categoryId
+            'company_id' => $companyId
         ]);
     }
 

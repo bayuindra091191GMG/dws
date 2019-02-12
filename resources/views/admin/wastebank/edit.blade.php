@@ -91,13 +91,13 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="senin">Open Day</label>
-                                                            <input type="checkbox" name="days[]" id="senin" value="Senin"/> Senin
-                                                            <input type="checkbox" name="days[]" id="selasa" value="Selasa"/> Selasa
-                                                            <input type="checkbox" name="days[]" id="rabu" value="Rabu"/> Rabu
-                                                            <input type="checkbox" name="days[]" id="kamis" value="Kamis"/> Kamis
-                                                            <input type="checkbox" name="days[]" id="jumat" value="Jumat"/> Jumat
-                                                            <input type="checkbox" name="days[]" id="sabtu" value="Sabtu"/> Sabtu
-                                                            <input type="checkbox" name="days[]" id="minggu" value="Minggu"/> Minggu
+                                                            <input type="checkbox" name="days[]" id="senin" value="1"/> Senin
+                                                            <input type="checkbox" name="days[]" id="selasa" value="2"/> Selasa
+                                                            <input type="checkbox" name="days[]" id="rabu" value="3"/> Rabu
+                                                            <input type="checkbox" name="days[]" id="kamis" value="4"/> Kamis
+                                                            <input type="checkbox" name="days[]" id="jumat" value="5"/> Jumat
+                                                            <input type="checkbox" name="days[]" id="sabtu" value="6"/> Sabtu
+                                                            <input type="checkbox" name="days[]" id="minggu" value="7"/> Minggu
                                                             <input type="checkbox" id="selectAllDay" onchange="selectAll()"/> Select/Unselect All
                                                         </div>
                                                     </div>

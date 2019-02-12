@@ -33,7 +33,7 @@ class UserController extends Controller
     public function changeRoutinePickup(Request $request)
     {
         try{
-            $user = User::where('email', $request->input('email'));
+            $user = User::where('email', $request->input('email'))->first();
 
             $user->routine_pickup = $request->input('routine_pickup');
             $user->save();
@@ -80,7 +80,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param Request $request
-     * @return UserResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
@@ -88,7 +88,10 @@ class UserController extends Controller
         try{
             $users = User::where('email', $request->input('email'))->first();
 
-            return new UserResource($users);
+            return Response::json([
+                'user'                  => $users,
+                'waste_category_id'     => $users->company->waste_category_id,
+            ], 200);
         }
         catch(\Exception $ex){
             error_log($ex);

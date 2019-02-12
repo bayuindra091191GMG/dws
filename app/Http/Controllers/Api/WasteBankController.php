@@ -67,7 +67,7 @@ class WasteBankController extends Controller
             $user = User::where('email', $request->input('email'))->first();
             $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
 
-            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->all();
+            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
 
             return $wasteBankSchedules;
         }
