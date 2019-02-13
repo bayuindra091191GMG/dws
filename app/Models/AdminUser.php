@@ -44,6 +44,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property \Illuminate\Database\Eloquent\Collection $waste_bank_schedules
  * @property \Illuminate\Database\Eloquent\Collection $waste_banks
  * @property \Illuminate\Database\Eloquent\Collection $waste_collectors
+ * @property \Illuminate\Database\Eloquent\Collection $fcm_token_browsers
  *
  * @package App\Models
  */
@@ -160,5 +161,10 @@ class AdminUser extends Authenticatable
 	public function waste_collectors()
 	{
 		return $this->hasMany(\App\Models\WasteCollector::class, 'updated_by');
+	}
+
+	public function fcm_token_browsers()
+	{
+		return $this->hasMany(\App\Models\FcmTokenBrowser::class, 'updated_by');
 	}
 }

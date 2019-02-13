@@ -46,6 +46,7 @@ use Laravel\Passport\HasApiTokens;
  * @property \Illuminate\Database\Eloquent\Collection $waste_banks
  * @property \Illuminate\Database\Eloquent\Collection $wallet_histories
  * @property \Illuminate\Database\Eloquent\Collection $wishlists
+ * @property \Illuminate\Database\Eloquent\Collection $fcm_token_apps
  *
  * @package App\Models
  */
@@ -150,5 +151,10 @@ class User extends Authenticatable
 	public function wishlists()
 	{
 		return $this->hasMany(\App\Models\Wishlist::class);
+	}
+
+	public function fcm_token_apps()
+	{
+		return $this->hasMany(\App\Models\FcmTokenApp::class);
 	}
 }

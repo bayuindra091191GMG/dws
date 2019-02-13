@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\UserResource;
 use App\Mail\EmailVerification;
 use App\Models\Address;
 use App\Models\City;
@@ -105,6 +106,53 @@ class RegisterController extends Controller
                 'message' => "Something went Wrong!",
                 'exception' => $exception
             ], 500);
+        }
+    }
+
+    public function facebookRegister(Request $request){
+//        $rules = array(
+//            'email'                 => 'required|email|max:100|unique:users',
+//            'name'            => 'required|max:100',
+//            'phone'                 => 'required|unique:users',
+//        );
+//
+//        $messages = array(
+//            'not_contains'  => 'Email cannot contain these characters +',
+//            'phone.unique'  => 'Your phone number already registered!',
+//        );
+//
+//        $validator = Validator::make($request->all(), $rules, $messages);
+//
+//        if ($validator->fails()) {
+//            return back()->withErrors($validator)->withInput();
+//        }
+        $user = User::where('email', $request->input('email'))->first();
+        if(!empty($user)){
+            return new UserResource($user);
+        }
+        else{
+
+            if($request->input('referral') != null && $request->input('referral') != ''){
+                $categoryId = 2;
+            }
+            else{
+                $categoryId = 1;
+            }
+            // password = {email}.{email_token}
+            $emailToken =  base64_encode($request->input('email'));
+            $passwordString = $request->input('email').$emailToken;
+
+            $userDB = User::create([
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'password' => Hash::make($passwordString),
+                'email_token' => $emailToken,
+                'status_id' => 5,
+                'waste_category_id' => $categoryId
+            ]);
+            return new UserResource($userDB);
         }
     }
 
