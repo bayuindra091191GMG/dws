@@ -40,7 +40,7 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/antar-sendiri/user/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
 
     //On Demand
-//    Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
+    Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
     Route::post('/on-demand/driver/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
     Route::post('/on-demand/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
 
@@ -49,15 +49,16 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/vouchers', 'Api\VoucherController@get');
 
     //Routine Pickup
-
-    //Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
+    Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+    Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
 
     //Point
     Route::post('/redeem-poin', 'Api\PoinController@redeem');
 });
-Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
-Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
-Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+//Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
+//Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
+//Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+
 Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
 

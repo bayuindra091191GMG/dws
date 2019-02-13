@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card-body">
-            <h2 class="card-title m-b-0">Create New Voucher</h2>
+            <h2 class="card-title m-b-0">Create New Voucher Category</h2>
 
             {{ Form::open(['route'=>['admin.voucher-categories.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -31,8 +31,8 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="code">Nama *</label>
-                                                            <input id="code" type="text" class="form-control"
-                                                                   name="code" value="{{ old('code') }}">
+                                                            <input id="name" type="text" class="form-control"
+                                                                   name="name" value="{{ old('name') }}">
                                                         </div>
                                                     </div>
                                                 </div>

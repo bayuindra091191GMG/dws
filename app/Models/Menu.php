@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 06 Dec 2018 06:52:28 +0000.
+ * Date: Wed, 13 Feb 2019 08:11:08 +0000.
  */
 
 namespace App\Models;
@@ -13,35 +13,41 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Menu
  * 
  * @property int $id
- * @property int $menu_group_id
- * @property int $parent_id
+ * @property int $menu_header_id
  * @property string $name
  * @property string $route
- * @property string $params
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property int $index
+ * @property string $icon
  * 
- * @property \App\Models\MenuGroup $menu_group
+ * @property \App\Models\MenuHeader $menu_header
+ * @property \Illuminate\Database\Eloquent\Collection $menu_subs
  *
  * @package App\Models
  */
 class Menu extends Eloquent
 {
+	public $timestamps = false;
+
 	protected $casts = [
-		'menu_group_id' => 'int',
-		'parent_id' => 'int'
+		'menu_header_id' => 'int',
+		'index' => 'int'
 	];
 
 	protected $fillable = [
-		'menu_group_id',
-		'parent_id',
+		'menu_header_id',
 		'name',
 		'route',
-		'params'
+		'index',
+		'icon'
 	];
 
-	public function menu_group()
+	public function menu_header()
 	{
-		return $this->belongsTo(\App\Models\MenuGroup::class);
+		return $this->belongsTo(\App\Models\MenuHeader::class);
+	}
+
+	public function menu_subs()
+	{
+		return $this->hasMany(\App\Models\MenuSub::class);
 	}
 }

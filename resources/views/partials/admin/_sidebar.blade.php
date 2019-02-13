@@ -35,7 +35,7 @@
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ route('admin.users.index') }}" class="sidebar-link">
-                                <i class="mdi mdi-note-plus"></i>
+                                <i class="mdi mdi-account"></i>
                                 <span class="hide-menu"> Users </span>
                             </a>
                         </li>

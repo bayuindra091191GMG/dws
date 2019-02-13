@@ -174,13 +174,13 @@
                                                                         <tr id='sch0'>
                                                                             <td class='field-item'>
                                                                                 <select class="form-control" id="schDay0" name="schDays[]">
-                                                                                    <option value="Senin">Senin</option>
-                                                                                    <option value="Selasa">Selasa</option>
-                                                                                    <option value="Rabu">Rabu</option>
-                                                                                    <option value="Kamis">Kamis</option>
-                                                                                    <option value="Jumat">Jumat</option>
-                                                                                    <option value="Sabtu">Sabtu</option>
-                                                                                    <option value="Minggu">Minggu</option>
+                                                                                    <option value="1">Senin</option>
+                                                                                    <option value="2">Selasa</option>
+                                                                                    <option value="3">Rabu</option>
+                                                                                    <option value="4">Kamis</option>
+                                                                                    <option value="5">Jumat</option>
+                                                                                    <option value="6">Sabtu</option>
+                                                                                    <option value="7">Minggu</option>
                                                                                 </select>
                                                                             </td>
                                                                             <td>
@@ -344,13 +344,13 @@
         $("#add_row").click(function(){
             $('#sch'+i).html("<td class='field-item'>" +
                 "<select class='form-control' id='schDay0' name='schDays[]'>" +
-                "<option value='Senin'>Senin</option>" +
-                "<option value='Selasa'>Selasa</option>" +
-                "<option value='Rabu'>Rabu</option>" +
-                "<option value='Kamis'>Kamis</option>" +
-                "<option value='Jumat'>Jumat</option>" +
-                "<option value='Sabtu'>Sabtu</option>" +
-                "<option value='Minggu'>Minggu</option>" +
+                "<option value='1'>Senin</option>" +
+                "<option value='2'>Selasa</option>" +
+                "<option value='3'>Rabu</option>" +
+                "<option value='4'>Kamis</option>" +
+                "<option value='5'>Jumat</option>" +
+                "<option value='6'>Sabtu</option>" +
+                "<option value='7'>Minggu</option>" +
                 "</select>" +
                 "</td><td><input type='text' id='schTime" + i + "' name='schTimes[]' class='form-control time-inputmask'></td>" +
                 "<td><select id='select" + i +"' name='masaroTypes[]' class='form-control'></select></td>");

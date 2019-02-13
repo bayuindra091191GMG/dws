@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Voucher;
 use App\Models\VoucherCategory;
+use App\Transformer\VoucherCategoryTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -27,10 +28,10 @@ class VoucherCategoryController extends Controller
 
     public function getIndex(Request $request){
         $users = VoucherCategory::query();
-//        return DataTables::of($users)
-//            ->setTransformer(new VoucherTransformer)
-//            ->addIndexColumn()
-//            ->make(true);
+        return DataTables::of($users)
+            ->setTransformer(new VoucherCategoryTransformer)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     /**
@@ -88,15 +89,13 @@ class VoucherCategoryController extends Controller
         $ext = explode('/', $extStr, 2);
 
         $filename = $vCategory->id.'_main_'.$vCategory->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
-
-        $path = env('PICTURE_URI');
-        $img->save($path . $filename, 75);
+        $img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
 
         $vCategory->img_path = $filename;
         $vCategory->save();
 
-        Session::flash('success', 'Success Creating new Voucher Categories!');
-        return redirect()->route('admin.vouchers.index');
+        Session::flash('success', 'Success Creating new Voucher Category!');
+        return redirect()->route('admin.voucher-categories.index');
     }
 
     /**
@@ -118,29 +117,74 @@ class VoucherCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $voucherCategory = VoucherCategory::find($id);
+
+        return view('admin.voucher-categories.edit', compact('voucherCategory'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required|max:100|unique:voucher_categories'
+        ]);
+
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+        $user = Auth::guard('admin')->user();
+
+        //Save Data
+        $vCategory = VoucherCategory::find($request->input('id'));
+        $vCategory->name = $request->input('name');
+        $vCategory->updated_at = Carbon::now('Asia/Jakarta');
+        $vCategory->updated_by = $user->id;
+        $vCategory->save();
+
+        //Save Image
+        $image = $request->file('img_path');
+        if($image != null) {
+            $img = Image::make($image);
+            $extStr = $img->mime();
+            $ext = explode('/', $extStr, 2);
+
+            $filename = $vCategory->id.'_main_'.$vCategory->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+
+            $img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
+            $vCategory->img_path = $filename;
+            $vCategory->save();
+        }
+
+        Session::flash('success', 'Success Updating Voucher Category!');
+        return redirect()->route('admin.voucher-categories.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            //Belum melakukan pengecekan hubungan antar Table
+            $vCategoryId = $request->input('id');
+            $vCategory = VoucherCategory::find($vCategoryId);
+            if($vCategory->vouchers != null){
+                Session::flash('success', 'Ketemu');
+                return Response::json(array('success' => 'VALID'));
+            }
+            $vCategory->delete();
+
+            Session::flash('success', 'Success Deleting Voucher Category ' . $vCategory->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }
