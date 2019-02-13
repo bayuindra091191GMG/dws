@@ -71,8 +71,8 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="description">Description *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $dwsWaste->description }}</textarea>
-                                                            <div id="editor" style="height: 300px;">{{ $dwsWaste->description }}</div>
+                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{  $dwsWaste->description }}</textarea>
+                                                            <div id="editor" style="height: 300px;">{!! $dwsWaste->description !!}</div>
                                                         </div>
                                                     </div>
                                                 </div>
