@@ -9,17 +9,17 @@
 namespace App\Http\ViewComposers;
 
 use App\Models\PermissionMenu;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NavigationComposer
 {
     public $menus;
-    public $menuHeader;
 
     public function __construct()
     {
-        $user = auth()->user();
-        $role = $user->roles()->pluck('id')[0];
+        $user = Auth::guard('admin')->user();
+        $role = $user->role()->pluck('id')[0];
         $this->menus = PermissionMenu::join('menus', 'permission_menus.menu_id', '=', 'menus.id')
             ->where('permission_menus.role_id', $role)
             ->orderBy('menus.index')
@@ -30,7 +30,6 @@ class NavigationComposer
     {
         $data = [
             'menus'         => $this->menus,
-            'menuHeader'    => $this->menuHeader
         ];
         $view->with($data);
     }
