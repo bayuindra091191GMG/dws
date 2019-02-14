@@ -37,6 +37,15 @@ Route::prefix('admin')->group(function(){
     Route::get('/setting', 'Admin\AdminController@showSetting')->name('admin.setting');
     Route::post('/setting-update', 'Admin\AdminController@saveSetting')->name('admin.setting.update');
 
+    // Permission Menus
+    Route::get('/permission-menus', 'Admin\PermissionMenuController@index')->name('admin.permission-menus.index');
+    Route::get('permission_menus/detail/{permission_menu}', 'Admin\PermissionMenuController@show')->name('admin.permission-menus.show');
+    Route::get('/permission-menus/create', 'Admin\PermissionMenuController@create')->name('admin.permission-menus.create');
+    Route::post('/permission-menus/store', 'Admin\PermissionMenuController@store')->name('admin.permission-menus.store');
+    Route::get('/permission-menus/edit/{item}', 'Admin\PermissionMenuController@edit')->name('admin.permission-menus.edit');
+    Route::post('/permission-menus/update', 'Admin\PermissionMenuController@update')->name('admin.permission-menus.update');
+    Route::post('/permission-menus/delete', 'Admin\PermissionMenuController@destroy')->name('admin.permission-menus.destroy');
+
     // Admin User
     Route::get('/admin-users', 'Admin\AdminUserController@index')->name('admin.admin-users.index');
     Route::get('/admin-users/create', 'Admin\AdminUserController@create')->name('admin.admin-users.create');
@@ -204,6 +213,7 @@ Route::get('/datatables-transactions-on-demand', 'Admin\TransactionHeaderOnDeman
 Route::get('/datatables-dws-waste-items', 'Admin\DwsWasteItemController@getIndex')->name('datatables.dws-waste-items');
 Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@getIndex')->name('datatables.masaro-waste-items');
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');
+Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
