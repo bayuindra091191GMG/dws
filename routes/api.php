@@ -61,6 +61,7 @@ Route::middleware('auth:api')->group(function(){
 
 Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
+Route::post('/fb-register', 'Api\RegisterController@facebookRegister');
 
 //Forgot Password
 Route::post('/checkEmail', 'Api\ForgotPasswordController@checkEmail');

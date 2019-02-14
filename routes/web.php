@@ -20,6 +20,8 @@ Auth::routes();
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
 Route::get('/test-email', 'Frontend\HomeController@testEmail')->name('testEmail');
+Route::get('/test-notif', 'Frontend\HomeController@testNotif')->name('testNotif');
+Route::get('/test-notif-send', 'Frontend\HomeController@testNotifSend')->name('testNotifSend');
 Route::get('/test-location', 'Frontend\HomeController@getLocation')->name('getLocation');
 Route::get('/test-province', 'Frontend\HomeController@getProvince')->name('getProvince');
 // ADMIN ROUTE

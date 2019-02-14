@@ -316,4 +316,45 @@
     <script src="{{ asset('backend/assets/libs/flot/jquery.flot.crosshair.js') }}"></script>
     <script src="{{ asset('backend/assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}"></script>
     <script src="{{ asset('backend/dist/js/pages/chart/chart-page-init.js') }}"></script>
+
+    {{--<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>--}}
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js"></script>
+
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAiQhyz6woWzHMDyxAR1UM2lmi-pPcbnKc",
+            authDomain: "go-4-0-waste.firebaseapp.com",
+            databaseURL: "https://go-4-0-waste.firebaseio.com",
+            projectId: "go-4-0-waste",
+            storageBucket: "go-4-0-waste.appspot.com",
+            messagingSenderId: "12749329351"
+        };
+        firebase.initializeApp(config);
+
+        const messaging = firebase.messaging();
+
+        messaging.requestPermission()
+            .then(function() {
+                console.log('Notification permission granted.');
+                return messaging.getToken();
+            })
+            .then(function(token) {
+                alert(token);
+                console.log(token); // Display user token
+            })
+            .catch(function(err) { // Happen if user deney permission
+                console.log('Unable to get permission to notify.', err);
+            });
+
+        messaging.onMessage(function(payload){
+            alert(payload);
+            console.log('onMessage',payload);
+        })
+
+    </script>
 @endsection
