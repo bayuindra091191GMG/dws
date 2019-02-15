@@ -64,8 +64,7 @@ class UserController extends Controller
             $user = User::where('email', $request->input('email'))->first();
 
             //Save user deviceID
-            $saveToken = new FCMNotification();
-            $saveToken->SaveToken($user->id, $request->input('device_id'), "apps");
+            FCMNotification::SaveToken($user->id, $request->input('device_id'), "apps");
 
             return Response::json([
                 'message' => "Success Save User Token!",

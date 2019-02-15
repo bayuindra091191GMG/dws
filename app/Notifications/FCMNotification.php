@@ -31,7 +31,7 @@ class FCMNotification
         }
     }
 
-    public static function SendNotification($userId, $type, $title, $body){
+    public static function SendNotification($userId, $type, $title, $body, $notifData){
         try{
             if($type == 'apps'){
                 $user  = FcmTokenApp::where('user_id', $userId)->first();
@@ -39,14 +39,15 @@ class FCMNotification
             else{
                 $user  = FcmTokenBrowser::where('user_admin_id', $userId)->first();
             }
-//            $token = $user->token;
-            $token = "e8dPZUFC6D4:APA91bE5LdSuuQssuT4IhumpZKGBw9QVNI4qXBqZsCULIlU5TOnkI8wCvv-WwTmkB8Qn4pIgf_EXY-177u58pk1s_fG5On2CZ8ZRoPiBE_vrxVQrj4kRYvLyEzzT4wKegEwa2l1ObziA";
+//            dd($user);
+            $token = $user->token;
             $data = array(
                 "to" => $token,
                 "notification" => [
                     "title"=> $title,
                     "body"=> $body,
-                ]
+                ],
+                "data" => $notifData,
             );
             $data_string = json_encode($data);
             $client = new Client([
@@ -62,9 +63,13 @@ class FCMNotification
             ]);
             $responseJSON = json_decode($response->getBody());
 //            dd($responseJSON->results[0]->message_id);
+//            dd($responseJSON);
+
+//            $response = $client->request('GET', $responseJSON->results[0]->message_id);
             return $responseJSON->results[0]->message_id;
         }
         catch (\Exception $exception){
+            dd($exception);
 //            dd($exception);
 //            error_log($exception);
             return "";

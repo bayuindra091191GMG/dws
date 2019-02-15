@@ -38,9 +38,17 @@ class HomeController extends Controller
         return view('admin.test-notif');
     }
     public function testNotifSend(){
-        $notfiClass = new FCMNotification();
-        $isSuccess = $notfiClass->SendNotification(9, 'browser', 'FCM Message', 'This is an FCM Message');
+        $title = "Digital Waste Solution";
+        $body = "User Confirm Transaction On Demand";
+        $data = array(
+            'type_id' => '1',
+            'message' => $body,
+        );
+//        dd($data);
+        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+//        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
 
+//        dd($isSuccess);
         return redirect($isSuccess);
     }
     public function testEmail(){

@@ -8,6 +8,7 @@ use App\Models\DwsWasteCategoryData;
 use App\Models\MasaroWasteCategoryData;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Notifications\FCMNotification;
 use App\Transformer\TransactionTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -214,13 +215,24 @@ class TransactionHeaderController extends Controller
         // Update transaction auto number
         Utilities::UpdateTransactionNumber($prepend);
 
+        $title = "Digital Waste Solution";
         if($categoryType == "1"){
             Session::flash('message', 'Berhasil membuat transaksi kategori DWS!');
+            $body = "Berhasil membuat transaksi kategori DWS - Nomor Transaksi ".$code;
         }
         else{
             Session::flash('message', 'Berhasil membuat transaksi kategori Masaro!');
+            $body = "Berhasil membuat transaksi kategori Masaro - Nomor Transaksi ".$code;
         }
+        $data = array(
+            'type_id' => '1',
+            'message' => $body,
+        );
+//        dd($data);
+        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+//        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
 
+//        return redirect($isSuccess);
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
     }
 

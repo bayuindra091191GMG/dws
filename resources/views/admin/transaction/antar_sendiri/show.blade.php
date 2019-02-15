@@ -8,7 +8,19 @@
             <h2 class="card-title m-b-0">Detail Transaksi</h2>
             <div class="container-fluid relative animatedParent animateOnce">
                 <div class="row mb-2">
-                    <div class="col-12 text-right">
+                    <div class="col-10">
+                        <div class="form-group form-float form-group-lg" style="display: none;">
+                            <div class="form-line">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>User Mengkonfirm</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 text-right">
 
                         @if($header->waste_category_id == "1")
                             <a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
@@ -170,4 +182,52 @@
     </div>
 </div>
 
+@endsection
+@section('scripts')
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js"></script>
+    {{--<script src="{{ asset('js/fcm-notif.js') }}"></script>--}}
+    <script>
+        MsgElem = document.getElementById("msg")
+        TokenElem = document.getElementById("token")
+        NotisElem = document.getElementById("notis")
+        ErrElem = document.getElementById("err")
+        // Initialize Firebase
+        // TODO: Replace with your project's customized code snippet
+        var config = {
+            apiKey: "{{env('FCM_API_KEY')}}",
+            authDomain: "{{env('FCM_DOMAIN')}}.firebaseapp.com",
+            databaseURL: "https://{{env('FCM_DOMAIN')}}.firebaseio.com",
+            projectId: "{{env('FCM_DOMAIN')}}",
+            storageBucket: "{{env('FCM_DOMAIN')}}.appspot.com",
+            messagingSenderId: "{{env('FCM_MESSANGING_SENDER')}}"
+        };
+        firebase.initializeApp(config);
+
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function () {
+                MsgElem.innerHTML = "Notification permission granted."
+                console.log("Notification permission granted.");
+
+                // get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                TokenElem.innerHTML = "token is : " + token
+            })
+            .catch(function (err) {
+                ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify.", err);
+            });
+
+        messaging.onMessage(function(payload) {
+
+            console.log("Message received. ", payload);
+            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
+        });
+    </script>
 @endsection
