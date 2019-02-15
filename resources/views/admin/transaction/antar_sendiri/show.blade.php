@@ -9,10 +9,10 @@
             <div class="container-fluid relative animatedParent animateOnce">
                 <div class="row mb-2">
                     <div class="col-10">
-                        <div class="form-group form-float form-group-lg" style="display: none;">
+                        <div id="user-action" class="form-group form-float form-group-lg" style="display: none;">
                             <div class="form-line">
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>User Mengkonfirm</strong>
+                                    <strong>User <span id="action-type">Mengkonfirm</span> Transaksi</strong>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -190,10 +190,10 @@
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js"></script>
     {{--<script src="{{ asset('js/fcm-notif.js') }}"></script>--}}
     <script>
-        MsgElem = document.getElementById("msg")
-        TokenElem = document.getElementById("token")
-        NotisElem = document.getElementById("notis")
-        ErrElem = document.getElementById("err")
+        // MsgElem = document.getElementById("msg")
+        // TokenElem = document.getElementById("token")
+        // NotisElem = document.getElementById("notis")
+        // ErrElem = document.getElementById("err")
         // Initialize Firebase
         // TODO: Replace with your project's customized code snippet
         var config = {
@@ -210,24 +210,32 @@
         messaging
             .requestPermission()
             .then(function () {
-                MsgElem.innerHTML = "Notification permission granted."
-                console.log("Notification permission granted.");
+                // MsgElem.innerHTML = "Notification permission granted."
+                // console.log("Notification permission granted.");
 
                 // get the token in the form of promise
                 return messaging.getToken()
             })
             .then(function(token) {
-                TokenElem.innerHTML = "token is : " + token
+                // TokenElem.innerHTML = "token is : " + token
             })
             .catch(function (err) {
-                ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
-                console.log("Unable to get permission to notify.", err);
+                // ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+                // console.log("Unable to get permission to notify.", err);
             });
 
         messaging.onMessage(function(payload) {
+            var isConfirm = payload.data.is_confirm;
+            if(isConfirm === 1){
+                $("#action-type").text("Mengkonfirm");
+            }
+            else{
+                $("#action-type").text("Membatalkan");
+            }
+            $("#user-action").show();
 
-            console.log("Message received. ", payload);
-            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
+            // console.log("Message received. ", payload);
+            // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
         });
     </script>
 @endsection

@@ -45,8 +45,8 @@ class HomeController extends Controller
             'message' => $body,
         );
 //        dd($data);
-        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
-//        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
+//        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
 
 //        dd($isSuccess);
         return redirect($isSuccess);

@@ -280,7 +280,10 @@ class TransactionHeaderController extends Controller
         //send notification
         $title = "Digital Waste Solution";
         $body = "User Confirm Transaction";
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body);
+        $data = array(
+            'is_confirm' => '1'
+        );
+        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Confirming Transaction!",
@@ -315,8 +318,11 @@ class TransactionHeaderController extends Controller
         //Admin Wastebank
         //send notification
         $title = "Digital Waste Solution";
-        $body = "User Cancelled the Transaction";
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body);
+        $body = "User Confirm Transaction";
+        $data = array(
+            'is_confirm' => '0'
+        );
+        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Cancelling Transaction!",
