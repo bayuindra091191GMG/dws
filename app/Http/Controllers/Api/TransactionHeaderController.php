@@ -260,7 +260,7 @@ class TransactionHeaderController extends Controller
     public function confirmTransactionByUserAntarSendiri(Request $request)
     {
         $rules = array(
-            'transaction_id'    => 'required'
+            'transaction_no' => 'required'
         );
 
         $data = $request->json()->all();
@@ -271,7 +271,7 @@ class TransactionHeaderController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $header = TransactionHeader::find($data['transaction_id']);
+        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
         $header->status_id = 10;
         $header->save();
 
@@ -296,7 +296,7 @@ class TransactionHeaderController extends Controller
     public function cancelTransactionByUserAntarSendiri(Request $request)
     {
         $rules = array(
-            'transaction_id'    => 'required'
+            'transaction_no'    => 'required'
         );
 
         $data = $request->json()->all();
@@ -307,7 +307,7 @@ class TransactionHeaderController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $header = TransactionHeader::find($data['transaction_id']);
+        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
         $header->status_id = 12;
         $header->save();
 
