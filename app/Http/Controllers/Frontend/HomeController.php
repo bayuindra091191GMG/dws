@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Frontend;
 use App\Mail\EmailVerification;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\FCMNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Client;
 
 class HomeController extends Controller
 {
@@ -36,7 +38,10 @@ class HomeController extends Controller
         return view('admin.test-notif');
     }
     public function testNotifSend(){
-        return view('admin.test-notif');
+        $notfiClass = new FCMNotification();
+        $isSuccess = $notfiClass->SendNotification(9, 'browser', 'FCM Message', 'This is an FCM Message');
+
+        return redirect($isSuccess);
     }
     public function testEmail(){
         try{

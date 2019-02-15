@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Address;
 use App\Models\User;
 use App\Models\UserWasteBank;
+use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -47,6 +48,27 @@ class UserController extends Controller
 
             return Response::json([
                 'message' => "Success Changing Routine Pickup Status!",
+            ], 200);
+        }
+        catch(\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    public function saveUserToken(Request $request)
+    {
+        try{
+            $user = User::where('email', $request->input('email'))->first();
+
+            //Save user deviceID
+            $saveToken = new FCMNotification();
+            $saveToken->SaveToken($user->id, $request->input('device_id'), "apps");
+
+            return Response::json([
+                'message' => "Success Save User Token!",
             ], 200);
         }
         catch(\Exception $ex){

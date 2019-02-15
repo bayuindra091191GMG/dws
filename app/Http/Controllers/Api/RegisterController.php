@@ -10,8 +10,10 @@ use App\Models\Address;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\FcmTokenApp;
 use App\Models\Province;
 use App\Models\User;
+use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -93,6 +95,10 @@ class RegisterController extends Controller
                 'postal_code'   => $request->input('postal_code'),
                 'created_at'    => Carbon::now('Asia/Jakarta')
             ]);
+
+            //Save user deviceID
+//            $saveToken = new FCMNotification();
+//            $saveToken->SaveToken($user->id, )
 
             $emailVerify = new EmailVerification($user, 'api');
             Mail::to($user->email)->send($emailVerify);

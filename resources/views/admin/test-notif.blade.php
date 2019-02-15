@@ -10,10 +10,12 @@
 <div id="msg"></div>
 <div id="notis"></div>
 <div id="err"></div>
+
 <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
 
 <!-- Add additional services that you want to use -->
 <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js"></script>
+{{--<script src="{{ asset('js/fcm-notif.js') }}"></script>--}}
 <script>
     MsgElem = document.getElementById("msg")
     TokenElem = document.getElementById("token")
@@ -22,12 +24,12 @@
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
     var config = {
-        apiKey: "AIzaSyAiQhyz6woWzHMDyxAR1UM2lmi-pPcbnKc",
-        authDomain: "go-4-0-waste.firebaseapp.com",
-        databaseURL: "https://go-4-0-waste.firebaseio.com",
-        projectId: "go-4-0-waste",
-        storageBucket: "go-4-0-waste.appspot.com",
-        messagingSenderId: "12749329351"
+        apiKey: "{{env('FCM_API_KEY')}}",
+        authDomain: "{{env('FCM_DOMAIN')}}.firebaseapp.com",
+        databaseURL: "https://{{env('FCM_DOMAIN')}}.firebaseio.com",
+        projectId: "{{env('FCM_DOMAIN')}}",
+        storageBucket: "{{env('FCM_DOMAIN')}}.appspot.com",
+        messagingSenderId: "{{env('FCM_MESSANGING_SENDER')}}"
     };
     firebase.initializeApp(config);
 
@@ -55,6 +57,6 @@
     });
 </script>
 
-<body>
+</body>
 
 </html>

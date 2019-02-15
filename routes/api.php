@@ -24,6 +24,7 @@ Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBank
 Route::middleware('auth:api')->group(function(){
     Route::get('/get-users', 'Api\UserController@index');
     Route::post('/get-user-data', 'Api\UserController@show');
+    Route::post('/save-user-device', 'Api\UserController@saveUserToken');
     Route::get('/waste-banks', 'Api\WasteBankController@getData');
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
     Route::get('/dws-category', 'Api\DwsWasteController@getData');

@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
+use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -211,6 +212,12 @@ class TransactionHeaderController extends Controller
         $header->user_id = $user->id;
         $header->save();
 
+        //send notification
+        $notfiClass = new FCMNotification();
+        $title = "Admin Scan the User QR Code";
+        $body = "Body of Admin Scan the User QR Code";
+        $isSuccess = $notfiClass->SendNotification($header->created_by_admin, 'browser', $title, $body);
+
         return Response::json([
             'message' => "Success Set " . $user->email . " to " . $header->transaction_no . "!",
         ], 200);
@@ -242,6 +249,11 @@ class TransactionHeaderController extends Controller
 
         //Send notification to
         //Admin Wastebank
+        //send notification
+        $notfiClass = new FCMNotification();
+        $title = "User Confirm Transaction";
+        $body = "Body of User Confirm Transaction";
+        $isSuccess = $notfiClass->SendNotification($header->created_by_admin, 'browser', $title, $body);
 
         return Response::json([
             'message' => "Success Confirming Transaction!",
@@ -274,6 +286,11 @@ class TransactionHeaderController extends Controller
 
         //Send notification to
         //Admin Wastebank
+        //send notification
+        $notfiClass = new FCMNotification();
+        $title = "User Cancelled the Transaction";
+        $body = "Body of User Cancelled the Transaction";
+        $isSuccess = $notfiClass->SendNotification($header->created_by_admin, 'browser', $title, $body);
 
         return Response::json([
             'message' => "Success Cancelling Transaction!",

@@ -4,7 +4,7 @@ importScripts('https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js');
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
 firebase.initializeApp({
-    'messagingSenderId': 'YOUR-SENDER-ID'
+    'messagingSenderId': '12749329351'
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
