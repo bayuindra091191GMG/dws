@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Address;
 use App\Models\User;
 use App\Models\UserWasteBank;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -56,27 +58,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param Request $request
@@ -86,15 +67,87 @@ class UserController extends Controller
     {
         error_log("exception");
         try{
-            $users = User::where('email', $request->input('email'))->first();
+            $users = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
 
             return Response::json([
-                'user'                  => $users,
-                'waste_category_id'     => $users->company->waste_category_id,
+                $users
             ], 200);
         }
         catch(\Exception $ex){
-            error_log($ex);
+            return Response::json([
+                'error'   => $ex,
+            ], 500);
+        }
+    }
+
+    /**
+     * Function to get user Address with Email Posted.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAddress(Request $request)
+    {
+        try{
+            $user = User::where('email', $request->input('email'))->first();
+
+            return Response::json([
+                'address'   => $user->addresses->first(),
+            ], 200);
+        }
+        catch (\Exception $ex){
+            return Response::json([
+                'error'   => $ex,
+            ], 500);
+        }
+    }
+
+    /**
+     * Function to Set Address with Parameters like Register.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setAddress(Request $request)
+    {
+        try{
+            $user = User::where('email', $request->input('email'))->first();
+            $address = Address::where('user_id', $user->id)->first();
+            if($address == null){
+                //Create new address
+                $nAddress = Address::create([
+                    'user_id'       => $user->id,
+                    'description'   => $request->input('description'),
+                    'latitude'      => $request->input('latitude'),
+                    'longitude'     => $request->input('longitude'),
+                    'city'          => (int)$request->input('city'),
+                    'province'      => (int)$request->input('province'),
+                    'postal_code'   => $request->input('postal_code'),
+                    'created_at'    => Carbon::now('Asia/Jakarta')
+                ]);
+
+                return Response::json([
+                    'address'   => $nAddress,
+                ], 200);
+            }
+            else{
+                $address->description = $request->input('description');
+                $address->latitude = $request->input('latitude');
+                $address->longitude = $request->input('longitude');
+                $address->city = (int)$request->input('city');
+                $address->province = (int)$request->input('province');
+                $address->pistal_code = $request->input('postal_code');
+                $address->save();
+
+                return Response::json([
+                    'address'   => $address,
+                ], 200);
+            }
+        }
+        catch (\Exception $ex){
+            return Response::json([
+                'error'   => $ex,
+            ], 500);
         }
     }
 
@@ -117,17 +170,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }
