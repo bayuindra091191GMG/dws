@@ -16,7 +16,7 @@ use GuzzleHttp\Client;
 
 class FCMNotification
 {
-    public function SaveToken($userId, $token, $type){
+    public static function SaveToken($userId, $token, $type){
         if($type == 'apps'){
             $fcmToken = FcmTokenApp::create([
                 'user_id' => $userId,
@@ -31,7 +31,7 @@ class FCMNotification
         }
     }
 
-    public function SendNotification($userId, $type, $title, $body){
+    public static function SendNotification($userId, $type, $title, $body){
         try{
             if($type == 'apps'){
                 $user  = FcmTokenApp::where('user_id', $userId)->first();
