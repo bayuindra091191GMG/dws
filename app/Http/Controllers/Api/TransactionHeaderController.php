@@ -15,6 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionHeaderController extends Controller
 {
+    public function getTransactionData(Request $request)
+    {
+        $transactionHeader = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
+
+        return $transactionHeader;
+    }
+
     public function getTransactions(Request $request)
     {
         $user = User::where('email', $request->input('email'));

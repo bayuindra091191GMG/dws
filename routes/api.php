@@ -36,6 +36,7 @@ Route::middleware('auth:api')->group(function(){
     //Transactions
     Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
     Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
+    Route::post('/get-transaction-data', 'Api\TransactionHeaderController@getTransactionData');
 
     //Antar Sendiri
     Route::post('/antar-sendiri/admin/set-transaction', 'Api\TransactionHeaderController@setTransactionToUser');
