@@ -17,7 +17,7 @@ class TransactionHeaderController extends Controller
 {
     public function getTransactionData(Request $request)
     {
-        $transactionHeader = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
+        $transactionHeader = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->with('transaction_details')->first();
 
         return $transactionHeader;
     }
