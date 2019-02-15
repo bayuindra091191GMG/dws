@@ -14,14 +14,14 @@
                     </a>
                 </li>
 
-                @foreach($menus as $menu)
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route($menu->route) }}" aria-expanded="false">
-                            <i class="{{ $menu->icon }}"></i>
-                            <span class="hide-menu">{{ $menu->name }}</span>
-                        </a>
-                    </li>
-                @endforeach
+                {{--@foreach($menus as $menu)--}}
+                    {{--<li class="sidebar-item">--}}
+                        {{--<a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route($menu->route) }}" aria-expanded="false">--}}
+                            {{--<i class="{{ $menu->icon }}"></i>--}}
+                            {{--<span class="hide-menu">{{ $menu->name }}</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
+                {{--@endforeach--}}
 
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false">
@@ -52,6 +52,21 @@
                             <a href="#" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
                                 <span class="hide-menu"> Pendaftar </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-book"></i>
+                        <span class="hide-menu">Transaksi Penjemputan Rutin</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.transactions.penjemputan_rutin.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Subscribed User </span>
                             </a>
                         </li>
                     </ul>

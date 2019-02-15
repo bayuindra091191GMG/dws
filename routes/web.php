@@ -159,14 +159,14 @@ Route::prefix('admin')->group(function(){
     Route::post('/transactions/on_demand/assign/{id}', 'Admin\TransactionHeaderOnDemandController@assignWasteCollector')->name('admin.transactions.on_demand.assign');
 
     // Rutin Transactions
-    Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderOnDemandController@index')->name('admin.transactions.penjemputan_rutin.index');
-    Route::get('/transactions/penjemputan_rutin/show/{id}', 'Admin\TransactionHeaderOnDemandController@show')->name('admin.transactions.penjemputan_rutin.show');
-    Route::get('/transactions/penjemputan_rutin/dws/create', 'Admin\TransactionHeaderOnDemandController@createDws')->name('admin.transactions.penjemputan_rutin.dws.create');
-    Route::get('/transactions/penjemputan_rutin/masaro/create', 'Admin\TransactionHeaderOnDemandController@createMasaro')->name('admin.transactions.penjemputan_rutin.masaro.create');
-    Route::post('/transactions/penjemputan_rutin/store', 'Admin\TransactionHeaderOnDemandController@store')->name('admin.transactions.penjemputan_rutin.store');
-    Route::get('/transactions/penjemputan_rutin/dws/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editDws')->name('admin.transactions.dws.penjemputan_rutin.edit');
-    Route::get('/transactions/penjemputan_rutin/masaro/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editMasaro')->name('admin.transactions.penjemputan_rutin.masaro.edit');
-    Route::post('/transactions/penjemputan_rutin/update/{id}', 'Admin\TransactionHeaderOnDemandController@update')->name('admin.transactions.penjemputan_rutin.update');
+    Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderPenjemputanRutinController@indexSuscribedUsers')->name('admin.transactions.penjemputan_rutin.index');
+    Route::get('/transactions/penjemputan_rutin/show/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@show')->name('admin.transactions.penjemputan_rutin.show');
+    Route::get('/transactions/penjemputan_rutin/dws/create', 'Admin\TransactionHeaderPenjemputanRutinController@createDws')->name('admin.transactions.penjemputan_rutin.dws.create');
+    Route::get('/transactions/penjemputan_rutin/masaro/create', 'Admin\TransactionHeaderPenjemputanRutinController@createMasaro')->name('admin.transactions.penjemputan_rutin.masaro.create');
+    Route::post('/transactions/penjemputan_rutin/store', 'Admin\TransactionHeaderPenjemputanRutinController@store')->name('admin.transactions.penjemputan_rutin.store');
+    Route::get('/transactions/penjemputan_rutin/dws/edit/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@editDws')->name('admin.transactions.dws.penjemputan_rutin.edit');
+    Route::get('/transactions/penjemputan_rutin/masaro/edit/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@editMasaro')->name('admin.transactions.penjemputan_rutin.masaro.edit');
+    Route::post('/transactions/penjemputan_rutin/update/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@update')->name('admin.transactions.penjemputan_rutin.update');
 
     // Points
     Route::get('/points', 'Admin\PointController@index')->name('admin.points.index');
@@ -214,6 +214,7 @@ Route::get('/datatables-dws-waste-items', 'Admin\DwsWasteItemController@getIndex
 Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@getIndex')->name('datatables.masaro-waste-items');
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
+Route::get('/datatables-transactions-rutin-subscribed-users', 'Admin\TransactionHeaderPenjemputanRutinController@getIndexSuscribedUsers')->name('datatables.rutin.subscribed-users');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');

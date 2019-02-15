@@ -18,6 +18,16 @@ use Yajra\DataTables\DataTables;
 class TransactionHeaderPenjemputanRutinController extends Controller
 {
     public function indexSuscribedUsers(){
+//        $user = Auth::guard('admin')->user();
+//        $adminWasteBankId = $user->waste_bank_id;
+//
+//        $subscribedUsers = User::where('status_id', 1)
+//            ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
+//                $query->where('waste_bank_id', $adminWasteBankId);
+//            })->get();
+//
+//        dd($subscribedUsers);
+
         return view('admin.transaction.rutin.index_subscribed_users');
     }
 

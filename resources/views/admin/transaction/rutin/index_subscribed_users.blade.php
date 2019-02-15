@@ -5,7 +5,7 @@
         <div class="col-12">
             @include('partials.admin._messages')
             <div class="card-body">
-                <h2 class="card-title m-b-0">Users</h2>
+                <h2 class="card-title m-b-0">Daftar User yang Mengaktifkan Penjemputan Rutin</h2>
                 <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
                     <thead>
                     <tr>
@@ -36,7 +36,7 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
-            ajax: '{!! route('datatables.users') !!}',
+            ajax: '{!! route('datatables.rutin.subscribed-users') !!}',
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'email', name: 'email', class: 'text-center'},
