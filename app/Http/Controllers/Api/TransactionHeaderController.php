@@ -278,10 +278,13 @@ class TransactionHeaderController extends Controller
         //Send notification to
         //Admin Wastebank
         //send notification
+        $userName = $header->user->first_name." ".$header->user->last_name;
         $title = "Digital Waste Solution";
-        $body = "User Confirmed Transaction";
+        $body = "User Confirm Transaction";
         $data = array(
-            'is_confirm' => '1'
+            'is_confirm' => '1',
+            'transaction_no' => $data['transaction_no'],
+            'name' => $userName
         );
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
@@ -317,10 +320,13 @@ class TransactionHeaderController extends Controller
         //Send notification to
         //Admin Wastebank
         //send notification
+        $userName = $header->user->first_name." ".$header->user->last_name;
         $title = "Digital Waste Solution";
         $body = "User Canceled Transaction";
         $data = array(
-            'is_confirm' => '0'
+            'is_confirm' => '0',
+            'transaction_no' => $data['transaction_no'],
+            'name' => $userName
         );
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 

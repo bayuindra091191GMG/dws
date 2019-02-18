@@ -6,10 +6,10 @@
     }
 </style>
 <body>
-<div id="token"></div>
-<div id="msg"></div>
-<div id="notis"></div>
-<div id="err"></div>
+asdf1 <div id="token"></div>
+asdf2 <div id="msg"></div>
+asdf3 <div id="notis"></div>
+asdf4 <div id="err"></div>
 
 <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
 

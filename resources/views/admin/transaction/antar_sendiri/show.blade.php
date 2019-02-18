@@ -240,14 +240,22 @@
             });
 
         messaging.onMessage(function(payload) {
-            var isConfirm = payload.data.is_confirm;
-            if(isConfirm === '1'){
-                $("#user-action-confirm").show();
-                $("#user-action-cancel").hide();
-            }
-            else{
-                $("#user-action-cancel").show();
-                $("#user-action-confirm").hide();
+            var transactionNo = payload.data.transaction_no;
+            var transNo = $('#trxNo').val();
+
+            if(transactionNo === transNo){
+                var isConfirm = payload.data.is_confirm;
+                var name = payload.data.name;
+
+                if(isConfirm === '1'){
+                    $("#user-action-confirm").show();
+                    $("#user-action-cancel").hide();
+                }
+                else{
+                    $("#user-action-cancel").show();
+                    $("#user-action-confirm").hide();
+                }
+                $('#name').val(name);
             }
             // console.log("Message received. ", payload);
             // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
