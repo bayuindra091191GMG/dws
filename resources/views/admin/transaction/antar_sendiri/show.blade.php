@@ -8,18 +8,7 @@
             <h2 class="card-title m-b-0">Detail Transaksi</h2>
             <div class="container-fluid relative animatedParent animateOnce">
                 <div class="row mb-2">
-                    <div class="col-10">
-                        <div id="user-action" class="form-group form-float form-group-lg" style="display: none;">
-                            <div class="form-line">
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>User <span id="action-type">Mengkonfirm</span> Transaksi</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-10"></div>
                     <div class="col-2 text-right">
 
                         @if($header->waste_category_id == "1")
@@ -34,6 +23,32 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body b-b">
+
+                                <div class="col-md-12">
+                                    <div id="user-action-confirm" class="form-group form-float form-group-lg" style="display: none;">
+                                        <div class="form-line">
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong>Transaksi Dikonfirmasi oleh User</strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div id="user-action-cancel" class="form-group form-float form-group-lg" style="display: none;">
+                                        <div class="form-line">
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong>Transaksi Dibatalkan oleh User</strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 @if(\Illuminate\Support\Facades\Session::has('message'))
                                     <div class="col-md-12">
@@ -226,14 +241,14 @@
 
         messaging.onMessage(function(payload) {
             var isConfirm = payload.data.is_confirm;
-            if(isConfirm === 1){
-                $("#action-type").text("Mengkonfirm");
+            if(isConfirm === '1'){
+                $("#user-action-confirm").show();
+                $("#user-action-cancel").hide();
             }
             else{
-                $("#action-type").text("Membatalkan");
+                $("#user-action-cancel").show();
+                $("#user-action-confirm").hide();
             }
-            $("#user-action").show();
-
             // console.log("Message received. ", payload);
             // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
         });

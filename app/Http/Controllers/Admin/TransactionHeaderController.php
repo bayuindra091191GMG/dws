@@ -87,7 +87,9 @@ class TransactionHeaderController extends Controller
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
         $prepend = "TRANS/MASARO/". $today;
+        //dd($prepend);
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
+        //dd($nextNo);
         $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
         $data = [
@@ -164,14 +166,21 @@ class TransactionHeaderController extends Controller
 
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
-        $prepend = "TRANS/DWS/". $today;
+
+        $categoryType = $request->input('category_type');
+        if($categoryType == "1"){
+            $prepend = "TRANS/DWS/". $today;
+        }
+        else{
+            $prepend = "TRANS/MASARO/". $today;
+        }
+
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
         $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
         $user = Auth::guard('admin')->user();
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
         $now = Carbon::now();
-        $categoryType = $request->input('category_type');
 
         $trxHeader = TransactionHeader::create([
             'transaction_no'        => $code,

@@ -279,7 +279,7 @@ class TransactionHeaderController extends Controller
         //Admin Wastebank
         //send notification
         $title = "Digital Waste Solution";
-        $body = "User Confirm Transaction";
+        $body = "User Confirmed Transaction";
         $data = array(
             'is_confirm' => '1'
         );
@@ -318,7 +318,7 @@ class TransactionHeaderController extends Controller
         //Admin Wastebank
         //send notification
         $title = "Digital Waste Solution";
-        $body = "User Confirm Transaction";
+        $body = "User Canceled Transaction";
         $data = array(
             'is_confirm' => '0'
         );

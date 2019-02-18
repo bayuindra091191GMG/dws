@@ -63,7 +63,7 @@ class FCMNotification
             ]);
             $responseJSON = json_decode($response->getBody());
 //            dd($responseJSON->results[0]->message_id);
-//            dd($responseJSON);
+            //dd($responseJSON);
 
 //            $response = $client->request('GET', $responseJSON->results[0]->message_id);
             return $responseJSON->results[0]->message_id;

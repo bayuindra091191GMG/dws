@@ -61,7 +61,8 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="description">Description *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10">{{ $masaroWaste->description }}</textarea>
+                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $masaroWaste->description }}</textarea>
+                                                            <div id="editor" style="height: 300px;">{!! $masaroWaste->description !!}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -88,12 +89,24 @@
 
 @section('styles')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/libs/quill/dist/quill.snow.css') }}">
 @endsection
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="{{ asset('backend/assets/libs/quill/dist/quill.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
     <script type="text/javascript">
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        $('#general-form').submit(function() {
+            $('#description').val(quill.root.innerHTML);
+
+            return true; // return false to cancel form action
+        });
+
         // Add autonumeric
         priceFormat = new AutoNumeric('#price', {
             minimumValue: '0',
