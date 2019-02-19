@@ -102,6 +102,10 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
+                            <a href="{{ route('admin.transactions.on_demand.list') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Transaksi Baru </span>
+                            </a>
                             <a href="{{ route('admin.transactions.on_demand.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Transaksi </span>
@@ -168,12 +172,12 @@
                                 <span class="hide-menu"> Dws Waste Categories </span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('admin.dws-waste-items.index') }}" class="sidebar-link">
-                                <i class="mdi mdi-note-plus"></i>
-                                <span class="hide-menu"> Dws Waste Items </span>
-                            </a>
-                        </li>
+                        {{--<li class="sidebar-item">--}}
+                            {{--<a href="{{ route('admin.dws-waste-items.index') }}" class="sidebar-link">--}}
+                                {{--<i class="mdi mdi-note-plus"></i>--}}
+                                {{--<span class="hide-menu"> Dws Waste Items </span>--}}
+                            {{--</a>--}}
+                        {{--</li>--}}
                         <li class="sidebar-item">
                             <a href="{{ route('admin.masaro-wastes.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>

@@ -33,9 +33,13 @@ Route::prefix('admin')->group(function(){
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
 
+
     // Setting
     Route::get('/setting', 'Admin\AdminController@showSetting')->name('admin.setting');
     Route::post('/setting-update', 'Admin\AdminController@saveSetting')->name('admin.setting.update');
+
+    // Token
+    Route::post('/save-token', 'Admin\AdminController@saveUserToken')->name('admin.save.token');
 
     // Permission Menus
     Route::get('/permission-menus', 'Admin\PermissionMenuController@index')->name('admin.permission-menus.index');
@@ -149,6 +153,7 @@ Route::prefix('admin')->group(function(){
 
     // On Demand Transactions
     Route::get('/transactions/on_demand', 'Admin\TransactionHeaderOnDemandController@index')->name('admin.transactions.on_demand.index');
+    Route::get('/transactions/on_demand/list', 'Admin\TransactionHeaderOnDemandController@list')->name('admin.transactions.on_demand.list');
     Route::get('/transactions/on_demand/show/{id}', 'Admin\TransactionHeaderOnDemandController@show')->name('admin.transactions.on_demand.show');
     Route::get('/transactions/on_demand/dws/create', 'Admin\TransactionHeaderOnDemandController@createDws')->name('admin.transactions.on_demand.dws.create');
     Route::get('/transactions/on_demand/masaro/create', 'Admin\TransactionHeaderOnDemandController@createMasaro')->name('admin.transactions.on_demand.masaro.create');

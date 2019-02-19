@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use App\Models\WasteCollector;
+use App\Notifications\FCMNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
 {
@@ -49,6 +52,24 @@ class AdminController extends Controller
         $configuration->save();
 
         return redirect()->route('admin.setting');
+    }
+
+    public function saveUserToken(Request $request)
+    {
+        try{
+            if (Auth::check()){
+                $user = Auth::guard('admin')->user();
+
+                //Save user deviceID
+                FCMNotification::SaveToken($user->id, $request->input('token'), "browser");
+
+                return Response::json(array('success' => 'VALID'));
+            }
+            return Response::json(array('errors' => 'INVALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function test(){

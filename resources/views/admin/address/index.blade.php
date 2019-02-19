@@ -111,5 +111,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.store-address.destroy', 'redirectUrl' => 'admin.store-address.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.store-address.destroy', 'redirectUrl' => 'admin.store-address.index'])
 @endsection

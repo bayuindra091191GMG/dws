@@ -132,31 +132,34 @@ class RegisterController extends Controller
 //        if ($validator->fails()) {
 //            return back()->withErrors($validator)->withInput();
 //        }
-        $user = User::where('email', $request->input('email'))->first();
+
+        $data = $request->json()->all();
+
+        $user = User::where('email', $data['email'])->first();
         if(!empty($user)){
             return new UserResource($user);
         }
         else{
 
-            if($request->input('referral') != null && $request->input('referral') != ''){
-                $categoryId = 2;
-            }
-            else{
-                $categoryId = 1;
-            }
-            // password = {email}.{email_token}
-            $emailToken =  base64_encode($request->input('email'));
-            $passwordString = $request->input('email').$emailToken;
+//            if($request->input('referral') != null && $request->input('referral') != ''){
+//                $categoryId = 2;
+//            }
+//            else{
+//                $categoryId = 1;
+//            }
+            // password default = {email}.{email_token}
+            $emailToken =  base64_encode($data['email']);
+            $passwordString = $data['email'].$emailToken;
 
             $userDB = User::create([
-                'first_name' => $request->input('first_name'),
-                'last_name' => $request->input('last_name'),
-                'email' => $request->input('email'),
-                'phone' => $request->input('phone'),
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
                 'password' => Hash::make($passwordString),
                 'email_token' => $emailToken,
-                'status_id' => 5,
-                'waste_category_id' => $categoryId
+                'status_id' => 14,
+                'waste_category_id' => 1
             ]);
             return new UserResource($userDB);
         }

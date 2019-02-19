@@ -232,6 +232,19 @@
                 return messaging.getToken()
             })
             .then(function(token) {
+                //save token to DB
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('admin.save.token') }}',
+                    datatype : "application/json",
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'token': token
+                    }, // no need to stringify
+                    success: function (result) {
+                        console.log("Success save token.");
+                    }
+                });
                 // TokenElem.innerHTML = "token is : " + token
             })
             .catch(function (err) {

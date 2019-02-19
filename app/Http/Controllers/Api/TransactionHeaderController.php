@@ -98,12 +98,20 @@ class TransactionHeaderController extends Controller
         //Send notification to
         //Driver, Admin Wastebank
         $title = "Digital Waste Solution";
-        $body = "User Confirm Transaction On Demand";
+        $body = "User Create Transaction On Demand";
         $data = array(
             "data" => [
-                "type_id" => "DWS - ".$title,
-                "user_id" => "9",
-                "message" => $body,
+                "type_id" => "2",
+                "transaction_id" => $header->id,
+                "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                "transaction_no" => $user->transaction_no,
+                "name" => $user->first_name." ".$user->last_name,
+                "waste_category_name" => $body,
+                "total_weight" => $header->total_weight,
+                "total_price" => $header->total_price,
+                "waste_bank" => "-",
+                "waste_collector" => "-",
+                "status" => $header->status->description,
             ]
         );
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
@@ -282,7 +290,7 @@ class TransactionHeaderController extends Controller
         $title = "Digital Waste Solution";
         $body = "User Confirm Transaction";
         $data = array(
-            'is_confirm' => '1',
+            'type_id' => '1',
             'transaction_no' => $data['transaction_no'],
             'name' => $userName
         );
@@ -324,6 +332,7 @@ class TransactionHeaderController extends Controller
         $title = "Digital Waste Solution";
         $body = "User Canceled Transaction";
         $data = array(
+            'type_id' => '1',
             'is_confirm' => '0',
             'transaction_no' => $data['transaction_no'],
             'name' => $userName

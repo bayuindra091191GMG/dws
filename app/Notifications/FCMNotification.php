@@ -17,17 +17,31 @@ use GuzzleHttp\Client;
 class FCMNotification
 {
     public static function SaveToken($userId, $token, $type){
-        if($type == 'apps'){
-            $fcmToken = FcmTokenApp::create([
-                'user_id' => $userId,
-                'token' => $token
-            ]);
+        if($type == 'app'){
+            $isExistToken = FcmTokenApp::where('user_id', $userId)->first();
+            if(!empty($isExistToken)){
+                $isExistToken->token = $token;
+                $isExistToken->save();
+            }
+            else{
+                $fcmToken = FcmTokenApp::create([
+                    'user_id' => $userId,
+                    'token' => $token
+                ]);
+            }
         }
         else{
-            $fcmToken = FcmTokenBrowser::create([
-                'user_admin_id' => $userId,
-                'token' => $token
-            ]);
+            $isExistToken = FcmTokenBrowser::where('user_admin_id', $userId)->first();
+            if(!empty($isExistToken)){
+                $isExistToken->token = $token;
+                $isExistToken->save();
+            }
+            else{
+                $fcmToken = FcmTokenBrowser::create([
+                    'user_admin_id' => $userId,
+                    'token' => $token
+                ]);
+            }
         }
     }
 

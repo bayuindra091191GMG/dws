@@ -80,5 +80,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.voucher-categories.destroy', 'redirectUrl' => 'admin.voucher-categories.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.voucher-categories.destroy', 'redirectUrl' => 'admin.voucher-categories.index'])
 @endsection

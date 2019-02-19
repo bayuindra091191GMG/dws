@@ -25,6 +25,11 @@ class TransactionHeaderOnDemandController extends Controller
     {
         return view('admin.transaction.on_demand.index');
     }
+    public function list()
+    {
+        $transactions = TransactionHeader::where('transaction_type_id', 3)->get();
+        return view('admin.transaction.on_demand.list', compact('transactions'));
+    }
 
     public function getIndex(Request $request){
         $transations = TransactionHeader::where('transaction_type_id', 3)->get();

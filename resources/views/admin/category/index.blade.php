@@ -105,5 +105,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.categories.destroy', 'redirectUrl' => 'admin.categories.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.categories.destroy', 'redirectUrl' => 'admin.categories.index'])
 @endsection
