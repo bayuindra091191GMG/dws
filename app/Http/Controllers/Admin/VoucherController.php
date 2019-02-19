@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Intervention\Image\Facades\Image;
 
 class VoucherController extends Controller
 {
@@ -71,6 +72,7 @@ class VoucherController extends Controller
             'start_date'    => 'required',
             'finish_date'   => 'required'
         ]);
+        $image = $request->file('img_path');
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
@@ -98,6 +100,19 @@ class VoucherController extends Controller
             'updated_by'    => $user->id,
             'status_id'     => $request->input('status')
         ]);
+
+        //Save Image
+        $img = Image::make($image);
+        $extStr = $img->mime();
+        $ext = explode('/', $extStr, 2);
+
+        $filename = $voucher->id.'_main_'.$voucher->code.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+
+        //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+        $img->save(public_path('storage/admin/vouchers/'. $filename), 75);
+
+        $voucher->img_path = $filename;
+        $voucher->save();
 
         Session::flash('success', 'Success Creating new Voucher!');
         return redirect()->route('admin.vouchers.index');
@@ -145,8 +160,7 @@ class VoucherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -158,6 +172,8 @@ class VoucherController extends Controller
             'start_date'    => 'required',
             'finish_date'   => 'required'
         ]);
+
+        $image = $request->file('img_path');
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
@@ -185,6 +201,14 @@ class VoucherController extends Controller
         $voucher->updated_by = $user->id;
         $voucher->save();
 
+        //Save Image
+        if($image != null) {
+            $img = Image::make($image);
+            $filename = $voucher->img_path;
+            //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+            $img->save(public_path('storage/admin/vouchers/'. $filename), 75);
+        }
+
         Session::flash('success', 'Success Updating Voucher ' . $voucher->code . '!');
         return redirect()->route('admin.vouchers.index');
     }
@@ -202,6 +226,11 @@ class VoucherController extends Controller
             $voucherId = $request->input('id');
             $voucher = Voucher::find($voucherId);
             $voucher->delete();
+
+            $image_path = public_path("storage/admin/vouchers/" . $voucher->img_path);  // Value is not URL but directory file path
+            if(file_exists($image_path)) {
+                unlink($image_path);
+            }
 
             Session::flash('success', 'Success Deleting Voucher ' . $voucher->code);
             return Response::json(array('success' => 'VALID'));

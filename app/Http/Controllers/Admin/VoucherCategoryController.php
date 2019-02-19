@@ -89,7 +89,8 @@ class VoucherCategoryController extends Controller
         $ext = explode('/', $extStr, 2);
 
         $filename = $vCategory->id.'_main_'.$vCategory->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
-        $img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
+        //$img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
+        $img->save(public_path('storage/admin/vouchercategories/'. $filename), 75);
 
         $vCategory->img_path = $filename;
         $vCategory->save();
@@ -153,7 +154,8 @@ class VoucherCategoryController extends Controller
 
             $filename = $vCategory->id.'_main_'.$vCategory->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-            $img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
+            //$img->save('../public_html/storage/admin/vouchercategories/' . $filename, 75);
+            $img->save(public_path('storage/admin/vouchercategories/'. $filename), 75);
             $vCategory->img_path = $filename;
             $vCategory->save();
         }
@@ -179,6 +181,11 @@ class VoucherCategoryController extends Controller
                 return Response::json(array('success' => 'VALID'));
             }
             $vCategory->delete();
+
+            $image_path = public_path("storage/admin/vouchercategories/" . $vCategory->img_path);  // Value is not URL but directory file path
+            if(file_exists($image_path)) {
+                unlink($image_path);
+            }
 
             Session::flash('success', 'Success Deleting Voucher Category ' . $vCategory->name);
             return Response::json(array('success' => 'VALID'));

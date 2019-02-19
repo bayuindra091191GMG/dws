@@ -28,6 +28,8 @@ class VoucherTransformer extends TransformerAbstract
             $action = "<a class='btn btn-xs btn-info' href='vouchers/edit/".$data->id."' data-toggle='tooltip' data-placement='top'><i class='icon-mode_edit'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $data->id ."' ><i class='icon-delete'></i></a>";
 
+            $imgPath = "<img src='". public_path('storage/admin/vouchers'.$data->img_path) . "' width='50'/>";
+
             if($data->category_id != null || $data->category_id != 0){
                 $tmpCategory = Category::find($data->category_id);
                 $category = $tmpCategory->name;
@@ -49,6 +51,7 @@ class VoucherTransformer extends TransformerAbstract
                 'description'       => $data->description,
                 'category'          => $category,
                 'product'           => $product,
+                'img_path'          => $imgPath,
                 'created_at'        => $createdDate,
                 'created_by'        => $data->createdBy->first_name . ' ' . $data->createdBy->last_name,
                 'updated_at'        => $updatedDate,

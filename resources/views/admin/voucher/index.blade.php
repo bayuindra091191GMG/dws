@@ -19,6 +19,7 @@
                         <th>Description</th>
                         <th>Category</th>
                         <th>Product</th>
+                        <th>Image</th>
                         <th>Start Date</th>
                         <th>Finish Date</th>
                         <th>Status</th>
@@ -56,6 +57,7 @@
                 { data: 'description', name: 'description', class: 'text-center'},
                 { data: 'category', name: 'category', class: 'text-center'},
                 { data: 'product', name: 'product', class: 'text-center'},
+                { data: 'img_path', name: 'img_path', class: 'text-center'},
                 { data: 'start_date', name: 'start_date', class: 'text-center'},
                 { data: 'finish_date', name: 'finish_date', class: 'text-center'},
                 { data: 'status', name: 'status', class: 'text-center'},

@@ -7,7 +7,7 @@
             <div class="card-body">
                 <h2 class="card-title m-b-0">Create New Voucher</h2>
 
-            {{ Form::open(['route'=>['admin.vouchers.store'],'method' => 'post','id' => 'general-form']) }}
+            {{ Form::open(['route'=>['admin.vouchers.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row">
                         <div class="col-md-12">
@@ -68,6 +68,15 @@
                                                     <div class="form-group">
                                                         <label for="product">Product *</label>
                                                         <select id="product" name="product" class="form-control"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="img_path">Image *</label>
+                                                            {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
+                                                        </div>
                                                     </div>
                                                 </div>
 
