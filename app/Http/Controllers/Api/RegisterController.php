@@ -115,23 +115,7 @@ class RegisterController extends Controller
         }
     }
 
-    public function facebookRegister(Request $request){
-//        $rules = array(
-//            'email'                 => 'required|email|max:100|unique:users',
-//            'name'            => 'required|max:100',
-//            'phone'                 => 'required|unique:users',
-//        );
-//
-//        $messages = array(
-//            'not_contains'  => 'Email cannot contain these characters +',
-//            'phone.unique'  => 'Your phone number already registered!',
-//        );
-//
-//        $validator = Validator::make($request->all(), $rules, $messages);
-//
-//        if ($validator->fails()) {
-//            return back()->withErrors($validator)->withInput();
-//        }
+    public function facebookAuth(Request $request){
 
         $data = $request->json()->all();
 
@@ -139,14 +123,21 @@ class RegisterController extends Controller
         if(!empty($user)){
             return new UserResource($user);
         }
+        elseif($data['referral'] == '' ||  $data['phone'] == ''){
+            return Response::json([
+                'email' => $data['email']
+            ], 404);
+        }
         else{
+            $companyId = 1;
+            if($data['referral'] != null && $data['referral'] != ''){
+                //Check if it is Company Code
+                $companyData = Company::where('code', $data['referral'])->first();
+                if($companyData != null){
+                    $companyId = $companyData->id;
+                }
+            }
 
-//            if($request->input('referral') != null && $request->input('referral') != ''){
-//                $categoryId = 2;
-//            }
-//            else{
-//                $categoryId = 1;
-//            }
             // password default = {email}.{email_token}
             $emailToken =  base64_encode($data['email']);
             $passwordString = $data['email'].$emailToken;
@@ -159,7 +150,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($passwordString),
                 'email_token' => $emailToken,
                 'status_id' => 14,
-                'waste_category_id' => 1
+                'company_id' => $companyId
             ]);
             return new UserResource($userDB);
         }
