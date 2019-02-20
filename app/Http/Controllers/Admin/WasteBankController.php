@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\AdminUser;
 use App\Models\City;
 use App\Models\WasteBank;
 use App\Models\WasteBankSchedule;

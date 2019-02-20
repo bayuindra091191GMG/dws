@@ -149,6 +149,12 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
+                            <a href="{{ route('admin.wastecollectors.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-note-outline"></i>
+                                <span class="hide-menu"> Waste Collectors </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('admin.admin-users.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
                                 <span class="hide-menu"> Admin Users </span>

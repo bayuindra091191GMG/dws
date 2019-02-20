@@ -21,14 +21,16 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $phone
  * @property string $address
  * @property float $point
- * @property string $image_path
+ * @property string $img_path
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
- * 
- * @property \App\Models\AdminUser $admin_user
+ *
+ * @property \App\Models\Status $status
+ * @property \App\Models\AdminUser $createdBy
+ * @property \App\Models\AdminUser $updatedBy
  * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  * @property \Illuminate\Database\Eloquent\Collection $waste_banks
  *
@@ -56,16 +58,26 @@ class WasteCollector extends Eloquent
 		'phone',
 		'address',
 		'point',
-		'image_path',
+		'img_path',
 		'status_id',
 		'created_by',
 		'updated_by'
 	];
 
-	public function admin_user()
-	{
-		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
-	}
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
+    }
 
 	public function transaction_headers()
 	{

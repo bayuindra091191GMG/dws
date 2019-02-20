@@ -192,6 +192,14 @@ Route::prefix('admin')->group(function(){
     Route::get('/voucher-categories/edit/{item}', 'Admin\VoucherCategoryController@edit')->name('admin.voucher-categories.edit');
     Route::post('/voucher-categories/update', 'Admin\VoucherCategoryController@update')->name('admin.voucher-categories.update');
     Route::post('/voucher-categories/delete', 'Admin\VoucherCategoryController@destroy')->name('admin.voucher-categories.destroy');
+
+    // Waste Collector
+    Route::get('/wastecollectors', 'Admin\WasteCollectorController@index')->name('admin.wastecollectors.index');
+    Route::get('/wastecollectors/create', 'Admin\WasteCollectorController@create')->name('admin.wastecollectors.create');
+    Route::post('/wastecollectors/store', 'Admin\WasteCollectorController@store')->name('admin.wastecollectors.store');
+    Route::get('/wastecollectors/edit/{item}', 'Admin\WasteCollectorController@edit')->name('admin.wastecollectors.edit');
+    Route::post('/wastecollectors/update', 'Admin\WasteCollectorController@update')->name('admin.wastecollectors.update');
+    Route::post('/wastecollectors/delete', 'Admin\WasteCollectorController@destroy')->name('admin.wastecollectors.destroy');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -220,6 +228,7 @@ Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@ge
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
 Route::get('/datatables-transactions-rutin-subscribed-users', 'Admin\TransactionHeaderPenjemputanRutinController@getIndexSuscribedUsers')->name('datatables.rutin.subscribed-users');
+Route::get('/datatables-waste-collectors', 'Admin\WasteCollectorController@getIndex')->name('datatables.waste-collectors');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
