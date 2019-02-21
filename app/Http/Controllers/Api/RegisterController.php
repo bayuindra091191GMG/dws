@@ -152,7 +152,19 @@ class RegisterController extends Controller
                 'status_id' => 14,
                 'company_id' => $companyId
             ]);
-            return new UserResource($userDB);
+            //return new UserResource($userDB);
+            //return Response::json(
+            //    $userDB, 200);
+            try{
+                $user = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
+
+                return Response::json($user, 200);
+            }
+            catch(\Exception $ex){
+                return Response::json([
+                    'error'   => $ex,
+                ], 500);
+            }
         }
     }
 
