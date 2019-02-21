@@ -119,9 +119,10 @@ class RegisterController extends Controller
 
         $data = $request->json()->all();
 
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
         if(!empty($user)){
-            return new UserResource($user);
+//            return new UserResource($user);
+            return Response::json($user, 200);
         }
         elseif($data['referral'] == '' ||  $data['phone'] == ''){
             return Response::json([
