@@ -26,11 +26,13 @@ use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
  * @property string $img_path
  * @property int $status_id
  * @property int $created_by
+ * @property int $company_id
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  *
  * @property \App\Models\Status $status
+ * @property \App\Models\Company $company
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
  * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
@@ -71,6 +73,11 @@ class WasteCollector extends Authenticatable
     public function status()
     {
         return $this->belongsTo(\App\Models\Status::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(\App\Models\Company::class);
     }
 
     public function createdBy()
