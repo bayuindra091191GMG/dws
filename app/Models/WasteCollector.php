@@ -7,7 +7,9 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 
 /**
  * Class WasteCollector
@@ -36,8 +38,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class WasteCollector extends Eloquent
+class WasteCollector extends Authenticatable
 {
+	use Notifiable, HasMultiAuthApiTokens;
+	
 	protected $casts = [
 		'point' => 'float',
 		'status_id' => 'int',

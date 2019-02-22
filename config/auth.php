@@ -50,6 +50,11 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+
+        'waste_collector' => [
+            'driver' => 'passport',
+            'provider' => 'waste_collectors',
+        ],
     ],
 
     /*
@@ -78,6 +83,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\AdminUser::class,
+        ],
+
+        'waste_collectors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\WasteCollector::class,
         ],
 
         // 'users' => [

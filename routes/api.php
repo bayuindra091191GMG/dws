@@ -67,6 +67,9 @@ Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
 Route::post('/fb-register', 'Api\RegisterController@facebookAuth');
 
+//Test WasteCollector Auth
+Route::middleware('auth:waste_collector')->get('/wastecollectors', 'Api\WasteCollectorController@get');
+
 //Forgot Password
 Route::post('/checkEmail', 'Api\ForgotPasswordController@checkEmail');
 Route::post('/sendResetLinkEmail', 'Api\ForgotPasswordController@sendResetLinkEmail');
