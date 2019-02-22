@@ -76,6 +76,7 @@ Route::middleware('auth:waste_collector')->group(function(){
     Route::post('/waste-collector/get-data', 'Api\WasteCollectorController@show');
     Route::post('/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
     Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
+    Route::post('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
 });
 
 //Forgot Password

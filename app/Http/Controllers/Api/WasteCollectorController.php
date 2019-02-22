@@ -161,4 +161,23 @@ class WasteCollectorController extends Controller
             'message' => "Success creating Routine Pickup Transaction!",
         ], 200);
     }
+
+    /**
+     * Function to show all WasteCollector Transactions Related.
+     *
+     * @param Request $request
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+     */
+    public function getAllTransactions(Request $request)
+    {
+        try{
+            $wasteCollector = WasteCollector::where('email', $request->input('email'))->first();
+            $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)->get();
+
+            return $transactions;
+        }
+        catch (\Exception $ex){
+            return Response::json("Sorry something went wrong!",500);
+        }
+    }
 }
