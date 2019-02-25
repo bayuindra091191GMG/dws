@@ -180,4 +180,107 @@ class WasteCollectorController extends Controller
             return Response::json("Sorry something went wrong!",500);
         }
     }
+
+    /**
+     * On Demand.
+     * Function for WasteCollector to edit on Demand Transaction.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function confirmOnDemandTransaction(Request $request)
+    {
+        $rules = array(
+            'email'             => 'required',
+            'total_weight'      => 'required',
+            'total_price'       => 'required',
+            'details'           => 'required',
+            'transaction_no'    => 'required',
+            'is_edit'           => 'required'
+        );
+
+        $data = $request->json()->all();
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $user = User::where('email', $data['email'])->first();
+
+        if($request->input('is_edit')) {
+            $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
+            $header->total_weight = $data['total_weight'];
+            $header->total_price = $data['total_price'];
+            $header->updated_at = Carbon::now('Asia/Jakarta');
+            $header->status_id = 7;
+            $header->save();
+
+            //do detail
+            $i = 0;
+            foreach ($data['details'] as $item) {
+                $detail = $header->transaction_details[$i];
+                $detail->weight = $item['weight'];
+                $detail->price = $item['price'];
+                $detail->save();
+                $i++;
+            }
+
+            //Send notification to
+            //Driver, Admin Wastebank
+            $title = "Digital Waste Solution";
+            $body = "Driver Mengkonfirmasi Transaksi On Demand!";
+            $data = array(
+                "data" => [
+                    "type_id" => "2",
+                    "transaction_id" => $header->id,
+                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                    "transaction_no" => $header->transaction_no,
+                    "name" => $user->first_name . " " . $user->last_name,
+                    "waste_category_name" => $body,
+                    "total_weight" => $header->total_weight,
+                    "total_price" => $header->total_price,
+                    "waste_bank" => "-",
+                    "waste_collector" => "-",
+                    "status" => $header->status->description,
+                ]
+            );
+            $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Berhasil mengkonfirmasi dan mengubah Transaksi On demand!",
+            ], 200);
+        }
+        else{
+            $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
+            $header->updated_at = Carbon::now('Asia/Jakarta');
+            $header->status_id = 7;
+            $header->save();
+
+            //Send notification to
+            //Driver, Admin Wastebank
+            $title = "Digital Waste Solution";
+            $body = "Driver Mengkonfirmasi Transaksi On Demand!";
+            $data = array(
+                "data" => [
+                    "type_id" => "2",
+                    "transaction_id" => $header->id,
+                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                    "transaction_no" => $header->transaction_no,
+                    "name" => $user->first_name . " " . $user->last_name,
+                    "waste_category_name" => $body,
+                    "total_weight" => $header->total_weight,
+                    "total_price" => $header->total_price,
+                    "waste_bank" => "-",
+                    "waste_collector" => "-",
+                    "status" => $header->status->description,
+                ]
+            );
+            $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Berhasil mengkonfirmasi Transaksi On Demand!",
+            ], 200);
+        }
+    }
 }

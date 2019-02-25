@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\libs\Utilities;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
@@ -47,6 +48,7 @@ class TransactionHeaderController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function createTransaction(Request $request)
     {
@@ -67,9 +69,22 @@ class TransactionHeaderController extends Controller
 
         $user = User::where('email', $data['email'])->first();
 
+        // Generate transaction codes
+        $today = Carbon::today()->format("Ym");
+        $categoryType = $user->company->waste_category_id;
+        if($categoryType == "1"){
+            $prepend = "TRANS/DWS/". $today;
+        }
+        else{
+            $prepend = "TRANS/MASARO/". $today;
+        }
+
+        $nextNo = Utilities::GetNextTransactionNumber($prepend);
+        $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
+
         //Awaiting Bayu Create Transaction Number
         $header = TransactionHeader::create([
-            'transaction_no'        => 'asdf',
+            'transaction_no'        => $code,
             'total_weight'          => $data["total_weight"],
             'total_price'           => $data["total_price"],
             'status_id'             => 6,

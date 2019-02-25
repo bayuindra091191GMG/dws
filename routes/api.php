@@ -71,12 +71,15 @@ Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
 Route::post('/fb-register', 'Api\RegisterController@facebookAuth');
 
-//Waste Collector Routine Pickup
+//Waste Collector Transaction
 Route::middleware('auth:waste_collector')->group(function(){
     Route::post('/waste-collector/get-data', 'Api\WasteCollectorController@show');
     Route::post('/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
     Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
     Route::post('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
+
+    Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollector@confirmOnDemandTransaction');
+
 });
 
 //Forgot Password
