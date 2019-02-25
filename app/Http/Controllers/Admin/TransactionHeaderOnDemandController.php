@@ -87,4 +87,24 @@ class TransactionHeaderOnDemandController extends Controller
 
         return view('admin.transaction.on_demand.show')->with($data);
     }
+
+    public function confirm(Request $request){
+        $trxId = $request->input('confirmed_header_id');
+        $header = TransactionHeader::find($trxId);
+        if($header->status_id !== 8){
+            Session::flash('error', 'Customer harus konfirmasi transaksi terlebih dahulu!');
+            return redirect()->back();
+        }
+
+        $user = Auth::guard('admin')->user();
+        $now = Carbon::now();
+
+        $header->status_id = 9;
+        $header->updated_at = $now->toDateTimeString();
+        $header->updated_by_admin = $user->id;
+        $header->save();
+        Session::flash('message', 'Berhasil konfirmasi transaksi On Demand!');
+
+        return redirect()->route('admin.transactions.on_demand.show', ['id' => $trxId]);
+    }
 }
