@@ -162,6 +162,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/transactions/on_demand/masaro/edit/{id}', 'Admin\TransactionHeaderOnDemandController@editMasaro')->name('admin.transactions.on_demand.masaro.edit');
     Route::post('/transactions/on_demand/update/{id}', 'Admin\TransactionHeaderOnDemandController@update')->name('admin.transactions.on_demand.update');
     Route::post('/transactions/on_demand/assign/{id}', 'Admin\TransactionHeaderOnDemandController@assignWasteCollector')->name('admin.transactions.on_demand.assign');
+    Route::post('/transactions/on_demand/confirm', 'Admin\TransactionHeaderOnDemandController@confirm')->name('admin.transactions.on_demand.confirm');
 
     // Rutin Transactions
     Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderPenjemputanRutinController@indexSuscribedUsers')->name('admin.transactions.penjemputan_rutin.index');
