@@ -124,7 +124,15 @@ class WasteCollectorController extends Controller
      */
     public function show($id)
     {
-        //
+        $collector = WasteCollector::find($id);
+        $name = $collector->first_name. " ". $collector->last_name;
+
+        $data = [
+            'collector'     => $collector,
+            'name'          => $name
+        ];
+
+        return view('admin.wastecollector.show')->with($data);
     }
 
     /**
