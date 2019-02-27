@@ -55,6 +55,11 @@ return [
             'driver' => 'passport',
             'provider' => 'waste_collectors',
         ],
+
+        'admin_wastebank' => [
+            'driver' => 'passport',
+            'provider' => 'admins'
+        ]
     ],
 
     /*
