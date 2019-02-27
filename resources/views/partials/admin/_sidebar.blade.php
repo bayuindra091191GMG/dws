@@ -121,6 +121,12 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
+                            <a href="{{ route('admin.voucher.users.index') }}" class="sidebar-link">
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Penggunaan Voucher </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('admin.vouchers.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> Daftar Voucher </span>

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\UserVoucher;
 use App\Models\Voucher;
 use App\Transformer\VoucherTransformer;
+use App\Transformer\VoucherUserTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,14 @@ class VoucherController extends Controller
             ->make(true);
     }
 
+    public function getIndexUserVoucher(Request $request){
+        $users = UserVoucher::query();
+        return DataTables::of($users)
+            ->setTransformer(new VoucherUserTransformer())
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,6 +55,16 @@ class VoucherController extends Controller
     public function index()
     {
         return view('admin.voucher.index');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexUsers()
+    {
+        return view('admin.voucher.index-users');
     }
 
     /**

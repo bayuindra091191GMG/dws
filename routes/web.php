@@ -180,6 +180,7 @@ Route::prefix('admin')->group(function(){
 
     // Vouchers
     Route::get('/vouchers', 'Admin\VoucherController@index')->name('admin.vouchers.index');
+    Route::get('/voucher-users', 'Admin\VoucherController@indexUsers')->name('admin.voucher.users.index');
     Route::get('/vouchers/create', 'Admin\VoucherController@create')->name('admin.vouchers.create');
     Route::post('/vouchers/store', 'Admin\VoucherController@store')->name('admin.vouchers.store');
     Route::get('/vouchers/edit/{item}', 'Admin\VoucherController@edit')->name('admin.vouchers.edit');
@@ -218,6 +219,7 @@ Route::get('/datatables-store-addresses', 'Admin\StoreAddressController@getIndex
 Route::get('/datatables-contact-message', 'Admin\ContactMessageController@getIndex')->name('datatables.contact-message');
 Route::get('/datatables-subscribes', 'Admin\SubscribeController@getIndex')->name('datatables.subscribes');
 Route::get('/datatables-vouchers', 'Admin\VoucherController@getIndex')->name('datatables.vouchers');
+Route::get('/datatables-voucher-users', 'Admin\VoucherController@getIndexUserVoucher')->name('datatables.voucher.users');
 Route::get('/datatables-voucher-categories', 'Admin\VoucherCategoryController@getIndex')->name('datatables.voucher-categories');
 Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables.faqs');
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
