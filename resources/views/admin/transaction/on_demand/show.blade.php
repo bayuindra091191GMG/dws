@@ -9,7 +9,10 @@
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row mb-2">
                         <div class="col-12 text-right">
-                            <a class="btn btn-primary" style="cursor: pointer;" id="btn-confirm">KONFIRMASI</a>
+                            @if($header->status_id === 8)
+                                <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
+                            @endif
+
                             {{--@if($header->waste_category_id == "1")--}}
                                 {{--<a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>--}}
                             {{--@else--}}
@@ -29,6 +32,21 @@
                                                 <div class="form-line">
                                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                         <strong>{{ \Illuminate\Support\Facades\Session::get('message') }}</strong>
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if(\Illuminate\Support\Facades\Session::has('error'))
+                                        <div class="col-md-12">
+                                            <div class="form-group form-float form-group-lg">
+                                                <div class="form-line">
+                                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                        <strong>{{ \Illuminate\Support\Facades\Session::get('error') }}</strong>
                                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -226,11 +244,11 @@
                 </div>
                 <div class="modal-body">
                     Apakah anda yakin konfirmasi transaksi ini?
-                    <input type="hidden" value="{{ $header->id }}"/>
+                    <input type="hidden" name="confirmed_header_id" value="{{ $header->id }}"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
-                    <button type="button" class="btn btn-primary">KONFIRMASI</button>
+                    <input type="submit" class="btn btn-primary" value="KONFIRMASI">
                 </div>
                 {{ Form::close() }}
             </div>
@@ -249,6 +267,10 @@
     <script>
         $(document).ready(function() {
             $('#waste_collector_id').select2();
+
+            $(document).on('click', '#btn-confirm', function(){
+                $('#modal-confirm').modal('show');
+            })
         });
     </script>
 @endsection

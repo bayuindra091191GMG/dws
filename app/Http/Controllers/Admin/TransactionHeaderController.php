@@ -239,7 +239,7 @@ class TransactionHeaderController extends Controller
             'message' => $body,
         );
 //        dd($data);
-        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+        //$isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
 
 
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
