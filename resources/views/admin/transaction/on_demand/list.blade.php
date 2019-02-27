@@ -140,7 +140,7 @@
 
         messaging.onMessage(function(payload) {
             var typeId = payload.data.type_id;
-            if(typeId === '2'){
+            if(typeId === '3'){
                 $("#datatable-ondemand tbody").prepend(
                     "<tr>" +
                     "<td>" + payload.data.transaction_date +"</td>" +

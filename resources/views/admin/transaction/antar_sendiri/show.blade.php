@@ -255,20 +255,22 @@
         messaging.onMessage(function(payload) {
             var transactionNo = payload.data.transaction_no;
             var transNo = $('#trxNo').val();
+            var typeId = payload.data.type_id;
+            if(typeId === '3') {
+                if(transactionNo === transNo){
+                    var isConfirm = payload.data.is_confirm;
+                    var name = payload.data.name;
 
-            if(transactionNo === transNo){
-                var isConfirm = payload.data.is_confirm;
-                var name = payload.data.name;
-
-                if(isConfirm === '1'){
-                    $("#user-action-confirm").show();
-                    $("#user-action-cancel").hide();
+                    if(isConfirm === '1'){
+                        $("#user-action-confirm").show();
+                        $("#user-action-cancel").hide();
+                    }
+                    else{
+                        $("#user-action-cancel").show();
+                        $("#user-action-confirm").hide();
+                    }
+                    $('#name').val(name);
                 }
-                else{
-                    $("#user-action-cancel").show();
-                    $("#user-action-confirm").hide();
-                }
-                $('#name').val(name);
             }
             // console.log("Message received. ", payload);
             // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
