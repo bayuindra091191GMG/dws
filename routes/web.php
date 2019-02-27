@@ -198,6 +198,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/wastecollectors', 'Admin\WasteCollectorController@index')->name('admin.wastecollectors.index');
     Route::get('/wastecollectors/create', 'Admin\WasteCollectorController@create')->name('admin.wastecollectors.create');
     Route::post('/wastecollectors/store', 'Admin\WasteCollectorController@store')->name('admin.wastecollectors.store');
+    Route::get('/wastecollectors/show/{id}', 'Admin\WasteCollectorController@show')->name('admin.wastecollectors.show');
     Route::get('/wastecollectors/edit/{item}', 'Admin\WasteCollectorController@edit')->name('admin.wastecollectors.edit');
     Route::post('/wastecollectors/update', 'Admin\WasteCollectorController@update')->name('admin.wastecollectors.update');
     Route::post('/wastecollectors/delete', 'Admin\WasteCollectorController@destroy')->name('admin.wastecollectors.destroy');

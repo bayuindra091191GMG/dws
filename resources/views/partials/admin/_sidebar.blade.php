@@ -144,16 +144,31 @@
 
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i class="mdi mdi-account-settings-variant"></i>
-                        <span class="hide-menu">Master Data </span>
+                        <i class="mdi mdi-book"></i>
+                        <span class="hide-menu">Waste Collector</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
                             <a href="{{ route('admin.wastecollectors.index') }}" class="sidebar-link">
-                                <i class="mdi mdi-note-outline"></i>
-                                <span class="hide-menu"> Waste Collectors </span>
+                                <i class="mdi mdi-book-multiple"></i>
+                                <span class="hide-menu"> Daftar Waste Collector </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.wastecollectors.create') }}" class="sidebar-link">
+                                <i class="fas fa-plus"></i>
+                                <span class="hide-menu"> Tambah Baru </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-account-settings-variant"></i>
+                        <span class="hide-menu">Master Data </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
                             <a href="{{ route('admin.admin-users.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
