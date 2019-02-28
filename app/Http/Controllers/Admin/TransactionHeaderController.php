@@ -30,7 +30,7 @@ class TransactionHeaderController extends Controller
     }
 
     public function getIndex(Request $request){
-        $transations = TransactionHeader::where('transaction_type_id', 2)->get();
+        $transations = TransactionHeader::where('transaction_type_id', 1)->get();
         return DataTables::of($transations)
             ->setTransformer(new TransactionTransformer)
             ->addIndexColumn()

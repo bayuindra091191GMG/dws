@@ -10,6 +10,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Configuration;
+use App\Models\PointHistory;
+use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
 use App\Transformer\TransactionTransformer;
@@ -88,10 +91,16 @@ class TransactionHeaderOnDemandController extends Controller
         return view('admin.transaction.on_demand.show')->with($data);
     }
 
+    /**
+     * Confirm Transaction on demand
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function confirm(Request $request){
         $trxId = $request->input('confirmed_header_id');
         $header = TransactionHeader::find($trxId);
-        if($header->status_id !== 8){
+        if($header->status_id !== 16){
             Session::flash('error', 'Customer harus konfirmasi transaksi terlebih dahulu!');
             return redirect()->back();
         }
@@ -99,10 +108,49 @@ class TransactionHeaderOnDemandController extends Controller
         $user = Auth::guard('admin')->user();
         $now = Carbon::now();
 
-        $header->status_id = 9;
+        $header->status_id = 18;
         $header->updated_at = $now->toDateTimeString();
         $header->updated_by_admin = $user->id;
         $header->save();
+
+        //add point to user
+        $configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
+        $amount = $configuration->configuration_value;
+        $userDB = $header->user;
+        $newSaldo = $userDB->point + $amount;
+        $userDB->point = $newSaldo;
+        $userDB->save();
+
+        $point = PointHistory::create([
+            'user_id'  => $header->user_id,
+            'type'   => $header->transaction_type_id,
+            'transaction_id'    => $header->id,
+            'type_transaction'   => "Kredit",
+            'amount'    => $amount,
+            'saldo'    => $newSaldo,
+            'description'    => "Point dari transaksi nomor ".$header->transaction_no,
+            'created_at'    => Carbon::now('Asia/Jakarta'),
+        ]);
+
+        //add point to wastecollector
+        $configuration = Configuration::where('configuration_key', 'point_amount_wastecollector')->first();
+        $amount = $configuration->configuration_value;
+        $userDB = $header->waste_collector;
+        $newSaldo = $userDB->point + $amount;
+        $userDB->point = $newSaldo;
+        $userDB->save();
+
+        $point = PointWastecollectorHistory::create([
+            'wastecollector_id'  => $header->waste_collector_id,
+            'type'   => $header->transaction_type_id,
+            'transaction_id'    => $header->id,
+            'type_transaction'   => "Kredit",
+            'amount'    => $amount,
+            'saldo'    => $newSaldo,
+            'description'    => "Point dari transaksi nomor ".$header->transaction_no,
+            'created_at'    => Carbon::now('Asia/Jakarta'),
+        ]);
+
         Session::flash('message', 'Berhasil konfirmasi transaksi On Demand!');
 
         return redirect()->route('admin.transactions.on_demand.show', ['id' => $trxId]);

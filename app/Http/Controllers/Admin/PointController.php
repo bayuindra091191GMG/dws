@@ -7,6 +7,7 @@ use App\libs\Utilities;
 use App\Models\DwsWasteCategoryData;
 use App\Models\MasaroWasteCategoryData;
 use App\Models\PointHistory;
+use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Transformer\PointTransformer;
@@ -37,6 +38,14 @@ class PointController extends Controller
             ->make(true);
     }
 
+    public function getIndexWastecollectors(Request $request){
+        $points = PointWastecollectorHistory::query();
+        return DataTables::of($points)
+            ->setTransformer(new PointTransformer())
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,6 +54,16 @@ class PointController extends Controller
     public function index()
     {
         return view('admin.point.index');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexWastecollectors()
+    {
+        return view('admin.point.index-wastecollector');
     }
 
     /**

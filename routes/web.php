@@ -176,6 +176,7 @@ Route::prefix('admin')->group(function(){
 
     // Points
     Route::get('/points', 'Admin\PointController@index')->name('admin.points.index');
+    Route::get('/point-wastecollectors', 'Admin\PointController@indexWastecollectors')->name('admin.point-wastecollectors.index');
     Route::get('/points/show/{id}', 'Admin\PointController@show')->name('admin.points.show');
 
     // Vouchers
@@ -230,6 +231,7 @@ Route::get('/datatables-transactions-on-demand', 'Admin\TransactionHeaderOnDeman
 Route::get('/datatables-dws-waste-items', 'Admin\DwsWasteItemController@getIndex')->name('datatables.dws-waste-items');
 Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@getIndex')->name('datatables.masaro-waste-items');
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');
+Route::get('/datatables-point-wastecollectors', 'Admin\PointController@getIndexWastecollectors')->name('datatables.point-wastecollectors');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
 Route::get('/datatables-transactions-rutin-subscribed-users', 'Admin\TransactionHeaderPenjemputanRutinController@getIndexSuscribedUsers')->name('datatables.rutin.subscribed-users');
 Route::get('/datatables-waste-collectors', 'Admin\WasteCollectorController@getIndex')->name('datatables.waste-collectors');
