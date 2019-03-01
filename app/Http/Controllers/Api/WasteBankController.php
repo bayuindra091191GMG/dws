@@ -25,9 +25,9 @@ class WasteBankController extends Controller
         try{
             $wasteBank = WasteBank::all();
 
-            return Response::json([
-                'waste_banks' => $wasteBank,
-            ], 200);
+            return Response::json(
+                $wasteBank
+            , 200);
         }
         catch (\Exception $ex){
             return Response::json([
