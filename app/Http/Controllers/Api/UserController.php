@@ -92,9 +92,7 @@ class UserController extends Controller
         try{
             $users = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
 
-            return Response::json([
-                $users
-            ], 200);
+            return Response::json($users, 200);
         }
         catch(\Exception $ex){
             return Response::json([
@@ -114,9 +112,7 @@ class UserController extends Controller
         try{
             $user = User::where('email', $request->input('email'))->first();
 
-            return Response::json([
-                'address'   => $user->addresses->first(),
-            ], 200);
+            return Response::json($user->addresses->first(),200);
         }
         catch (\Exception $ex){
             return Response::json([
