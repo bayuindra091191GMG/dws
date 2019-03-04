@@ -68,7 +68,7 @@ Route::middleware('auth:api')->group(function(){
 
 Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
-Route::post('/fb-register', 'Api\RegisterController@facebookAuth');
+Route::post('/external-register', 'Api\RegisterController@externalAuth');
 
 //Waste Collector Transaction
 Route::middleware('auth:waste_collector')->group(function(){

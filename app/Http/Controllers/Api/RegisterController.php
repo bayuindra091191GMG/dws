@@ -115,7 +115,7 @@ class RegisterController extends Controller
         }
     }
 
-    public function facebookAuth(Request $request){
+    public function externalAuth(Request $request){
 
         $data = $request->json()->all();
 
@@ -124,35 +124,40 @@ class RegisterController extends Controller
 //            return new UserResource($user);
             return Response::json($user, 200);
         }
-        elseif($data['referral'] == '' ||  $data['phone'] == ''){
+//        elseif($data['referral'] == '' ||  $data['phone'] == ''){
+        elseif($request->input('referral') == '' ||  $request->input('phone') == ''){
             return Response::json([
-                'email' => $data['email']
+                'email' => $request->input('email')
             ], 404);
         }
         else{
             $companyId = 1;
-            if($data['referral'] != null && $data['referral'] != ''){
+//            if($data['referral'] != null && $data['referral'] != ''){
+            if($request->input('referral') != null && $request->input('referral') != ''){
                 //Check if it is Company Code
-                $companyData = Company::where('code', $data['referral'])->first();
+                $companyData = Company::where('code', $request->input('referral'))->first();
                 if($companyData != null){
                     $companyId = $companyData->id;
                 }
             }
 
             // password default = {email}.{email_token}
-            $emailToken =  base64_encode($data['email']);
-            $passwordString = $data['email'].$emailToken;
+            $emailToken =  base64_encode($request->input('email'));
+            $passwordString = $request->input('email').$emailToken;
 
+            //for status_id if user login using fb(ext_id=1) status 14, and gmail (ext_id=2) status 19
+            $extId = $request->input('ext_id');
             $userDB = User::create([
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
                 'password' => Hash::make($passwordString),
                 'email_token' => $emailToken,
-                'status_id' => 14,
+                'status_id' => $extId == "1" ? 14 : 19,
                 'company_id' => $companyId
             ]);
+
             //return new UserResource($userDB);
             //return Response::json(
             //    $userDB, 200);
