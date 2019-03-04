@@ -43,7 +43,12 @@ use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 class WasteCollector extends Authenticatable
 {
 	use Notifiable, HasMultiAuthApiTokens;
-	
+
+    public function findForPassport($username)
+    {
+        return $this->where('phone', $username)->first();
+    }
+
 	protected $casts = [
 		'point' => 'float',
 		'status_id' => 'int',
