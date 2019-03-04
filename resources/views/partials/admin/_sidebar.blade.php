@@ -188,6 +188,12 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ route('admin.wastebanks-radius.setting') }}" class="sidebar-link">
+                                <i class="mdi mdi-note-outline"></i>
+                                <span class="hide-menu"> WasteBanks Radius </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('admin.setting') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
                                 <span class="hide-menu"> Category Setting </span>

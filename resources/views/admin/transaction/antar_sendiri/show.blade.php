@@ -256,7 +256,7 @@
             var transactionNo = payload.data.transaction_no;
             var transNo = $('#trxNo').val();
             var typeId = payload.data.type_id;
-            if(typeId === '3') {
+            if(typeId === '2') {
                 if(transactionNo === transNo){
                     var isConfirm = payload.data.is_confirm;
                     var name = payload.data.name;

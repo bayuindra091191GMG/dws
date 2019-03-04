@@ -109,6 +109,10 @@ Route::prefix('admin')->group(function(){
     Route::post('/waste-banks/update', 'Admin\WasteBankController@update')->name('admin.waste-banks.update');
     Route::post('/waste-banks/delete', 'Admin\WasteBankController@destroy')->name('admin.waste-banks.destroy');
 
+    // Wastebanks Setting
+    Route::get('/setting-wastebank-radius', 'Admin\AdminController@showWastebankSetting')->name('admin.wastebanks-radius.setting');
+    Route::post('/setting-wastebank-radius-update', 'Admin\AdminController@saveWastebankSetting')->name('admin.setting-wastebank.update');
+
     // Dws Waste
     Route::get('/dws-wastes', 'Admin\DwsWasteController@index')->name('admin.dws-wastes.index');
     Route::get('/dws-wastes/create', 'Admin\DwsWasteController@create')->name('admin.dws-wastes.create');

@@ -54,6 +54,21 @@ class AdminController extends Controller
         return redirect()->route('admin.setting');
     }
 
+    public function showWastebankSetting()
+    {
+        $configuration = Configuration::find(18);
+        return view('admin.setting.setting-wastebank-radius', compact('configuration'));
+    }
+
+    public function saveWastebankSetting(Request $request)
+    {
+        $configuration = Configuration::find(18);
+        $configuration->configuration_value = $request->input('wastebank_radius');
+        $configuration->save();
+
+        return redirect()->route('admin.wastebanks-radius.setting');
+    }
+
     public function saveUserToken(Request $request)
     {
         try{

@@ -234,12 +234,15 @@ class TransactionHeaderController extends Controller
             $body = "Berhasil membuat transaksi kategori Masaro - Nomor Transaksi ".$code;
         }
         $data = array(
-            'type_id' => '1',
+            'type_id' => '2',
             'transaction_no' => $code,
             'message' => $body,
         );
 //        dd($data);
-        //$isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+        //for testing purpose set user and send notif
+        $trxHeader->user_id = 8;
+        $trxHeader->save();
+        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
 
 
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
