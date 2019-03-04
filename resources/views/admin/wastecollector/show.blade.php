@@ -13,7 +13,15 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-12 text-right">
-
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    OPSI
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{{ route('admin.wastecollectors.transactions', ['id' => $collector->id]) }}">Histori Transaksi</a>
+                                    <a class="dropdown-item" href="{{ route('admin.wastecollectors.edit', ['item' => $collector->id]) }}">Ubah</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">

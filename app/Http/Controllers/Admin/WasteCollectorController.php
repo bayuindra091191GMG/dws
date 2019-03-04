@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
+use App\Transformer\WasteCollectorTransactionTransformer;
 use App\Transformer\WasteCollectorTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -222,5 +224,26 @@ class WasteCollectorController extends Controller
         catch(\Exception $ex){
             return Response::json(array('errors' => 'INVALID'));
         }
+    }
+
+    public function indexTransaction($id)
+    {
+        $collector = WasteCollector::find($id);
+        $name = $collector->first_name. " ". $collector->last_name;
+
+        $data = [
+            'collector'     => $collector,
+            'name'          => $name
+        ];
+
+        return view('admin.wastecollector.transactions')->with($data);
+    }
+
+    public function getTransactions(Request $request){
+        $transations = TransactionHeader::where('waste_collector_id', $request->input('waste_collector_id'));
+        return DataTables::of($transations)
+            ->setTransformer(new WasteCollectorTransactionTransformer())
+            ->addIndexColumn()
+            ->make(true);
     }
 }

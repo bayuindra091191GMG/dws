@@ -204,6 +204,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/wastecollectors/edit/{item}', 'Admin\WasteCollectorController@edit')->name('admin.wastecollectors.edit');
     Route::post('/wastecollectors/update', 'Admin\WasteCollectorController@update')->name('admin.wastecollectors.update');
     Route::post('/wastecollectors/delete', 'Admin\WasteCollectorController@destroy')->name('admin.wastecollectors.destroy');
+    Route::get('/wastecollectors/transactions/{id}', 'Admin\WasteCollectorController@indexTransaction')->name('admin.wastecollectors.transactions');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
@@ -235,6 +236,7 @@ Route::get('/datatables-point-wastecollectors', 'Admin\PointController@getIndexW
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
 Route::get('/datatables-transactions-rutin-subscribed-users', 'Admin\TransactionHeaderPenjemputanRutinController@getIndexSuscribedUsers')->name('datatables.rutin.subscribed-users');
 Route::get('/datatables-waste-collectors', 'Admin\WasteCollectorController@getIndex')->name('datatables.waste-collectors');
+Route::get('/datatables-transactions-waste-collectors', 'Admin\WasteCollectorController@getTransactions')->name('datatables.waste-collectors.transactions');
 
 // Select2
 Route::get('/select-roles', 'Admin\RoleController@getRoles')->name('select.roles');
