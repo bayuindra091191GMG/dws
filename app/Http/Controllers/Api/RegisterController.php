@@ -128,7 +128,7 @@ class RegisterController extends Controller
         elseif($request->input('referral') == '' ||  $request->input('phone') == ''){
             return Response::json([
                 'email' => $request->input('email')
-            ], 404);
+            ], 482);
         }
         else{
             $companyId = 1;

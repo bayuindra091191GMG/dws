@@ -47,7 +47,7 @@
                                                                         <input id="name" type="text" class="form-control"
                                                                                name="name" value="{{ $wasteBank->name }}">
                                                                         <input type="hidden" value="{{ $wasteBank->id }}" name="id"/>
-                                                                        <input type="hidden" name="categoryType" value="1" />
+                                                                        <input type="hidden" name="categoryType" value="2" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -170,7 +170,7 @@
                                                                                 Jam
                                                                             </th>
                                                                             <th class="text-center" style="width: 30%">
-                                                                                Dws Kategori
+                                                                                Masaro Kategori
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
@@ -179,7 +179,7 @@
                                                                         @foreach($wasteBank->waste_bank_schedules as $schedule)
                                                                             <tr id='sch{{$ct}}'>
                                                                                 <td class='field-item'>
-                                                                                    <input type='hidden' name='schDetailId[]' value="-1">
+                                                                                    <input type='hidden' name='schDetailId[]' value="{{$schedule->id}}">
                                                                                     <select class='form-control' id='schDay{{$ct}}' name='schDays[]'>
                                                                                         <option value='1'>Senin</option>
                                                                                         <option value='2'>Selasa</option>
@@ -192,8 +192,8 @@
                                                                                 </td>
                                                                                 <td><input type='text' id='schTime{{$ct}}' name='schTimes[]' class='form-control time-inputmask' value="{{$schedule->time}}"></td>
                                                                                 <td>
-                                                                                    <select id='select{{$ct}}' name='dwsTypes[]' class='form-control'>
-                                                                                        <option value="{{$schedule->dws_waste_category_id}}">{{$schedule->dws_waste_category_data->code}} - {{$schedule->dws_waste_category_data->name}}</option>
+                                                                                    <select id='select{{$ct}}' name='masaroTypes[]' class='form-control'>
+                                                                                        <option value="{{$schedule->masaro_waste_category_id}}">{{$schedule->masaro_waste_category_data->code}} - {{$schedule->masaro_waste_category_data->name}}</option>
                                                                                     </select>
                                                                                 </td>
                                                                             </tr>
@@ -201,6 +201,7 @@
                                                                         @endforeach
                                                                         <tr id='sch0'>
                                                                             <td class='field-item'>
+                                                                                <input type='hidden' name='schDetailId[]' value="-1">
                                                                                 <select class="form-control" id="schDay0" name="schDays[]">
                                                                                     <option value="1">Senin</option>
                                                                                     <option value="2">Selasa</option>
@@ -216,7 +217,7 @@
                                                                                        name="schTimes[]"/>
                                                                             </td>
                                                                             <td>
-                                                                                <select id="select0" name="dwsTypes[]" class='form-control'></select>
+                                                                                <select id="select0" name="masaroTypes[]" class='form-control'></select>
                                                                             </td>
                                                                         </tr>
                                                                         <tr id="sch{{$ct}}"></tr>
@@ -355,12 +356,12 @@
             $('#select{{$ct2}}').select2({
                 placeholder: {
                     id: '-1',
-                    text: ' - Pilih DWS Kategori - '
+                    text: ' - Pilih Masaro Kategori - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
                 ajax: {
-                    url: '{{ route('select.dws-categories') }}',
+                    url: '{{ route('select.masaro-categories') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -380,12 +381,12 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: ' - Pilih DWS Kategori - '
+                text: ' - Pilih Masaro Kategori - '
             },
             width: '100%',
             minimumInputLength: 1,
             ajax: {
-                url: '{{ route('select.dws-categories') }}',
+                url: '{{ route('select.masaro-categories') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -427,12 +428,12 @@
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: ' - Pilih DWS Kategori - '
+                    text: ' - Pilih Masaro Kategori - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
                 ajax: {
-                    url: '{{ route('select.dws-categories') }}',
+                    url: '{{ route('select.masaro-categories') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

@@ -46,7 +46,7 @@
                             @foreach($transactions as $transaction)
                                 <tr>
                                     <td>{{ \Carbon\Carbon::parse($transaction->date)->format('j-F-Y H:i:s')}}</td>
-                                    <td>{{ $trasaction->transaction_no}}</td>
+                                    <td>{{ $transaction->transaction_no}}</td>
                                     <td>{{ $transaction->user->first_name}} {{ $transaction->user->last_name}}</td>
                                     <td>{{ $transaction->waste_category->name}}</td>
                                     <td>{{ $transaction->total_weight}}</td>

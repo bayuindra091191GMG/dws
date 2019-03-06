@@ -139,6 +139,7 @@ class WasteBankController extends Controller
 
         //Wastebank Schedules
         $i = 0;
+
         foreach ($schDays as $day){
             if($request->input('categoryType') == 1)
             {
@@ -194,8 +195,12 @@ class WasteBankController extends Controller
     {
         $wasteBank = WasteBank::find($id);
         $cities = City::all();
-
-        return view('admin.wastebank.edit', compact('wasteBank', 'cities'));
+        if($wasteBank->waste_category_id == 1){
+            return view('admin.wastebank.edit', compact('wasteBank', 'cities'));
+        }
+        else{
+            return view('admin.wastebank.edit-masaro', compact('wasteBank', 'cities'));
+        }
     }
 
     /**
@@ -230,6 +235,71 @@ class WasteBankController extends Controller
         $wastebank->updated_at = Carbon::now('Asia/Jakarta');
         $wastebank->updated_by = $user->id;
         $wastebank->save();
+
+        //Wastebank Schedules
+        $schDays = $request->input('schDays');
+        $timeDays = $request->input('schTimes');
+        $detailId = $request->input('schDetailId');
+//        dd($detailId);
+
+        if($request->input('categoryType') == 1){
+            $dwsCategories = $request->input('dwsTypes');
+        }
+        else{
+            $masaroCategories = $request->input('masaroTypes');
+        }
+        $i = 0;
+        foreach ($schDays as $day){
+            if($request->input('categoryType') == 1)
+            {
+                if($detailId[$i] == '-1'){
+                    WasteBankSchedule::create([
+                        'waste_bank_id'         => $wastebank->id,
+                        'day'                   => $day,
+                        'time'                  => $timeDays[$i],
+                        'dws_waste_category_id' => $dwsCategories[$i],
+                        'created_at'            => Carbon::now('Asia/Jakarta'),
+                        'updated_at'            => Carbon::now('Asia/Jakarta'),
+                        'updated_by'            => $user->id,
+                        'created_by'            => $user->id
+                    ]);
+                }
+                else{
+                    $wasteBankSchedule = WasteBankSchedule::find($detailId[$i]);
+                    $wasteBankSchedule->day = $day;
+                    $wasteBankSchedule->time = $timeDays[$i];
+                    $wasteBankSchedule->dws_waste_category_id = $dwsCategories[$i];
+                    $wasteBankSchedule->updated_at = Carbon::now('Asia/Jakarta');
+                    $wasteBankSchedule->updated_by = $user->id;
+                    $wasteBankSchedule->save();
+                }
+            }
+            else{
+                if($detailId[$i] == '-1'){
+                    WasteBankSchedule::create([
+                        'waste_bank_id'             => $wastebank->id,
+                        'day'                       => $day,
+                        'time'                      => $timeDays[$i],
+                        'masaro_waste_category_id'  => $masaroCategories[$i],
+                        'created_at'                => Carbon::now('Asia/Jakarta'),
+                        'updated_at'                => Carbon::now('Asia/Jakarta'),
+                        'updated_by'                => $user->id,
+                        'created_by'                => $user->id
+                    ]);
+                }
+                else{
+                    $wasteBankSchedule = WasteBankSchedule::find($detailId[$i]);
+                    $wasteBankSchedule->day = $day;
+                    $wasteBankSchedule->time = $timeDays[$i];
+                    $wasteBankSchedule->dws_waste_category_id = $masaroCategories[$i];
+                    $wasteBankSchedule->updated_at = Carbon::now('Asia/Jakarta');
+                    $wasteBankSchedule->updated_by = $user->id;
+                    $wasteBankSchedule->save();
+                }
+            }
+
+            $i++;
+        }
 
         Session::flash('success', 'Success Updating Waste Bank!');
         return redirect()->route('admin.waste-banks.index');
