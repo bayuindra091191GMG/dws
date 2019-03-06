@@ -22,7 +22,7 @@
             <!-- card new -->
             <div class="card">
                 <div class="card-body">
-                    <span class="badge badge-success">Januari</span>
+                    <span class="badge badge-success">Transaksi Penjemputan Rutin</span>
                     <i class="m-r-10 mdi mdi-folder-download size-33" style="padding-left:50%;"></i>
                 </div>
                 <ul class="list-style-none">
