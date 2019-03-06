@@ -291,7 +291,7 @@ class WasteBankController extends Controller
                     $wasteBankSchedule = WasteBankSchedule::find($detailId[$i]);
                     $wasteBankSchedule->day = $day;
                     $wasteBankSchedule->time = $timeDays[$i];
-                    $wasteBankSchedule->dws_waste_category_id = $masaroCategories[$i];
+                    $wasteBankSchedule->masaro_waste_category_id = $masaroCategories[$i];
                     $wasteBankSchedule->updated_at = Carbon::now('Asia/Jakarta');
                     $wasteBankSchedule->updated_by = $user->id;
                     $wasteBankSchedule->save();
