@@ -7,6 +7,7 @@ use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteCollector;
+use App\Models\WasteCollectorUser;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class WasteCollectorController extends Controller
     public function show(Request $request)
     {
         try{
-            $wasteCollector = WasteCollector::where('email', $request->input('email'))->first();
+            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
 
             return $wasteCollector;
         }
@@ -45,14 +46,19 @@ class WasteCollectorController extends Controller
     {
         //Get the Data based on Driver Data
         try{
-            $wasteCollector = WasteCollector::where('email', $request->input('email'))->first();
-            $wasteCategoryId = $wasteCollector->company->waste_category_id;
+            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
+            //$wasteCategoryId = $wasteCollector->company->waste_category_id;
 
-            $users = User::where('routine_pickup', 1)->whereHas('company', function($query) use ($wasteCategoryId){
-                $query->waste_category_id = $wasteCategoryId;
-            })->get();
+//            $users = User::where('routine_pickup', 1)->whereHas('company', function($query) use ($wasteCategoryId){
+//                $query->waste_category_id = $wasteCategoryId;
+//            })->get();
 
-            return $users;
+            //Get Users By Assign Table
+            $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->with('user')->get();
+
+            //Should Compare List if the User Transaction has Done
+
+            return $data;
         }
         catch (\Exception $ex){
             return Response::json(
@@ -72,7 +78,7 @@ class WasteCollectorController extends Controller
     {
         $rules = array(
             'user_email'            => 'required',
-            'waste_collector_email' => 'required',
+            'waste_collector_phone' => 'required',
             'total_weight'          => 'required',
             'total_price'           => 'required',
             'details'               => 'required'
@@ -86,7 +92,7 @@ class WasteCollectorController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $wasteCollector = WasteCollector::where('email', $request->input('waste_collector_email'))->first();
+        $wasteCollector = WasteCollector::where('phone', $request->input('waste_collector_phone'))->first();
         $user = User::where('email', $data['email'])->first();
 
         // Generate transaction codes
@@ -151,7 +157,7 @@ class WasteCollectorController extends Controller
                 "total_weight" => $header->total_weight,
                 "total_price" => $header->total_price,
                 "waste_bank" => "-",
-                "waste_collector" => $wasteCollector->email,
+                "waste_collector" => $wasteCollector->phone,
                 "status" => $header->status->description,
             ]
         );
@@ -171,7 +177,7 @@ class WasteCollectorController extends Controller
     public function getAllTransactions(Request $request)
     {
         try{
-            $wasteCollector = WasteCollector::where('email', $request->input('email'))->first();
+            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
             $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)->get();
 
             return $transactions;
