@@ -71,8 +71,9 @@ Route::post('/external-register', 'Api\RegisterController@externalAuth');
 
 //Waste Collector Transaction
 Route::middleware('auth:waste_collector')->group(function(){
+    Route::post('/save-collector-device', 'Api\WasteCollectorController@saveCollectorToken');
     Route::post('/waste-collector/get-data', 'Api\WasteCollectorController@show');
-    Route::post('/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
+    Route::post('/waste-collector/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
     Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
     Route::post('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
 

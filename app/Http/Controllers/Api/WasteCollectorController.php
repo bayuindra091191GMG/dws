@@ -38,6 +38,34 @@ class WasteCollectorController extends Controller
     }
 
     /**
+     * Function to save WasteCollector Device ID.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveCollectorToken(Request $request)
+    {
+        try{
+            $data = $request->json()->all();
+
+            $collector = WasteCollector::where('phone', $data['phone'])->first();
+
+            //Save user deviceID
+            FCMNotification::SaveToken($collector->id, $data['device_id'], "collector");
+
+            return Response::json([
+                'message' => "Success Save Collector Token!",
+            ], 200);
+        }
+        catch(\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    /**
      * Function to get the User List for Routine Pickup.
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -56,9 +84,26 @@ class WasteCollectorController extends Controller
             //Get Users By Assign Table
             $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->with('user')->get();
 
-            //Should Compare List if the User Transaction has Done
+            //get Total household
+            $totalHousehold = $data->count();
 
-            return $data;
+            //get total household done
+            //Should Compare List if the User Transaction has Done
+            $totalHouseholdDone = 0;
+            foreach ($data as $wasteCollectorUser){
+                $transactionDB = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)->where('status_id', 16)->first();
+
+                if(!empty($transactionDB)){
+                    $totalHouseholdDone++;
+                }
+            }
+
+            return Response::json([
+                'routine_pickup_list' => $data,
+                'total_household' => $totalHousehold,
+                'total_household_done' => $totalHouseholdDone
+            ], 200);
+
         }
         catch (\Exception $ex){
             return Response::json(

@@ -10,11 +10,15 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Configuration;
 use App\Models\PointHistory;
 use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionHeader;
 use App\Models\User;
+use App\Models\WasteCollector;
+use App\Models\WasteCollectorUser;
+use App\Transformer\UserPenjemputanRutinTransformer;
 use App\Transformer\UserWasteBankTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -46,19 +50,74 @@ class TransactionHeaderPenjemputanRutinController extends Controller
             ->make(true);
     }
 
-    public function getIndexSuscribedUsers(){
+    public function getIndexSubscribedUsers(Request $request){
+        try{
+            $userAdmin = Auth::guard('admin')->user();
+            $adminWasteBankId = $userAdmin->waste_bank_id;
+            error_log("wastebank id = ".$adminWasteBankId);
+
+            $subscribedUsers = User::where('routine_pickup', 1)
+                ->whereIn('status_id', [1, 14, 19])
+                ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
+                    $query->where('waste_bank_id', $adminWasteBankId);
+                })->get();
+            error_log("count = ".$subscribedUsers->count());
+
+            return DataTables::of($subscribedUsers)
+                ->setTransformer(new UserPenjemputanRutinTransformer())
+                ->addIndexColumn()
+                ->make(true);
+        }
+        catch (\Exception $exception){
+            error_log($exception);
+        }
+    }
+
+    /**
+     * Form to assign wastecollector to User rutin pickup
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function setUserWastecollector($id){
+        $user = User::find($id);
+        $address = Address::where('user_id', $id)->first();
+
+        return view('admin.transaction.rutin.set_user_wastecollector', compact('user', 'address'));
+    }
+
+    /**
+     * Update wastecollector to User rutin pickup
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function updateUserWastecollector(Request $request){
+
         $user = Auth::guard('admin')->user();
-        $adminWasteBankId = $user->waste_bank_id;
 
-        $subscribedUsers = User::where('status_id', 1)
-            ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
-                $query->where('waste_bank_id', $adminWasteBankId);
-            });
+        $id = $request->input('user_id');
+        $wastecollectorId = $request->input('wastecollector');
 
-        return DataTables::of($subscribedUsers)
-            ->setTransformer(new UserWasteBankTransformer())
-            ->addIndexColumn()
-            ->make(true);
+        //check if exist on DB, if exist edit assigned wastecollector, else create new one
+        $wasteCollectorUserDB = WasteCollectorUser::where('user_id', $id)->first();
+        if(empty($wasteCollectorUserDB)){
+            dd("if");
+            $saveToDb = WasteCollectorUser::create([
+                'user_id'  => $id,
+                'waste_collector_id'   => $wastecollectorId,
+                'created_by'    => $user->id,
+                'created_at'    => Carbon::now('Asia/Jakarta'),
+            ]);
+        }
+        else{
+            $wasteCollectorUserDB->waste_collector_id = $wastecollectorId;
+            $wasteCollectorUserDB->save();
+        }
+
+        Session::flash('message', 'Berhasil menugaskan waastecollector kepada user!');
+
+        return redirect()->route('admin.user.penjemputan_rutin.index');
     }
 
     /**
@@ -125,4 +184,5 @@ class TransactionHeaderPenjemputanRutinController extends Controller
 
         return redirect()->route('admin.transactions.on_demand.show', ['id' => $trxId]);
     }
+
 }

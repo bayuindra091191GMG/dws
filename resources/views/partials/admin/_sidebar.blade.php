@@ -64,9 +64,9 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="{{ route('admin.transactions.penjemputan_rutin.index') }}" class="sidebar-link">
+                            <a href="{{ route('admin.user.penjemputan_rutin.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
-                                <span class="hide-menu"> Daftar Subscribed User </span>
+                                <span class="hide-menu"> Daftar User </span>
                             </a>
                         </li>
                     </ul>

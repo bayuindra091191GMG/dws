@@ -246,4 +246,23 @@ class WasteCollectorController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+
+
+    public function getWastecollectors(Request $request){
+        $term = trim($request->q);
+        $roles = WasteCollector::where(function ($q) use ($term) {
+            $q->where('first_name', 'LIKE', '%' . $term . '%')
+            ->orwhere('last_name', 'LIKE', '%' . $term . '%');
+        })
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($roles as $role) {
+            $formatted_tags[] = ['id' => $role->id, 'text' => $role->first_name." ".$role->last_name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }

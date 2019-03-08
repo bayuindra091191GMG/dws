@@ -30,6 +30,19 @@ class FCMNotification
                 ]);
             }
         }
+        else if($type == 'collector'){
+            $isExistToken = FcmTokenApp::where('user_id', $userId)->first();
+            if(!empty($isExistToken)){
+                $isExistToken->token = $token;
+                $isExistToken->save();
+            }
+            else{
+                $fcmToken = FcmTokenApp::create([
+                    'user_id' => $userId,
+                    'token' => $token
+                ]);
+            }
+        }
         else{
             $isExistToken = FcmTokenBrowser::where('user_admin_id', $userId)->first();
             if(!empty($isExistToken)){
