@@ -244,42 +244,6 @@ class TransactionHeaderController extends Controller
     }
 
     /**
-     * Used for Antar Sendiri Transaction when Admin Scan the User QR Code
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function setTransactionToUser(Request $request)
-    {
-        $rules = array(
-            'transaction_no'    => 'required',
-            'email'             => 'required'
-        );
-
-        $data = $request->json()->all();
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-
-        $user = User::where('email', $data['email'])->first();
-        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-        $header->user_id = $user->id;
-        $header->save();
-
-        //send notification
-        $title = "Digital Waste Solution";
-        $body = "Admin Scan the User QR Code";
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body);
-
-        return Response::json([
-            'message' => "Success Set " . $user->email . " to " . $header->transaction_no . "!",
-        ], 200);
-    }
-
-    /**
      * Used for Antar Sendiri Transaction when User Confirm The Transaction inputed by Admin.
      *
      * @param Request $request

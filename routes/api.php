@@ -38,7 +38,6 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/get-transaction-data', 'Api\TransactionHeaderController@getTransactionData');
 
     //Antar Sendiri
-    Route::post('/antar-sendiri/admin/set-transaction', 'Api\TransactionHeaderController@setTransactionToUser');
     Route::post('/antar-sendiri/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserAntarSendiri');
     Route::post('/antar-sendiri/user/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
 
@@ -79,6 +78,15 @@ Route::middleware('auth:waste_collector')->group(function(){
 
     Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollector@confirmOnDemandTransaction');
 
+});
+
+
+//Admin Wastebank
+Route::middleware('auth:admin_wastebank')->group(function(){
+    //Antar Sendiri
+    Route::post('/admin/confirm-transaction', 'Api\AdminController@confirmTransactionAntarSendiri');
+    Route::post('/admin/transactions/get', 'Api\AdminController@getTransactionList');
+    Route::post('/admin/set-transaction', 'Api\AdminController@setTransactionToUser');
 });
 
 //Forgot Password
