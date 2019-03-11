@@ -102,7 +102,6 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         //check if exist on DB, if exist edit assigned wastecollector, else create new one
         $wasteCollectorUserDB = WasteCollectorUser::where('user_id', $id)->first();
         if(empty($wasteCollectorUserDB)){
-            dd("if");
             $saveToDb = WasteCollectorUser::create([
                 'user_id'  => $id,
                 'waste_collector_id'   => $wastecollectorId,

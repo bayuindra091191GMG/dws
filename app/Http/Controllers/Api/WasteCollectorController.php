@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
+use App\Models\WasteBankSchedule;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorUser;
+use App\Models\WasteCollectorWasteBank;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -81,17 +83,39 @@ class WasteCollectorController extends Controller
 //                $query->waste_category_id = $wasteCategoryId;
 //            })->get();
 
+            $collectorWasteBank = WasteCollectorWasteBank::where('waste_collector_id', $wasteCollector->id)->first();
+
+            //get current day of week, and compare for wastebank schedule
+            //Day of week number (from 0 (Sunday) to 6 (Saturday))
+            $currentday = (Carbon::now()->dayOfWeek()) + 1;
+            $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $collectorWasteBank->waste_bank_id)
+                ->where('day', $currentday)->first();
+            if(empty($wasteBankSchedule)){
+                return Response::json([
+                    'routine_pickup_list' => null,
+                    'total_weight' => 0,
+                    'total_point' => 0,
+                    'total_household' => 0,
+                    'total_household_done' => 0
+                ], 482);
+            }
+            
             //Get Users By Assign Table
             $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->with('user')->get();
 
             //get Total household
             $totalHousehold = $data->count();
 
-            //get total household done
+            //get total household done, total point, total weight
             //Should Compare List if the User Transaction has Done
             $totalHouseholdDone = 0;
+            $totalWeight = 0;
+            $totalPoint = 0;
             foreach ($data as $wasteCollectorUser){
-                $transactionDB = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)->where('status_id', 16)->first();
+                $transactionDB = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('status_id', 16)->first();
+                $totalWeight = $totalWeight + $transactionDB->total_weight;
+                $totalPoint = $totalPoint + 1000;
 
                 if(!empty($transactionDB)){
                     $totalHouseholdDone++;
@@ -100,6 +124,8 @@ class WasteCollectorController extends Controller
 
             return Response::json([
                 'routine_pickup_list' => $data,
+                'total_weight' => $totalWeight,
+                'total_point' => $totalPoint,
                 'total_household' => $totalHousehold,
                 'total_household_done' => $totalHouseholdDone
             ], 200);
