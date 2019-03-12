@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
@@ -120,13 +121,18 @@ class WasteCollectorController extends Controller
             $totalHouseholdDone = 0;
             $totalWeight = 0;
             $totalPoint = 0;
+            $pickUpModel = [];
             foreach ($data as $wasteCollectorUser){
+                $weight = 0;
+                $point = 0;
+
                 //summary total weight of transaction routine pickup and total household
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('status_id', 16)
                     ->first();
                 if(!empty($transactionDBRoutine)){
                     $totalHouseholdDone++;
+                    $weight = $transactionDBRoutine->total_weight;
                     $totalWeight = $totalWeight + $transactionDBRoutine->total_weight;
                     $totalPoint = $transactionDBRoutine->waste_collector->point;
                 }
@@ -136,13 +142,31 @@ class WasteCollectorController extends Controller
                     ->where('status_id', 8)
                     ->first();
                 if(!empty($transactionDBRoutine)){
+                    $weight = $transactionDBOnDemand->total_weight;
                     $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
                     $totalPoint = $transactionDBRoutine->waste_collector->point;
                 }
+                $addressDb = Address::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('primary', 1)
+                    ->first();
+                $data = array(
+                   [
+                        "id" => $wasteCollectorUser->id,
+                        "img_path" => $wasteCollectorUser->user->image_path,
+                        "first_name" => $wasteCollectorUser->user->first_name,
+                        "last_name" => $wasteCollectorUser->user->last_name,
+                        "description" => $addressDb->description,
+                        "latitude" => $addressDb->latitude,
+                        "longitude" => $addressDb->longitude,
+                        "weight" => $weight,
+                        "point" => $point,
+                    ]
+                );
+                array_push($pickUpModel, $data);
             }
 
             return Response::json([
-                'routine_pickup_list' => $data,
+                'routine_pickup_list' => $pickUpModel,
                 'total_weight' => $totalWeight,
                 'total_point' => $totalPoint,
                 'total_household' => $totalHousehold,
