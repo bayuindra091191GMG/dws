@@ -18,6 +18,7 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorUser;
+use App\Transformer\TransactionTransformer;
 use App\Transformer\UserPenjemputanRutinTransformer;
 use App\Transformer\UserWasteBankTransformer;
 use Carbon\Carbon;
@@ -28,6 +29,19 @@ use Yajra\DataTables\DataTables;
 
 class TransactionHeaderPenjemputanRutinController extends Controller
 {
+    public function index()
+    {
+        return view('admin.transaction.rutin.index');
+    }
+
+    public function getIndex(Request $request){
+        $transactions = TransactionHeader::where('transaction_type_id', 1);
+        return DataTables::of($transactions)
+            ->setTransformer(new TransactionTransformer)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     public function indexSuscribedUsers(){
 //        $user = Auth::guard('admin')->user();
 //        $adminWasteBankId = $user->waste_bank_id;
@@ -40,14 +54,6 @@ class TransactionHeaderPenjemputanRutinController extends Controller
 //        dd($subscribedUsers);
 
         return view('admin.transaction.rutin.index_subscribed_users');
-    }
-
-    public function getIndex(Request $request){
-        $transations = TransactionHeader::where('transaction_type_id', 2)->get();
-        return DataTables::of($transations)
-            ->setTransformer(new TransactionTransformer)
-            ->addIndexColumn()
-            ->make(true);
     }
 
     public function getIndexSubscribedUsers(Request $request){

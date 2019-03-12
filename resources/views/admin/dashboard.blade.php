@@ -78,7 +78,7 @@
                         <li class="d-flex no-block card-body border-top">
                             <div class="row w-100">
                                 <div class="col-12 text-center">
-                                    <a href="#" class="btn btn-success btn-lg text-white">Lihat Semua</a>
+                                    <a href="{{ route('admin.transactions.penjemputan_rutin.index') }}" class="btn btn-success btn-lg text-white">Lihat Semua</a>
                                 </div>
                             </div>
                         </li>

@@ -169,6 +169,7 @@ Route::prefix('admin')->group(function(){
     Route::post('/transactions/on_demand/confirm', 'Admin\TransactionHeaderOnDemandController@confirm')->name('admin.transactions.on_demand.confirm');
 
     // Rutin Transactions
+    Route::get('/transactions/penjemputan_rutin', 'Admin\TransactionHeaderPenjemputanRutinController@index')->name('admin.transactions.penjemputan_rutin.index');
     Route::get('/transactions/penjemputan_rutin/show/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@show')->name('admin.transactions.penjemputan_rutin.show');
     Route::get('/transactions/penjemputan_rutin/dws/create', 'Admin\TransactionHeaderPenjemputanRutinController@createDws')->name('admin.transactions.penjemputan_rutin.dws.create');
     Route::get('/transactions/penjemputan_rutin/masaro/create', 'Admin\TransactionHeaderPenjemputanRutinController@createMasaro')->name('admin.transactions.penjemputan_rutin.masaro.create');
@@ -242,6 +243,7 @@ Route::get('/datatables-masaro-waste-items', 'Admin\MasaroWasteItemController@ge
 Route::get('/datatables-points', 'Admin\PointController@getIndex')->name('datatables.points');
 Route::get('/datatables-point-wastecollectors', 'Admin\PointController@getIndexWastecollectors')->name('datatables.point-wastecollectors');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission-menus');
+Route::get('/datatables-transactions-rutin', 'Admin\TransactionHeaderPenjemputanRutinController@getIndex')->name('datatables.rutin.transactions');
 Route::get('/datatables-transactions-rutin-subscribed-users', 'Admin\TransactionHeaderPenjemputanRutinController@getIndexSubscribedUsers')->name('datatables.rutin.subscribed-users');
 Route::get('/datatables-waste-collectors', 'Admin\WasteCollectorController@getIndex')->name('datatables.waste-collectors');
 Route::get('/datatables-transactions-waste-collectors', 'Admin\WasteCollectorController@getTransactions')->name('datatables.waste-collectors.transactions');
