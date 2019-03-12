@@ -28,12 +28,11 @@ class WasteCollectorController extends Controller
      */
     public function show(Request $request)
     {
-        try{
+        try {
             $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
 
             return $wasteCollector;
-        }
-        catch (\Exception $ex){
+        } catch (\Exception $ex) {
             return Response::json(
                 $ex
                 , 500);
@@ -48,7 +47,7 @@ class WasteCollectorController extends Controller
      */
     public function saveCollectorToken(Request $request)
     {
-        try{
+        try {
             $data = $request->json()->all();
 
             $collector = WasteCollector::where('phone', $data['phone'])->first();
@@ -59,8 +58,7 @@ class WasteCollectorController extends Controller
             return Response::json([
                 'message' => "Success Save Collector Token!",
             ], 200);
-        }
-        catch(\Exception $ex){
+        } catch (\Exception $ex) {
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
@@ -76,7 +74,7 @@ class WasteCollectorController extends Controller
     public function getUserListRoutinePickUp(Request $request)
     {
         //Get the Data based on Driver Data
-        try{
+        try {
             $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
             //$wasteCategoryId = $wasteCollector->company->waste_category_id;
 
@@ -85,7 +83,7 @@ class WasteCollectorController extends Controller
 //            })->get();
 
             $collectorWasteBank = WasteCollectorWasteBank::where('waste_collector_id', $wasteCollector->id)->first();
-            if(empty($collectorWasteBank)){
+            if (empty($collectorWasteBank)) {
                 return Response::json([
                     'routine_pickup_list' => null,
                     'total_weight' => 0,
@@ -100,7 +98,7 @@ class WasteCollectorController extends Controller
             $currentday = Carbon::now()->dayOfWeekIso;
             $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $collectorWasteBank->waste_bank_id)
                 ->where('day', $currentday)->first();
-            if(empty($wasteBankSchedule)){
+            if (empty($wasteBankSchedule)) {
                 return Response::json([
                     'routine_pickup_list' => null,
                     'total_weight' => 0,
@@ -109,7 +107,7 @@ class WasteCollectorController extends Controller
                     'total_household_done' => 0
                 ], 482);
             }
-            
+
             //Get Users By Assign Table
             $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->with('user')->get();
 
@@ -122,7 +120,7 @@ class WasteCollectorController extends Controller
             $totalWeight = 0;
             $totalPoint = 0;
             $pickUpModel = [];
-            foreach ($data as $wasteCollectorUser){
+            foreach ($data as $wasteCollectorUser) {
                 $weight = 0;
                 $point = 0;
 
@@ -130,7 +128,7 @@ class WasteCollectorController extends Controller
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('status_id', 16)
                     ->first();
-                if(!empty($transactionDBRoutine)){
+                if (!empty($transactionDBRoutine)) {
                     $totalHouseholdDone++;
                     $weight = $transactionDBRoutine->total_weight;
                     $totalWeight = $totalWeight + $transactionDBRoutine->total_weight;
@@ -141,7 +139,7 @@ class WasteCollectorController extends Controller
                 $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('status_id', 8)
                     ->first();
-                if(!empty($transactionDBRoutine)){
+                if (!empty($transactionDBRoutine)) {
                     $weight = $transactionDBOnDemand->total_weight;
                     $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
                     $totalPoint = $transactionDBRoutine->waste_collector->point;
@@ -150,17 +148,15 @@ class WasteCollectorController extends Controller
                     ->where('primary', 1)
                     ->first();
                 $data = array(
-                   [
-                        "id" => $wasteCollectorUser->id,
-                        "img_path" => $wasteCollectorUser->user->image_path,
-                        "first_name" => $wasteCollectorUser->user->first_name,
-                        "last_name" => $wasteCollectorUser->user->last_name,
-                        "description" => $addressDb->description,
-                        "latitude" => $addressDb->latitude,
-                        "longitude" => $addressDb->longitude,
-                        "weight" => $weight,
-                        "point" => $point,
-                    ]
+                    "id" => $wasteCollectorUser->id,
+                    "img_path" => $wasteCollectorUser->user->image_path,
+                    "first_name" => $wasteCollectorUser->user->first_name,
+                    "last_name" => $wasteCollectorUser->user->last_name,
+                    "description" => $addressDb->description,
+                    "latitude" => $addressDb->latitude,
+                    "longitude" => $addressDb->longitude,
+                    "weight" => $weight,
+                    "point" => $point,
                 );
                 array_push($pickUpModel, $data);
             }
@@ -173,8 +169,7 @@ class WasteCollectorController extends Controller
                 'total_household_done' => $totalHouseholdDone
             ], 200);
 
-        }
-        catch (\Exception $ex){
+        } catch (\Exception $ex) {
             return Response::json([
                 'message' => $ex,
             ], 500);
@@ -191,11 +186,11 @@ class WasteCollectorController extends Controller
     public function createTransactionRoutinePickup(Request $request)
     {
         $rules = array(
-            'user_email'            => 'required',
+            'user_email' => 'required',
             'waste_collector_phone' => 'required',
-            'total_weight'          => 'required',
-            'total_price'           => 'required',
-            'details'               => 'required'
+            'total_weight' => 'required',
+            'total_price' => 'required',
+            'details' => 'required'
         );
 
         $data = $request->json()->all();
@@ -212,11 +207,10 @@ class WasteCollectorController extends Controller
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
         $categoryType = $user->company->waste_category_id;
-        if($categoryType == "1"){
-            $prepend = "TRANS/DWS/". $today;
-        }
-        else{
-            $prepend = "TRANS/MASARO/". $today;
+        if ($categoryType == "1") {
+            $prepend = "TRANS/DWS/" . $today;
+        } else {
+            $prepend = "TRANS/MASARO/" . $today;
         }
 
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
@@ -224,34 +218,33 @@ class WasteCollectorController extends Controller
 
         //Awaiting Bayu Create Transaction Number
         $header = TransactionHeader::create([
-            'transaction_no'        => $code,
-            'total_weight'          => $data["total_weight"],
-            'total_price'           => $data["total_price"],
-            'status_id'             => 15,
-            'user_id'               => $user->id,
-            'transaction_type_id'   => 1,
-            'waste_category_id'     => $user->company->waste_category_id,
-            'waste_collector_id'    => $wasteCollector->id,
-            'created_at'            => Carbon::now('Asia/Jakarta'),
-            'updated_at'            => Carbon::now('Asia/Jakarta')
+            'transaction_no' => $code,
+            'total_weight' => $data["total_weight"],
+            'total_price' => $data["total_price"],
+            'status_id' => 15,
+            'user_id' => $user->id,
+            'transaction_type_id' => 1,
+            'waste_category_id' => $user->company->waste_category_id,
+            'waste_collector_id' => $wasteCollector->id,
+            'created_at' => Carbon::now('Asia/Jakarta'),
+            'updated_at' => Carbon::now('Asia/Jakarta')
         ]);
 
         //do detail
-        foreach ($data['details'] as $item){
-            if($user->company->waste_category_id == 1) {
+        foreach ($data['details'] as $item) {
+            if ($user->company->waste_category_id == 1) {
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
-                    'dws_category_id'       => $item['dws_category_id'],
-                    'weight'                => $item['weight'],
-                    'price'                 => $item['price']
+                    'dws_category_id' => $item['dws_category_id'],
+                    'weight' => $item['weight'],
+                    'price' => $item['price']
                 ]);
-            }
-            else if($user->company->waste_category_id == 2){
+            } else if ($user->company->waste_category_id == 2) {
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
-                    'masaro_category_id'    => $item['masaro_category_id'],
-                    'weight'                => $item['weight'],
-                    'price'                 => $item['price']
+                    'masaro_category_id' => $item['masaro_category_id'],
+                    'weight' => $item['weight'],
+                    'price' => $item['price']
                 ]);
             }
         }
@@ -266,7 +259,7 @@ class WasteCollectorController extends Controller
                 "transaction_id" => $header->id,
                 "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
                 "transaction_no" => $header->transaction_no,
-                "name" => $user->first_name." ".$user->last_name,
+                "name" => $user->first_name . " " . $user->last_name,
                 "waste_category_name" => $body,
                 "total_weight" => $header->total_weight,
                 "total_price" => $header->total_price,
@@ -292,14 +285,13 @@ class WasteCollectorController extends Controller
      */
     public function getAllTransactions(Request $request)
     {
-        try{
+        try {
             $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
             $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)->get();
 
             return $transactions;
-        }
-        catch (\Exception $ex){
-            return Response::json("Sorry something went wrong!",500);
+        } catch (\Exception $ex) {
+            return Response::json("Sorry something went wrong!", 500);
         }
     }
 
@@ -313,12 +305,12 @@ class WasteCollectorController extends Controller
     public function confirmOnDemandTransaction(Request $request)
     {
         $rules = array(
-            'email'             => 'required',
-            'total_weight'      => 'required',
-            'total_price'       => 'required',
-            'details'           => 'required',
-            'transaction_no'    => 'required',
-            'is_edit'           => 'required'
+            'email' => 'required',
+            'total_weight' => 'required',
+            'total_price' => 'required',
+            'details' => 'required',
+            'transaction_no' => 'required',
+            'is_edit' => 'required'
         );
 
         $data = $request->json()->all();
@@ -330,7 +322,7 @@ class WasteCollectorController extends Controller
         }
         $user = User::where('email', $data['email'])->first();
 
-        if($request->input('is_edit')) {
+        if ($request->input('is_edit')) {
             $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
             $header->total_weight = $data['total_weight'];
             $header->total_price = $data['total_price'];
@@ -374,8 +366,7 @@ class WasteCollectorController extends Controller
             return Response::json([
                 'message' => "Berhasil mengkonfirmasi dan mengubah Transaksi On demand!",
             ], 200);
-        }
-        else{
+        } else {
             $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
             $header->updated_at = Carbon::now('Asia/Jakarta');
             $header->status_id = 7;
