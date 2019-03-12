@@ -327,4 +327,28 @@ class WasteBankController extends Controller
             return Response::json(array('errors' => 'INVALID'));
         }
     }
+
+    public function getWastebanks(Request $request){
+        $term = trim($request->q);
+        $formatted_tags = [];
+
+        $user = Auth::guard('admin')->user();
+        //if logged in admin type is "wastebank" (is_super_admin=0), list of available wastebank of admin's wastebank
+        if($user->is_super_admin == 0){
+            $modelDB = WasteBank::where(function ($q) use ($user) {
+                $q->where('id', $user->waste_bank_id);
+            })->get();
+        }
+        else{
+            $modelDB = WasteBank::where(function ($q) use ($term) {
+                $q->where('name', 'LIKE', '%' . $term . '%');
+            })->get();
+        }
+
+        foreach ($modelDB as $model) {
+            $formatted_tags[] = ['id' => $model->id, 'text' => $model->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }

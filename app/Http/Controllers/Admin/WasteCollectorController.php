@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
+use App\Models\WasteCollectorWasteBank;
 use App\Transformer\WasteCollectorTransactionTransformer;
 use App\Transformer\WasteCollectorTransformer;
 use Carbon\Carbon;
@@ -114,6 +115,12 @@ class WasteCollectorController extends Controller
         $wasteCollector->img_path = $filename;
         $wasteCollector->save();
 
+        //save wastecollector wastebank
+        $wasteCollectorWastebank = WasteCollectorWasteBank::create([
+            'waste_bank_id'             => $request->input('wastebank'),
+            'waste_collector_id'          => $wasteCollector->id,
+        ]);
+
         Session::flash('success', 'Sukses Membuat data Waste Collector!');
         return redirect()->route('admin.wastecollectors.index');
     }
@@ -133,7 +140,6 @@ class WasteCollectorController extends Controller
             'collector'     => $collector,
             'name'          => $name
         ];
-
         return view('admin.wastecollector.show')->with($data);
     }
 
@@ -146,7 +152,7 @@ class WasteCollectorController extends Controller
     public function edit($id)
     {
         $wasteCollector = WasteCollector::find($id);
-
+//        dd($wasteCollector->waste_bank);
         return view('admin.wastecollector.edit', compact('wasteCollector'));
     }
 
@@ -192,6 +198,20 @@ class WasteCollectorController extends Controller
             $filename = $wasteCollector->img_path;
             //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
             $img->save(public_path('storage/admin/wastecollector/'. $filename), 75);
+        }
+
+        //update or save wastecollector wastebank
+        $wasteCollectorWastebankDB = WasteCollectorWasteBank::where('waste_collector_id', $request->input('id'))->first();
+        if(!empty($wasteCollectorWastebankDB)){
+            $wasteCollectorWastebankDB->waste_bank_id = $request->input('wastebank');
+            $wasteCollectorWastebankDB->save();
+        }
+        else{
+            $wasteCollectorWastebank = WasteCollectorWasteBank::create([
+                'waste_bank_id'             => $request->input('wastebank'),
+                'waste_collector_id'          => $wasteCollector->id,
+            ]);
+
         }
 
         Session::flash('success', 'Sukses Menggubah data Waste Collector!');

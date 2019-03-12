@@ -84,10 +84,19 @@ class WasteCollectorController extends Controller
 //            })->get();
 
             $collectorWasteBank = WasteCollectorWasteBank::where('waste_collector_id', $wasteCollector->id)->first();
+            if(empty($collectorWasteBank)){
+                return Response::json([
+                    'routine_pickup_list' => null,
+                    'total_weight' => 0,
+                    'total_point' => 0,
+                    'total_household' => 0,
+                    'total_household_done' => 0
+                ], 482);
+            }
 
             //get current day of week, and compare for wastebank schedule
-            //Day of week number (from 0 (Sunday) to 6 (Saturday))
-            $currentday = (Carbon::now()->dayOfWeek()) % 7;
+            //Day of week number (between 1 (monday) and 7 (sunday))
+            $currentday = Carbon::now()->dayOfWeekIso;
             $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $collectorWasteBank->waste_bank_id)
                 ->where('day', $currentday)->first();
             if(empty($wasteBankSchedule)){
@@ -142,9 +151,9 @@ class WasteCollectorController extends Controller
 
         }
         catch (\Exception $ex){
-            return Response::json(
-                $ex
-            , 500);
+            return Response::json([
+                'message' => $ex,
+            ], 500);
         }
     }
 

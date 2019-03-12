@@ -120,6 +120,15 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
+                                                            <label class="form-label" for="wastebank">Wastebank *</label>
+                                                            <select id="wastebank" name="wastebank" class="form-control"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
                                                             <label class="form-label" for="img_path">Foto *</label>
                                                             {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
                                                         </div>
@@ -142,4 +151,42 @@
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('styles')
+    <link href="{{ asset('css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
+    <style>
+        .select2-container--default .select2-search--dropdown::before {
+            content: "";
+        }
+    </style>
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $('#wastebank').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Wastebank...'
+            },
+            width: '100%',
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route('select.wastebanks') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    </script>
 @endsection

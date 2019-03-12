@@ -95,7 +95,7 @@
         $('#wastecollector').select2({
             placeholder: {
                 id: '-1',
-                text: 'Choose Wastecollector...'
+                text: 'Pilih Wastecollector...'
             },
             width: '100%',
             minimumInputLength: 0,
