@@ -7,6 +7,7 @@ use App\Models\AdminUser;
 use App\Models\Configuration;
 use App\Models\PointHistory;
 use App\Models\TransactionHeader;
+use App\Models\User;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class AdminController extends Controller
             //send notification
             $userName = $header->user->first_name." ".$header->user->last_name;
             $title = "Digital Waste Solution";
-            $body = "Wastebank Mengkonfirmasi Transaksi";
+            $body = "Wastebank Mengkonfirmasi Transaksi Antar Sendiri";
             $data = array(
                 'type_id' => '2',
                 'transaction_no' => $header->transaction_no,
@@ -91,9 +92,15 @@ class AdminController extends Controller
         $header->save();
 
         //send notification
+        $userName = $header->user->first_name." ".$header->user->last_name;
         $title = "Digital Waste Solution";
-        $body = "Admin Scan the User QR Code";
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body);
+        $body = "Admin Scan QR Code User";
+        $data = array(
+            'type_id' => '2',
+            'transaction_no' => $header->transaction_no,
+            'name' => $userName
+        );
+        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Set " . $user->email . " to " . $header->transaction_no . "!",

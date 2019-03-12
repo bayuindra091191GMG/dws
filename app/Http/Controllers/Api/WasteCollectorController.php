@@ -87,7 +87,7 @@ class WasteCollectorController extends Controller
 
             //get current day of week, and compare for wastebank schedule
             //Day of week number (from 0 (Sunday) to 6 (Saturday))
-            $currentday = (Carbon::now()->dayOfWeek()) + 1;
+            $currentday = (Carbon::now()->dayOfWeek()) % 7;
             $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $collectorWasteBank->waste_bank_id)
                 ->where('day', $currentday)->first();
             if(empty($wasteBankSchedule)){
@@ -112,13 +112,23 @@ class WasteCollectorController extends Controller
             $totalWeight = 0;
             $totalPoint = 0;
             foreach ($data as $wasteCollectorUser){
-                $transactionDB = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
-                    ->where('status_id', 16)->first();
-                $totalWeight = $totalWeight + $transactionDB->total_weight;
-                $totalPoint = $totalPoint + 1000;
-
-                if(!empty($transactionDB)){
+                //summary total weight of transaction routine pickup and total household
+                $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('status_id', 16)
+                    ->first();
+                if(!empty($transactionDBRoutine)){
                     $totalHouseholdDone++;
+                    $totalWeight = $totalWeight + $transactionDBRoutine->total_weight;
+                    $totalPoint = $transactionDBRoutine->waste_collector->point;
+                }
+
+                //summary total weight of transaction on demand
+                $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('status_id', 8)
+                    ->first();
+                if(!empty($transactionDBRoutine)){
+                    $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
+                    $totalPoint = $transactionDBRoutine->waste_collector->point;
                 }
             }
 
@@ -219,7 +229,7 @@ class WasteCollectorController extends Controller
         $body = "Driver Create Transaction Routine Pickup";
         $data = array(
             "data" => [
-                "type_id" => "2",
+                "type_id" => "1",
                 "transaction_id" => $header->id,
                 "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
                 "transaction_no" => $header->transaction_no,
@@ -232,7 +242,9 @@ class WasteCollectorController extends Controller
                 "status" => $header->status->description,
             ]
         );
-        $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+        $isSuccess = FCMNotification::SendNotification($user->id, 'collector', $title, $body, $data);
+        //Push Notification to Admin.
+//      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success creating Routine Pickup Transaction!",
@@ -304,12 +316,12 @@ class WasteCollectorController extends Controller
             }
 
             //Send notification to
-            //Driver, Admin Wastebank
+            //User, Admin Wastebank
             $title = "Digital Waste Solution";
             $body = "Driver Mengkonfirmasi Transaksi On Demand!";
             $data = array(
                 "data" => [
-                    "type_id" => "2",
+                    "type_id" => "3",
                     "transaction_id" => $header->id,
                     "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
                     "transaction_no" => $header->transaction_no,
@@ -323,6 +335,8 @@ class WasteCollectorController extends Controller
                 ]
             );
             $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+            //Push Notification to Admin.
+//            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
             return Response::json([
                 'message' => "Berhasil mengkonfirmasi dan mengubah Transaksi On demand!",
@@ -335,7 +349,7 @@ class WasteCollectorController extends Controller
             $header->save();
 
             //Send notification to
-            //Driver, Admin Wastebank
+            //User, Admin Wastebank
             $title = "Digital Waste Solution";
             $body = "Driver Mengkonfirmasi Transaksi On Demand!";
             $data = array(
@@ -354,6 +368,8 @@ class WasteCollectorController extends Controller
                 ]
             );
             $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+            //Push Notification to Admin.
+//            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
             return Response::json([
                 'message' => "Berhasil mengkonfirmasi Transaksi On Demand!",

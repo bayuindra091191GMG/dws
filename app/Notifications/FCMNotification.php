@@ -11,6 +11,7 @@ namespace App\Notifications;
 
 use App\Models\FcmTokenApp;
 use App\Models\FcmTokenBrowser;
+use App\Models\FcmTokenCollector;
 use GuzzleHttp\Client;
 
 
@@ -31,14 +32,14 @@ class FCMNotification
             }
         }
         else if($type == 'collector'){
-            $isExistToken = FcmTokenApp::where('user_id', $userId)->first();
+            $isExistToken = FcmTokenCollector::where('collector_id', $userId)->first();
             if(!empty($isExistToken)){
                 $isExistToken->token = $token;
                 $isExistToken->save();
             }
             else{
-                $fcmToken = FcmTokenApp::create([
-                    'user_id' => $userId,
+                $fcmToken = FcmTokenCollector::create([
+                    'collector_id' => $userId,
                     'token' => $token
                 ]);
             }
@@ -60,8 +61,11 @@ class FCMNotification
 
     public static function SendNotification($userId, $type, $title, $body, $notifData){
         try{
-            if($type == 'apps'){
+            if($type == 'app'){
                 $user  = FcmTokenApp::where('user_id', $userId)->first();
+            }
+            elseif($type == 'collector'){
+                $user  = FcmTokenCollector::where('collector_id', $userId)->first();
             }
             else{
                 $user  = FcmTokenBrowser::where('user_admin_id', $userId)->first();

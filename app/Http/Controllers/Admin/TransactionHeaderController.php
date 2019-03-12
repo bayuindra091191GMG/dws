@@ -242,7 +242,7 @@ class TransactionHeaderController extends Controller
         //for testing purpose set user and send notif
         $trxHeader->user_id = 8;
         $trxHeader->save();
-        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+        $isSuccess = FCMNotification::SendNotification(8, 'app', $title, $body, $data);
 
 
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);

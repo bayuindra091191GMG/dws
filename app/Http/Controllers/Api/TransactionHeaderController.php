@@ -232,10 +232,13 @@ class TransactionHeaderController extends Controller
         $body = "User Mengkonfirmasi Transaksi On Demand";
         $data = array(
             "data" => [
-                "type_id" => "DWS - ".$title,
+                "type_id" => "3",
                 "message" => $body,
             ]
         );
+        //Push Notification to Collector App.
+        FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
+        //Push Notification to Admin.
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
@@ -363,7 +366,10 @@ class TransactionHeaderController extends Controller
                 'transaction_no' => $data['transaction_no']
             ]
         );
-        FCMNotification::SendNotification($header->waste_collector_id, 'app', $title, $body, $data);
+        //Push Notification to Collector App.
+        FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
+        //Push Notification to Admin.
+        FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Confirming Transaction!",
@@ -407,8 +413,8 @@ class TransactionHeaderController extends Controller
                 'transaction_no' => $data['transaction_no']
             ]
         );
-        FCMNotification::SendNotification($header->waste_collector_id, 'app', $title, $body, $data);
         //Push Notification to Admin.
+        FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Cancelling Transaction!",
