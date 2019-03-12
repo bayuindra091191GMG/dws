@@ -4,94 +4,95 @@
     <!-- ============================================================== -->
     <!-- Recent comment and chats -->
     <!-- ============================================================== -->
-    <div class="row">
-        <div class="col-lg-6">
-            <h3>Pendapatan</h3>
-            <h4>Rangkuman</h4>
-        </div>
-        <div class="col-lg-6 text-right">
-            <select class="select2 form-control custom-select" style="width: 20%; height:36px;">
-                <option>Select</option>
-                <option>2018</option>
-            </select>
-        </div>
-    </div>
+    {{--<div class="row">--}}
+        {{--<div class="col-lg-6">--}}
+            {{--<h3>Pendapatan</h3>--}}
+        {{--</div>--}}
+        {{--<div class="col-lg-6 text-right">--}}
+            {{--<select class="select2 form-control custom-select" style="width: 20%; height:36px;">--}}
+                {{--<option>Select</option>--}}
+                {{--<option>2018</option>--}}
+            {{--</select>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     <div class="row">
         <!-- column -->
         <div class="col-lg-4">
             <!-- card new -->
             <div class="card">
                 <div class="card-body">
-                    <span class="badge badge-success">Transaksi Penjemputan Rutin</span>
-                    <i class="m-r-10 mdi mdi-folder-download size-33" style="padding-left:50%;"></i>
+                    <span class="badge badge-success font-bold">TRANSAKSI PENJEMPUTAN RUTIN</span>
                 </div>
-                <ul class="list-style-none">
-                    <li class="d-flex no-block card-body">
-                        <div class="col-lg-12">
-                            <span class="text-muted">Total Nilai Sampah</span><br>
-                            <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div class="col-12">
-                            <span class="text-muted">Total Berat</span>
-                            <br>
-                            <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div>
-                            <span class="text-muted">Jenis Sampah</span>
-                        </div>
-                    </li>
-                    @for($i = 0; $i<4; $i++)
-                        <li class="d-flex no-block card-body no-padding">
-                            <div class="width-25">
-                                <span class="text-muted">Plastik</span>
+
+                @if($trxDetailRutin->count() > 0)
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12">
+                                <span class="text-muted">Total Nilai Sampah</span><br>
+                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
                             </div>
-                            <div>
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">800 Kg</span>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="col-12">
+                                <span class="text-muted">Total Berat</span>
+                                <br>
+                                <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
+                            </div>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-6">
+                                    <span>Jenis Sampah</span>
                                 </div>
-                            </div>
-                            <div class="ml-auto">
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">Rp40.588.000</span>
+                                <div class="col-3 text-right">
+                                    <span>Berat (Gram)</span>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <span>Harga (Rp)</span>
                                 </div>
                             </div>
                         </li>
-                    @endfor
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Elektronik</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">800 Kg</span>
+                        @foreach($trxDetailRutin as $trxDetail)
+                            <li class="d-flex no-block card-body no-padding">
+                                <div class="row w-100">
+                                    <div class="col-6">
+                                        @if($adminBankCatId === 1)
+                                            <span class="text-muted">{{ $trxDetail->dws_waste_category_data->name }}</span>
+                                        @else
+                                            <span class="text-muted">{{ $trxDetail->masaro_waste_category_data->name }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->weight_string }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->price_string }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-12 text-center">
+                                    <a href="#" class="btn btn-success btn-lg text-white">Lihat Semua</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
+                        </li>
+                    </ul>
+                @else
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12">
+                                <span class="text-muted size-30 font-bold">Tidak Ada Transaksi</span><br>
                             </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Lainnya</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">123456 Kg</span>
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                @endif
+
             </div>
         </div>
         <!-- column -->
@@ -100,76 +101,78 @@
             <!-- card new -->
             <div class="card">
                 <div class="card-body">
-                    <span class="badge badge-success">Mei</span>
-                    <i class="m-r-10 mdi mdi-folder-download size-33" style="padding-left:50%;"></i>
+                    <span class="badge badge-success font-bold">TRANSAKSI ANTAR SENDIRI</span>
                 </div>
-                <ul class="list-style-none">
-                    <li class="d-flex no-block card-body">
-                        <div class="col-lg-12">
-                            <span class="text-muted">Total Nilai Sampah</span><br>
-                            <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div class="col-12">
-                            <span class="text-muted">Total Berat</span>
-                            <br>
-                            <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div>
-                            <span class="text-muted">Jenis Sampah</span>
-                        </div>
-                    </li>
-                    @for($i = 0; $i<4; $i++)
-                        <li class="d-flex no-block card-body no-padding">
-                            <div class="width-25">
-                                <span class="text-muted">Plastik</span>
+
+                @if($trxDetailAntarSendiri->count() > 0)
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12 text-center">
+                                <span class="text-muted">Total Nilai Sampah</span><br>
+                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">{{ $totalAntarSendiriWastePrice }}</span>
                             </div>
-                            <div>
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">800 Kg</span>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="col-12 text-center">
+                                <span class="text-muted">Total Berat</span>
+                                <br>
+                                <span class="text-muted font-bold size-33">{{ $totalAntarSendiriWasteWeight }} </span><span class="text-muted size-30">Gram</span>
+                            </div>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-6">
+                                    <span>Jenis Sampah</span>
                                 </div>
-                            </div>
-                            <div class="ml-auto">
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">Rp40.588.000</span>
+                                <div class="col-3 text-right">
+                                    <span>Berat (Gram)</span>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <span>Harga (Rp)</span>
                                 </div>
                             </div>
                         </li>
-                    @endfor
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Elektronik</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">800 Kg</span>
+                        @foreach($trxDetailAntarSendiri as $trxDetail)
+                            <li class="d-flex no-block card-body no-padding">
+                                <div class="row w-100">
+                                    <div class="col-6">
+                                        @if($adminBankCatId === 1)
+                                            <span class="text-muted">{{ $trxDetail->dws_waste_category_data->name }}</span>
+                                        @else
+                                            <span class="text-muted">{{ $trxDetail->masaro_waste_category_data->name }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->weight_string }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->price_string }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-12 text-center">
+                                    <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-success btn-lg text-white">Lihat Semua</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
+                        </li>
+                    </ul>
+                @else
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12">
+                                <span class="text-muted size-30 font-bold">Tidak Ada Transaksi</span><br>
                             </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Lainnya</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">123456 Kg</span>
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                @endif
+
             </div>
         </div>
         <!-- column -->
@@ -178,76 +181,77 @@
             <!-- card new -->
             <div class="card">
                 <div class="card-body">
-                    <span class="badge badge-success">Desember</span>
-                    <i class="m-r-10 mdi mdi-folder-download size-33" style="padding-left:50%;"></i>
+                    <span class="badge badge-success font-bold">TRANSAKSI INSTAN</span>
                 </div>
-                <ul class="list-style-none">
-                    <li class="d-flex no-block card-body">
-                        <div class="col-lg-12">
-                            <span class="text-muted">Total Nilai Sampah</span><br>
-                            <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div class="col-12">
-                            <span class="text-muted">Total Berat</span>
-                            <br>
-                            <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <div>
-                            <span class="text-muted">Jenis Sampah</span>
-                        </div>
-                    </li>
-                    @for($i = 0; $i<4; $i++)
-                        <li class="d-flex no-block card-body no-padding">
-                            <div class="width-25">
-                                <span class="text-muted">Plastik</span>
+                @if($trxDetailInstant->count() > 0)
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12">
+                                <span class="text-muted">Total Nilai Sampah</span><br>
+                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
                             </div>
-                            <div>
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">800 Kg</span>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="col-12">
+                                <span class="text-muted">Total Berat</span>
+                                <br>
+                                <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
+                            </div>
+                        </li>
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-6">
+                                    <span>Jenis Sampah</span>
                                 </div>
-                            </div>
-                            <div class="ml-auto">
-                                <div class="tetx-right">
-                                    <span class="text-muted font-bold">Rp40.588.000</span>
+                                <div class="col-3 text-right">
+                                    <span>Berat (Gram)</span>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <span>Harga (Rp)</span>
                                 </div>
                             </div>
                         </li>
-                    @endfor
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Elektronik</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">800 Kg</span>
+                        @foreach($trxDetailInstant as $trxDetail)
+                            <li class="d-flex no-block card-body no-padding">
+                                <div class="row w-100">
+                                    <div class="col-6">
+                                        @if($adminBankCatId === 1)
+                                            <span class="text-muted">{{ $trxDetail->dws_waste_category_data->name }}</span>
+                                        @else
+                                            <span class="text-muted">{{ $trxDetail->masaro_waste_category_data->name }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->weight_string }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-right">
+                                            <span class="text-muted font-bold">{{ $trxDetail->price_string }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                        <li class="d-flex no-block card-body border-top">
+                            <div class="row w-100">
+                                <div class="col-12 text-center">
+                                    <a href="{{ route('admin.transactions.on_demand.index') }}" class="btn btn-success btn-lg text-white">Lihat Semua</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
+                        </li>
+                    </ul>
+                @else
+                    <ul class="list-style-none">
+                        <li class="d-flex no-block card-body">
+                            <div class="col-lg-12">
+                                <span class="text-muted size-30 font-bold">Tidak Ada Transaksi</span><br>
                             </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body no-padding">
-                        <div class="width-25">
-                            <span class="text-muted">Lainnya</span>
-                        </div>
-                        <div>
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">123456 Kg</span>
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <span class="text-muted font-bold">Rp40.588.000</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                @endif
+
             </div>
         </div>
         <!-- column -->
