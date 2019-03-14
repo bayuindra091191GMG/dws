@@ -32,12 +32,11 @@ class TransactionHeaderController extends Controller
     /**
      * Function to get all the Transactions.
      *
-     * @param Request $request
      * @return UserResource
      */
-    public function getTransactions(Request $request)
+    public function getTransactions()
     {
-        $user = User::where('email', $request->input('email'));
+        $user = auth('api')->user();
         $transactions = TransactionHeader::where('user_id', $user->id)->get();
 
         return new UserResource($transactions);
@@ -53,7 +52,6 @@ class TransactionHeaderController extends Controller
     public function createTransaction(Request $request)
     {
         $rules = array(
-            'email'             => 'required',
             'total_weight'      => 'required',
             'total_price'       => 'required',
             'details'           => 'required'
@@ -67,7 +65,7 @@ class TransactionHeaderController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $user = User::where('email', $data['email'])->first();
+        $user = auth('api')->user();
 
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
@@ -150,7 +148,7 @@ class TransactionHeaderController extends Controller
     public function confirmTransactionByDriver(Request $request)
     {
         $rules = array(
-            'driver_id'         => 'required',
+            'transaction_id'    => 'required',
             'flag'              => 'required'
         );
 

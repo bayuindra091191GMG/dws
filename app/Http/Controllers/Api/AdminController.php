@@ -110,13 +110,13 @@ class AdminController extends Controller
     /**
      * Function to return Transaction Data Related to the Admin Wastebank.
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTransactionList(Request $request)
+    public function getTransactionList()
     {
         try{
-            $admin = AdminUser::where('email', $request->input('email'));
+            $adminWb = auth('admin_wastebank')->user();
+            $admin = AdminUser::where('email', $adminWb->id);
             $header = TransactionHeader::where('transaction_type_id', 1)->where('waste_bank_id', $admin->waste_bank_id1)->get();
 
             return Response::json($header, 200);

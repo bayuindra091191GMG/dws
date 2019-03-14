@@ -61,12 +61,14 @@ class WasteBankController extends Controller
         }
     }
 
-    public function getWasteBankSchedules(Request $request)
+    /**
+     * Function to Get Waste Bank Schedules
+    */
+    public function getWasteBankSchedules()
     {
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $user = auth('api')->user();
             $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
-
             $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
 
             return $wasteBankSchedules;

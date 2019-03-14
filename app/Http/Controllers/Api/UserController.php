@@ -11,13 +11,14 @@ use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return UserResource
+     * @return User[]|\Exception|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -26,17 +27,25 @@ class UserController extends Controller
 
             $users = User::all();
 
-            return new UserResource($users);
+            return $users;
         }
         catch(\Exception $ex){
             error_log($ex);
+            return $ex;
         }
     }
 
+    /**
+     * Function to change the status of Routine Pickup.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function changeRoutinePickup(Request $request)
     {
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $userId = auth('api')->user();
+            $user = User::where('email', $userId->id)->first();
 
             $user->routine_pickup = $request->input('routine_pickup');
             $user->save();
@@ -58,12 +67,17 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Function to save user token.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function saveUserToken(Request $request)
     {
         try{
             $data = $request->json()->all();
-
-            $user = User::where('email', $data['email'])->first();
+            $user = auth('api')->user();
 
             //Save user deviceID
             FCMNotification::SaveToken($user->id, $data['device_id'], "app");
@@ -83,14 +97,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function show()
     {
         error_log("exception");
         try{
-            $users = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
+            $user = auth('api')->user();
+            $users = User::where('email', $user->email)->with('company', 'addresses')->first();
 
             return Response::json($users, 200);
         }
@@ -104,13 +118,13 @@ class UserController extends Controller
     /**
      * Function to get user Address with Email Posted.
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAddress(Request $request)
+    public function getAddress()
     {
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $userId = auth('api')->user();
+            $user = User::where('email', $userId->email)->first();
 
             return Response::json($user->addresses->first(),200);
         }
@@ -130,7 +144,24 @@ class UserController extends Controller
     public function setAddress(Request $request)
     {
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $rules = array(
+                'description'    => 'required',
+                'latitude'       => 'required',
+                'longitude'      => 'required',
+                'city'           => 'required',
+                'province'       => 'required',
+                'postal_code'    => 'required'
+            );
+
+            $data = $request->json()->all();
+
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
+            $user = auth('api')->user();
             $address = Address::where('user_id', $user->id)->first();
             if($address == null){
                 //Create new address
@@ -191,5 +222,10 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function testingAuthToken(){
+        $user = auth('waste_collector')->user();
+        return $user;
     }
 }

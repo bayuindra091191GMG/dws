@@ -23,19 +23,18 @@ class WasteCollectorController extends Controller
     /**
      * Function to get WasteCollector Details.
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function show()
     {
         try {
-            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
+            $wasteCollectorId = auth('waste_collector')->user();
+            $wasteCollector = WasteCollector::where('phone', $wasteCollectorId->phone)->first();
 
             return $wasteCollector;
         } catch (\Exception $ex) {
             return Response::json(
-                $ex
-                , 500);
+                $ex, 500);
         }
     }
 
@@ -48,9 +47,18 @@ class WasteCollectorController extends Controller
     public function saveCollectorToken(Request $request)
     {
         try {
+            $rules = array(
+                'device_id'    => 'required'
+            );
+
             $data = $request->json()->all();
 
-            $collector = WasteCollector::where('phone', $data['phone'])->first();
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+            $collector = auth('waste_collector')->user();
 
             //Save user deviceID
             FCMNotification::SaveToken($collector->id, $data['device_id'], "collector");
@@ -68,19 +76,14 @@ class WasteCollectorController extends Controller
 
     /**
      * Function to get the User List for Routine Pickup.
-     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUserListRoutinePickUp(Request $request)
+    public function getUserListRoutinePickUp()
     {
         //Get the Data based on Driver Data
         try {
-            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
-            //$wasteCategoryId = $wasteCollector->company->waste_category_id;
-
-//            $users = User::where('routine_pickup', 1)->whereHas('company', function($query) use ($wasteCategoryId){
-//                $query->waste_category_id = $wasteCategoryId;
-//            })->get();
+            $wasteCollector = auth('waste_collector')->user();
 
             $collectorWasteBank = WasteCollectorWasteBank::where('waste_collector_id', $wasteCollector->id)->first();
             if (empty($collectorWasteBank)) {
@@ -186,11 +189,10 @@ class WasteCollectorController extends Controller
     public function createTransactionRoutinePickup(Request $request)
     {
         $rules = array(
-            'user_email' => 'required',
-            'waste_collector_phone' => 'required',
-            'total_weight' => 'required',
-            'total_price' => 'required',
-            'details' => 'required'
+            'user_email'            => 'required',
+            'total_weight'          => 'required',
+            'total_price'           => 'required',
+            'details'               => 'required'
         );
 
         $data = $request->json()->all();
@@ -201,7 +203,7 @@ class WasteCollectorController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $wasteCollector = WasteCollector::where('phone', $request->input('waste_collector_phone'))->first();
+        $wasteCollector = auth('waste_collector')->user();
         $user = User::where('email', $data['email'])->first();
 
         // Generate transaction codes
@@ -280,13 +282,12 @@ class WasteCollectorController extends Controller
     /**
      * Function to show all WasteCollector Transactions Related.
      *
-     * @param Request $request
      * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
      */
-    public function getAllTransactions(Request $request)
+    public function getAllTransactions()
     {
         try {
-            $wasteCollector = WasteCollector::where('phone', $request->input('phone'))->first();
+            $wasteCollector = auth('waste_collector')->user();
             $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)->get();
 
             return $transactions;

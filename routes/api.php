@@ -22,18 +22,19 @@ Route::get('/noauth/users', 'Api\UserController@index');
 Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBanks');
 //User Management
 Route::middleware('auth:api')->group(function(){
+    Route::get('/testing', 'Api\UserController@testingAuthToken');
     Route::get('/get-users', 'Api\UserController@index');
-    Route::post('/get-user-data', 'Api\UserController@show');
+    Route::get('/get-user-data', 'Api\UserController@show');
     Route::post('/save-user-device', 'Api\UserController@saveUserToken');
     Route::get('/waste-banks', 'Api\WasteBankController@getData');
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
     Route::get('/dws-category', 'Api\DwsWasteController@getData');
     Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
-    Route::post('/address', 'Api\UserController@getAddress');
+    Route::get('/address', 'Api\UserController@getAddress');
     Route::post('/set-address', 'Api\UserController@setAddress');
 
     //Transactions
-    Route::post('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
+    Route::get('/get-transactions', 'Api\TransactionHeaderController@getTransactions');
     Route::post('/get-transaction-details', 'Api\TransactionHeaderController@getTransactionDetails');
     Route::post('/get-transaction-data', 'Api\TransactionHeaderController@getTransactionData');
 
@@ -56,7 +57,7 @@ Route::middleware('auth:api')->group(function(){
 
     //Routine Pickup
     Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
-    Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
+    Route::get('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
 
     //Point
     Route::post('/redeem-poin', 'Api\PoinController@redeem');
@@ -72,10 +73,10 @@ Route::post('/external-register', 'Api\RegisterController@externalAuth');
 //Waste Collector Transaction
 Route::middleware('auth:waste_collector')->group(function(){
     Route::post('/save-collector-device', 'Api\WasteCollectorController@saveCollectorToken');
-    Route::post('/waste-collector/get-data', 'Api\WasteCollectorController@show');
-    Route::post('/waste-collector/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
+    Route::get('/waste-collector/get-data', 'Api\WasteCollectorController@show');
+    Route::get('/waste-collector/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');
     Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
-    Route::post('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
+    Route::get('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
 
     Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollector@confirmOnDemandTransaction');
 
@@ -86,7 +87,7 @@ Route::middleware('auth:waste_collector')->group(function(){
 Route::middleware('auth:admin_wastebank')->group(function(){
     //Antar Sendiri
     Route::post('/admin/confirm-transaction', 'Api\AdminController@confirmTransactionAntarSendiri');
-    Route::post('/admin/transactions/get', 'Api\AdminController@getTransactionList');
+    Route::get('/admin/transactions/get', 'Api\AdminController@getTransactionList');
     Route::post('/admin/set-transaction', 'Api\AdminController@setTransactionToUser');
 });
 
