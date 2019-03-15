@@ -10,7 +10,7 @@
             success: function(data) {
                 if ((data.errors)){
                     setTimeout(function () {
-                        toastr.error('Failed to Delete, data has been used!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                        toastr.error('Gagal menghapus data!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                     }, 500);
                 }
                 else{
