@@ -298,6 +298,27 @@ class WasteCollectorController extends Controller
 
     /**
      * On Demand.
+     * Function to show all current on Demand Transactions.
+     *
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+    */
+    public function getCurrentOnDemandTransaction()
+    {
+        try {
+            $wasteCollector = auth('waste_collector')->user();
+            $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)
+                ->where('transaction_type_id', 3)
+                ->where('status_id', 6)
+                ->get();
+
+            return $transactions;
+        } catch (\Exception $ex) {
+            return Response::json("Sorry something went wrong!", 500);
+        }
+    }
+
+    /**
+     * On Demand.
      * Function for WasteCollector to edit on Demand Transaction.
      *
      * @param Request $request

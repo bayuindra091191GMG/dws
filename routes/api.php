@@ -78,8 +78,9 @@ Route::middleware('auth:waste_collector')->group(function(){
     Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
     Route::get('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
 
+    //ON Demand
+    Route::get('/waste-collector/on-demand/list', 'Api\WasteCollector@getCurrentOnDemandTransaction');
     Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollector@confirmOnDemandTransaction');
-
 });
 
 
