@@ -160,6 +160,7 @@ class WasteCollectorController extends Controller
                     "longitude" => $addressDb->longitude,
                     "weight" => $weight,
                     "point" => $point,
+                    "datas" => $wasteCollectorUser
                 );
                 array_push($pickUpModel, $data);
             }
