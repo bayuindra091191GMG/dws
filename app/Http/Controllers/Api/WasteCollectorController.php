@@ -307,7 +307,7 @@ class WasteCollectorController extends Controller
     {
         try {
             $wasteCollector = auth('waste_collector')->user();
-            $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)
+            $transactions = TransactionHeader::with(['status', 'user'])->where('waste_collector_id', $wasteCollector->id)
                 ->where('transaction_type_id', 3)
                 ->where('status_id', 6)
                 ->get();
