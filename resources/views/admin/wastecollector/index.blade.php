@@ -84,5 +84,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.wastecollectors.destroy', 'redirectUrl' => 'admin.wastecollectors.index'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.wastecollectors.destroy', 'redirectUrl' => 'admin.wastecollectors.index'])
 @endsection
