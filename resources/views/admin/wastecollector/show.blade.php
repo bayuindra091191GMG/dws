@@ -114,7 +114,7 @@
                                             <div class="form-line">
                                                 <label class="form-label" for="address">Alamat</label>
                                                 <input id="address" type="text" class="form-control"
-                                                       name="address" value="{{ $collector->address }} gram" readonly>
+                                                       name="address" value="{{ $collector->address }}" readonly>
                                             </div>
                                         </div>
                                     </div>
