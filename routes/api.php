@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->get('/users', 'Api\UserController@index');
 Route::get('/noauth/users', 'Api\UserController@index');
 Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBanks');
+Route::get('/dws-category', 'Api\DwsWasteController@getData');
+Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
 //User Management
 Route::middleware('auth:api')->group(function(){
     Route::get('/testing', 'Api\UserController@testingAuthToken');
@@ -28,8 +30,6 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/save-user-device', 'Api\UserController@saveUserToken');
     Route::get('/waste-banks', 'Api\WasteBankController@getData');
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
-    Route::get('/dws-category', 'Api\DwsWasteController@getData');
-    Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
     Route::get('/address', 'Api\UserController@getAddress');
     Route::post('/set-address', 'Api\UserController@setAddress');
 
@@ -81,7 +81,7 @@ Route::middleware('auth:waste_collector')->group(function(){
     //ON Demand
     Route::get('/waste-collector/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
     Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
-    Route::post('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
+    Route::get('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 });
 
 

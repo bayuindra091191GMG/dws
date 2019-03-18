@@ -183,28 +183,17 @@ class WasteCollectorController extends Controller
     /**
      * Function to get the Current Waste Bank Schedule.
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getWasteBankCurrentSchedule(Request $request)
+    public function getWasteBankCurrentSchedule()
     {
-        $rules = array(
-            'user_email'            => 'required'
-        );
-
-        $data = $request->json()->all();
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-
         $wasteCollector = auth('waste_collector')->user();
-        $user = User::where('email', $data['email'])->first();
+        $wasteBanks = WasteCollectorWasteBank::where('waste_collector_id', $wasteCollector->id)->first();
 
         $currentday = Carbon::now()->dayOfWeekIso;
-        $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $wasteCollector->waste_bank_id)
+        $wasteBankSchedule = WasteBankSchedule::with('dws_waste_category_data')
+            ->with('masaro_waste_category_data')
+            ->where('waste_bank_id', $wasteBanks->waste_bank_id)
             ->where('day', $currentday)->first();
 
         return $wasteBankSchedule;
