@@ -181,6 +181,36 @@ class WasteCollectorController extends Controller
     }
 
     /**
+     * Function to get the Current Waste Bank Schedule.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getWasteBankCurrentSchedule(Request $request)
+    {
+        $rules = array(
+            'user_email'            => 'required'
+        );
+
+        $data = $request->json()->all();
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $wasteCollector = auth('waste_collector')->user();
+        $user = User::where('email', $data['email'])->first();
+
+        $currentday = Carbon::now()->dayOfWeekIso;
+        $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $wasteCollector->waste_bank_id)
+            ->where('day', $currentday)->first();
+
+        return $wasteBankSchedule;
+    }
+
+    /**
      * Create a new Transaction when on Routine Pickup.
      *
      * @param Request $request
