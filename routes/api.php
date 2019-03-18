@@ -79,9 +79,9 @@ Route::middleware('auth:waste_collector')->group(function(){
     Route::get('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
 
     //ON Demand
-    Route::get('/waste-collector/on-demand/list', 'Api\WasteCollector@getCurrentOnDemandTransaction');
-    Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollector@confirmOnDemandTransaction');
-    Route::post('/waste-collector/routine/schedule', 'Api\WasteCollector@getWasteBankCurrentSchedule');
+    Route::get('/waste-collector/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
+    Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
+    Route::post('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 });
 
 
