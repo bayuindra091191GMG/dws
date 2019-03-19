@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 06 Mar 2019 03:05:31 +0000.
+ * Date: Tue, 19 Mar 2019 03:07:00 +0000.
  */
 
 namespace App\Models;
@@ -17,10 +17,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
- *
- * @property \App\Models\AdminUser $createdBy
+ * 
+ * @property \App\Models\AdminUser $admin_user
  * @property \App\Models\User $user
  * @property \App\Models\WasteCollector $waste_collector
+ * @property \Illuminate\Database\Eloquent\Collection $statuses
  *
  * @package App\Models
  */
@@ -40,10 +41,10 @@ class WasteCollectorUser extends Eloquent
 		'created_by'
 	];
 
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
-    }
+	public function admin_user()
+	{
+		return $this->belongsTo(\App\Models\AdminUser::class, 'created_by');
+	}
 
 	public function user()
 	{
@@ -53,5 +54,11 @@ class WasteCollectorUser extends Eloquent
 	public function waste_collector()
 	{
 		return $this->belongsTo(\App\Models\WasteCollector::class);
+	}
+
+	public function statuses()
+	{
+		return $this->belongsToMany(\App\Models\Status::class, 'waste_collector_user_statuses')
+					->withPivot('id', 'date', 'created_by');
 	}
 }

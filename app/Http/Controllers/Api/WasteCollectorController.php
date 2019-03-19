@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\WasteBankSchedule;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorUser;
+use App\Models\WasteCollectorUserStatus;
 use App\Models\WasteCollectorWasteBank;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
@@ -126,6 +127,25 @@ class WasteCollectorController extends Controller
             foreach ($data as $wasteCollectorUser) {
                 $weight = 0;
                 $point = 0;
+                $pickupStatus = "Belum Dikunjungi";
+
+                //get status from database
+                $scheduleDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
+                    ->whereDate('date', Carbon::today())->first();
+                if(empty($scheduleDB)){
+                    $data = WasteCollectorUserStatus::create([
+                        'waste_collector_user_id' => $wasteCollectorUser->id,
+                        'date' => Carbon::now('Asia/Jakarta'),
+                        'status_id' => 4,
+                        'created_at' => Carbon::now('Asia/Jakarta'),
+                    ]);
+                }
+                else{
+                    if($scheduleDB->status_id != 4){
+                        $pickupStatus = $scheduleDB->status->description;
+                    }
+                }
+
 
                 //summary total weight of transaction routine pickup and total household
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
@@ -160,7 +180,8 @@ class WasteCollectorController extends Controller
                     "longitude" => $addressDb->longitude,
                     "weight" => $weight,
                     "point" => $point,
-                    "datas" => $wasteCollectorUser
+                    "pickup_status" => $pickupStatus,
+                    "user" => $wasteCollectorUser->user
                 );
                 array_push($pickUpModel, $data);
             }
@@ -200,6 +221,43 @@ class WasteCollectorController extends Controller
         else{
             return Response::json([$wasteBankSchedule], 200);
         }
+    }
+
+    /**
+     * Function to Change status of routine pickup Waste Bank Schedule.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function saveRoutinePickUpStatus(Request $request)
+    {
+        $rules = array(
+            'routine_pickup_id'    => 'required',
+            'status_id'    => 'required'
+        );
+
+        $data = $request->json()->all();
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $wasteCollectorUserDB = WasteCollectorUserStatus::where('waste_collector_user_id', $data['routine_pickup_id'])->first();
+        if(empty($wasteCollectorUserDB)){
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+        }
+        else{
+            $wasteCollectorUserDB->status_id = $data['status_id'];
+            $wasteCollectorUserDB->save();
+        }
+
+        return Response::json([
+            'message' => "Success Change Status!",
+        ], 200);
     }
 
     /**
