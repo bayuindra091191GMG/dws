@@ -182,8 +182,6 @@ class WasteCollectorController extends Controller
 
     /**
      * Function to get the Current Waste Bank Schedule.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function getWasteBankCurrentSchedule()
     {
@@ -194,9 +192,14 @@ class WasteCollectorController extends Controller
         $wasteBankSchedule = WasteBankSchedule::with('dws_waste_category_data')
             ->with('masaro_waste_category_data')
             ->where('waste_bank_id', $wasteBanks->waste_bank_id)
-            ->where('day', $currentday)->first();
+            ->where('day', $currentday)->get();
 
-        return $wasteBankSchedule;
+        if($wasteBankSchedule->count() > 1){
+            return $wasteBankSchedule;
+        }
+        else{
+            return Response::json([$wasteBankSchedule], 200);
+        }
     }
 
     /**
