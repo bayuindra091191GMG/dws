@@ -30,24 +30,24 @@
                         <table id="datatable-ondemand" class="table table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th class="text-center">Jenis Kategori</th>
-                                <th class="text-center">Jenis Barang</th>
-                                <th class="text-center">Total Berat (kilogram)</th>
-                                <th class="text-center">Point</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">No. Telp</th>
+                                <th class="text-center">Jenis Sampah</th>
+                                <th class="text-center">Berat Sampah</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Sampah Bakar</td>
-                                    <td>Daun Kering</td>
+                                    <td>Bang Toyib</td>
+                                    <td>087889088123</td>
+                                    <td>Sampah Busuk</td>
                                     <td>5</td>
-                                    <td>50</td>
                                 </tr>
                                 <tr>
-                                    <td>Sampah Busuk</td>
-                                    <td>Sampah Sayuran</td>
+                                    <td>Tony Stark</td>
+                                    <td>087129456123</td>
+                                    <td>Sampah Bakar</td>
                                     <td>3</td>
-                                    <td>30</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -118,10 +118,10 @@
         messaging.onMessage(function(payload) {
             $("#datatable-ondemand tbody").prepend(
                 "<tr>" +
-                "<td>" + payload.data.category +"</td>" +
-                "<td>" + payload.data.item + "</td>" +
+                "<td>" + payload.data.name +"</td>" +
+                "<td>" + payload.data.phone + "</td>" +
+                "<td>" + payload.data.category + "</td>" +
                 "<td>" + payload.data.weight + "</td>" +
-                "<td>" + payload.data.point + "</td>" +
                 "</tr>"
             );
             // console.log("Message received. ", payload);

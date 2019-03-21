@@ -39,19 +39,19 @@ class SubscribeController extends Controller
     }
     public function demoSubmit(Request $request){
         try{
+            $name = $request->input('name');
+            $phone = $request->input('phone');
             $category = $request->input('category');
-            $item = $request->input('item');
             $weight = $request->input('weight');
-            $point = $weight * 10;
 
             //send notification
             $title = "Digital Waste Solution";
             $body = "Transaksi Baru dari kategori ".$category." seberat ".$weight." kilogram";
             $data = array(
                 'category' => $category,
-                'item' => $item,
+                'name' => $name,
                 'weight' => $weight,
-                'point' => $point,
+                'phone' => $phone,
             );
 //        dd($data);
 //        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
