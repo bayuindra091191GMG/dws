@@ -38,11 +38,14 @@ class HomeController extends Controller
         return view('admin.test-notif');
     }
     public function testNotifSend(){
+        //send notification
         $title = "Digital Waste Solution";
-        $body = "User Confirm Transaction On Demand";
+        $body = "Transaksi Baru";
         $data = array(
-            'type_id' => '1',
-            'message' => $body,
+            'category' => "testing Category",
+            'item' => "Testing Item",
+            'weight' => "10",
+            'point' => 10*10,
         );
 //        dd($data);
 //        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);

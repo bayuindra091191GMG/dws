@@ -32,6 +32,10 @@ class AdminController extends Controller
     public function index()
     {
         $userAdmin = Auth::guard('admin')->user();
+        if($userAdmin->email == "demo@dws-solusi.net"){
+            return view('home-demo');
+        }
+
         $adminBankCatId = 0;
         // Check admin type
         if($userAdmin->is_super_admin === 0 && !empty($userAdmin->waste_bank_id)){

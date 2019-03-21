@@ -108,6 +108,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'password
 
 //Beta
 Route::post('/subscribe', 'Api\SubscribeController@save');
+Route::post('/submit-demo', 'Api\SubscribeController@demoSubmit');
 
 //Coba2
 Route::post('/test', 'Api\TransactionHeaderController@test');

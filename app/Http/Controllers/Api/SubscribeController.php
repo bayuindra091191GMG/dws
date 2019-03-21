@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscribe;
+use App\Notifications\FCMNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class SubscribeController extends Controller
@@ -26,6 +28,37 @@ class SubscribeController extends Controller
 
             return Response::json([
                 'Success'
+            ], 200);
+        }
+        catch (\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+    public function demoSubmit(Request $request){
+        try{
+            $category = $request->input('category');
+            $item = $request->input('item');
+            $weight = $request->input('weight');
+            $point = $weight * 10;
+
+            //send notification
+            $title = "Digital Waste Solution";
+            $body = "Transaksi Baru dari kategori ".$category." seberat ".$weight." kilogram";
+            $data = array(
+                'category' => $category,
+                'item' => $item,
+                'weight' => $weight,
+                'point' => $point,
+            );
+//        dd($data);
+//        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
+            $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Success submit data!",
             ], 200);
         }
         catch (\Exception $ex){

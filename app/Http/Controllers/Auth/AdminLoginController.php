@@ -33,4 +33,8 @@ class AdminLoginController extends Controller
             return redirect()->back()->withErrors('Wrong Email or Password!!', 'default')->withInput($request->only('email'));
         }
     }
+    public function logout(){
+        Auth::guard('admin')->logout();
+        return redirect()->guest(route('admin.login'));
+    }
 }
