@@ -215,12 +215,7 @@ class WasteCollectorController extends Controller
             ->where('waste_bank_id', $wasteBanks->waste_bank_id)
             ->where('day', $currentday)->get();
 
-        if($wasteBankSchedule->count() > 1){
-            return $wasteBankSchedule;
-        }
-        else{
-            return Response::json([$wasteBankSchedule], 200);
-        }
+        return $wasteBankSchedule;
     }
 
     /**
