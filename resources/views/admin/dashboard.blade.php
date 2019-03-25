@@ -29,14 +29,14 @@
                         <li class="d-flex no-block card-body">
                             <div class="col-lg-12">
                                 <span class="text-muted">Total Nilai Sampah</span><br>
-                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
+                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">{{ $totalRutinWasteWeight }}</span>
                             </div>
                         </li>
                         <li class="d-flex no-block card-body border-top">
                             <div class="col-12">
                                 <span class="text-muted">Total Berat</span>
                                 <br>
-                                <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
+                                <span class="text-muted font-bold size-33">{{ $totalRutinWastePrice }} </span><span class="text-muted size-30">Gram</span>
                             </div>
                         </li>
                         <li class="d-flex no-block card-body border-top">
@@ -188,14 +188,14 @@
                         <li class="d-flex no-block card-body">
                             <div class="col-lg-12">
                                 <span class="text-muted">Total Nilai Sampah</span><br>
-                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">159.030.000</span>
+                                <span class="text-muted size-30">Rp </span><span class="text-muted font-bold size-33">{{ $totalInstantWastePrice }}</span>
                             </div>
                         </li>
                         <li class="d-flex no-block card-body border-top">
                             <div class="col-12">
                                 <span class="text-muted">Total Berat</span>
                                 <br>
-                                <span class="text-muted font-bold size-33">2.051 </span><span class="text-muted size-30">kg</span>
+                                <span class="text-muted font-bold size-33">{{ $totalInstantWasteWeight }} </span><span class="text-muted size-30">Gram</span>
                             </div>
                         </li>
                         <li class="d-flex no-block card-body border-top">

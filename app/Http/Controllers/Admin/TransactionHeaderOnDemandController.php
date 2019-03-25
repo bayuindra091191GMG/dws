@@ -35,10 +35,19 @@ class TransactionHeaderOnDemandController extends Controller
     }
 
     public function getIndex(Request $request){
-        $transations = TransactionHeader::where('transaction_type_id', 3)->get();
+
+        $user = Auth::guard('admin')->user();
+        if($user->is_super_admin === 1){
+            $transations = TransactionHeader::where('transaction_type_id', 3);
+        }
+        else{
+            $adminWasteBankId = $user->waste_bank_id;
+            $transations = TransactionHeader::where('transaction_type_id', 3)
+                            ->where('waste_bank_id', $adminWasteBankId);
+        }
+
         return DataTables::of($transations)
             ->setTransformer(new TransactionTransformer())
-            ->addIndexColumn()
             ->make(true);
     }
 

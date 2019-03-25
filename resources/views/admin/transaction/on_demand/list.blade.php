@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR TRANSAKSI ON DEMAND</h1>
+                        <h1>DAFTAR TRANSAKSI ON DEMAND BARU</h1>
                     </div>
                 </div>
                 {{--<div class="row mb-3">--}}
@@ -70,7 +70,6 @@
                                         <a class='btn btn-xs btn-info' href='{{route('admin.transactions.on_demand.show', ['id' => $transaction->id])}}' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>
                                     </td>
                                 </tr>
-                                @php ($idx++)
                             @endforeach
                             </tbody>
                         </table>
