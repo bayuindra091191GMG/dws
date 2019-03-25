@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 07 Feb 2019 08:08:09 +0000.
+ * Date: Mon, 25 Mar 2019 07:35:50 +0000.
  */
 
 namespace App\Models;
@@ -21,14 +21,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $address
  * @property int $city_id
  * @property string $open_days
- * @property string $open_hours
- * @property string $closed_hours
+ * @property \Carbon\Carbon $open_hours
+ * @property \Carbon\Carbon $closed_hours
  * @property int $waste_category_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * 
+ *
  * @property \App\Models\City $city
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
@@ -51,6 +51,11 @@ class WasteBank extends Eloquent
 		'updated_by' => 'int'
 	];
 
+	protected $dates = [
+		'open_hours',
+		'closed_hours'
+	];
+
 	protected $fillable = [
 		'name',
 		'latitude',
@@ -70,11 +75,6 @@ class WasteBank extends Eloquent
 	public function city()
 	{
 		return $this->belongsTo(\App\Models\City::class);
-	}
-
-	public function pic()
-	{
-		return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
 	}
 
 	public function waste_category()

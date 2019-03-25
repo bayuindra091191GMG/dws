@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class TransactionHeaderController extends Controller
 {
@@ -54,7 +55,9 @@ class TransactionHeaderController extends Controller
         $rules = array(
             'total_weight'      => 'required',
             'total_price'       => 'required',
-            'details'           => 'required'
+            'details'           => 'required',
+            'latitude'          => 'required',
+            'longitude'         => 'required'
         );
 
         $data = $request->json()->all();
@@ -70,6 +73,32 @@ class TransactionHeaderController extends Controller
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
         $categoryType = $user->company->waste_category_id;
+
+        //Check for Nearest Wastebank
+        $wasteBankId = '';
+        $wasteBankTemp = DB::table("waste_banks")
+            ->select("*"
+                ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
+                    * cos(radians(waste_banks.latitude)) 
+                    * cos(radians(waste_banks.longitude) - radians(" . $request->input('longitude') . ")) 
+                    + sin(radians(" .$request->input('latitude'). ")) 
+                    * sin(radians(waste_banks.latitude))) AS distance"))
+            ->get();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $wasteBanks = $wasteBankTemp->where('distance', '<=', 20)
+            ->where('waste_category_id', $categoryType)
+            ->where('open_hours', '<', $now->toTimeString())
+            ->where('closed_hours', '>', $now->toTimeString());
+
+        if($wasteBanks == null || $wasteBanks->count() == 0){
+            return response()->json("No Nearest Wastebank Detected!", 400);
+        }
+        else{
+            $tmp = $wasteBanks->first();
+            $wasteBankId = $tmp->id;
+        }
+
         if($categoryType == "1"){
             $prepend = "TRANS/DWS/". $today;
         }
@@ -90,7 +119,8 @@ class TransactionHeaderController extends Controller
             'transaction_type_id'   => 3,
             'waste_category_id'     => $user->company->waste_category_id,
             'created_at'            => Carbon::now('Asia/Jakarta'),
-            'updated_at'            => Carbon::now('Asia/Jakarta')
+            'updated_at'            => Carbon::now('Asia/Jakarta'),
+            'waste_bank_id'         => $wasteBankId
         ]);
 
         //do detail
