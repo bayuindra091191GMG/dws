@@ -22,8 +22,16 @@ Route::get('/noauth/users', 'Api\UserController@index');
 Route::post('/closest-waste-banks', 'Api\WasteBankController@getClosestWasteBanks');
 Route::get('/dws-category', 'Api\DwsWasteController@getData');
 Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
+//Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
+//Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
+//Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+
+Route::post('/register', 'Api\RegisterController@register');
+Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
+Route::post('/external-register', 'Api\RegisterController@externalAuth');
 //User Management
-Route::middleware('auth:api')->group(function(){
+//Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'user'], function () {
+Route::middleware('auth:api')->prefix('user')->group(function(){
     Route::get('/testing', 'Api\UserController@testingAuthToken');
     Route::get('/get-users', 'Api\UserController@index');
     Route::get('/get-user-data', 'Api\UserController@show');
@@ -39,50 +47,44 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/get-transaction-data', 'Api\TransactionHeaderController@getTransactionData');
 
     //Antar Sendiri
-    Route::post('/antar-sendiri/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserAntarSendiri');
-    Route::post('/antar-sendiri/user/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
+    Route::post('/antar-sendiri/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserAntarSendiri');
+    Route::post('/antar-sendiri/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
 
     //On Demand
     Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
-    Route::post('/on-demand/driver/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
-    Route::post('/on-demand/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
+//    Route::post('/waste-collector/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
+    Route::post('/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
 
     //Pickup Routine
-    Route::post('/pickup/user/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserRoutinePickup');
-    Route::post('/pickup/user/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserRoutinePickup');
+    Route::post('/routine/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserRoutinePickup');
+    Route::post('/routine/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserRoutinePickup');
 
     //Voucher
     Route::get('/voucher-categories', 'Api\VoucherController@getCategories');
     Route::post('/vouchers', 'Api\VoucherController@get');
 
     //Routine Pickup
-    Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
+    Route::post('/change-routine-pickup', 'Api\UserController@changeRoutinePickup');
     Route::get('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
 
     //Point
     Route::post('/redeem-poin', 'Api\PoinController@redeem');
 });
-//Route::post('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
-//Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
-//Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
-
-Route::post('/register', 'Api\RegisterController@register');
-Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
-Route::post('/external-register', 'Api\RegisterController@externalAuth');
 
 //Waste Collector Transaction
-Route::middleware('auth:waste_collector')->group(function(){
+//Route::group(['namespace' => 'Api', 'middleware' => 'waste_collector', 'prefix' => 'waste-collector'], function () {
+Route::middleware('auth:waste_collector')->prefix('waste-collector')->group(function(){
     Route::post('/save-collector-device', 'Api\WasteCollectorController@saveCollectorToken');
-    Route::get('/waste-collector/get-data', 'Api\WasteCollectorController@show');
-    Route::get('/waste-collector/routine/list', 'Api\WasteCollectorController@getUserListRoutinePickUp');;
-    Route::post('/waste-collector/routine/change-status', 'Api\WasteCollectorController@SaveRoutinePickUpStatus');
-    Route::post('/waste-collector/routine/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
-    Route::get('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
-    Route::get('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
+    Route::get('/get-data', 'Api\WasteCollectorController@show');
+    Route::get('/routine/list', 'Api\WasteCollectorController@getUserListRoutinePickUp');;
+    Route::post('/routine/change-status', 'Api\WasteCollectorController@SaveRoutinePickUpStatus');
+    Route::post('/routine/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
+    Route::get('/transactions', 'Api\WasteCollectorController@getAllTransactions');
+    Route::get('/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 
     //ON Demand
-    Route::get('/waste-collector/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
-    Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
+    Route::get('/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
+    Route::post('/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
 });
 
 

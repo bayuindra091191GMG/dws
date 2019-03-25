@@ -24,6 +24,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $waste_collector_id
  * @property string $notes
  * @property int $status_id
+ * @property string $latitude
+ * @property string $longitude
  * @property \Carbon\Carbon $created_at
  * @property int $created_by_admin
  * @property int $created_by_user
@@ -76,6 +78,8 @@ class TransactionHeader extends Eloquent
 		'waste_collector_id',
 		'notes',
 		'status_id',
+        'latitude',
+        'longitude',
 		'created_by_admin',
 		'created_by_user',
 		'updated_by_admin',

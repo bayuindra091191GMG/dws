@@ -127,7 +127,7 @@ class WasteCollectorController extends Controller
             foreach ($data as $wasteCollectorUser) {
                 $weight = 0;
                 $point = 0;
-                $pickupStatus = "Belum Dikunjungi";
+                $pickupStatus = 4;
 
                 //get status from database
                 $scheduleDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
@@ -142,7 +142,7 @@ class WasteCollectorController extends Controller
                 }
                 else{
                     if($scheduleDB->status_id != 4){
-                        $pickupStatus = $scheduleDB->status->description;
+                        $pickupStatus = $scheduleDB->status_id;
                     }
                 }
 
@@ -385,6 +385,7 @@ class WasteCollectorController extends Controller
             $transactions = TransactionHeader::with(['status', 'user'])->where('waste_collector_id', $wasteCollector->id)
                 ->where('transaction_type_id', 3)
                 ->where('status_id', 6)
+                ->with('transaction_details')
                 ->get();
 
             return $transactions;

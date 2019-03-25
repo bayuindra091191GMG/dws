@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\libs\Utilities;
+use App\Models\Configuration;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
@@ -85,8 +86,9 @@ class TransactionHeaderController extends Controller
                     * sin(radians(waste_banks.latitude))) AS distance"))
             ->get();
         $now = Carbon::now('Asia/Jakarta');
+        $radiusDB = Configuration::find(18);
 
-        $wasteBanks = $wasteBankTemp->where('distance', '<=', 20)
+        $wasteBanks = $wasteBankTemp->where('distance', '<=', $radiusDB->wastebank_radius)
             ->where('waste_category_id', $categoryType)
             ->where('open_hours', '<', $now->toTimeString())
             ->where('closed_hours', '>', $now->toTimeString());
@@ -114,10 +116,13 @@ class TransactionHeaderController extends Controller
             'transaction_no'        => $code,
             'total_weight'          => $data["total_weight"],
             'total_price'           => $data["total_price"],
+            'date'                  => Carbon::now('Asia/Jakarta'),
             'status_id'             => 6,
             'user_id'               => $user->id,
             'transaction_type_id'   => 3,
             'waste_category_id'     => $user->company->waste_category_id,
+            'latitude'              => $request->input('latitude'),
+            'longitude'              => $request->input('longitude'),
             'created_at'            => Carbon::now('Asia/Jakarta'),
             'updated_at'            => Carbon::now('Asia/Jakarta'),
             'waste_bank_id'         => $wasteBankId
