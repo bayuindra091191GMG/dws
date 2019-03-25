@@ -159,6 +159,7 @@
                                                         </div>
                                                         <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
                                                             <div class="col-md-12 p-t-20">
+                                                                @if($wasteBank->waste_bank_schedules != null)
                                                                 <div class="table-responsive">
                                                                     <table class="table table-bordered table-hover" id="tab_logic">
                                                                         <thead>
@@ -225,6 +226,49 @@
                                                                     </table>
                                                                 </div>
                                                                 <a id="add_row" class="btn btn-success">Tambah</a><a id='delete_row' class="btn btn-danger">Hapus</a>
+                                                                @else
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-bordered table-hover" id="tab_logic">
+                                                                            <thead>
+                                                                            <tr >
+                                                                                <th class="text-center" style="width: 30%">
+                                                                                    Hari
+                                                                                </th>
+                                                                                <th class="text-center" style="width: 30%">
+                                                                                    Jam
+                                                                                </th>
+                                                                                <th class="text-center" style="width: 30%">
+                                                                                    Masaro Kategori
+                                                                                </th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <tr id='sch0'>
+                                                                                <td class='field-item'>
+                                                                                    <select class="form-control" id="schDay0" name="schDays[]">
+                                                                                        <option value="1">Senin</option>
+                                                                                        <option value="2">Selasa</option>
+                                                                                        <option value="3">Rabu</option>
+                                                                                        <option value="4">Kamis</option>
+                                                                                        <option value="5">Jumat</option>
+                                                                                        <option value="6">Sabtu</option>
+                                                                                        <option value="7">Minggu</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input id="schTime0" type="text" class="form-control time-inputmask"
+                                                                                           name="schTimes[]"/>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <select id="select0" name="masaroTypes[]" class='form-control'></select>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr id='sch1'></tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <a id="add_row" class="btn btn-success">Tambah</a><a id='delete_row' class="btn btn-danger">Hapus</a>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>

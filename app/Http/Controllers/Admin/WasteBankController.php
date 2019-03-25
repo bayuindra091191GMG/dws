@@ -95,9 +95,15 @@ class WasteBankController extends Controller
         $timeDays = $request->input('schTimes');
         if($request->input('categoryType') == 1){
             $dwsCategories = $request->input('dwsTypes');
+            if($dwsCategories == null){
+                return redirect()->back()->withErrors("Penjemputan Rutin harus diisi!")->withInput($request->all());
+            }
         }
         else{
             $masaroCategories = $request->input('masaroTypes');
+            if($masaroCategories == null){
+                return redirect()->back()->withErrors("Penjemputan Rutin harus diisi!")->withInput($request->all());
+            }
         }
 
         if($timeDays == null){
