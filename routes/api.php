@@ -74,15 +74,15 @@ Route::post('/external-register', 'Api\RegisterController@externalAuth');
 Route::middleware('auth:waste_collector')->group(function(){
     Route::post('/save-collector-device', 'Api\WasteCollectorController@saveCollectorToken');
     Route::get('/waste-collector/get-data', 'Api\WasteCollectorController@show');
-    Route::get('/waste-collector/user-list-pickup', 'Api\WasteCollectorController@getUserListRoutinePickUp');;
-    Route::post('/waste-collector/user-pickup-status', 'Api\WasteCollectorController@SaveRoutinePickUpStatus');
-    Route::post('/pickup/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
+    Route::get('/waste-collector/routine/list', 'Api\WasteCollectorController@getUserListRoutinePickUp');;
+    Route::post('/waste-collector/routine/change-status', 'Api\WasteCollectorController@SaveRoutinePickUpStatus');
+    Route::post('/waste-collector/routine/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
     Route::get('/waste-collector/transactions', 'Api\WasteCollectorController@getAllTransactions');
+    Route::get('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 
     //ON Demand
     Route::get('/waste-collector/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
     Route::post('/waste-collector/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
-    Route::get('/waste-collector/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 });
 
 
