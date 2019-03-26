@@ -139,7 +139,7 @@
 
         messaging.onMessage(function(payload) {
             var typeId = payload.data.type_id;
-            //alert(payload);
+            alert(payload.data.type_id);
             // if(typeId === '3'){
             // }
             $("#datatable-ondemand tbody").prepend(

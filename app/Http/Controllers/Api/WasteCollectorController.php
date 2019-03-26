@@ -448,9 +448,9 @@ class WasteCollectorController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $request->input('email'))->first();
 
-        if ($request->input('is_edit')) {
+        if ($data['is_edit']) {
             $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
             $header->total_weight = $data['total_weight'];
             $header->total_price = $data['total_price'];

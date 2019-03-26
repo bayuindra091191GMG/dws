@@ -161,19 +161,17 @@ class TransactionHeaderController extends Controller
             $title = "Digital Waste Solution";
             $body = "User Membuat Transaksi On Demand";
             $data = array(
-                "data" => [
-                    "type_id" => "3",
-                    "transaction_id" => $header->id,
-                    "transaction_date" => Carbon::parse($header->created_at)->format('j-F-Y H:i:s'),
-                    "transaction_no" => $header->transaction_no,
-                    "name" => $user->first_name." ".$user->last_name,
+                "type_id" => "3",
+                "transaction_id" => $header->id,
+                "transaction_date" => Carbon::parse($header->created_at)->format('j-F-Y H:i:s'),
+                "transaction_no" => $header->transaction_no,
+                "name" => $user->first_name." ".$user->last_name,
 //                    "waste_category_name" => $body,
-                    "total_weight" => $header->total_weight,
-                    "total_price" => $header->total_price,
+                "total_weight" => $header->total_weight,
+                "total_price" => $header->total_price,
 //                    "waste_bank" => $wasteBankId,
 //                    "waste_collector" => "-",
 //                    "status" => $header->status->description,
-                ]
             );
             $isSuccess = FCMNotification::SendNotification($wasteBankPIC, 'browser', $title, $body, $data);
 
