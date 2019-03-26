@@ -396,6 +396,35 @@ class WasteCollectorController extends Controller
 
     /**
      * On Demand.
+     * Function to change driver on Demand status.
+     *
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+    */
+    public function changeOnDemandStatus(Request $request)
+    {
+        try{
+            $data = $request->json()->all();
+
+            $wasteCollector = auth('waste_collector')->user();
+            $wasteCollectorDB = WasteCollector::find($wasteCollector->id);
+
+            $wasteCollectorDB->on_demand_status = $data['on_demand_status'];
+            $wasteCollectorDB->save();
+
+            return Response::json([
+                'message' => "Success Changing On Demand Status!",
+            ], 200);
+        }
+        catch(\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    /**
+     * On Demand.
      * Function for WasteCollector to edit on Demand Transaction.
      *
      * @param Request $request

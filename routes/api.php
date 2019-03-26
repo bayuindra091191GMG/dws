@@ -85,6 +85,7 @@ Route::middleware('auth:waste_collector')->prefix('waste-collector')->group(func
     //ON Demand
     Route::get('/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
     Route::post('/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
+    Route::post('/on-demand/change-status', 'Api\WasteCollectorController@changeOnDemandStatus');
 });
 
 

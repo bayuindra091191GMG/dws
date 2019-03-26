@@ -33,39 +33,39 @@
                                 <th class="text-center">Tanggal</th>
                                 <th class="text-center">No Transaksi</th>
                                 <th class="text-center">Nama User</th>
-                                <th class="text-center">Kategori</th>
+                                {{--<th class="text-center">Kategori</th>--}}
                                 <th class="text-center">Total Berat (gram)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Waste Bank</th>
-                                <th class="text-center">Waste Collector</th>
-                                <th class="text-center">Status</th>
+                                {{--<th class="text-center">Waste Bank</th>--}}
+                                {{--<th class="text-center">Waste Collector</th>--}}
+                                {{--<th class="text-center">Status</th>--}}
                                 <th class="text-center"></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($transactions as $transaction)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($transaction->date)->format('j-F-Y H:i:s')}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('j-F-Y H:i:s')}}</td>
                                     <td>{{ $transaction->transaction_no}}</td>
                                     <td>{{ $transaction->user->first_name}} {{ $transaction->user->last_name}}</td>
-                                    <td>{{ $transaction->waste_category->name}}</td>
+                                    {{--<td>{{ $transaction->waste_category->name}}</td>--}}
                                     <td>{{ $transaction->total_weight}}</td>
                                     <td>{{ $transaction->total_price}}</td>
-                                    <td>
-                                        @php($wasteBank = "-")
-                                        @if(!empty($transaction->waste_bank_id))
-                                            @php($wasteBank = $transaction->waste_bank->name)
-                                        @endif
-                                        {{ $wasteBank}}
-                                    </td>
-                                    <td>
-                                        @php($wasteCollector = "-")
-                                        @if(!empty($transaction->waste_collector_id))
-                                            @php($wasteCollector = $transaction->waste_collector->first_name. ' '. $transaction->waste_collector->last_name)
-                                        @endif
-                                        {{ $wasteCollector}}
-                                    </td>
-                                    <td>{{ $transaction->status->description}}</td>
+                                    {{--<td>--}}
+                                        {{--@php($wasteBank = "-")--}}
+                                        {{--@if(!empty($transaction->waste_bank_id))--}}
+                                            {{--@php($wasteBank = $transaction->waste_bank->name)--}}
+                                        {{--@endif--}}
+                                        {{--{{ $wasteBank}}--}}
+                                    {{--</td>--}}
+                                    {{--<td>--}}
+                                        {{--@php($wasteCollector = "-")--}}
+                                        {{--@if(!empty($transaction->waste_collector_id))--}}
+                                            {{--@php($wasteCollector = $transaction->waste_collector->first_name. ' '. $transaction->waste_collector->last_name)--}}
+                                        {{--@endif--}}
+                                        {{--{{ $wasteCollector}}--}}
+                                    {{--</td>--}}
+                                    {{--<td>{{ $transaction->status->description}}</td>--}}
                                     <td>
                                         <a class='btn btn-xs btn-info' href='{{route('admin.transactions.on_demand.show', ['id' => $transaction->id])}}' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>
                                     </td>
@@ -139,30 +139,32 @@
 
         messaging.onMessage(function(payload) {
             var typeId = payload.data.type_id;
-            if(typeId === '3'){
-                $("#datatable-ondemand tbody").prepend(
-                    "<tr>" +
-                    "<td>" + payload.data.transaction_date +"</td>" +
-                    "<td>" + payload.data.transaction_no + "</td>" +
-                    "<td>" + payload.data.name + "</td>" +
-                    "<td>" + payload.data.waste_category_name + "</td>" +
-                    "<td>" + payload.data.total_weight + "</td>" +
-                    "<td>" + payload.data.total_price + "</td>" +
-                    "<td>" + payload.data.waste_bank + "</td>" +
-                    "<td>" + payload.data.waste_collector + "</td>" +
-                    "<td>" + payload.data.status + "</td>" +
-                    "<td>" +
-                    "<a class='btn btn-xs btn-info' href='/admin/transactions/on_demand/show/"+ payload.data.transaction_id + "' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>" +
-                    "</td>" +
-                    "</tr>"
-                );
-            }
-            // console.log("Message received. ", payload);
+            //alert(payload);
+            // if(typeId === '3'){
+            // }
+            $("#datatable-ondemand tbody").prepend(
+                "<tr>" +
+                "<td>" + payload.data.transaction_date +"</td>" +
+                "<td>" + payload.data.transaction_no + "</td>" +
+                "<td>" + payload.data.name + "</td>" +
+                // "<td>" + payload.data.waste_category_name + "</td>" +
+                "<td>" + payload.data.total_weight + "</td>" +
+                "<td>" + payload.data.total_price + "</td>" +
+                // "<td>" + payload.data.waste_bank + "</td>" +
+                // "<td>" + payload.data.waste_collector + "</td>" +
+                // "<td>" + payload.data.status + "</td>" +
+                "<td>" +
+                "<a class='btn btn-xs btn-info' href='/admin/transactions/on_demand/show/"+ payload.data.transaction_id + "' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>" +
+                "</td>" +
+                "</tr>"
+            );
+            console.log("Message received. ", payload.data);
         });
     </script>
     <script>
 
         $('#datatable-ondemand').DataTable( {
+            order : [[0, 'desc']],
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
             }

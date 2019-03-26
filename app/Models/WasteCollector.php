@@ -27,6 +27,7 @@ use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
  * @property int $status_id
  * @property int $created_by
  * @property int $company_id
+ * @property int $on_demand_status
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
@@ -52,6 +53,7 @@ class WasteCollector extends Authenticatable
 	protected $casts = [
 		'point' => 'float',
 		'status_id' => 'int',
+		'on_demand_status' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -71,6 +73,7 @@ class WasteCollector extends Authenticatable
 		'point',
 		'img_path',
 		'status_id',
+		'on_demand_status',
 		'created_by',
 		'updated_by'
 	];

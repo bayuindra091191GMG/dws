@@ -30,7 +30,8 @@ class TransactionHeaderOnDemandController extends Controller
     }
     public function list()
     {
-        $transactions = TransactionHeader::where('transaction_type_id', 3)->get();
+        $transactions = TransactionHeader::where('transaction_type_id', 3)->orderByDesc('created_at')->get();
+
         return view('admin.transaction.on_demand.list', compact('transactions'));
     }
 
