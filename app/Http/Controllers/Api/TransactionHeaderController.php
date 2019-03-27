@@ -155,6 +155,7 @@ class TransactionHeaderController extends Controller
                     ]);
                 }
             }
+            Utilities::UpdateTransactionNumber($prepend);
 
             //Send notification to
             //Driver, Admin Wastebank
@@ -268,7 +269,7 @@ class TransactionHeaderController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $header = TransactionHeader::find($data['transaction_id']);
+        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
         $header->status_id = 8;
         $header->save();
 
@@ -277,15 +278,14 @@ class TransactionHeaderController extends Controller
         $title = "Digital Waste Solution";
         $body = "User Mengkonfirmasi Transaksi On Demand";
         $data = array(
-            "data" => [
-                "type_id" => "3",
-                "message" => $body,
-            ]
+            "type_id" => "3",
+            "message" => $body,
         );
         //Push Notification to Collector App.
         FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
         //Push Notification to Admin.
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+        $wastebankDB = $header->waste_bank;
+        FCMNotification::SendNotification($wastebankDB->pic_id, 'browser', $title, $body, $data);
 
         return Response::json([
             'message' => "Success Confirming Transaction!",

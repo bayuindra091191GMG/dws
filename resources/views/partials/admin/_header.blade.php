@@ -165,7 +165,14 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{route('admin.logout')}}"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                        <form id="logout-form" method="POST" action="{{route('admin.keluar')}}">
+                            {{csrf_field()}}
+                        </form>
+                        {{--{{ Form::open(['route'=>['admin.logout'],'method' => 'post','id' => 'logout-form']) }}--}}
+                        {{--{{ Form::close() }}--}}
+                        <a class="dropdown-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout
+                        </a>
                         <div class="dropdown-divider"></div>
                         <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
                     </div>

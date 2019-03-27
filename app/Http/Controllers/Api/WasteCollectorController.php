@@ -327,6 +327,13 @@ class WasteCollectorController extends Controller
             }
         }
 
+        //change record status_id of waste_collector_user_status
+        $wasteCollectorUserDB = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->where('user_id', $user->id)->first();
+        $wasteCollectorUserStatusDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUserDB->id)->first();
+        $wasteCollectorUserStatusDB->status_id = 5;
+        $wasteCollectorUserStatusDB->save();
+
+
         //Send notification to
         //Driver, Admin Wastebank
         $title = "Digital Waste Solution";
@@ -346,7 +353,7 @@ class WasteCollectorController extends Controller
                 "status" => $header->status->description,
             ]
         );
-        $isSuccess = FCMNotification::SendNotification($user->id, 'collector', $title, $body, $data);
+        $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
         //Push Notification to Admin.
 //      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
@@ -384,7 +391,7 @@ class WasteCollectorController extends Controller
             $wasteCollector = auth('waste_collector')->user();
             $transactions = TransactionHeader::with(['status', 'user'])->where('waste_collector_id', $wasteCollector->id)
                 ->where('transaction_type_id', 3)
-                ->where('status_id', 6)
+                ->where('status_id','!=', 9)
                 ->with('transaction_details')
                 ->get();
 
@@ -473,19 +480,17 @@ class WasteCollectorController extends Controller
             $title = "Digital Waste Solution";
             $body = "Driver Mengkonfirmasi Transaksi On Demand!";
             $data = array(
-                "data" => [
-                    "type_id" => "3",
-                    "transaction_id" => $header->id,
-                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
-                    "transaction_no" => $header->transaction_no,
-                    "name" => $user->first_name . " " . $user->last_name,
-                    "waste_category_name" => $body,
-                    "total_weight" => $header->total_weight,
-                    "total_price" => $header->total_price,
-                    "waste_bank" => "-",
-                    "waste_collector" => "-",
-                    "status" => $header->status->description,
-                ]
+                "type_id" => "3",
+                "transaction_id" => $header->id,
+                "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                "transaction_no" => $header->transaction_no,
+                "name" => $user->first_name . " " . $user->last_name,
+                "waste_category_name" => $body,
+                "total_weight" => $header->total_weight,
+                "total_price" => $header->total_price,
+                "waste_bank" => "-",
+                "waste_collector" => "-",
+                "status" => $header->status->description,
             );
             $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
             //Push Notification to Admin.
@@ -505,19 +510,17 @@ class WasteCollectorController extends Controller
             $title = "Digital Waste Solution";
             $body = "Driver Mengkonfirmasi Transaksi On Demand!";
             $data = array(
-                "data" => [
-                    "type_id" => "2",
-                    "transaction_id" => $header->id,
-                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
-                    "transaction_no" => $header->transaction_no,
-                    "name" => $user->first_name . " " . $user->last_name,
-                    "waste_category_name" => $body,
-                    "total_weight" => $header->total_weight,
-                    "total_price" => $header->total_price,
-                    "waste_bank" => "-",
-                    "waste_collector" => "-",
-                    "status" => $header->status->description,
-                ]
+                "type_id" => "3",
+                "transaction_id" => $header->id,
+                "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                "transaction_no" => $header->transaction_no,
+                "name" => $user->first_name . " " . $user->last_name,
+                "waste_category_name" => $body,
+                "total_weight" => $header->total_weight,
+                "total_price" => $header->total_price,
+                "waste_bank" => "-",
+                "waste_collector" => "-",
+                "status" => $header->status->description,
             );
             $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
             //Push Notification to Admin.

@@ -15,6 +15,7 @@ use App\Models\PointHistory;
 use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
+use App\Notifications\FCMNotification;
 use App\Transformer\TransactionTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -60,7 +61,20 @@ class TransactionHeaderOnDemandController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function assignWasteCollector(Request $request, $id){
+
         $collectorId = $request->input('waste_collector_id');
+
+        //Send notification to
+        //Driver, Admin Wastebank
+        $transactionDB = TransactionHeader::where('id', $id)->with('status', 'user', 'transaction_details')->first();
+        $title = "Digital Waste Solution";
+        $body = "Admin assign Driver Routine Pickup";
+        $data = array(
+            "type_id" => "31",
+            "model" => $transactionDB,
+        );
+        $isSuccess = FCMNotification::SendNotification($collectorId, 'collector', $title, $body, $data);
+
 
         $transaction = TransactionHeader::find($id);
         $transaction->waste_collector_id = $collectorId;
@@ -69,6 +83,8 @@ class TransactionHeaderOnDemandController extends Controller
         $collector = WasteCollector::find($collectorId);
 
         Session::flash('message', 'Berhasil assign Waste Collector '. $collector->first_name. ' '. $collector->last_name.  ' ke transaksi '. $transaction->transaction_no);
+
+
 
         return redirect()->route('admin.transactions.on_demand.show', ['id' => $id]);
     }
