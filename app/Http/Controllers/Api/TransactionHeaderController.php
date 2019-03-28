@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,8 @@ class TransactionHeaderController extends Controller
             );
 
             $data = $request->json()->all();
+
+            Log::info("TransactionHeaderController - createTransaction: ". $request->getContent());
 
             $validator = Validator::make($data, $rules);
 
@@ -181,6 +184,7 @@ class TransactionHeaderController extends Controller
             ], 200);
         }
         catch (\Exception $ex){
+            Log::error("TransactionHeaderController - createTransaction Error: ". $ex);
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
