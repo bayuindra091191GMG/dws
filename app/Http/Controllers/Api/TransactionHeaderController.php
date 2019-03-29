@@ -165,7 +165,7 @@ class TransactionHeaderController extends Controller
             $title = "Digital Waste Solution";
             $body = "User Membuat Transaksi On Demand";
             $data = array(
-                "type_id" => "3",
+                "type_id" => "3-1",
                 "transaction_id" => $header->id,
                 "transaction_date" => Carbon::parse($header->created_at)->format('j-F-Y H:i:s'),
                 "transaction_no" => $header->transaction_no,
@@ -279,11 +279,13 @@ class TransactionHeaderController extends Controller
 
         //Send notification to
         //Driver, Admin Wastebank
+        $transactionDB = TransactionHeader::where('transaction_no', $data['transaction_no'])->with('status', 'user', 'transaction_details')->first();
         $title = "Digital Waste Solution";
         $body = "User Mengkonfirmasi Transaksi On Demand";
         $data = array(
             "type_id" => "3",
             "message" => $body,
+            'model' => $transactionDB
         );
         //Push Notification to Collector App.
         FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
@@ -335,6 +337,48 @@ class TransactionHeaderController extends Controller
 
         return Response::json([
             'message' => "Success Confirming Transaction!",
+        ], 200);
+    }
+
+    /**
+     * Used for on demand Transaction when User Cancelled the Transaction.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancelTransactionByUserOnDemand(Request $request)
+    {
+        $rules = array(
+            'transaction_no'    => 'required'
+        );
+
+        $data = $request->json()->all();
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
+        $header->status_id = 23;
+        $header->save();
+
+        //Send notification to
+        //Driver
+        //send notification
+        $transactionDB = TransactionHeader::where('transaction_no', $data['transaction_no'])->with('status', 'user', 'transaction_details')->first();
+        $userName = $header->user->first_name." ".$header->user->last_name;
+        $title = "Digital Waste Solution";
+        $body = "User Membatalkan Transaksi On Demand";
+        $data = array(
+            'type_id' => '3',
+            'model' => $transactionDB
+        );
+        $isSuccess = FCMNotification::SendNotification($transactionDB->waste_collector_id, 'collector', $title, $body, $data);
+
+        return Response::json([
+            'message' => "Success Cancelling Transaction!",
         ], 200);
     }
 

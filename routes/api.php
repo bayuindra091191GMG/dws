@@ -54,6 +54,7 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
 //    Route::post('/waste-collector/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
     Route::post('/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
+    Route::post('/on-demand/reject', 'Api\TransactionHeaderController@cancelTransactionByUserOnDemand');
 
     //Pickup Routine
     Route::post('/routine/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserRoutinePickup');

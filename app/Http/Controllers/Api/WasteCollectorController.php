@@ -392,6 +392,7 @@ class WasteCollectorController extends Controller
             $transactions = TransactionHeader::with(['status', 'user'])->where('waste_collector_id', $wasteCollector->id)
                 ->where('transaction_type_id', 3)
                 ->where('status_id','!=', 9)
+                ->orderBy('status_id', 'Asc')
                 ->with('transaction_details')
                 ->get();
 

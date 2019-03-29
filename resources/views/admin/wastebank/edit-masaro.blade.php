@@ -200,27 +200,27 @@
                                                                             </tr>
                                                                             @php($ct++)
                                                                         @endforeach
-                                                                        <tr id='sch0'>
-                                                                            <td class='field-item'>
-                                                                                <input type='hidden' name='schDetailId[]' value="-1">
-                                                                                <select class="form-control" id="schDay0" name="schDays[]">
-                                                                                    <option value="1">Senin</option>
-                                                                                    <option value="2">Selasa</option>
-                                                                                    <option value="3">Rabu</option>
-                                                                                    <option value="4">Kamis</option>
-                                                                                    <option value="5">Jumat</option>
-                                                                                    <option value="6">Sabtu</option>
-                                                                                    <option value="7">Minggu</option>
-                                                                                </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <input id="schTime0" type="text" class="form-control time-inputmask"
-                                                                                       name="schTimes[]"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select id="select0" name="masaroTypes[]" class='form-control'></select>
-                                                                            </td>
-                                                                        </tr>
+                                                                        {{--<tr id='sch0'>--}}
+                                                                            {{--<td class='field-item'>--}}
+                                                                                {{--<input type='hidden' name='schDetailId[]' value="-1">--}}
+                                                                                {{--<select class="form-control" id="schDay0" name="schDays[]">--}}
+                                                                                    {{--<option value="1">Senin</option>--}}
+                                                                                    {{--<option value="2">Selasa</option>--}}
+                                                                                    {{--<option value="3">Rabu</option>--}}
+                                                                                    {{--<option value="4">Kamis</option>--}}
+                                                                                    {{--<option value="5">Jumat</option>--}}
+                                                                                    {{--<option value="6">Sabtu</option>--}}
+                                                                                    {{--<option value="7">Minggu</option>--}}
+                                                                                {{--</select>--}}
+                                                                            {{--</td>--}}
+                                                                            {{--<td>--}}
+                                                                                {{--<input id="schTime0" type="text" class="form-control time-inputmask"--}}
+                                                                                       {{--name="schTimes[]"/>--}}
+                                                                            {{--</td>--}}
+                                                                            {{--<td>--}}
+                                                                                {{--<select id="select0" name="masaroTypes[]" class='form-control'></select>--}}
+                                                                            {{--</td>--}}
+                                                                        {{--</tr>--}}
                                                                         <tr id="sch{{$ct}}"></tr>
                                                                         </tbody>
                                                                     </table>

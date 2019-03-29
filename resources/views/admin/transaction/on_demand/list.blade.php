@@ -139,26 +139,26 @@
 
         messaging.onMessage(function(payload) {
             var typeId = payload.data.type_id;
-            alert(payload.data.type_id);
-            // if(typeId === '3'){
-            // }
-            $("#datatable-ondemand tbody").prepend(
-                "<tr>" +
-                "<td>" + payload.data.transaction_date +"</td>" +
-                "<td>" + payload.data.transaction_no + "</td>" +
-                "<td>" + payload.data.name + "</td>" +
-                // "<td>" + payload.data.waste_category_name + "</td>" +
-                "<td>" + payload.data.total_weight + "</td>" +
-                "<td>" + payload.data.total_price + "</td>" +
-                // "<td>" + payload.data.waste_bank + "</td>" +
-                // "<td>" + payload.data.waste_collector + "</td>" +
-                // "<td>" + payload.data.status + "</td>" +
-                "<td>" +
-                "<a class='btn btn-xs btn-info' href='/admin/transactions/on_demand/show/"+ payload.data.transaction_id + "' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>" +
-                "</td>" +
-                "</tr>"
-            );
-            console.log("Message received. ", payload.data);
+            //alert(payload.data.type_id);
+            if(typeId === '3-1'){
+                $("#datatable-ondemand tbody").prepend(
+                    "<tr>" +
+                    "<td>" + payload.data.transaction_date +"</td>" +
+                    "<td>" + payload.data.transaction_no + "</td>" +
+                    "<td>" + payload.data.name + "</td>" +
+                    // "<td>" + payload.data.waste_category_name + "</td>" +
+                    "<td>" + payload.data.total_weight + "</td>" +
+                    "<td>" + payload.data.total_price + "</td>" +
+                    // "<td>" + payload.data.waste_bank + "</td>" +
+                    // "<td>" + payload.data.waste_collector + "</td>" +
+                    // "<td>" + payload.data.status + "</td>" +
+                    "<td>" +
+                    "<a class='btn btn-xs btn-info' href='/admin/transactions/on_demand/show/"+ payload.data.transaction_id + "' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>" +
+                    "</td>" +
+                    "</tr>"
+                );
+            }
+            // console.log("Message received. ", payload.data);
         });
     </script>
     <script>
