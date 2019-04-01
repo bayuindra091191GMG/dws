@@ -26,6 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $latitude
  * @property string $longitude
  * @property \Carbon\Carbon $created_at
+ * @property string $notes
  * 
  * @property \App\Models\User $user
  *
@@ -58,7 +59,8 @@ class Address extends Eloquent
 		'name',
 		'latitude',
 		'longitude',
-        'created_at'
+        'created_at',
+        'notes'
 	];
 
 	public function city()

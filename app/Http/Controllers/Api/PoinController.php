@@ -10,6 +10,7 @@ use App\Models\UserVoucher;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class PoinController extends Controller
@@ -62,6 +63,23 @@ class PoinController extends Controller
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
             ], 500);
+        }
+    }
+
+    // Get waste collector total point
+    public function getWasteCollectorPoint(){
+        try {
+            $wasteCollector = auth('waste_collector')->user();
+
+            $response = collect([
+                'point_double' => $wasteCollector->point,
+                'point_str' => number_format($wasteCollector->point, 0, ",", ".")
+            ]);
+
+            return $response;
+        } catch (\Exception $ex) {
+            Log::error("PoinController - showWasteCollectorPoint error: ". $ex);
+            return Response::json("Sorry something went wrong!", 500);
         }
     }
 }

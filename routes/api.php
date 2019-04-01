@@ -87,6 +87,13 @@ Route::middleware('auth:waste_collector')->prefix('waste-collector')->group(func
     Route::get('/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
     Route::post('/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
     Route::post('/on-demand/change-status', 'Api\WasteCollectorController@changeOnDemandStatus');
+
+
+    //Routine
+    Route::post('/routine/list', 'Api\TransactionHeaderRoutineController@getTransactionRoutineForWasteCollector');
+
+    //Point
+    Route::get('/point/get', 'Api\PoinController@getWasteCollectorPoint');
 });
 
 
