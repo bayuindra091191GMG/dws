@@ -9,6 +9,7 @@
 namespace App\Http\ViewComposers;
 
 use App\Models\PermissionMenu;
+use App\Models\PermissionMenuSub;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 

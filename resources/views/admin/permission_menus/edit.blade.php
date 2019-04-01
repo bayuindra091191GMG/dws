@@ -1,13 +1,10 @@
-.@extends('admin.layouts.admin')
-
-@section('title', 'Tambah/Ubah Otorisasi Menu' )
+@extends('layouts.admin')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            @include('partials._success')
-            @include('partials._error')
-            {{ Form::open(['route'=>['admin.permission_menus.update'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            @include('partials.admin._messages')
+            {{ Form::open(['route'=>['admin.permission-menus.update'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -89,7 +86,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-warning" href="{{ route('admin.permission_menus') }}"> Batal</a>
+                    <a class="btn btn-warning" href="{{ route('admin.permission-menus.index') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -98,15 +95,7 @@
     </div>
 @endsection
 
-@section('styles')
-    @parent
-    {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
-@endsection
-
 @section('scripts')
-    @parent
-    {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
-
     <script>
         $("#selectAll").click(function(){
             $('input:checkbox').not(this).prop('checked', this.checked).change();

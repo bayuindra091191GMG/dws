@@ -44,12 +44,30 @@ Route::prefix('admin')->group(function(){
 
     // Permission Menus
     Route::get('/permission-menus', 'Admin\PermissionMenuController@index')->name('admin.permission-menus.index');
-    Route::get('permission_menus/detail/{permission_menu}', 'Admin\PermissionMenuController@show')->name('admin.permission-menus.show');
+    Route::get('permission-menus/detail/{permission_menu}', 'Admin\PermissionMenuController@show')->name('admin.permission-menus.show');
     Route::get('/permission-menus/create', 'Admin\PermissionMenuController@create')->name('admin.permission-menus.create');
     Route::post('/permission-menus/store', 'Admin\PermissionMenuController@store')->name('admin.permission-menus.store');
-    Route::get('/permission-menus/edit/{item}', 'Admin\PermissionMenuController@edit')->name('admin.permission-menus.edit');
+    Route::get('/permission-menus/edit/{permission_menu}', 'Admin\PermissionMenuController@edit')->name('admin.permission-menus.edit');
     Route::post('/permission-menus/update', 'Admin\PermissionMenuController@update')->name('admin.permission-menus.update');
     Route::post('/permission-menus/delete', 'Admin\PermissionMenuController@destroy')->name('admin.permission-menus.destroy');
+
+    // Menus
+    Route::get('/menus', 'Admin\MenuController@index')->name('admin.menus.index');
+    Route::get('menus/detail/{menu}', 'Admin\MenuController@show')->name('admin.menus.show');
+    Route::get('/menus/create', 'Admin\MenuController@create')->name('admin.menus.create');
+    Route::post('/menus/store', 'Admin\MenuController@store')->name('admin.menus.store');
+    Route::get('/menus/edit/{menu}', 'Admin\MenuController@edit')->name('admin.menus.edit');
+    Route::post('/menus/update', 'Admin\MenuController@update')->name('admin.menus.update');
+    Route::post('/menus/delete', 'Admin\MenuController@destroy')->name('admin.menus.destroy');
+
+    // Sub Menus
+    Route::get('/menu-subs', 'Admin\SubMenuController@index')->name('admin.menu-subs.index');
+    Route::get('menu-subs/detail/{menu}', 'Admin\SubMenuController@show')->name('admin.menu-subs.show');
+    Route::get('/menu-subs/create', 'Admin\SubMenuController@create')->name('admin.menu-subs.create');
+    Route::post('/menu-subs/store', 'Admin\SubMenuController@store')->name('admin.menu-subs.store');
+    Route::get('/menu-subs/edit/{menu}', 'Admin\SubMenuController@edit')->name('admin.menu-subs.edit');
+    Route::post('/menu-subs/update', 'Admin\SubMenuController@update')->name('admin.menu-subs.update');
+    Route::post('/menu-subs/delete', 'Admin\SubMenuController@destroy')->name('admin.menu-subs.destroy');
 
     // Admin User
     Route::get('/admin-users', 'Admin\AdminUserController@index')->name('admin.admin-users.index');
@@ -222,6 +240,8 @@ Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
 Route::view('/send-email', 'auth.send-email');
 
 // Datatables
+Route::get('/datatables-menus', 'Admin\MenuController@getIndex')->name('datatables.menus');
+Route::get('/datatables-menu-subs', 'Admin\SubMenuController@getIndex')->name('datatables.menu-subs');
 Route::get('/datatables-admin-users', 'Admin\AdminUserController@getIndex')->name('datatables.admin_users');
 Route::get('/datatables-admin-products', 'Admin\ProductController@getIndex')->name('datatables.admin_products');
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');

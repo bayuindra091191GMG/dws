@@ -18,7 +18,7 @@ class PermissionMenuTransformer extends TransformerAbstract
         $permissionMenuRoute = route('admin.permission-menus.show', ['permission_menu' => $role->id]);
         $roleName =  "<a style='text-decoration: underline;' href='" . $permissionMenuRoute. "' target='_blank'>". $role->name . "</a>";
         $action =
-            "<a class='btn btn-xs btn-info' href='permission_menus/". $role->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
+            "<a class='btn btn-xs btn-info' href='permission-menus/edit/". $role->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
 
         $permission = PermissionMenu::where('role_id', $role->id)->count();
 
