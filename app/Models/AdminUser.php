@@ -7,8 +7,9 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 /**
  * Class AdminUser
  * 
@@ -50,7 +51,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class AdminUser extends Authenticatable
 {
-    protected $guard = 'admin';
+    use Notifiable, HasMultiAuthApiTokens;
 
 	protected $casts = [
 		'is_super_admin' => 'int',
