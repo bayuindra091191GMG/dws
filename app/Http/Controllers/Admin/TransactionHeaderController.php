@@ -189,6 +189,7 @@ class TransactionHeaderController extends Controller
             'total_weight'          => $totalWeight,
             'total_price'           => $totalPrice,
             'waste_category_id'     => $categoryType,
+            'waste_bank_id'         => $user->waste_bank_id,
             'status_id'             => 13,
             'notes'                 => $request->input('notes'),
             'created_at'            => $now->toDateTimeString(),
@@ -424,7 +425,6 @@ class TransactionHeaderController extends Controller
                     $trxDetail->save();
                 }
                 else{
-                    error_log("check!");
                     $trxDetail = TransactionDetail::create([
                         'transaction_header_id'     => $trxHeader->id,
                         'dws_category_id'           => $category,

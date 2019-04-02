@@ -47,16 +47,19 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     Route::post('/get-transaction-data', 'Api\TransactionHeaderController@getTransactionData');
 
     //Antar Sendiri
+    Route::post('/antar-sendiri/transactions', 'Api\TransactionHeaderController@getTransactionAntarSendiriForCustomer');
     Route::post('/antar-sendiri/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserAntarSendiri');
     Route::post('/antar-sendiri/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserAntarSendiri');
 
     //On Demand
+    Route::post('/on-demand/transactions', 'Api\TransactionHeaderOnDemandController@getTransactionOnDemandForCustomer');
     Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
 //    Route::post('/waste-collector/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
     Route::post('/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
     Route::post('/on-demand/reject', 'Api\TransactionHeaderController@cancelTransactionByUserOnDemand');
 
-    //Pickup Routine
+    //Routine
+    Route::post('/routine/transactions', 'Api\TransactionHeaderRoutineController@getTransactionRoutineForCustomer');
     Route::post('/routine/confirm', 'Api\TransactionHeaderController@confirmTransactionByUserRoutinePickup');
     Route::post('/routine/cancel', 'Api\TransactionHeaderController@cancelTransactionByUserRoutinePickup');
 
@@ -69,6 +72,7 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     Route::get('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
 
     //Point
+    Route::get('/point/get', 'Api\PoinController@getCustomerPoint');
     Route::post('/redeem-poin', 'Api\PoinController@redeem');
 });
 
@@ -83,14 +87,15 @@ Route::middleware('auth:waste_collector')->prefix('waste-collector')->group(func
     Route::get('/transactions', 'Api\WasteCollectorController@getAllTransactions');
     Route::get('/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 
-    //ON Demand
+    //On Demand
+    Route::post('/on-demand/transactions', 'Api\TransactionHeaderOnDemandController@getTransactionOnDemandForWasteCollector');
     Route::get('/on-demand/list', 'Api\WasteCollectorController@getCurrentOnDemandTransaction');
     Route::post('/on-demand/confirm', 'Api\WasteCollectorController@confirmOnDemandTransaction');
     Route::post('/on-demand/change-status', 'Api\WasteCollectorController@changeOnDemandStatus');
 
 
     //Routine
-    Route::post('/routine/list', 'Api\TransactionHeaderRoutineController@getTransactionRoutineForWasteCollector');
+    Route::post('/routine/transactions', 'Api\TransactionHeaderRoutineController@getTransactionRoutineForWasteCollector');
 
     //Point
     Route::get('/point/get', 'Api\PoinController@getWasteCollectorPoint');
@@ -103,7 +108,10 @@ Route::middleware('auth:admin_wastebank')->group(function(){
     Route::post('/admin/confirm-transaction', 'Api\AdminController@confirmTransactionAntarSendiri');
     Route::get('/admin/transactions/get', 'Api\AdminController@getTransactionList');
     Route::post('/admin/set-transaction', 'Api\AdminController@setTransactionToUser');
+    Route::get('/admin/antar-sendiri/pending-transactions', 'Api\TransactionHeaderController@getTransactionAntarSendiriForAdmin');
 });
+
+
 
 //Forgot Password
 Route::post('/checkEmail', 'Api\ForgotPasswordController@checkEmail');

@@ -9,11 +9,14 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteBankSchedule;
 use App\Models\WasteCollector;
+use App\Models\WasteCollectorPickupHistory;
 use App\Models\WasteCollectorUser;
 use App\Models\WasteCollectorUserStatus;
 use App\Models\WasteCollectorWasteBank;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +27,7 @@ class WasteCollectorController extends Controller
     /**
      * Function to get WasteCollector Details.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show()
     {
@@ -33,7 +36,7 @@ class WasteCollectorController extends Controller
             $wasteCollector = WasteCollector::where('phone', $wasteCollectorId->phone)->first();
 
             return $wasteCollector;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return Response::json(
                 $ex, 500);
         }
@@ -43,7 +46,7 @@ class WasteCollectorController extends Controller
      * Function to save WasteCollector Device ID.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function saveCollectorToken(Request $request)
     {
@@ -67,7 +70,7 @@ class WasteCollectorController extends Controller
             return Response::json([
                 'message' => "Success Save Collector Token!",
             ], 200);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
@@ -78,7 +81,7 @@ class WasteCollectorController extends Controller
     /**
      * Function to get the User List for Routine Pickup.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getUserListRoutinePickUp()
     {
@@ -194,7 +197,7 @@ class WasteCollectorController extends Controller
                 'total_household_done' => $totalHouseholdDone
             ], 200);
 
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return Response::json([
                 'message' => $ex,
             ], 500);
@@ -222,8 +225,8 @@ class WasteCollectorController extends Controller
      * Function to Change status of routine pickup Waste Bank Schedule.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function saveRoutinePickUpStatus(Request $request)
     {
@@ -250,6 +253,13 @@ class WasteCollectorController extends Controller
             $wasteCollectorUserDB->save();
         }
 
+        // Create new waste collector pickup history
+        $pickupHistory = WasteCollectorPickupHistory::create([
+            'waste_collector_user_id' => $data['routine_pickup_id'],
+            'status_id' => $data['status_id'],
+            'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+        ]);
+
         return Response::json([
             'message' => "Success Change Status!",
         ], 200);
@@ -259,8 +269,8 @@ class WasteCollectorController extends Controller
      * Create a new Transaction when on Routine Pickup.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function createTransactionRoutinePickup(Request $request)
     {
@@ -294,10 +304,13 @@ class WasteCollectorController extends Controller
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
         $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
-        //Awaiting Bayu Create Transaction Number
+        // Convert total weight to kilogram
+        $totalWeight = floatval($data["total_weight"]) * 1000;
+
+        // Create routine transaction
         $header = TransactionHeader::create([
             'transaction_no' => $code,
-            'total_weight' => $data["total_weight"],
+            'total_weight' => $totalWeight,
             'total_price' => $data["total_price"],
             'status_id' => 15,
             'user_id' => $user->id,
@@ -353,6 +366,15 @@ class WasteCollectorController extends Controller
                 "status" => $header->status->description,
             ]
         );
+
+        // Create new waste collector pickup history
+        $pickupHistory = WasteCollectorPickupHistory::create([
+            'waste_collector_user_id' => $wasteCollector->id,
+            'transaction_header_id' => $header->id,
+            'status_id' => 15,
+            'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+        ]);
+
         $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
         //Push Notification to Admin.
 //      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
@@ -365,7 +387,7 @@ class WasteCollectorController extends Controller
     /**
      * Function to show all WasteCollector Transactions Related.
      *
-     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|JsonResponse
      */
     public function getAllTransactions()
     {
@@ -374,7 +396,7 @@ class WasteCollectorController extends Controller
             $transactions = TransactionHeader::with('status')->where('waste_collector_id', $wasteCollector->id)->get();
 
             return $transactions;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return Response::json("Sorry something went wrong!", 500);
         }
     }
@@ -383,7 +405,7 @@ class WasteCollectorController extends Controller
      * On Demand.
      * Function to show all current on Demand Transactions.
      *
-     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|JsonResponse
     */
     public function getCurrentOnDemandTransaction()
     {
@@ -397,7 +419,7 @@ class WasteCollectorController extends Controller
                 ->get();
 
             return $transactions;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return Response::json("Sorry something went wrong!", 500);
         }
     }
@@ -406,7 +428,7 @@ class WasteCollectorController extends Controller
      * On Demand.
      * Function to change driver on Demand status.
      *
-     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
+     * @return TransactionHeader[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|JsonResponse
     */
     public function changeOnDemandStatus(Request $request)
     {
@@ -423,7 +445,7 @@ class WasteCollectorController extends Controller
                 'message' => "Success Changing On Demand Status!",
             ], 200);
         }
-        catch(\Exception $ex){
+        catch(Exception $ex){
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
@@ -436,7 +458,7 @@ class WasteCollectorController extends Controller
      * Function for WasteCollector to edit on Demand Transaction.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmOnDemandTransaction(Request $request)
     {

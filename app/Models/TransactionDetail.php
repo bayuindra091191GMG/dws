@@ -47,11 +47,17 @@ class TransactionDetail extends Eloquent
 
 	protected $appends = [
 	    'weight_string',
+        'weight_kg_string',
         'price_string'
     ];
 
     public function getWeightStringAttribute(){
         return number_format($this->attributes['weight'], 0, ",", ".");
+    }
+
+    public function getWeightKgStringAttribute(){
+        $kg = $this->attributes['weight'] / 1000;
+        return number_format($kg, 0, ",", ".");
     }
 
     public function getPriceStringAttribute(){

@@ -11,6 +11,7 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -23,7 +24,7 @@ class TransactionHeaderController extends Controller
      * Function to get the Transaction Data Details.
      * 
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getTransactionData(Request $request)
     {
@@ -49,7 +50,7 @@ class TransactionHeaderController extends Controller
      * Create a new Transaction when on Demand.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function createTransaction(Request $request)
@@ -122,10 +123,13 @@ class TransactionHeaderController extends Controller
             $nextNo = Utilities::GetNextTransactionNumber($prepend);
             $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
-            //Awaiting Bayu Create Transaction Number
+            // Convert total weight to kilogram
+            $totalWeight = floatval($data["total_weight"]) * 1000;
+
+            // Create on demand transaction
             $header = TransactionHeader::create([
                 'transaction_no'        => $code,
-                'total_weight'          => $data["total_weight"],
+                'total_weight'          => $totalWeight,
                 'total_price'           => $data["total_price"],
                 'date'                  => Carbon::now('Asia/Jakarta'),
                 'status_id'             => 6,
@@ -196,7 +200,7 @@ class TransactionHeaderController extends Controller
      * Used for On demand transaction when Driver Scan user QR Code then Confirm the Transaction's Details.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmTransactionByDriver(Request $request)
     {
@@ -257,7 +261,7 @@ class TransactionHeaderController extends Controller
      * Used for On Demand Transactions
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmTransactionByUser(Request $request)
     {
@@ -302,7 +306,7 @@ class TransactionHeaderController extends Controller
      * Used for Antar Sendiri Transaction when User Confirm The Transaction inputed by Admin.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmTransactionByUserAntarSendiri(Request $request)
     {
@@ -344,7 +348,7 @@ class TransactionHeaderController extends Controller
      * Used for on demand Transaction when User Cancelled the Transaction.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function cancelTransactionByUserOnDemand(Request $request)
     {
@@ -386,7 +390,7 @@ class TransactionHeaderController extends Controller
      * Used for Antar Sendiri Transaction when User Cancelled the Transaction.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function cancelTransactionByUserAntarSendiri(Request $request)
     {
@@ -429,7 +433,7 @@ class TransactionHeaderController extends Controller
      * Used for Routine pickup Transaction when user Confirm the Transaction Confirmed by User.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmTransactionByUserRoutinePickup(Request $request)
     {
@@ -474,7 +478,7 @@ class TransactionHeaderController extends Controller
      * Used for Routine Pickup Transaction when user Cancel the Transaction Confirmed By User.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function cancelTransactionByUserRoutinePickup(Request $request)
     {
@@ -523,5 +527,166 @@ class TransactionHeaderController extends Controller
             $test .= $item["masaro_category_id"] . ' ';
         }
         return $test;
+    }
+
+    // Get list of transaction antar sendiri for customer app
+    public function getTransactionAntarSendiriForCustomer(Request $request)
+    {
+        try{
+            $customerUser = auth('api')->user();
+            $skip = intval($request->input('skip'));
+
+            $transactions = TransactionHeader::with(['transaction_details'])
+                ->where('transaction_type_id', 2)
+                ->where('user_id', $customerUser->id)
+                ->orderBy('created_at', 'desc')
+                ->skip($skip)
+                ->limit(10)
+                ->get();
+
+            if($transactions->count() == 0){
+                return Response::json([
+                    'message' => "No transaction found!",
+                ], 482);
+            }
+
+            $headerResponses = collect();
+            foreach ($transactions as $header){
+                $newHeaderResponse = collect([
+                    'id'                => $header->id,
+                    'transaction_no'    => $header->transaction_no,
+                    'total_weight'      => $header->total_weight / 1000,
+                    'total_price'       => $header->total_price,
+                    'status'            => $header->status_id,
+                    'created_at'        => Carbon::parse($header->created_at)->format('d M Y')
+                ]);
+
+                // Get transaction credit point amount
+                $point = 0;
+                $customerPointHistory = DB::table('point_histories')
+                    ->select('amount')
+                    ->where('transaction_id', $header->id)
+                    ->where('user_id', $customerUser->id)
+                    ->where('type_transaction', 'credit')
+                    ->first();
+
+                if(!empty($customerPointHistory)){
+                    $point = $customerPointHistory->amount;
+                }
+
+                $newHeaderResponse->put('point', $point);
+
+                // Get waste details
+                $trxDetails = $header->transaction_details;
+
+                $detailResponses = collect();
+                foreach ($trxDetails as $detail){
+
+                    if(!empty($detail->dws_category_id) && empty($detail->masaro_category_id)){
+                        $newDetailResponse = collect([
+                            'waste_name'        => $detail->dws_waste_category_data->name,
+                            'price'             => $detail->price,
+                            'weight_double'     => $detail->weight / 1000,
+                            'weight_str'        => $detail->weight_kg_string
+                        ]);
+                        $detailResponses->push($newDetailResponse);
+                    }
+                    elseif(empty($detail->dws_category_id) && !empty($detail->masaro_category_id)){
+                        $newDetailResponse = collect([
+                            'waste_name'        => $detail->masaro_waste_category_data->name,
+                            'price'             => $detail->price,
+                            'weight_double'     => $detail->weight / 1000,
+                            'weight_str'        => $detail->weight_kg_string
+                        ]);
+                        $detailResponses->push($newDetailResponse);
+                    }
+                }
+
+                $newHeaderResponse->put('transaction_details', $detailResponses);
+
+                $headerResponses->push($newHeaderResponse);
+            }
+
+            return $headerResponses;
+        }
+        catch(\Exception $ex){
+            Log::error("TransactionHeaderController - getTransactionAntarSendiriForCustomer Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    // Get list of transaction antar sendiri for admin app
+    public function getTransactionAntarSendiriForAdmin()
+    {
+        try{
+            $adminUser = auth('admin_wastebank')->user();
+
+            $transactions = TransactionHeader::with(['transaction_details'])
+                ->where('transaction_type_id', 2)
+                ->where('waste_bank_id', $adminUser->waste_bank_id)
+                ->whereNull('user_id')
+                ->orderBy('created_at', 'desc')->get();
+
+            if($transactions->count() == 0){
+                return Response::json([
+                    'message' => "No transaction found!",
+                ], 482);
+            }
+
+            $headerResponses = collect();
+            foreach ($transactions as $header){
+                //Log::info("first name: ". $header->user->first_name);
+                $newHeaderResponse = collect([
+                    'id'                => $header->id,
+                    'transaction_no'    => $header->transaction_no,
+                    'total_weight'      => $header->total_weight / 1000,
+                    'total_price'       => $header->total_price,
+                    'status'            => $header->status_id,
+                    'created_at'        => Carbon::parse($header->created_at)->format('d M Y')
+                ]);
+
+                // Get waste details
+                $trxDetails = $header->transaction_details;
+
+                $detailResponses = collect();
+                foreach ($trxDetails as $detail){
+
+                    if(!empty($detail->dws_category_id) && empty($detail->masaro_category_id)){
+                        $newDetailResponse = collect([
+                            'waste_name'        => $detail->dws_waste_category_data->name,
+                            'price'             => $detail->price,
+                            'weight_double'     => $detail->weight / 1000,
+                            'weight_str'        => $detail->weight_kg_string
+                        ]);
+                        $detailResponses->push($newDetailResponse);
+                    }
+                    elseif(empty($detail->dws_category_id) && !empty($detail->masaro_category_id)){
+                        $newDetailResponse = collect([
+                            'waste_name'        => $detail->masaro_waste_category_data->name,
+                            'price'             => $detail->price,
+                            'weight_double'     => $detail->weight / 1000,
+                            'weight_str'        => $detail->weight_kg_string
+                        ]);
+                        $detailResponses->push($newDetailResponse);
+                    }
+                }
+
+                $newHeaderResponse->put('transaction_details', $detailResponses);
+
+                $headerResponses->push($newHeaderResponse);
+            }
+
+            return $headerResponses;
+        }
+        catch(\Exception $ex){
+            Log::error("TransactionHeaderController - getTransactionAntarSendiriForAdmin Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
     }
 }

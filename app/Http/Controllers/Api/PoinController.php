@@ -72,13 +72,30 @@ class PoinController extends Controller
             $wasteCollector = auth('waste_collector')->user();
 
             $response = collect([
-                'point_double' => $wasteCollector->point,
-                'point_str' => number_format($wasteCollector->point, 0, ",", ".")
+                'point_double'  => $wasteCollector->point,
+                'point_str'     => number_format($wasteCollector->point, 0, ",", ".")
             ]);
 
             return $response;
         } catch (\Exception $ex) {
-            Log::error("PoinController - showWasteCollectorPoint error: ". $ex);
+            Log::error("PoinController - getWasteCollectorPoint error: ". $ex);
+            return Response::json("Sorry something went wrong!", 500);
+        }
+    }
+
+    // Get customer total point
+    public function getCustomerPoint(){
+        try {
+            $customerUser = auth('api')->user();
+
+            $response = collect([
+                'point_double'  => $customerUser->point,
+                'point_str'     => number_format($customerUser->point, 0, ",", ".")
+            ]);
+
+            return $response;
+        } catch (\Exception $ex) {
+            Log::error("PoinController - getCustomerPoint error: ". $ex);
             return Response::json("Sorry something went wrong!", 500);
         }
     }
