@@ -238,7 +238,7 @@ class UserController extends Controller
             }
 
             $user = auth('api')->user();
-            $profile = User::where('id', $user->id)->first();
+            $profile = User::with('addresses')->where('id', $user->id)->first();
             $profile->first_name = $data['first_name'];
             $profile->last_name = $data['last_name'];
             $profile->phone = $data['phone'];
