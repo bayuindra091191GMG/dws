@@ -10,6 +10,7 @@ use App\Models\UserWasteBank;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -212,20 +213,47 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     public function testingAuthToken(){
         $user = auth('waste_collector')->user();
         return $user;
+    }
+
+    // Update customer profile
+    public function updateProfile(Request $request)
+    {
+        try{
+            $rules = array(
+                'first_name'    => 'required',
+                'last_name'     => 'required',
+                'phone'         => 'required'
+            );
+
+            Log::info("UserController - updateProfile Content: ". $request->getContent());
+
+            $data = $request->json()->all();
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
+            $user = auth('api')->user();
+            $profile = User::where('id', $user->id)->first();
+            $profile->first_name = $data['first_name'];
+            $profile->last_name = $data['last_name'];
+            $profile->phone = $data['phone'];
+            $profile->save();
+
+            return Response::json([
+                'user'   => $profile,
+            ], 200);
+        }
+        catch (\Exception $ex){
+            Log::error("UserController - updateProfile Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'error'   => $ex,
+            ], 500);
+        }
     }
 }

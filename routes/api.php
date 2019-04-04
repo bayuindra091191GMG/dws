@@ -40,6 +40,7 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     Route::get('/check-category', 'Api\GeneralController@checkCategory');
     Route::get('/address', 'Api\UserController@getAddress');
     Route::post('/set-address', 'Api\UserController@setAddress');
+    Route::post('/profile/update', 'Api\UserController@updateProfile');
 
     //Transactions
     Route::get('/get-transactions', 'Api\TransactionHeaderController@getTransactions');

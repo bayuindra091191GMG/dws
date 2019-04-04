@@ -66,7 +66,7 @@ class TransactionHeaderController extends Controller
 
             $data = $request->json()->all();
 
-            Log::info("TransactionHeaderController - createTransaction: ". $request->getContent());
+            //Log::info("TransactionHeaderController - createTransaction: ". $request->getContent());
 
             $validator = Validator::make($data, $rules);
 
