@@ -52,10 +52,11 @@ class SubscribeController extends Controller
                 'name' => $name,
                 'weight' => $weight,
                 'phone' => $phone,
+                'point' => $weight*10,
             );
 //        dd($data);
 //        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
-            $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
+            $isSuccess = FCMNotification::SendNotification(3, 'browser', $title, $body, $data);
 
             return Response::json([
                 'message' => "Success submit data!",

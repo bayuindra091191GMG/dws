@@ -34,20 +34,23 @@
                                 <th class="text-center">No. Telp</th>
                                 <th class="text-center">Jenis Sampah</th>
                                 <th class="text-center">Berat Sampah</th>
+                                <th class="text-center">Point</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Bang Toyib</td>
-                                    <td>087889088123</td>
-                                    <td>Sampah Busuk</td>
-                                    <td>5</td>
+                                    <td class="text-center">Bang Toyib</td>
+                                    <td class="text-center">087889088123</td>
+                                    <td class="text-center">Sampah Busuk</td>
+                                    <td class="text-center">5</td>
+                                    <td class="text-center">50</td>
                                 </tr>
                                 <tr>
-                                    <td>Tony Stark</td>
-                                    <td>087129456123</td>
-                                    <td>Sampah Bakar</td>
-                                    <td>3</td>
+                                    <td class="text-center">Tony Stark</td>
+                                    <td class="text-center">087129456123</td>
+                                    <td class="text-center">Sampah Bakar</td>
+                                    <td class="text-center">3</td>
+                                    <td class="text-center">30</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -118,10 +121,11 @@
         messaging.onMessage(function(payload) {
             $("#datatable-ondemand tbody").prepend(
                 "<tr>" +
-                "<td>" + payload.data.name +"</td>" +
-                "<td>" + payload.data.phone + "</td>" +
-                "<td>" + payload.data.category + "</td>" +
-                "<td>" + payload.data.weight + "</td>" +
+                "<td class='text-center'>" + payload.data.name +"</td>" +
+                "<td class='text-center'>" + payload.data.phone + "</td>" +
+                "<td class='text-center'>" + payload.data.category + "</td>" +
+                "<td class='text-center'>" + payload.data.weight + "</td>" +
+                "<td class='text-center'>" + payload.data.point + "</td>" +
                 "</tr>"
             );
             // console.log("Message received. ", payload);

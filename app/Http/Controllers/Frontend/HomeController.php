@@ -38,18 +38,35 @@ class HomeController extends Controller
         return view('admin.test-notif');
     }
     public function testNotifSend(){
+        //send notification beta
+        $name = "yansen";
+        $phone = "1111111111";
+        $category = "Sampah Plastik";
+        $weight = 10;
+
         //send notification
         $title = "Digital Waste Solution";
-        $body = "Transaksi Baru";
+        $body = "Transaksi Baru dari kategori ".$category." seberat ".$weight." kilogram";
         $data = array(
-            'category' => "testing Category",
-            'item' => "Testing Item",
-            'weight' => "10",
-            'point' => 10*10,
+            'category' => $category,
+            'name' => $name,
+            'weight' => $weight,
+            'phone' => $phone,
+            'point' => $weight*10,
         );
+        $isSuccess = FCMNotification::SendNotification(3, 'browser', $title, $body, $data);
+
+//        $title = "Digital Waste Solution";
+//        $body = "Transaksi Baru";
+//        $data = array(
+//            'category' => "testing Category",
+//            'item' => "Testing Item",
+//            'weight' => "10",
+//            'point' => 10*10,
+//        );
 //        dd($data);
 //        $isSuccess = FCMNotification::SendNotification(8, 'apps', $title, $body, $data);
-        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
+//        $isSuccess = FCMNotification::SendNotification(1, 'browser', $title, $body, $data);
 
         return $isSuccess;
     }

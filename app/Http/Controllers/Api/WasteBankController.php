@@ -69,9 +69,16 @@ class WasteBankController extends Controller
         try{
             $user = auth('api')->user();
             $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
-            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
+            if(empty($userWastebank)){
+                return Response::json([
+                    'message' => "User has not activate routine pickup!",
+                ], 482);
+            }
+            else{
+                $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
 
-            return $wasteBankSchedules;
+                return $wasteBankSchedules;
+            }
         }
         catch (\Exception $ex){
             return Response::json([
