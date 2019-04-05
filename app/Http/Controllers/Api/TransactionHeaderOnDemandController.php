@@ -44,6 +44,8 @@ class TransactionHeaderOnDemandController extends Controller
                 $newHeaderResponse = collect([
                     'id'                => $header->id,
                     'transaction_no'    => $header->transaction_no,
+                    'waste_bank'        => $header->waste_bank ?? null,
+                    'waste_collector'   => $header->waste_collector ?? null,
                     'total_weight'      => $header->total_weight / 1000,
                     'total_price'       => $header->total_price,
                     'status'            => $header->status_id,
@@ -73,6 +75,8 @@ class TransactionHeaderOnDemandController extends Controller
 
                     if(!empty($detail->dws_category_id) && empty($detail->masaro_category_id)){
                         $newDetailResponse = collect([
+                            'dws_category_id'   => $detail->dws_category_id,
+                            'masaro_category_id'=> 0,
                             'waste_name'        => $detail->dws_waste_category_data->name,
                             'price'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
@@ -82,6 +86,8 @@ class TransactionHeaderOnDemandController extends Controller
                     }
                     elseif(empty($detail->dws_category_id) && !empty($detail->masaro_category_id)){
                         $newDetailResponse = collect([
+                            'masaro_category_id'=> $detail->masaro_category_id,
+                            'dws_category_id'   => 0,
                             'waste_name'        => $detail->masaro_waste_category_data->name,
                             'price'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
@@ -145,12 +151,14 @@ class TransactionHeaderOnDemandController extends Controller
             foreach ($transactions as $header){
                 //Log::info("first name: ". $header->user->first_name);
                 $newHeaderResponse = collect([
+                    'transaction_no'    => $header->transaction_no,
                     'customer_name'     => $header->user->first_name. " ". $header->user->last_name,
                     'customer_image'    => $header->user->image_path,
                     'latitude'          => $header->latitude,
                     'longitude'         => $header->longitude,
                     'total_weight'      => $header->total_weight / 1000,
-                    'status'            => $header->status_id
+                    'status'            => $header->status_id,
+                    'created_at'        => Carbon::parse($header->created_at)->format('d M Y')
                 ]);
 
                 //Log::info("customer name 1: ". $newHeaderResponse->customer_name);
@@ -194,6 +202,8 @@ class TransactionHeaderOnDemandController extends Controller
 
                     if(!empty($detail->dws_category_id) && empty($detail->masaro_category_id)){
                         $newDetailResponse = collect([
+                            'dws_category_id'   => $detail->dws_category_id,
+                            'masaro_category_id'=> 0,
                             'waste_name'        => $detail->dws_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string
@@ -202,6 +212,8 @@ class TransactionHeaderOnDemandController extends Controller
                     }
                     elseif(empty($detail->dws_category_id) && !empty($detail->masaro_category_id)){
                         $newDetailResponse = collect([
+                            'masaro_category_id'=> $detail->masaro_category_id,
+                            'dws_category_id'   => 0,
                             'waste_name'        => $detail->masaro_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string
