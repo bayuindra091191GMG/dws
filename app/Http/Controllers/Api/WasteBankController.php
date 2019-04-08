@@ -71,7 +71,7 @@ class WasteBankController extends Controller
             $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
             if(empty($userWastebank)){
                 return Response::json([
-                    'message' => "User has not activate routine pickup!",
+                    'message' => "User has not activated routine pickup!",
                 ], 482);
             }
             else{
