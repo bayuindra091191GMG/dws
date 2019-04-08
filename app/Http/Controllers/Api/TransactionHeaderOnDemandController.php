@@ -33,7 +33,7 @@ class TransactionHeaderOnDemandController extends Controller
                 ->limit(10)
                 ->get();
 
-            if($transactions->count() == 0){
+            if($transactions->count() == 0 && $skip === 0){
                 return Response::json([
                     'message' => "No transaction history found!",
                 ], 482);
@@ -47,25 +47,25 @@ class TransactionHeaderOnDemandController extends Controller
                     'waste_bank'        => $header->waste_bank ?? null,
                     'waste_collector'   => $header->waste_collector ?? null,
                     'total_weight'      => $header->total_weight / 1000,
-                    'total_price'       => $header->total_price,
+                    'total_point'       => $header->total_price,
                     'status'            => $header->status_id,
                     'created_at'        => Carbon::parse($header->created_at)->format('d M Y')
                 ]);
 
                 // Get transaction credit point amount
-                $point = 0;
-                $customerPointHistory = DB::table('point_histories')
-                    ->select('amount')
-                    ->where('transaction_id', $header->id)
-                    ->where('user_id', $customerUser->id)
-                    ->where('type_transaction', 'credit')
-                    ->first();
-
-                if(!empty($customerPointHistory)){
-                    $point = $customerPointHistory->amount;
-                }
-
-                $newHeaderResponse->put('point', $point);
+//                $point = 0;
+//                $customerPointHistory = DB::table('point_histories')
+//                    ->select('amount')
+//                    ->where('transaction_id', $header->id)
+//                    ->where('user_id', $customerUser->id)
+//                    ->where('type_transaction', 'credit')
+//                    ->first();
+//
+//                if(!empty($customerPointHistory)){
+//                    $point = $customerPointHistory->amount;
+//                }
+//
+//                $newHeaderResponse->put('point', $point);
 
                 // Get waste details
                 $trxDetails = $header->transaction_details;
@@ -78,7 +78,7 @@ class TransactionHeaderOnDemandController extends Controller
                             'dws_category_id'   => $detail->dws_category_id,
                             'masaro_category_id'=> 0,
                             'waste_name'        => $detail->dws_waste_category_data->name,
-                            'price'             => $detail->price,
+                            'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string
                         ]);
@@ -89,7 +89,7 @@ class TransactionHeaderOnDemandController extends Controller
                             'masaro_category_id'=> $detail->masaro_category_id,
                             'dws_category_id'   => 0,
                             'waste_name'        => $detail->masaro_waste_category_data->name,
-                            'price'             => $detail->price,
+                            'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string
                         ]);
