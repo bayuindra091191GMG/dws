@@ -634,7 +634,8 @@ class TransactionHeaderController extends Controller
                 ->where('transaction_type_id', 2)
                 ->where('waste_bank_id', $adminUser->waste_bank_id)
                 ->whereNull('user_id')
-                ->orderBy('created_at', 'desc')->get();
+                ->orderBy('created_at', 'desc')
+                ->get();
 
             if($transactions->count() == 0){
                 return Response::json([
