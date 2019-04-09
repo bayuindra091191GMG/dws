@@ -17,6 +17,7 @@ use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -51,38 +52,35 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request){
-        $rules = array(
-            'email'                 => 'required|email|max:100|unique:users',
-            'first_name'            => 'required|max:100',
-            'last_name'             => 'required|max:100',
-            'phone'                 => 'required|unique:users',
-            'password'              => 'required|min:6|max:20',
-            'province'              => 'required',
-            'city'                  => 'required',
-            'postal_code'           => 'required',
-            'description'           => 'required',
-            'latitude'              => 'required',
-            'longitude'             => 'required',
-        );
-
-        $messages = array(
-            'not_contains'  => 'Email cannot contain these characters +',
-            'phone.unique'  => 'Your phone number already registered!',
-        );
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-
         try{
-            $user = $this->create($request->all());
+            $rules = array(
+                'email'                 => 'required|email|max:100|unique:users',
+                'first_name'            => 'required|max:100',
+                'last_name'             => 'required|max:100',
+                'phone'                 => 'required|unique:users',
+                'password'              => 'required|min:6|max:20',
+                'province'              => 'required',
+                'city'                  => 'required',
+                'postal_code'           => 'required',
+                'description'           => 'required',
+                'latitude'              => 'required',
+                'longitude'             => 'required',
+            );
 
-//            return Response::json([
-//                'message' => $user,
-//                'Request'   => $request->all()
-//            ], 200);
+            $messages = array(
+                'phone.unique'  => 'Your phone number already registered!',
+            );
+
+            $data = $request->json()->all();
+
+            $validator = Validator::make($data, $rules, $messages);
+
+            if ($validator->fails()) {
+                Log::error("Validator message: ". $validator->message());
+                return response()->json($validator->messages(), 400);
+            }
+
+            $user = $this->create($request->all());
 
             //Save Address
             $address = Address::create([
@@ -107,10 +105,11 @@ class RegisterController extends Controller
                 'message' => "Success!"
             ], 200);
         }
-        catch (\Exception $exception){
+        catch (\Exception $ex){
+            Log::error("RegisterController - register error: ". $ex);
             return Response::json([
                 'message' => "Something went Wrong!",
-                'exception' => $exception
+                'exception' => $ex
             ], 500);
         }
     }

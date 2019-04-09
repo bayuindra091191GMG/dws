@@ -10,8 +10,11 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -19,7 +22,7 @@ class AdminController extends Controller
      * Function to confirm transaction Antar Sendiri by Admin Wastebank.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function confirmTransactionAntarSendiri(Request $request)
     {
@@ -69,48 +72,58 @@ class AdminController extends Controller
      * Used for Antar Sendiri Transaction when Admin Scan the User QR Code
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function setTransactionToUser(Request $request)
     {
-        $rules = array(
-            'transaction_no'    => 'required',
-            'email'             => 'required'
-        );
+        try{
+            $rules = array(
+                'transaction_no'    => 'required',
+                'email'             => 'required'
+            );
 
-        $data = $request->json()->all();
+            $data = $request->json()->all();
 
-        $validator = Validator::make($data, $rules);
+            $validator = Validator::make($data, $rules);
 
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
+            $user = User::where('email', $data['email'])->first();
+            $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
+            $header->user_id = $user->id;
+            $header->save();
+
+            //send notification
+            $userName = $header->user->first_name." ".$header->user->last_name;
+            $title = "Digital Waste Solution";
+            $body = "Admin Scan QR Code User";
+            $data = array(
+                'type_id' => '2',
+                'transaction_no' => $header->transaction_no,
+                'name' => $userName
+            );
+
+            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Success assign " . $user->email . " to " . $header->transaction_no . "!",
+            ], 200);
+        }
+        catch (\Exception $ex){
+            Log::error("AdminController - setTransactionToUser error: ". $ex);
+            return Response::json([
+                'ex' => "ex " . $ex
+            ], 500);
         }
 
-        $user = User::where('email', $data['email'])->first();
-        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-        $header->user_id = $user->id;
-        $header->save();
-
-        //send notification
-        $userName = $header->user->first_name." ".$header->user->last_name;
-        $title = "Digital Waste Solution";
-        $body = "Admin Scan QR Code User";
-        $data = array(
-            'type_id' => '2',
-            'transaction_no' => $header->transaction_no,
-            'name' => $userName
-        );
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
-
-        return Response::json([
-            'message' => "Success Set " . $user->email . " to " . $header->transaction_no . "!",
-        ], 200);
     }
 
     /**
      * Function to return Transaction Data Related to the Admin Wastebank.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getTransactionList()
     {
