@@ -126,7 +126,7 @@ class TransactionHeaderOnDemandController extends Controller
     public function confirm(Request $request){
         $trxId = $request->input('confirmed_header_id');
         $header = TransactionHeader::find($trxId);
-        if($header->status_id !== 16){
+        if($header->status_id !== 8){
             Session::flash('error', 'Customer harus konfirmasi transaksi terlebih dahulu!');
             return redirect()->back();
         }
