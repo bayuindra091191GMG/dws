@@ -10,10 +10,14 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\libs\Utilities;
 use App\Models\Address;
 use App\Models\Configuration;
+use App\Models\DwsWasteCategoryData;
+use App\Models\MasaroWasteCategoryData;
 use App\Models\PointHistory;
 use App\Models\PointWastecollectorHistory;
+use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteCollector;
@@ -25,6 +29,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class TransactionHeaderPenjemputanRutinController extends Controller
@@ -77,6 +82,192 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         catch (\Exception $exception){
             error_log($exception);
         }
+    }
+
+    /**
+     * Edit dws category type transaction
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function editDws($id)
+    {
+        $header = TransactionHeader::find($id);
+        $date = Carbon::parse($header->date)->format("d M Y");
+        $wasteCategories = DwsWasteCategoryData::orderBy('name')->get();
+
+        $data = [
+            'header'            => $header,
+            'date'              => $date,
+            'wasteCategories'   => $wasteCategories
+        ];
+
+        return view('admin.transaction.rutin.edit_dws')->with($data);
+    }
+
+    /**
+     * Edit Masaro category type transaction
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function editMasaro($id)
+    {
+        $header = TransactionHeader::find($id);
+        $date = Carbon::parse($header->date)->format("d M Y");
+        $wasteCategories = MasaroWasteCategoryData::orderBy('name')->get();
+
+        $data = [
+            'header'            => $header,
+            'date'              => $date,
+            'wasteCategories'   => $wasteCategories
+        ];
+
+        return view('admin.transaction.rutin.edit_masaro')->with($data);
+    }
+
+    /**
+     * Update the specified transaction in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(),[
+            'date'          => 'required',
+            'notes'         => 'max:199'
+        ],[
+            'date.required'         => 'Tanggal wajib diisi!',
+            'notes.max'             => 'Catatan tidak boleh lebih dari 200 karakter!'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $valid = true;
+        $categories = $request->input('categories');
+        $prices = $request->input('prices');
+        $weights = $request->input('weights');
+
+        if(empty($categories || empty($prices || empty($weights)))){
+            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        $idx = 0;
+        foreach ($categories as $category){
+            if(empty($category) || $category == "-1") $valid = false;
+            if(empty($prices[$idx]) || $prices[$idx] === '0') $valid = false;
+            if(empty($weights[$idx]) || $weights[$idx] === '0') $valid = false;
+            $idx++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate categories
+        $validUnique = Utilities::arrayIsUnique($categories);
+        if(!$validUnique){
+            return redirect()->back()->withErrors('Detil kategori tidak boleh kembar!', 'default')->withInput($request->all());
+        }
+
+        // Count total weight
+        $totalWeight = 0;
+        $totalPrice = 0;
+        $idx = 0;
+        foreach ($categories as $category){
+            $floatWeight = Utilities::toFloat($weights[$idx]);
+            $floatPrice = Utilities::toFloat($prices[$idx]);
+            $totalWeight += (double) $floatWeight;
+            $totalPrice += (double) $floatPrice;
+            $idx++;
+        }
+
+        $user = Auth::guard('admin')->user();
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $now = Carbon::now();
+        $categoryType = $request->input('category_type');
+
+        $trxHeader = TransactionHeader::find($id);
+        $trxHeader->date = $date;
+        $trxHeader->total_weight = $totalWeight * 1000;
+        $trxHeader->total_price = $totalPrice;
+        $trxHeader->notes = $request->input('notes');
+        $trxHeader->updated_at = $now->toDateTimeString();
+        $trxHeader->updated_by_admin = $user->id;
+        $trxHeader->save();
+
+        // Check deleted details
+        foreach ($trxHeader->transaction_details as $detail){
+            $isFound = false;
+            foreach ($categories as $category){
+                if($categoryType == "1" && $detail->dws_category_id == $category){
+                    $isFound = true;
+                }
+                elseif($categoryType == "2" && $detail->masaro_category_id == $category){
+                    $isFound = true;
+                }
+            }
+
+            if(!$isFound){
+                $detail->delete();
+            }
+        }
+
+        $idx = 0;
+        foreach ($categories as $category){
+            $floatWeight = Utilities::toFloat($weights[$idx]);
+            $floatPrice = Utilities::toFloat($prices[$idx]);
+
+            if($categoryType == "1"){
+                $trxDetail = $trxHeader->transaction_details->where('dws_category_id', $category)->first();
+                if(!empty($trxDetail)){
+                    $trxDetail->weight = $floatWeight * 1000;
+                    $trxDetail->price = $floatPrice;
+                    $trxDetail->save();
+                }
+                else{
+                    $trxDetail = TransactionDetail::create([
+                        'transaction_header_id'     => $trxHeader->id,
+                        'dws_category_id'           => $category,
+                        'weight'                    => $floatWeight * 1000,
+                        'price'                     => $floatPrice
+                    ]);
+                }
+            }
+            else{
+                $trxDetail = $trxHeader->transaction_details->where('masaro_category_id', $category)->first();
+                if(!empty($trxDetail)){
+                    $trxDetail->weight = $floatWeight * 1000;
+                    $trxDetail->price = $floatPrice;
+                    $trxDetail->save();
+                }
+                else{
+                    $trxDetail = TransactionDetail::create([
+                        'transaction_header_id'     => $trxHeader->id,
+                        'masaro_category_id'        => $category,
+                        'weight'                    => $floatWeight * 1000,
+                        'price'                     => $floatPrice
+                    ]);
+                }
+            }
+            $idx++;
+        }
+
+        if($categoryType == "1"){
+            Session::flash('message', 'Berhasil ubah transaksi Penjemputan Rutin kategori DWS!');
+        }
+        else{
+            Session::flash('message', 'Berhasil ubah transaksi Penjemputan Rutin kategori Masaro!');
+        }
+
+        return redirect()->route('admin.transactions.penjemputan_rutin.show', ['id' => $trxHeader->id]);
     }
 
     /**

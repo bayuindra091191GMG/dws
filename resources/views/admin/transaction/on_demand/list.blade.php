@@ -34,7 +34,7 @@
                                 <th class="text-center">No Transaksi</th>
                                 <th class="text-center">Nama User</th>
                                 {{--<th class="text-center">Kategori</th>--}}
-                                <th class="text-center">Total Berat (gram)</th>
+                                <th class="text-center">Total Berat (kg)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
                                 {{--<th class="text-center">Waste Bank</th>--}}
                                 {{--<th class="text-center">Waste Collector</th>--}}
@@ -49,7 +49,7 @@
                                     <td>{{ $transaction->transaction_no}}</td>
                                     <td>{{ $transaction->user->first_name}} {{ $transaction->user->last_name}}</td>
                                     {{--<td>{{ $transaction->waste_category->name}}</td>--}}
-                                    <td>{{ $transaction->total_weight}}</td>
+                                    <td>{{ $transaction->total_weight_kg}}</td>
                                     <td>{{ $transaction->total_price}}</td>
                                     {{--<td>--}}
                                         {{--@php($wasteBank = "-")--}}

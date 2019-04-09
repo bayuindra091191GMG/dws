@@ -186,7 +186,7 @@ class TransactionHeaderController extends Controller
             'transaction_no'        => $code,
             'date'                  => $date->toDateTimeString(),
             'transaction_type_id'   => 2,
-            'total_weight'          => $totalWeight,
+            'total_weight'          => $totalWeight * 1000,
             'total_price'           => $totalPrice,
             'waste_category_id'     => $categoryType,
             'waste_bank_id'         => $user->waste_bank_id,
@@ -207,7 +207,7 @@ class TransactionHeaderController extends Controller
                 $trxDetail = TransactionDetail::create([
                     'transaction_header_id'     => $trxHeader->id,
                     'dws_category_id'           => $category,
-                    'weight'                    => $floatWeight,
+                    'weight'                    => $floatWeight * 1000,
                     'price'                     => $floatPrice
                 ]);
             }
@@ -215,7 +215,7 @@ class TransactionHeaderController extends Controller
                 $trxDetail = TransactionDetail::create([
                     'transaction_header_id'     => $trxHeader->id,
                     'masaro_category_id'        => $category,
-                    'weight'                    => $floatWeight,
+                    'weight'                    => $floatWeight * 1000,
                     'price'                     => $floatPrice
                 ]);
             }
@@ -388,7 +388,7 @@ class TransactionHeaderController extends Controller
 
         $trxHeader = TransactionHeader::find($id);
         $trxHeader->date = $date;
-        $trxHeader->total_weight = $totalWeight;
+        $trxHeader->total_weight = $totalWeight * 1000;
         $trxHeader->total_price = $totalPrice;
         $trxHeader->notes = $request->input('notes');
         $trxHeader->updated_at = $now->toDateTimeString();
@@ -420,7 +420,7 @@ class TransactionHeaderController extends Controller
             if($categoryType == "1"){
                 $trxDetail = $trxHeader->transaction_details->where('dws_category_id', $category)->first();
                 if(!empty($trxDetail)){
-                    $trxDetail->weight = $floatWeight;
+                    $trxDetail->weight = $floatWeight * 1000;
                     $trxDetail->price = $floatPrice;
                     $trxDetail->save();
                 }
@@ -428,7 +428,7 @@ class TransactionHeaderController extends Controller
                     $trxDetail = TransactionDetail::create([
                         'transaction_header_id'     => $trxHeader->id,
                         'dws_category_id'           => $category,
-                        'weight'                    => $floatWeight,
+                        'weight'                    => $floatWeight * 1000,
                         'price'                     => $floatPrice
                     ]);
                 }
@@ -436,7 +436,7 @@ class TransactionHeaderController extends Controller
             else{
                 $trxDetail = $trxHeader->transaction_details->where('masaro_category_id', $category)->first();
                 if(!empty($trxDetail)){
-                    $trxDetail->weight = $floatWeight;
+                    $trxDetail->weight = $floatWeight * 1000;
                     $trxDetail->price = $floatPrice;
                     $trxDetail->save();
                 }
@@ -444,7 +444,7 @@ class TransactionHeaderController extends Controller
                     $trxDetail = TransactionDetail::create([
                         'transaction_header_id'     => $trxHeader->id,
                         'masaro_category_id'        => $category,
-                        'weight'                    => $floatWeight,
+                        'weight'                    => $floatWeight * 1000,
                         'price'                     => $floatPrice
                     ]);
                 }
@@ -453,10 +453,10 @@ class TransactionHeaderController extends Controller
         }
 
         if($categoryType == "1"){
-            Session::flash('message', 'Berhasil ubah transaksi kategori DWS!');
+            Session::flash('message', 'Berhasil ubah transaksi Antar Sendiri kategori DWS!');
         }
         else{
-            Session::flash('message', 'Berhasil ubah transaksi kategori Masaro!');
+            Session::flash('message', 'Berhasil ubah transaksi Antar Sendiri kategori Masaro!');
         }
 
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);

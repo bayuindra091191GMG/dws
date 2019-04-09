@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Ubah Transaksi Kategori DWS</h2>
+                <h2 class="card-title m-b-0">Ubah Transaksi Antar Sendiri Kategori DWS</h2>
 
                 {{ Form::open(['route'=>['admin.transactions.antar_sendiri.update', $header->id],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
@@ -81,7 +81,7 @@
                                             <thead>
                                             <tr>
                                                 <th scope="col">Kategori</th>
-                                                <th scope="col">Berat (gram)</th>
+                                                <th scope="col">Berat (kg)</th>
                                                 <th scope="col">Harga</th>
                                                 <th scope="col">Tindakan</th>
                                             </tr>
@@ -158,7 +158,7 @@
         // Set autonumeric each row
         @php( $numericIdx = 0 )
         @foreach($header->transaction_details as $detail)
-            new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight }}', {
+            new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight_kg }}', {
                 minimumValue: '0',
                 maximumValue: '999999',
                 digitGroupSeparator: '.',

@@ -5,13 +5,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Detail Transaksi On Demand</h2>
+                <h2 class="card-title m-b-0">Detail Transaksi Penjemputan Rutin</h2>
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row mb-2">
                         <div class="col-12 text-right">
-                            @if($header->status_id === 8)
-                                <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
-                            @endif
 
                             @if($header->waste_category_id == "1")
                                 <a href="{{ route('admin.transactions.on_demand.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
@@ -86,48 +83,15 @@
                                         </div>
                                     </div>
 
-                                    @if(empty($header->waste_collector_id))
-
-                                        <div class="col-md-12">
-                                            <div class="form-group form-float form-group-lg">
-                                                <div class="form-line">
-                                                    <label class="form-label" for="waste_collector_id">Waste Collector</label>
-                                                </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group form-float form-group-lg">
+                                            <div class="form-line">
+                                                <label class="form-label" for="waste_collector">Waste Collector</label>
+                                                <input id="waste_collector" type="text" class="form-control"
+                                                       name="waste_collector" value="{{ $header->waste_collector->first_name. ' '. $header->waste_collector->last_name }}" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-
-                                            {{ Form::open(['route'=>['admin.transactions.on_demand.assign', $header->id],'method' => 'post', 'id' => 'general-form']) }}
-
-                                            <div class="form-group row">
-                                                <div class="col-md-8">
-                                                    <select id="waste_collector_id" name="waste_collector_id" class="select2 form-control custom-select" style="width: 100%; height: 36px !important;">
-                                                        <option value="-1"> - Pilih Waste Collector - </option>
-                                                        @foreach($wasteCollectors as $wasteCollector)
-                                                            <option value="{{ $wasteCollector->id }}">{{ $wasteCollector->first_name. ' '. $wasteCollector->last_name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <input type="submit" class="btn btn-success" value="ASSIGN"/>
-                                                </div>
-                                            </div>
-
-                                            {{ Form::close() }}
-
-                                        </div>
-                                    @else
-                                        <div class="col-md-12">
-                                            <div class="form-group form-float form-group-lg">
-                                                <div class="form-line">
-                                                    <label class="form-label" for="waste_collector">Waste Collector</label>
-                                                    <input id="waste_collector" type="text" class="form-control"
-                                                           name="waste_collector" value="{{ $header->waste_collector->first_name. ' '. $header->waste_collector->last_name }}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
+                                    </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group form-float form-group-lg">
@@ -266,7 +230,6 @@
     <script src="{{ asset('backend/assets/libs/select2/dist/js/select2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#waste_collector_id').select2();
 
             $(document).on('click', '#btn-confirm', function(){
                 $('#modal-confirm').modal('show');

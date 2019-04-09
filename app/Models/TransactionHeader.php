@@ -88,11 +88,21 @@ class TransactionHeader extends Eloquent
 
     protected $appends = [
         'total_weight_string',
+        'total_weight_kg',
+        'total_weight_kg_string',
         'total_price_string'
     ];
 
     public function getTotalWeightStringAttribute(){
         return number_format($this->attributes['total_weight'], 0, ",", ".");
+    }
+
+    public function getTotalWeightKgAttribute(){
+        return $this->attributes['total_weight'] / 1000;
+    }
+
+    public function getTotalWeightKgStringAttribute(){
+        return number_format($this->attributes['total_weight'] / 1000, 2, ",", ".");
     }
 
     public function getTotalPriceStringAttribute(){

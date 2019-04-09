@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card-body">
-            <h2 class="card-title m-b-0">Detail Transaksi</h2>
+            <h2 class="card-title m-b-0">Detail Transaksi Antar Sendiri</h2>
             <div class="container-fluid relative animatedParent animateOnce">
                 <div class="row mb-2">
                     <div class="col-10"></div>
@@ -120,7 +120,7 @@
                                         <div class="form-line">
                                             <label class="form-label" for="total_weight">Berat Total</label>
                                             <input id="total_weight" type="text" class="form-control"
-                                                   name="total_weight" value="{{ $header->total_weight_string }} gram" readonly>
+                                                   name="total_weight" value="{{ $header->total_weight_string }} kg" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                         <tr>
                                             <th class="text-center">Kode</th>
                                             <th class="text-center">Nama</th>
-                                            <th class="text-center">Berat (gram)</th>
+                                            <th class="text-center">Berat (kg)</th>
                                             <th class="text-center">Harga (Rp)</th>
                                         </tr>
                                         </thead>
@@ -161,7 +161,7 @@
                                                 <tr>
                                                     <td>{{ $detail->dws_waste_category_data->code }}</td>
                                                     <td>{{ $detail->dws_waste_category_data->name }}</td>
-                                                    <td class="text-right">{{ $detail->weight_string }}</td>
+                                                    <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                     <td class="text-right">{{ $detail->price_string }}</td>
                                                 </tr>
                                             @endforeach
@@ -171,7 +171,7 @@
                                                 <tr>
                                                     <td>{{ $detail->masaro_waste_category_data->code }}</td>
                                                     <td>{{ $detail->masaro_waste_category_data->name }}</td>
-                                                    <td class="text-right">{{ $detail->weight_string }}</td>
+                                                    <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                     <td class="text-right">{{ $detail->price_string }}</td>
                                                 </tr>
                                             @endforeach

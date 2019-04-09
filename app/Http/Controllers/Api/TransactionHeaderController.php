@@ -145,11 +145,12 @@ class TransactionHeaderController extends Controller
 
             //do detail
             foreach ($data['details'] as $item){
+                $detailWeight = floatval($data["weight"]) * 1000;
                 if($user->company->waste_category_id == 1) {
                     TransactionDetail::create([
                         'transaction_header_id' => $header->id,
                         'dws_category_id'       => $item['dws_category_id'],
-                        'weight'                => $item['weight'],
+                        'weight'                => $detailWeight,
                         'price'                 => $item['price']
                     ]);
                 }
@@ -157,7 +158,7 @@ class TransactionHeaderController extends Controller
                     TransactionDetail::create([
                         'transaction_header_id' => $header->id,
                         'masaro_category_id'    => $item['masaro_category_id'],
-                        'weight'                => $item['weight'],
+                        'weight'                => $detailWeight,
                         'price'                 => $item['price']
                     ]);
                 }
@@ -175,7 +176,7 @@ class TransactionHeaderController extends Controller
                 "transaction_no" => $header->transaction_no,
                 "name" => $user->first_name." ".$user->last_name,
 //                    "waste_category_name" => $body,
-                "total_weight" => $header->total_weight,
+                "total_weight" => $header->total_weight_kg,
                 "total_price" => $header->total_price,
 //                    "waste_bank" => $wasteBankId,
 //                    "waste_collector" => "-",

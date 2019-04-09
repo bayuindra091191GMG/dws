@@ -5,11 +5,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Ubah Transaksi Antar Sendiri Kategori Masaro</h2>
+                <h2 class="card-title m-b-0">Ubah Transaksi On Demand Kategori Masaro</h2>
 
-                {{ Form::open(['route'=>['admin.transactions.antar_sendiri.update', $header->id],'method' => 'post','id' => 'general-form']) }}
-                {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
-                {{--{{ csrf_field() }}--}}
+                {{ Form::open(['route'=>['admin.transactions.on_demand.update', $header->id],'method' => 'post','id' => 'general-form']) }}
+
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row">
                         <div class="col-md-12">
@@ -93,7 +92,7 @@
                                                     <td>
                                                         <select id="category_{{ $idx }}" name="categories[]" class="form-control">
                                                             @foreach($wasteCategories as $category)
-                                                                <option value="{{ $category->id }}" {{ $detail->masaro_category_id == $category->id ? "selected" : "" }}>{{ $category->name }}</option>
+                                                                <option value="{{ $category->id }}" {{ $detail->dws_category_id == $category->id ? "selected" : "" }}>{{ $category->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
@@ -110,7 +109,7 @@
                                     <input type="hidden" name="category_type" value="2"/>
 
                                     <div class="col-md-11 col-sm-11 col-xs-12">
-                                        <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-danger">KEMBALI</a>
+                                        <a href="{{ route('admin.transactions.on_demand.show', ['id' => $header->id]) }}" class="btn btn-danger">KEMBALI</a>
                                         <input type="submit" class="btn btn-success" value="SIMPAN">
                                     </div>
                                 </div>
@@ -158,25 +157,25 @@
         // Set autonumeric each row
         @php( $numericIdx = 0 )
         @foreach($header->transaction_details as $detail)
-        new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight_kg }}', {
-            minimumValue: '0',
-            maximumValue: '999999',
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0,
-            modifyValueOnWheel: false
-        });
+            new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight_kg }}', {
+                minimumValue: '0',
+                maximumValue: '999999',
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 2,
+                modifyValueOnWheel: false
+            });
 
-        new AutoNumeric('#price_{{ $numericIdx }}', '{{ $detail->price }}', {
-            minimumValue: '0',
-            maximumValue: '9999999999',
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0,
-            modifyValueOnWheel: false
-        });
+            new AutoNumeric('#price_{{ $numericIdx }}', '{{ $detail->price }}', {
+                minimumValue: '0',
+                maximumValue: '9999999999',
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0,
+                modifyValueOnWheel: false
+            });
                 @php( $numericIdx++ )
-                @endforeach
+            @endforeach
 
         var i = parseInt("{{ $idx }}");
 
