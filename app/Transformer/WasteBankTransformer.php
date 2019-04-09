@@ -12,6 +12,7 @@ namespace App\Transformer;
 use App\Models\AdminUser;
 use App\Models\WasteBank;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use League\Fractal\TransformerAbstract;
 
 class WasteBankTransformer extends TransformerAbstract
@@ -19,7 +20,7 @@ class WasteBankTransformer extends TransformerAbstract
     public function transform(WasteBank $wasteBank){
 
         try{
-            $createdDate = Carbon::parse($wasteBank->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($wasteBank->created_at)->toIso8601String();
 
             $action = "<a class='btn btn-xs btn-info' href='waste-banks/edit/".$wasteBank->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $wasteBank->id ."' ><i class='fas fa-trash-alt'></i></a>";
@@ -41,7 +42,7 @@ class WasteBankTransformer extends TransformerAbstract
             ];
         }
         catch (\Exception $exception){
-            error_log($exception);
+            Log::error("WasteBankTrasnformer error: ". $exception);
         }
     }
 }

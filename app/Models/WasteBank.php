@@ -51,11 +51,6 @@ class WasteBank extends Eloquent
 		'updated_by' => 'int'
 	];
 
-	protected $dates = [
-		'open_hours',
-		'closed_hours'
-	];
-
 	protected $fillable = [
 		'name',
 		'latitude',
@@ -81,6 +76,11 @@ class WasteBank extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\WasteCategory::class);
 	}
+
+    public function pic()
+    {
+        return $this->belongsTo(\App\Models\AdminUser::class, 'pic_id');
+    }
 
     public function createdBy()
     {

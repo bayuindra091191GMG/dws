@@ -10,11 +10,12 @@ use App\Models\WasteBankSchedule;
 use App\Transformer\WasteBankTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class WasteBankController extends Controller
 {
@@ -30,11 +31,15 @@ class WasteBankController extends Controller
     }
 
     public function getIndex(Request $request){
-        $users = WasteBank::query();
-        return DataTables::of($users)
-            ->setTransformer(new WasteBankTransformer)
-            ->addIndexColumn()
-            ->make(true);
+        try{
+            $wasteBanks = WasteBank::query();
+            return DataTables::of($wasteBanks)
+                ->setTransformer(new WasteBankTransformer())
+                ->make(true);
+        }
+        catch (\Exception $ex){
+            Log::error("Admin/WasteBankController - getIndex error: ". $ex);
+        }
     }
 
     /**
