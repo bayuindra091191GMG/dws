@@ -33,7 +33,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">No. Telp</th>
                                 <th class="text-center">Jenis Sampah</th>
-                                <th class="text-center">Berat Sampah</th>
+                                <th class="text-center">Berat Sampah (Kg)</th>
                                 <th class="text-center">Point</th>
                             </tr>
                             </thead>
@@ -63,6 +63,11 @@
 
 @section('styles')
     <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
+    <style>
+        th{
+            font-weight: bold !important;
+        }
+    </style>
 @endsection
 
 @section('scripts')

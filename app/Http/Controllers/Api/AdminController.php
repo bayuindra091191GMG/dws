@@ -95,7 +95,7 @@ class AdminController extends Controller
             $header->user_id = $user->id;
             $header->save();
 
-            //send notification
+            //send notification to admin browser and user device
             $userName = $header->user->first_name." ".$header->user->last_name;
             $title = "Digital Waste Solution";
             $body = "Admin Scan QR Code User";
@@ -105,7 +105,8 @@ class AdminController extends Controller
                 'name' => $userName
             );
 
-            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+            FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+            FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
 
             return Response::json([
                 'message' => "Success assign " . $user->email . " to " . $header->transaction_no . "!",
