@@ -51,10 +51,13 @@ class UserController extends Controller
             $user->routine_pickup = $request->input('routine_pickup');
             $user->save();
 
-            UserWasteBank::create([
-                'user_id'       => $user->id,
-                'waste_bank_id' => $request->input('waste_bank_id')
-            ]);
+            $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
+            if(empty($userWasteBank)){
+                UserWasteBank::create([
+                    'user_id'       => $user->id,
+                    'waste_bank_id' => $request->input('waste_bank_id')
+                ]);
+            }
 
             return Response::json([
                 'message' => "Success Changing Routine Pickup Status!",
