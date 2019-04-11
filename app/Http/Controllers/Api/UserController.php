@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Address;
+use App\Models\Configuration;
 use App\Models\User;
 use App\Models\UserWasteBank;
 use App\Notifications\FCMNotification;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -46,18 +48,36 @@ class UserController extends Controller
     {
         try{
             $userId = auth('api')->user();
-            $user = User::where('email', $userId->id)->first();
+            $user = User::where('email', $userId->email)->first();
+
+            $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
+
+            if(empty($userWasteBank)){
+                $wasteBank = DB::table("waste_banks")
+                    ->select("*"
+                        ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
+                    * cos(radians(waste_banks.latitude)) 
+                    * cos(radians(waste_banks.longitude) - radians(" . $request->input('longitude') . ")) 
+                    + sin(radians(" .$request->input('latitude'). ")) 
+                    * sin(radians(waste_banks.latitude))) AS distance"))
+                    ->get();
+                $config = Configuration::where('configuration_key', 'wastebank_radius')->first();
+                $temp = $wasteBank->where('distance', '<=', $config->configuration_value);
+
+                if(count($temp) == 0){
+                    return Response::json([
+                        'message' => "No Near Wastebank Found!!",
+                    ], 482);
+                }
+
+                UserWasteBank::create([
+                    'user_id'       => $user->id,
+                    'waste_bank_id' => $wasteBank[0]->id
+                ]);
+            }
 
             $user->routine_pickup = $request->input('routine_pickup');
             $user->save();
-
-            $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
-            if(empty($userWasteBank)){
-                UserWasteBank::create([
-                    'user_id'       => $user->id,
-                    'waste_bank_id' => $request->input('waste_bank_id')
-                ]);
-            }
 
             return Response::json([
                 'message' => "Success Changing Routine Pickup Status!",
