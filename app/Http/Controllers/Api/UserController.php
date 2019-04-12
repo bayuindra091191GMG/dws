@@ -50,40 +50,51 @@ class UserController extends Controller
             $userId = auth('api')->user();
             $user = User::where('email', $userId->email)->first();
 
-            $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
+            $user->routine_pickup = $request->input('routine_pickup');
+            $user->save();
 
-            if(empty($userWasteBank)){
-                $wasteBank = DB::table("waste_banks")
-                    ->select("*"
-                        ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
+            //$userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
+
+            $wasteBank = DB::table("waste_banks")
+                ->select("*"
+                    ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
                     * cos(radians(waste_banks.latitude)) 
                     * cos(radians(waste_banks.longitude) - radians(" . $request->input('longitude') . ")) 
                     + sin(radians(" .$request->input('latitude'). ")) 
                     * sin(radians(waste_banks.latitude))) AS distance"))
-                    ->get();
-                $config = Configuration::where('configuration_key', 'wastebank_radius')->first();
-                $temp = $wasteBank->where('distance', '<=', $config->configuration_value);
+                ->get();
 
-                if(count($temp) == 0){
-                    return Response::json([
-                        'message' => "No Near Wastebank Found!!",
-                    ], 482);
+            $config = Configuration::where('configuration_key', 'wastebank_radius')->first();
+            $temp = $wasteBank->where('distance', '<=', $config->configuration_value);
+
+
+            if(count($temp) == 0){
+                // If calculated waste bank not found
+                $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
+                foreach($userWasteBanks as $userWasteBank){
+                    $userWasteBank->delete();
                 }
 
-                UserWasteBank::create([
-                    'user_id'       => $user->id,
-                    'waste_bank_id' => $wasteBank[0]->id
-                ]);
+                return Response::json([
+                    'message' => "There isn't any Waste Bank near your household address.",
+                ], 482);
             }
+            else{
+                $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $wasteBank[0]->id)->first();
 
-            $user->routine_pickup = $request->input('routine_pickup');
-            $user->save();
+                if(empty($userWasteBank)){
+                    UserWasteBank::create([
+                        'user_id'       => $user->id,
+                        'waste_bank_id' => $wasteBank[0]->id
+                    ]);
+                }
 
-            return Response::json([
-                'message' => "Success Changing Routine Pickup Status!",
-            ], 200);
+                $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
+                return Response::json($responseJson, 200);
+            }
         }
         catch(\Exception $ex){
+            Log::error("Api/UserController - changeRoutinePickup error: ". $ex);
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
@@ -147,10 +158,20 @@ class UserController extends Controller
     public function getAddress()
     {
         try{
-            $userId = auth('api')->user();
-            $user = User::where('email', $userId->email)->first();
+            $user = auth('api')->user();
+            $user = User::where('email', $user->email)->first();
 
-            return Response::json($user->addresses->first(),200);
+            $address = Address::where('user_id', $user->id)
+                ->where('primary', 1)
+                ->first();
+
+            if(empty($address)){
+                return Response::json([
+                    'message' => "Anda belum punya alamat.",
+                ], 482);
+            }
+
+            return Response::json($address,200);
         }
         catch (\Exception $ex){
             return Response::json([
@@ -186,39 +207,44 @@ class UserController extends Controller
             }
 
             $user = auth('api')->user();
-            $address = Address::where('user_id', $user->id)->first();
-            if($address == null){
-                //Create new address
+            $addresses = Address::where('user_id', $user->id)->get();
+            if($addresses->count() === 0){
+                // Create new address
                 $nAddress = Address::create([
                     'user_id'       => $user->id,
-                    'description'   => $request->input('description'),
-                    'latitude'      => $request->input('latitude'),
-                    'longitude'     => $request->input('longitude'),
-                    'city'          => (int)$request->input('city'),
-                    'province'      => (int)$request->input('province'),
-                    'postal_code'   => $request->input('postal_code'),
+                    'primary'       => $addresses->count() > 1 ? 0 : 1,
+                    'description'   => $data['description'],
+                    'latitude'      => $data['latitude'],
+                    'longitude'     => $data['longitude'],
+                    'city'          => (int)$data['city'],
+                    'province'      => (int)$data['province'],
+                    'postal_code'   => $data['postal_code'],
+                    'notes'         => $data['notes'] ?? null,
                     'created_at'    => Carbon::now('Asia/Jakarta')
                 ]);
 
-                return Response::json([
-                    'address'   => $nAddress,
-                ], 200);
+                return Response::json($nAddress, 200);
             }
             else{
-                $address->description = $request->input('description');
-                $address->latitude = $request->input('latitude');
-                $address->longitude = $request->input('longitude');
-                $address->city = (int)$request->input('city');
-                $address->province = (int)$request->input('province');
-                $address->pistal_code = $request->input('postal_code');
+                // Assume edited address is always primary
+                $address = Address::where('user_id', $user->id)
+                    ->where('primary', 1)
+                    ->first();
+
+                $address->description = $data['description'];
+                $address->latitude = $data['latitude'];
+                $address->longitude = $data['longitude'];
+                $address->city = (int)$data['city'];
+                $address->province = (int)$data['province'];
+                $address->postal_code = $data['postal_code'];
+                $address->notes = $data['notes'] ?? null;
                 $address->save();
 
-                return Response::json([
-                    'address'   => $address,
-                ], 200);
+                return Response::json($address, 200);
             }
         }
         catch (\Exception $ex){
+            Log::error("Api/UserController - setAddress error: ". $ex);
             return Response::json([
                 'error'   => $ex,
             ], 500);

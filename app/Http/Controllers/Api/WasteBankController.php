@@ -68,16 +68,24 @@ class WasteBankController extends Controller
     {
         try{
             $user = auth('api')->user();
-            $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
-            if(empty($userWastebank)){
-                return Response::json([
-                    'message' => "User has not activated routine pickup!",
-                ], 482);
+
+            if($user->routine_pickup === 1){
+                $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
+                if(empty($userWastebank)){
+                    return Response::json([
+                        'message' => "Penjemputan Rutin belum diaktifkan.",
+                    ], 482);
+                }
+                else{
+                    $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
+
+                    return $wasteBankSchedules;
+                }
             }
             else{
-                $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
-
-                return $wasteBankSchedules;
+                return Response::json([
+                    'message' => "Penjemputan Rutin belum diaktifkan.",
+                ], 482);
             }
         }
         catch (\Exception $ex){
