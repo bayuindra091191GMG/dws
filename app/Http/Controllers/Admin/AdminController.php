@@ -8,8 +8,10 @@ use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
 use App\Notifications\FCMNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
@@ -35,6 +37,52 @@ class AdminController extends Controller
         if($userAdmin->email == "demo@dws-solusi.net"){
             return view('home-demo');
         }
+
+        $start = Carbon::now('Asia/Jakarta')->subMonths(6);
+        $end = Carbon::now('Asia/Jakarta');
+
+        $transactionDatas = DB::table('transaction_headers')
+            ->select(DB::raw('SUM(total_weight) as total_weight, '.
+                'SUM(total_price) as total_price, '.
+                'YEAR(date) as year, '.
+                'MONTHNAME(date) as month'))
+            ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))
+            ->orderBy('date')
+            ->groupBy(DB::raw('MONTHNAME(date)'))
+            ->groupBy(DB::raw('YEAR(date)'))
+            ->get();
+
+        $wasteBankDatas = DB::table('waste_banks')
+            ->select(DB::raw('ifnull(count(id),0) as total_count, '.
+                'YEAR(created_at) as year, '.
+                'MONTHNAME(created_at) as month'))
+            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
+            ->orderBy('created_at')
+            ->groupBy(DB::raw('MONTHNAME(created_at)'))
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->get();
+
+        $wasteCollectorDatas = DB::table('waste_collectors')
+            ->select(DB::raw('ifnull(count(id),0) as total_count, '.
+                'YEAR(created_at) as year, '.
+                'MONTHNAME(created_at) as month'))
+            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
+            ->orderBy('created_at')
+            ->groupBy(DB::raw('MONTHNAME(created_at)'))
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->get();
+
+        $customerDatas = DB::table('users')
+            ->select(DB::raw('ifnull(count(id),0) as total_count, '.
+                'YEAR(created_at) as year, '.
+                'MONTHNAME(created_at) as month'))
+            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
+            ->orderBy('created_at')
+            ->groupBy(DB::raw('MONTHNAME(created_at)'))
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->get();
+
+        //dd($wasteBankDatas);
 
         $adminBankCatId = 0;
         // Check admin type
