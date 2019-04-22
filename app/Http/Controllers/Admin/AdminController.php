@@ -44,6 +44,10 @@ class AdminController extends Controller
         $transactionDatas = DB::table('transaction_headers')
             ->select(DB::raw('SUM(total_weight) as total_weight, '.
                 'SUM(total_price) as total_price, '.
+                'SUM(transaction_type = 1) as total_rutin, '.
+                'SUM(transaction_type = 2) as total_antar_sendiri, '.
+                'SUM(transaction_type = 3) as total_on_demand, '.
+                'SUM(total_price) as total_price, '.
                 'YEAR(date) as year, '.
                 'MONTHNAME(date) as month'))
             ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))
@@ -74,6 +78,16 @@ class AdminController extends Controller
 
         $customerDatas = DB::table('users')
             ->select(DB::raw('ifnull(count(id),0) as total_count, '.
+                'YEAR(created_at) as year, '.
+                'MONTHNAME(created_at) as month'))
+            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
+            ->orderBy('created_at')
+            ->groupBy(DB::raw('MONTHNAME(created_at)'))
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->get();
+
+        $emptyHouseDatas = DB::table('waste_collector_user_statuses')
+            ->select(DB::raw('ifnull(sum(status_id = 20),0) as total_count, '.
                 'YEAR(created_at) as year, '.
                 'MONTHNAME(created_at) as month'))
             ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
