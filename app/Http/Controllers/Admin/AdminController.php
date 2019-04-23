@@ -8,8 +8,9 @@ use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
 use App\Notifications\FCMNotification;
-use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -38,16 +39,17 @@ class AdminController extends Controller
             return view('home-demo');
         }
 
-        $start = Carbon::now('Asia/Jakarta')->subMonths(6);
+        $start = Carbon::now('Asia/Jakarta')->subMonths(2);
         $end = Carbon::now('Asia/Jakarta');
+
+        //dd($months);
 
         $transactionDatas = DB::table('transaction_headers')
             ->select(DB::raw('SUM(total_weight) as total_weight, '.
                 'SUM(total_price) as total_price, '.
-                'SUM(transaction_type = 1) as total_rutin, '.
-                'SUM(transaction_type = 2) as total_antar_sendiri, '.
-                'SUM(transaction_type = 3) as total_on_demand, '.
-                'SUM(total_price) as total_price, '.
+                'SUM(transaction_type_id = 1) as total_rutin, '.
+                'SUM(transaction_type_id = 2) as total_antar_sendiri, '.
+                'SUM(transaction_type_id = 3) as total_on_demand, '.
                 'YEAR(date) as year, '.
                 'MONTHNAME(date) as month'))
             ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))
@@ -96,111 +98,207 @@ class AdminController extends Controller
             ->groupBy(DB::raw('YEAR(created_at)'))
             ->get();
 
-        //dd($wasteBankDatas);
+        $period = CarbonPeriod::create($start, '1 month', $end);
+
+        $dashboardDatas = collect();
+
+        // Iterate each month
+        foreach ($period as $dt) {
+            $month = $dt->format("F");
+            //dd($month);
+            $year = $dt->format("Y");
+            $totalPrice = 0;
+            $totalWeight = 0;
+            $totalRutin = 0;
+            $totalAntarSendiri = 0;
+            $totalOnDemand = 0;
+            $totalWasteBank = 0;
+            $totalWasteCollector = 0;
+            $totalCustomer = 0;
+            $totalEmptyHouse = 0;
+
+            // Get monthly transaction data
+            if($transactionDatas->count() > 0){
+                $transactionData = $transactionDatas->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+                if(!empty($transactionData)){
+                    $totalPrice = $transactionData->total_price;
+                    $totalWeight = $transactionData->total_weight;
+                    $totalRutin = $transactionData->total_rutin;
+                    $totalAntarSendiri = $transactionData->total_antar_sendiri;
+                    $totalOnDemand = $transactionData->total_on_demand;
+                }
+            }
+
+            // Get monthly waste bank data
+            if($wasteBankDatas->count() > 0){
+                $wasteBankData = $wasteBankDatas->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+                if(!empty($wasteBankData)){
+                    $totalWasteBank = $wasteBankData->total_count;
+                }
+            }
+
+            // Get monthly waste collector data
+            if($wasteCollectorDatas->count() > 0){
+                $wasteCollectorData = $wasteCollectorDatas->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+                if(!empty($wasteCollectorData)){
+                    $totalWasteCollector = $wasteCollectorData->total_count;
+                }
+            }
+
+            // Get monthly customer data
+            if($customerDatas->count() > 0){
+                $customerData = $customerDatas->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+                if(!empty($customerData)){
+                    $totalCustomer = $customerData->total_count;
+                }
+            }
+
+            // Get monthly empty house data
+            if($emptyHouseDatas->count() > 0){
+                $emptyHouseData = $emptyHouseDatas->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+                if(!empty($emptyHouseData)){
+                    $totalEmptyHouse = $emptyHouseData->total_count;
+                }
+            }
+
+            $dashboardItem = collect([
+                'month'                 => $month,
+                'year'                  => $year,
+                'totalPrice'            => $totalPrice,
+                'totalWeight'           => $totalWeight,
+                'totalRutin'            => $totalRutin,
+                'totalAntarSendiri'     => $totalAntarSendiri,
+                'totalOnDemand'         => $totalOnDemand,
+                'totalWasteBank'        => $totalWasteBank,
+                'totalWasteCollector'   => $totalWasteCollector,
+                'totalCustomer'         => $totalCustomer,
+                'totalEmptyHouse'       => $totalEmptyHouse
+            ]);
+
+            $dashboardDatas->push($dashboardItem);
+        }
+
+//        foreach($dashboardDatas as $dashboardData){
+//            dd($dashboardData->get('totalPrice'));
+//        }
 
         $adminBankCatId = 0;
+        $isSuperAdmin = $userAdmin->is_super_admin === 1;
         // Check admin type
-        if($userAdmin->is_super_admin === 0 && !empty($userAdmin->waste_bank_id)){
-            $adminWasteBankId = $userAdmin->waste_bank_id;
-            $adminBankCatId = $userAdmin->waste_bank->waste_category->id;
-            $trxDetailRutin = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
-                    $query->where('transaction_type_id', 1)
-                        ->where('waste_bank_id', $adminWasteBankId)
-                        ->orderByDesc('date');
-            });
-
-
-            $trxDetailAntarSendiri = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
-                    $query->where('transaction_type_id', 2)
-                        ->where('waste_bank_id', $adminWasteBankId)
-                        ->orderByDesc('date');
-            });
-
-            $trxDetailInstant = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
-                    $query->where('transaction_type_id', 3)
-                        ->where('waste_bank_id', $adminWasteBankId)
-                        ->orderByDesc('date');
-            });
-
-            if($adminBankCatId === 1){
-                $trxDetailRutin = $trxDetailRutin->whereNotNull('dws_category_id');
-
-                $trxDetailAntarSendiri = $trxDetailAntarSendiri->whereNotNull('dws_category_id');
-
-                $trxDetailInstant = $trxDetailInstant->whereNotNull('dws_category_id');
-            }
-            else{
-                $trxDetailRutin = $trxDetailRutin->whereNotNull('masaro_category_id');
-
-                $trxDetailAntarSendiri = $trxDetailAntarSendiri->whereNotNull('masaro_category_id');
-
-                $trxDetailInstant = $trxDetailInstant->whereNotNull('masaro_category_id');
-            }
-        }
-        else{
-            $trxDetailRutin = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query){
-                    $query->where('transaction_type_id', 1)
-                        ->orderByDesc('date');
-            });
-            $trxDetailAntarSendiri = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query){
-                    $query->where('transaction_type_id', 2)
-                        ->orderByDesc('date');
-            });
-            $trxDetailInstant = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
-                ->whereHas('transaction_header', function($query){
-                    $query->where('transaction_type_id', 3)
-                        ->orderByDesc('date');
-            });
-        }
-
-        $trxDetailRutin = $trxDetailRutin->take(10)->get();
-        $trxDetailAntarSendiri = $trxDetailAntarSendiri->take(10)->get();
-        $trxDetailInstant = $trxDetailInstant->take(10)->get();
-
-        // Get total waste value
-        $totalRutinWasteWeight = 0;
-        $totalRutinWastePrice = 0;
-        if($trxDetailRutin->count() > 0){
-            foreach ($trxDetailRutin as $trxDetail){
-                $totalRutinWasteWeight += $trxDetail->weight;
-                $totalRutinWastePrice += $trxDetail->price;
-            }
-        }
-
-        $totalAntarSendiriWasteWeight = 0;
-        $totalAntarSendiriWastePrice = 0;
-        if($trxDetailAntarSendiri->count() > 0){
-            foreach ($trxDetailAntarSendiri as $trxDetail){
-                $totalAntarSendiriWasteWeight += $trxDetail->weight;
-                $totalAntarSendiriWastePrice += $trxDetail->price;
-            }
-        }
-
-        $totalInstantWasteWeight = 0;
-        $totalInstantWastePrice = 0;
-        if($trxDetailInstant->count() > 0){
-            foreach ($trxDetailInstant as $trxDetail){
-                $totalInstantWasteWeight += $trxDetail->weight;
-                $totalInstantWastePrice += $trxDetail->price;
-            }
-        }
+//        if($userAdmin->is_super_admin === 0 && !empty($userAdmin->waste_bank_id)){
+//            $adminWasteBankId = $userAdmin->waste_bank_id;
+//            $adminBankCatId = $userAdmin->waste_bank->waste_category->id;
+//            $trxDetailRutin = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
+//                    $query->where('transaction_type_id', 1)
+//                        ->where('waste_bank_id', $adminWasteBankId)
+//                        ->orderByDesc('date');
+//            });
+//
+//
+//            $trxDetailAntarSendiri = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
+//                    $query->where('transaction_type_id', 2)
+//                        ->where('waste_bank_id', $adminWasteBankId)
+//                        ->orderByDesc('date');
+//            });
+//
+//            $trxDetailInstant = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query) use($adminWasteBankId){
+//                    $query->where('transaction_type_id', 3)
+//                        ->where('waste_bank_id', $adminWasteBankId)
+//                        ->orderByDesc('date');
+//            });
+//
+//            if($adminBankCatId === 1){
+//                $trxDetailRutin = $trxDetailRutin->whereNotNull('dws_category_id');
+//
+//                $trxDetailAntarSendiri = $trxDetailAntarSendiri->whereNotNull('dws_category_id');
+//
+//                $trxDetailInstant = $trxDetailInstant->whereNotNull('dws_category_id');
+//            }
+//            else{
+//                $trxDetailRutin = $trxDetailRutin->whereNotNull('masaro_category_id');
+//
+//                $trxDetailAntarSendiri = $trxDetailAntarSendiri->whereNotNull('masaro_category_id');
+//
+//                $trxDetailInstant = $trxDetailInstant->whereNotNull('masaro_category_id');
+//            }
+//        }
+//        else{
+//            $trxDetailRutin = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query){
+//                    $query->where('transaction_type_id', 1)
+//                        ->orderByDesc('date');
+//            });
+//            $trxDetailAntarSendiri = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query){
+//                    $query->where('transaction_type_id', 2)
+//                        ->orderByDesc('date');
+//            });
+//            $trxDetailInstant = TransactionDetail::with(['dws_waste_category_data', 'masaro_waste_category_data'])
+//                ->whereHas('transaction_header', function($query){
+//                    $query->where('transaction_type_id', 3)
+//                        ->orderByDesc('date');
+//            });
+//        }
+//
+//        $trxDetailRutin = $trxDetailRutin->take(10)->get();
+//        $trxDetailAntarSendiri = $trxDetailAntarSendiri->take(10)->get();
+//        $trxDetailInstant = $trxDetailInstant->take(10)->get();
+//
+//        // Get total waste value
+//        $totalRutinWasteWeight = 0;
+//        $totalRutinWastePrice = 0;
+//        if($trxDetailRutin->count() > 0){
+//            foreach ($trxDetailRutin as $trxDetail){
+//                $totalRutinWasteWeight += $trxDetail->weight;
+//                $totalRutinWastePrice += $trxDetail->price;
+//            }
+//        }
+//
+//        $totalAntarSendiriWasteWeight = 0;
+//        $totalAntarSendiriWastePrice = 0;
+//        if($trxDetailAntarSendiri->count() > 0){
+//            foreach ($trxDetailAntarSendiri as $trxDetail){
+//                $totalAntarSendiriWasteWeight += $trxDetail->weight;
+//                $totalAntarSendiriWastePrice += $trxDetail->price;
+//            }
+//        }
+//
+//        $totalInstantWasteWeight = 0;
+//        $totalInstantWastePrice = 0;
+//        if($trxDetailInstant->count() > 0){
+//            foreach ($trxDetailInstant as $trxDetail){
+//                $totalInstantWasteWeight += $trxDetail->weight;
+//                $totalInstantWastePrice += $trxDetail->price;
+//            }
+//        }
 
         $data = [
             'adminBankCatId'                => $adminBankCatId,
-            'trxDetailAntarSendiri'         => $trxDetailAntarSendiri,
-            'trxDetailInstant'              => $trxDetailInstant,
-            'trxDetailRutin'                => $trxDetailRutin,
-            'totalRutinWasteWeight'         => number_format($totalRutinWasteWeight, 0, ",", "."),
-            'totalRutinWastePrice'          => number_format($totalRutinWastePrice, 0, ",", "."),
-            'totalAntarSendiriWasteWeight'  => number_format($totalAntarSendiriWasteWeight, 0, ",", "."),
-            'totalAntarSendiriWastePrice'   => number_format($totalAntarSendiriWastePrice, 0, ",", "."),
-            'totalInstantWasteWeight'       => number_format($totalInstantWasteWeight, 0, ",", "."),
-            'totalInstantWastePrice'        => number_format($totalInstantWastePrice, 0, ",", "."),
+            'isSuperAdmin'                  => $isSuperAdmin,
+            'dashboardDatas'                => $dashboardDatas
+
+//            'trxDetailAntarSendiri'         => $trxDetailAntarSendiri,
+//            'trxDetailInstant'              => $trxDetailInstant,
+//            'trxDetailRutin'                => $trxDetailRutin,
+//            'totalRutinWasteWeight'         => number_format($totalRutinWasteWeight, 0, ",", "."),
+//            'totalRutinWastePrice'          => number_format($totalRutinWastePrice, 0, ",", "."),
+//            'totalAntarSendiriWasteWeight'  => number_format($totalAntarSendiriWasteWeight, 0, ",", "."),
+//            'totalAntarSendiriWastePrice'   => number_format($totalAntarSendiriWastePrice, 0, ",", "."),
+//            'totalInstantWasteWeight'       => number_format($totalInstantWasteWeight, 0, ",", "."),
+//            'totalInstantWastePrice'        => number_format($totalInstantWastePrice, 0, ",", "."),
         ];
 
         return view('admin.dashboard')->with($data);
