@@ -88,8 +88,9 @@ class AdminController extends Controller
             ->groupBy(DB::raw('YEAR(created_at)'))
             ->get();
 
-        $emptyHouseDatas = DB::table('waste_collector_user_statuses')
-            ->select(DB::raw('ifnull(sum(status_id = 20),0) as total_count, '.
+        $rutinStatusDatas = DB::table('waste_collector_user_statuses')
+            ->select(DB::raw('ifnull(sum(status_id = 20),0) as total_empty_hourse, '.
+                'ifnull(sum(status_id = 21),0) as total_no_waste, '.
                 'YEAR(created_at) as year, '.
                 'MONTHNAME(created_at) as month'))
             ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
@@ -109,6 +110,7 @@ class AdminController extends Controller
             $year = $dt->format("Y");
             $totalPrice = 0;
             $totalWeight = 0;
+            $totalTransaction = 0;
             $totalRutin = 0;
             $totalAntarSendiri = 0;
             $totalOnDemand = 0;
@@ -116,6 +118,7 @@ class AdminController extends Controller
             $totalWasteCollector = 0;
             $totalCustomer = 0;
             $totalEmptyHouse = 0;
+            $totalNoWaste = 0;
 
             // Get monthly transaction data
             if($transactionDatas->count() > 0){
@@ -128,6 +131,8 @@ class AdminController extends Controller
                     $totalRutin = $transactionData->total_rutin;
                     $totalAntarSendiri = $transactionData->total_antar_sendiri;
                     $totalOnDemand = $transactionData->total_on_demand;
+
+                    $totalTransaction = $totalRutin + $totalAntarSendiri + $totalOnDemand;
                 }
             }
 
@@ -161,13 +166,14 @@ class AdminController extends Controller
                 }
             }
 
-            // Get monthly empty house data
-            if($emptyHouseDatas->count() > 0){
-                $emptyHouseData = $emptyHouseDatas->where('year', $year)
+            // Get monthly transaction routine status data
+            if($rutinStatusDatas->count() > 0){
+                $rutinStatusData = $rutinStatusDatas->where('year', $year)
                     ->where('month', $month)
                     ->first();
-                if(!empty($emptyHouseData)){
-                    $totalEmptyHouse = $emptyHouseData->total_count;
+                if(!empty($rutinStatusData)){
+                    $totalEmptyHouse = $rutinStatusData->total_empty_hourse;
+                    $totalNoWaste = $rutinStatusData->total_no_waste;
                 }
             }
 
@@ -176,13 +182,15 @@ class AdminController extends Controller
                 'year'                  => $year,
                 'totalPrice'            => $totalPrice,
                 'totalWeight'           => $totalWeight,
+                'totalTransaction'      => $totalTransaction,
                 'totalRutin'            => $totalRutin,
                 'totalAntarSendiri'     => $totalAntarSendiri,
                 'totalOnDemand'         => $totalOnDemand,
                 'totalWasteBank'        => $totalWasteBank,
                 'totalWasteCollector'   => $totalWasteCollector,
                 'totalCustomer'         => $totalCustomer,
-                'totalEmptyHouse'       => $totalEmptyHouse
+                'totalEmptyHouse'       => $totalEmptyHouse,
+                'totalNoWaste'          => $totalNoWaste
             ]);
 
             $dashboardDatas->push($dashboardItem);
