@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
+use App\Models\DwsWasteCategoryData;
+use App\Models\MasaroWasteCategoryData;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\WasteCollector;
@@ -103,9 +105,14 @@ class AdminController extends Controller
 
         $dashboardDatas = collect();
 
+        // Get waste categories
+        $dwsCategories = DwsWasteCategoryData::all();
+        $masaroCategories = MasaroWasteCategoryData::all();
+
         // Iterate each month
         foreach ($period as $dt) {
             $month = $dt->format("F");
+            $monthInt = $dt->format("m");
             //dd($month);
             $year = $dt->format("Y");
             $totalPrice = 0;
@@ -119,12 +126,14 @@ class AdminController extends Controller
             $totalCustomer = 0;
             $totalEmptyHouse = 0;
             $totalNoWaste = 0;
+            $wasteCategories = collect();
 
             // Get monthly transaction data
             if($transactionDatas->count() > 0){
                 $transactionData = $transactionDatas->where('year', $year)
                     ->where('month', $month)
                     ->first();
+
                 if(!empty($transactionData)){
                     $totalPrice = $transactionData->total_price;
                     $totalWeight = $transactionData->total_weight;
@@ -133,6 +142,73 @@ class AdminController extends Controller
                     $totalOnDemand = $transactionData->total_on_demand;
 
                     $totalTransaction = $totalRutin + $totalAntarSendiri + $totalOnDemand;
+
+                    foreach ($dwsCategories as $dwsCategory){
+
+                        $categoryData = DB::table('transaction_details')
+                            ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                            ->select(DB::raw('transaction_headers.date, '.
+                                'transaction_details.*, '.
+                                'SUM(transaction_details.weight) as total_category_weight, '.
+                                'SUM(transaction_details.price) as total_category_price'))
+                            ->where('transaction_details.dws_category_id', $dwsCategory->id)
+                            ->whereMonth('transaction_headers.date', '=', $monthInt)
+                            ->first();
+
+                        $wasteCategoryItem = collect([
+                            'name'      => $dwsCategory->name,
+                            'weight'    => $categoryData->total_category_weight ?? 0,
+                            'price'     => $categoryData->total_category_price ?? 0,
+                        ]);
+
+                        $wasteCategories->push($wasteCategoryItem);
+                    }
+
+                    foreach ($masaroCategories as $masaroCategory){
+
+                        $categoryData = DB::table('transaction_details')
+                            ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                            ->select(DB::raw('transaction_headers.date, '.
+                                'transaction_details.*, '.
+                                'SUM(transaction_details.weight) as total_category_weight, '.
+                                'SUM(transaction_details.price) as total_category_price'))
+                            ->where('transaction_details.masaro_category_id', $masaroCategory->id)
+                            ->whereMonth('transaction_headers.date', '=', $monthInt)
+                            ->first();
+
+                        $wasteCategoryItem = collect([
+                            'name'      => $masaroCategory->name,
+                            'weight'    => $categoryData->total_category_weight ?? 0,
+                            'price'     => $categoryData->total_category_price ?? 0,
+                        ]);
+
+                        $wasteCategories->push($wasteCategoryItem);
+                    }
+
+                    //dd($wasteCategories);
+                }
+                else{
+                    foreach ($dwsCategories as $dwsCategory){
+
+                        $wasteCategoryItem = collect([
+                            'name'      => $dwsCategory->name,
+                            'weight'    => 0,
+                            'price'     => 0
+                        ]);
+
+                        $wasteCategories->push($wasteCategoryItem);
+                    }
+
+                    foreach ($masaroCategories as $masaroCategory){
+
+                        $wasteCategoryItem = collect([
+                            'name'      => $masaroCategory->name,
+                            'weight'    => 0,
+                            'price'     => 0
+                        ]);
+
+                        $wasteCategories->push($wasteCategoryItem);
+                    }
                 }
             }
 
@@ -190,11 +266,14 @@ class AdminController extends Controller
                 'totalWasteCollector'   => $totalWasteCollector,
                 'totalCustomer'         => $totalCustomer,
                 'totalEmptyHouse'       => $totalEmptyHouse,
-                'totalNoWaste'          => $totalNoWaste
+                'totalNoWaste'          => $totalNoWaste,
+                'wasteCategoryItems'    => $wasteCategories
             ]);
 
             $dashboardDatas->push($dashboardItem);
         }
+
+        //dd($dashboardDatas);
 
 //        foreach($dashboardDatas as $dashboardData){
 //            dd($dashboardData->get('totalPrice'));

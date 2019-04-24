@@ -46,17 +46,32 @@
                         </li>
                         <li class="d-flex no-block card-body border-top">
                             <div class="row w-100">
-                                <div class="col-6">
-                                    <span>Jenis Sampah</span>
+                                <div class="col-5">
+                                    <span class="font-weight-bold">Jenis Sampah</span>
                                 </div>
                                 <div class="col-3 text-right">
-                                    <span>Berat (Gram)</span>
+                                    <span class="font-weight-bold">Berat (Kg)</span>
                                 </div>
-                                <div class="col-3 text-right">
-                                    <span>Harga (Rp)</span>
+                                <div class="col-4 text-right">
+                                    <span class="font-weight-bold">Harga (Rp)</span>
                                 </div>
                             </div>
                         </li>
+                        @foreach($dashboardData->get('wasteCategoryItems') as $wasteCategoryItem)
+                            <li class="d-flex no-block card-body no-padding">
+                                <div class="row w-100">
+                                    <div class="col-5">
+                                        <span class="text-muted">{{ $wasteCategoryItem->get('name') }}</span>
+                                    </div>
+                                    <div class="col-3 text-right">
+                                        <span class="text-black font-weight-bold">{{ number_format($wasteCategoryItem->get('weight') / 1000, 2, ",", ".") }}</span>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <span class="text-black font-weight-bold">{{ number_format($wasteCategoryItem->get('price'), 0, ",", ".") }}</span>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
                     </ul>
             </div>
         </div>
@@ -204,6 +219,10 @@
 
 @section('styles')
     <style>
+        .text-black{
+            color: #000;
+        }
+
         .size-30{
             font-size: 30px;
             color: black;
