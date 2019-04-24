@@ -140,7 +140,8 @@ class TransactionHeaderController extends Controller
                 'longitude'             => $data['longitude'],
                 'created_at'            => Carbon::now('Asia/Jakarta'),
                 'updated_at'            => Carbon::now('Asia/Jakarta'),
-                'waste_bank_id'         => $wasteBankId
+                'waste_bank_id'         => $wasteBankId,
+                'point_user'            => $data["total_price"]
             ]);
 
             //do detail

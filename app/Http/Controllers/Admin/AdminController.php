@@ -49,6 +49,7 @@ class AdminController extends Controller
         $transactionDatas = DB::table('transaction_headers')
             ->select(DB::raw('SUM(total_weight) as total_weight, '.
                 'SUM(total_price) as total_price, '.
+                'SUM(point_user) as total_distributed_point, '.
                 'SUM(transaction_type_id = 1) as total_rutin, '.
                 'SUM(transaction_type_id = 2) as total_antar_sendiri, '.
                 'SUM(transaction_type_id = 3) as total_on_demand, '.
@@ -117,6 +118,7 @@ class AdminController extends Controller
             $year = $dt->format("Y");
             $totalPrice = 0;
             $totalWeight = 0;
+            $totalDistributedPoint = 0;
             $totalTransaction = 0;
             $totalRutin = 0;
             $totalAntarSendiri = 0;
@@ -137,6 +139,7 @@ class AdminController extends Controller
                 if(!empty($transactionData)){
                     $totalPrice = $transactionData->total_price;
                     $totalWeight = $transactionData->total_weight;
+                    $totalDistributedPoint = $transactionData->total_distributed_point;
                     $totalRutin = $transactionData->total_rutin;
                     $totalAntarSendiri = $transactionData->total_antar_sendiri;
                     $totalOnDemand = $transactionData->total_on_demand;
@@ -147,8 +150,7 @@ class AdminController extends Controller
 
                         $categoryData = DB::table('transaction_details')
                             ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
-                            ->select(DB::raw('transaction_headers.date, '.
-                                'transaction_details.*, '.
+                            ->select(DB::raw(
                                 'SUM(transaction_details.weight) as total_category_weight, '.
                                 'SUM(transaction_details.price) as total_category_price'))
                             ->where('transaction_details.dws_category_id', $dwsCategory->id)
@@ -168,8 +170,7 @@ class AdminController extends Controller
 
                         $categoryData = DB::table('transaction_details')
                             ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
-                            ->select(DB::raw('transaction_headers.date, '.
-                                'transaction_details.*, '.
+                            ->select(DB::raw(
                                 'SUM(transaction_details.weight) as total_category_weight, '.
                                 'SUM(transaction_details.price) as total_category_price'))
                             ->where('transaction_details.masaro_category_id', $masaroCategory->id)
@@ -258,6 +259,7 @@ class AdminController extends Controller
                 'year'                  => $year,
                 'totalPrice'            => $totalPrice,
                 'totalWeight'           => $totalWeight,
+                'totalDistributedPoint' => $totalDistributedPoint,
                 'totalTransaction'      => $totalTransaction,
                 'totalRutin'            => $totalRutin,
                 'totalAntarSendiri'     => $totalAntarSendiri,

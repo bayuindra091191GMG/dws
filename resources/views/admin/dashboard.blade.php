@@ -98,7 +98,7 @@
                             <div class="col-12">
                                 <span class="text-muted">Total Poin yang Didistribusikan</span>
                                 <br>
-                                <span class="text-muted font-bold size-33">0 </span>
+                                <span class="text-muted font-bold size-33">{{ $dashboardData->get('totalDistributedPoint') }} </span>
                             </div>
                         </li>
                         <li class="d-flex no-block card-body border-top">
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalTransaction'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalTransaction'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalRutin'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalRutin'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalOnDemand'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalOnDemand'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalAntarSendiri'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalAntarSendiri'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalEmptyHouse'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalEmptyHouse'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="text-right">
-                                        <span class="text-muted font-bold">{{ number_format($dashboardData->get('totalNoWaste'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-bold">{{ number_format($dashboardData->get('totalNoWaste'), 0, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -32,6 +32,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by_admin
  * @property int $updated_by_user
+ * @property int $point_user
+ * @property int $point_waste_collector
  * 
  * @property \App\Models\AdminUser $admin_user
  * @property \App\Models\User $user
@@ -59,7 +61,9 @@ class TransactionHeader extends Eloquent
 		'created_by_admin' => 'int',
 		'created_by_user' => 'int',
 		'updated_by_admin' => 'int',
-		'updated_by_user' => 'int'
+		'updated_by_user' => 'int',
+        'point_user' => 'int',
+        'point_waste_collector' => 'int'
 	];
 
 	protected $dates = [
@@ -83,7 +87,9 @@ class TransactionHeader extends Eloquent
 		'created_by_admin',
 		'created_by_user',
 		'updated_by_admin',
-		'updated_by_user'
+		'updated_by_user',
+        'point_user',
+        'point_waste_collector'
 	];
 
     protected $appends = [

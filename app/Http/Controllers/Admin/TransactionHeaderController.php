@@ -195,7 +195,8 @@ class TransactionHeaderController extends Controller
             'created_at'            => $now->toDateTimeString(),
             'updated_at'            => $now->toDateTimeString(),
             'created_by_admin'      => $user->id,
-            'updated_by_admin'      => $user->id
+            'updated_by_admin'      => $user->id,
+            'point_user'            => $totalPrice
         ]);
 
         $idx = 0;
@@ -393,6 +394,7 @@ class TransactionHeaderController extends Controller
         $trxHeader->notes = $request->input('notes');
         $trxHeader->updated_at = $now->toDateTimeString();
         $trxHeader->updated_by_admin = $user->id;
+        $trxHeader->point_user = $totalPrice;
         $trxHeader->save();
 
         // Check deleted details

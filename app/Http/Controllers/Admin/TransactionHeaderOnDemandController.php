@@ -175,6 +175,7 @@ class TransactionHeaderOnDemandController extends Controller
         $trxHeader->notes = $request->input('notes');
         $trxHeader->updated_at = $now->toDateTimeString();
         $trxHeader->updated_by_admin = $user->id;
+        $trxHeader->point_user = $totalPrice;
         $trxHeader->save();
 
         // Check deleted details
