@@ -41,7 +41,7 @@ class AdminController extends Controller
             return view('home-demo');
         }
 
-        $start = Carbon::now('Asia/Jakarta')->subMonths(2);
+        $start = Carbon::now('Asia/Jakarta')->startOfMonth()->subMonths(2);
         $end = Carbon::now('Asia/Jakarta');
 
         //dd($months);
