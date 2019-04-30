@@ -278,10 +278,22 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function setUserWastecollector($id){
+        $adminUser = Auth::guard('admin')->user();
+        $adminWasteBankId = $adminUser->waste_bank_id;
         $user = User::find($id);
         $address = Address::where('user_id', $id)->first();
+        $wasteCollectors = WasteCollector::where('status_id', 1)
+            ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
+                $query->where('waste_bank_id', $adminWasteBankId);
+            })->get();
 
-        return view('admin.transaction.rutin.set_user_wastecollector', compact('user', 'address'));
+        $data = [
+            'user'              => $user,
+            'address'           => $address,
+            'wasteCollectors'   => $wasteCollectors
+        ];
+
+        return view('admin.transaction.rutin.set_user_wastecollector')->with($data);
     }
 
     /**

@@ -44,7 +44,15 @@ class AdminController extends Controller
         $start = Carbon::now('Asia/Jakarta')->startOfMonth()->subMonths(2);
         $end = Carbon::now('Asia/Jakarta');
 
-        //dd($months);
+        $isSuperAdmin = $userAdmin->is_super_admin === 1 ? true : false;
+
+        if(!$isSuperAdmin){
+            $data = [
+                'isSuperAdmin'                  => $isSuperAdmin
+            ];
+
+            return view('admin.dashboard')->with($data);
+        }
 
         $transactionDatas = DB::table('transaction_headers')
             ->select(DB::raw('SUM(total_weight) as total_weight, '.
@@ -281,8 +289,6 @@ class AdminController extends Controller
 //            dd($dashboardData->get('totalPrice'));
 //        }
 
-        $adminBankCatId = 0;
-        $isSuperAdmin = $userAdmin->is_super_admin === 1;
         // Check admin type
 //        if($userAdmin->is_super_admin === 0 && !empty($userAdmin->waste_bank_id)){
 //            $adminWasteBankId = $userAdmin->waste_bank_id;
@@ -375,7 +381,6 @@ class AdminController extends Controller
 //        }
 
         $data = [
-            'adminBankCatId'                => $adminBankCatId,
             'isSuperAdmin'                  => $isSuperAdmin,
             'dashboardDatas'                => $dashboardDatas
 

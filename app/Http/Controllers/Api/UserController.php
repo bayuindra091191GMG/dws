@@ -55,38 +55,56 @@ class UserController extends Controller
 
             //$userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $request->input('waste_bank_id'))->first();
 
-            $wasteBank = DB::table("waste_banks")
-                ->select("*"
-                    ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
+            if($user->routine_pickup === 1){
+                $wasteBankRaws = DB::table("waste_banks")
+                    ->select("*"
+                        ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
                     * cos(radians(waste_banks.latitude)) 
                     * cos(radians(waste_banks.longitude) - radians(" . $request->input('longitude') . ")) 
                     + sin(radians(" .$request->input('latitude'). ")) 
                     * sin(radians(waste_banks.latitude))) AS distance"))
-                ->get();
+                    ->orderBy("distance")
+                    ->get();
 
-            $config = Configuration::where('configuration_key', 'wastebank_radius')->first();
-            $temp = $wasteBank->where('distance', '<=', $config->configuration_value);
-
-
-            if(count($temp) == 0){
-                // If calculated waste bank not found
-                $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
-                foreach($userWasteBanks as $userWasteBank){
-                    $userWasteBank->delete();
+                foreach ($wasteBankRaws as $wasteBankRaw){
+                    Log::info($wasteBankRaw->id. " distance: ". $wasteBankRaw->distance);
                 }
 
-                return Response::json([
-                    'message' => "There isn't any Waste Bank near your household address.",
-                ], 482);
+                $config = Configuration::where('configuration_key', 'wastebank_radius')->first();
+                $temp = $wasteBankRaws->where('distance', '<=', $config->configuration_value);
+
+
+                if(count($temp) == 0){
+                    // If calculated waste bank not found
+                    $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
+                    foreach($userWasteBanks as $userWasteBank){
+                        $userWasteBank->delete();
+                    }
+
+                    return Response::json([
+                        'message' => "There isn't any Waste Bank near your household address.",
+                    ], 482);
+                }
+                else{
+                    $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $wasteBankRaws[0]->id)->first();
+
+                    if(empty($userWasteBank)){
+                        UserWasteBank::create([
+                            'user_id'       => $user->id,
+                            'waste_bank_id' => $wasteBankRaws[0]->id
+                        ]);
+                    }
+
+                    $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
+                    return Response::json($responseJson, 200);
+                }
             }
             else{
-                $userWasteBank = UserWasteBank::where('user_id', $user->id)->where('waste_bank_id', $wasteBank[0]->id)->first();
-
-                if(empty($userWasteBank)){
-                    UserWasteBank::create([
-                        'user_id'       => $user->id,
-                        'waste_bank_id' => $wasteBank[0]->id
-                    ]);
+                $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
+                if($userWasteBanks->count() > 0){
+                    foreach($userWasteBanks as $userWasteBank){
+                        $userWasteBank->delete();
+                    }
                 }
 
                 $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();

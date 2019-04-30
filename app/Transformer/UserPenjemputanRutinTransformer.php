@@ -20,7 +20,8 @@ class UserPenjemputanRutinTransformer extends TransformerAbstract
         try{
             $createdDate = Carbon::parse($user->created_at)->format('d M Y');
 
-            $action = "<a class='btn btn-xs btn-info' href='users/edit/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
+            $editUrl = route('admin.user.penjemputan_rutin.edit', ['id' => $user->id]);
+            $action = "<a class='btn btn-xs btn-info' href='". $editUrl. "' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
 
             return[
                 'email'             => $user->email,

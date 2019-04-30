@@ -182,13 +182,13 @@
                                                                                 <td class='field-item'>
                                                                                     <input type='hidden' name='schDetailId[]' value="-1">
                                                                                     <select class='form-control' id='schDay{{$ct}}' name='schDays[]'>
-                                                                                        <option value='1'>Senin</option>
-                                                                                        <option value='2'>Selasa</option>
-                                                                                        <option value='3'>Rabu</option>
-                                                                                        <option value='4'>Kamis</option>
-                                                                                        <option value='5'>Jumat</option>
-                                                                                        <option value='6'>Sabtu</option>
-                                                                                        <option value='7'>Minggu</option>
+                                                                                        <option value='1' @if($schedule->day === "1") selected @endif>Senin</option>
+                                                                                        <option value='2' @if($schedule->day === "2") selected @endif>Selasa</option>
+                                                                                        <option value='3' @if($schedule->day === "3") selected @endif>Rabu</option>
+                                                                                        <option value='4' @if($schedule->day === "4") selected @endif>Kamis</option>
+                                                                                        <option value='5' @if($schedule->day === "5") selected @endif>Jumat</option>
+                                                                                        <option value='6' @if($schedule->day === "6") selected @endif>Sabtu</option>
+                                                                                        <option value='7' @if($schedule->day === "7") selected @endif>Minggu</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td><input type='text' id='schTime{{$ct}}' name='schTimes[]' class='form-control time-inputmask' value="{{$schedule->time}}"></td>

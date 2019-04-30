@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/assets/images/favicon.png') }}">
-    <title>Matrix Template - The Ultimate Multipurpose admin template</title>
+    <title>GO 4.0 WASTE BACKEND</title>
 
     <link href="{{ asset('backend/assets/libs/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('backend/assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">

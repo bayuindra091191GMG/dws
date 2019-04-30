@@ -12,12 +12,12 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-12 text-right">
-                        <a href="{{ route('admin.transactions.antar_sendiri.dws.create') }}" class="btn btn-success">
+                        <a href="{{ route('admin.transactions.antar_sendiri.dws.create') }}" class="btn btn-success" style="cursor: pointer;">
                             <i class="fas fa-plus text-white"></i>
                             <br/>
                             <span>KATEGORI DWS</span>
                         </a>
-                        <a href="{{ route('admin.transactions.antar_sendiri.masaro.create') }}" class="btn btn-success">
+                        <a href="{{ route('admin.transactions.antar_sendiri.masaro.create') }}" class="btn btn-success" style="cursor: pointer;">
                             <i class="fas fa-plus text-white"></i>
                             <br/>
                             <span>KATEGORI MASARO</span>

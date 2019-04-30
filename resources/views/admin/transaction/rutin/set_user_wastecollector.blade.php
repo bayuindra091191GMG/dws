@@ -52,8 +52,14 @@
                                 <div class="col-md-12">
                                     <div class="form-group form-float form-group-lg">
                                         <div class="form-line">
-                                            <label class="form-label" for="address">Cari Wastecollector *</label>
-                                            <select id="wastecollector" name="wastecollector" class="form-control"></select>
+                                            <label class="form-label" for="wastecollector">Cari Wastecollector *</label>
+
+                                            <select id="wastecollector" name="wastecollector" class="form-control">
+                                                <option value="-1"> - Pilih Waste Collector - </option>
+                                                @foreach($wasteCollectors as $wasteCollector)
+                                                    <option value="{{ $wasteCollector->id }}">{{ $wasteCollector->first_name. ' '. $wasteCollector->last_name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -92,27 +98,6 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
-        $('#wastecollector').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Wastecollector...'
-            },
-            width: '100%',
-            minimumInputLength: 0,
-            ajax: {
-                url: '{{ route('select.wastecollectors') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        $('#wastecollector').select2();
     </script>
 @endsection
