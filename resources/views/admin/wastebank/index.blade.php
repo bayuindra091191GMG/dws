@@ -3,11 +3,11 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @include('partials.admin._messages')
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <h1>DAFTAR WASTEBANK</h1>
+                        @include('partials.admin._messages')
                     </div>
                 </div>
                 <div class="row mb-3">

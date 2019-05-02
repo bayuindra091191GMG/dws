@@ -56,12 +56,6 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
-                                <i class="mdi mdi-note-plus"></i>
-                                <span class="hide-menu"> Waste Collectors </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
                             <a href="{{ route('admin.users.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-account"></i>
                                 <span class="hide-menu"> Users </span>
@@ -200,7 +194,7 @@
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
                             <a href="{{ route('admin.admin-users.index') }}" class="sidebar-link">
-                                <i class="mdi mdi-note-outline"></i>
+                                <i class="mdi mdi-account-star-variant"></i>
                                 <span class="hide-menu"> Admin Users </span>
                             </a>
                         </li>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminUser;
+use App\Models\Role;
+use App\Models\WasteBank;
 use App\Transformer\AdminUserTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -67,14 +69,21 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        //
-        return view('admin.adminuser.create');
+        $wasteBanks = WasteBank::orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
+
+        $data = [
+            'wasteBanks'    => $wasteBanks,
+            'roles'         => $roles
+        ];
+
+        return view('admin.adminuser.create')->with($data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -98,17 +107,24 @@ class AdminUserController extends Controller
 
         //Create Admin
         $user = Auth::guard('admin')->user();
-        if($request->input('is_super_admin') == 'on'){
+        $assignedWasteBankId = null;
+        if($request->filled('is_super_admin')){
             $superAdmin = 1;
         }
         else{
             $superAdmin = 0;
+
+            if($request->input('waste_bank') != '-1'){
+                $assignedWasteBankId = $request->input('waste_bank');
+            }
         }
+
         $adminUser = AdminUser::create([
             'first_name'    => $request->input('first_name'),
             'last_name'     => $request->input('last_name'),
             'email'         => $request->input('email'),
             'role_id'       => $request->input('role'),
+            'waste_bank_id' => $assignedWasteBankId,
             'password'      => $request->input('password'),
             'status_id'     => $request->input('status'),
             'is_super_admin'=> $superAdmin,
@@ -139,27 +155,34 @@ class AdminUserController extends Controller
      */
     public function edit($id)
     {
-        //
         $adminUser = AdminUser::find($id);
-        return view('admin.adminuser.edit', compact('adminUser'));
+
+        $wasteBanks = WasteBank::orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
+
+        $data = [
+            'adminUser'     => $adminUser,
+            'wasteBanks'    => $wasteBanks,
+            'roles'         => $roles
+        ];
+
+        return view('admin.adminuser.edit')->with($data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|max:100',
-            'last_name'         => 'required|max:100',
-            'role'              => 'required'
+            'last_name'         => 'required|max:100'
         ],[
-            'email.unique'      => 'ID Login Akses telah terdaftar!',
-            'email.regex'       => 'ID Login Akses harus tanpa spasi!'
+            'first_name.required'      => 'Nama Depan wajib diisi!',
+            'last_name.required'       => 'Nama Belakang wajib diisi!'
         ]);
 
         if(!ctype_space($request->input('password'))){
@@ -170,23 +193,28 @@ class AdminUserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        //Create Admin
-        if($request->input('is_super_admin') == 'on'){
+        $adminUser = AdminUser::find($request->input('id'));
+        if($request->filled('is_super_admin')){
             $superAdmin = 1;
+            $adminUser->waste_bank_id = null;
         }
         else{
             $superAdmin = 0;
+
+            if($request->input('waste_bank') != '-1'){
+                $adminUser->waste_bank_id = $request->input('waste_bank');
+            }
         }
 
-        $adminUser = AdminUser::find($request->input('id'));
         $adminUser->first_name = $request->input('first_name');
         $adminUser->last_name = $request->input('last_name');
         $adminUser->is_super_admin = $superAdmin;
-        $adminUser->updated_at = Carbon::now('Asia/Jakarta');
+        $adminUser->role_id = $request->input('role');
         $adminUser->status_id = $request->input('status');
+        $adminUser->updated_at = Carbon::now('Asia/Jakarta');
         $adminUser->save();
 
-        Session::flash('success', 'Success Updating Admin User!');
+        Session::flash('success', 'Sukses menyimpan data admin!');
         return redirect()->route('admin.admin-users.index');
     }
 

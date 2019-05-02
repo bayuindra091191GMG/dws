@@ -7,12 +7,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
+                        <h1>DAFTAR WASTE COLLECTORS</h1>
                         @include('partials.admin._messages')
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <h1>Waste Collectors</h1>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -33,6 +29,7 @@
                                 <th>Nama</th>
                                 <th>No KTP</th>
                                 <th>No Handphone</th>
+                                <th>Waste Bank</th>
                                 <th>Status</th>
                                 <th>Dibuat Oleh</th>
                                 <th>Dibuat Pada</th>
@@ -65,13 +62,21 @@
             ajax: '{!! route('datatables.waste-collectors') !!}',
             order: [ [0, 'asc'] ],
             columns: [
-                { data: 'email', name: 'email', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'identity_number', name: 'identity_number', class: 'text-center'},
+                { data: 'email', name: 'email'},
+                { data: 'name', name: 'name', orderable: false, searchable: false},
+                { data: 'identity_number', name: 'identity_number'},
                 { data: 'phone', name: 'phone', class: 'text-center'},
+                { data: 'waste_bank', name: 'waste_bank', class: 'text-center', orderable: false, searchable: false},
                 { data: 'status', name: 'status', class: 'text-center'},
-                { data: 'created_by', name: 'created_by', class: 'text-center'},
-                { data: 'created_at', name: 'created_at', class: 'text-center'},
+                { data: 'created_by', name: 'created_by', class: 'text-center', orderable: false, searchable: false},
+                { data: 'created_at', name: 'created_at', class: 'text-center',
+                    render: function ( data, type, row ){
+                        if ( type === 'display' || type === 'filter' ){
+                            return moment(data).format('DD MMM YYYY');
+                        }
+                        return data;
+                    }
+                },
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
         });

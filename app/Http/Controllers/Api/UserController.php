@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\Configuration;
 use App\Models\User;
 use App\Models\UserWasteBank;
+use App\Models\WasteCollectorUser;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -106,6 +107,13 @@ class UserController extends Controller
                         $userWasteBank->delete();
                     }
                 }
+
+//                $userWasteCollectors = WasteCollectorUser::where('user_id', $user->id)->get();
+//                if($userWasteCollectors->count() > 0){
+//                    foreach ($userWasteCollectors as $userWasteCollector){
+//                        $userWasteCollector->delete();
+//                    }
+//                }
 
                 $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
                 return Response::json($responseJson, 200);

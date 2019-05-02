@@ -13,6 +13,7 @@ use App\Models\FcmTokenApp;
 use App\Models\FcmTokenBrowser;
 use App\Models\FcmTokenCollector;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 
 class FCMNotification
@@ -81,6 +82,7 @@ class FCMNotification
                 "data" => $notifData,
             );
             $data_string = json_encode($data);
+            //Log::info("JSON: ". $data_string);
             $client = new Client([
                 'base_uri' => "https://fcm.googleapis.com/fcm/send",
                 'headers' => [

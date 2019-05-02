@@ -127,6 +127,26 @@ class TransactionHeaderPenjemputanRutinController extends Controller
     }
 
     /**
+     * Display on demand transaction detail
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $header = TransactionHeader::find($id);
+        $date = Carbon::parse($header->date)->format("d M Y");
+
+        $data = [
+            'header'            => $header,
+            'date'              => $date,
+            'name'              => $header->user->first_name. " ". $header->user->last_name
+        ];
+
+        return view('admin.transaction.on_demand.show')->with($data);
+    }
+
+    /**
      * Update the specified transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request

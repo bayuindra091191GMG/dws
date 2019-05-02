@@ -35,6 +35,7 @@ class AdminUserTransformer extends TransformerAbstract
                 'superadmin'        => $superAdmin,
                 'name'              => $user->first_name . ' ' . $user->last_name,
                 'role'              => $user->role->name,
+                'waste_bank'        => $user->waste_bank->name ?? "-",
                 'status'            => $user->status->description,
                 'created_at'        => $createdDate,
                 'action'            => $action

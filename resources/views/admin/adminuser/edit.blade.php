@@ -35,7 +35,7 @@
                                                             <input type="checkbox" id="is_super_admin" name="is_super_admin" value="true" class="form-check-input"/>
                                                         @endif
                                                         <label class="form-check-label" for="is_super_admin">
-                                                            Superadmin
+                                                            Super Admin?
                                                         </label>
                                                     </div>
                                                 </div>
@@ -44,7 +44,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="password">Password *</label>
+                                                            <label class="form-label" for="password">Kata Sandi Baru</label>
                                                             <input id="password" type="password" class="form-control"
                                                                    name="password">
                                                         </div>
@@ -54,7 +54,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="password_confirmation">Password Confirmation *</label>
+                                                            <label class="form-label" for="password_confirmation">Konfirmasi Kata Sandi Baru</label>
                                                             <input id="password_confirmation" type="password" class="form-control"
                                                                    name="password_confirmation">
                                                         </div>
@@ -64,7 +64,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="first_name">First Name *</label>
+                                                            <label class="form-label" for="first_name">Nama Depan *</label>
                                                             <input id="first_name" name="first_name" type="text" value="{{ $adminUser->first_name }}"
                                                                    class="form-control" required>
                                                         </div>
@@ -74,7 +74,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="last_name">Last Name *</label>
+                                                            <label class="form-label" for="last_name">Nama Belakang *</label>
                                                             <input id="last_name" name="last_name" type="text" value="{{ $adminUser->last_name }}"
                                                                    class="form-control" required>
                                                         </div>
@@ -83,9 +83,23 @@
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="role">Role *</label>
+                                                        <label for="waste_bank">Assign Waste Bank</label>
+                                                        <select id="waste_bank" name="waste_bank" class="form-control">
+                                                            <option value="-1" @if($adminUser->waste_bank == null) selected @endif> - Pilih Waste Bank - </option>
+                                                            @foreach($wasteBanks as $wasteBank)
+                                                                <option value="{{ $wasteBank->id }}" @if($adminUser->waste_bank_id === $wasteBank->id) selected @endif>{{ $wasteBank->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="role">Role</label>
                                                         <select id="role" name="role" class="form-control">
-                                                            <option value="{{ $adminUser->role_id }}">{{ $adminUser->role->name }}</option>
+                                                            @foreach($roles as $role)
+                                                                <option value="{{ $role->id }}" @if($adminUser->role_id === $role->id) selected @endif>{{ $role->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -117,8 +131,9 @@
                         </div>
                     </div>
                 </div>
-                {{--</form>--}}
+
                 {{ Form::close() }}
+
             </div>
         </div>
     </div>
@@ -139,27 +154,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
 
-        $('#role').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Role...'
-            },
-            width: '100%',
-            minimumInputLength: 0,
-            ajax: {
-                url: '{{ route('select.roles') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        $('#role').select2();
+        $('#waste_bank').select2();
     </script>
 @endsection

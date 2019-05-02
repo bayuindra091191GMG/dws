@@ -20,7 +20,7 @@ class WasteCollectorTransformer extends TransformerAbstract
     public function transform(WasteCollector $data){
 
         try{
-            $createdDate = Carbon::parse($data->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($data->created_at)->toIso8601String();
 
             //$action = "<a class='btn btn-xs btn-info' href='wastecollectors/edit/".$data->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action = "<a class='btn btn-xs btn-info' href='". route('admin.wastecollectors.show', ['id' => $data->id]). "'><i class='fas fa-info'></i></a>";
@@ -31,6 +31,7 @@ class WasteCollectorTransformer extends TransformerAbstract
                 'name'              => $data->first_name . ' ' . $data->last_name,
                 'identity_number'   => $data->identity_number,
                 'phone'             => $data->phone,
+                'waste_bank'        => $data->waste_banks->first()->name ?? "-",
                 'created_by'        => $data->createdBy->first_name . ' ' . $data->createdBy->last_name,
                 'created_at'        => $createdDate,
                 'status'            => $data->status->description,

@@ -146,7 +146,7 @@ class TransactionHeaderController extends Controller
 
             //do detail
             foreach ($data['details'] as $item){
-                $detailWeight = floatval($data["weight"]) * 1000;
+                $detailWeight = floatval($item["weight"]) * 1000;
                 if($user->company->waste_category_id == 1) {
                     TransactionDetail::create([
                         'transaction_header_id' => $header->id,
@@ -179,10 +179,12 @@ class TransactionHeaderController extends Controller
 //                    "waste_category_name" => $body,
                 "total_weight" => $header->total_weight_kg,
                 "total_price" => $header->total_price,
+                "transaction_details" => $header->transaction_details
 //                    "waste_bank" => $wasteBankId,
 //                    "waste_collector" => "-",
 //                    "status" => $header->status->description,
             );
+
             $isSuccess = FCMNotification::SendNotification($wasteBankPIC, 'browser', $title, $body, $data);
 
             return Response::json([
@@ -225,7 +227,8 @@ class TransactionHeaderController extends Controller
 
         if($data['flag'] == 1)
         {
-            $header->total_weight = $data['total_weight'];
+            $totalWeight = floatval($data["total_weight"]) * 1000;
+            $header->total_weight = $totalWeight;
             $header->total_price = $data['total_price'];
             $header->status_id = 7;
             $header->save();

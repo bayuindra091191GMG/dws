@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorWasteBank;
 use App\Transformer\WasteCollectorTransactionTransformer;
@@ -135,10 +136,12 @@ class WasteCollectorController extends Controller
     {
         $collector = WasteCollector::find($id);
         $name = $collector->first_name. " ". $collector->last_name;
+        $wasteBank = $collector->waste_banks->first()->name ?? "Belum Pilih Waste Bank";
 
         $data = [
             'collector'     => $collector,
-            'name'          => $name
+            'name'          => $name,
+            'wasteBank'     => $wasteBank
         ];
         return view('admin.wastecollector.show')->with($data);
     }
@@ -152,8 +155,16 @@ class WasteCollectorController extends Controller
     public function edit($id)
     {
         $wasteCollector = WasteCollector::find($id);
-//        dd($wasteCollector->waste_bank);
-        return view('admin.wastecollector.edit', compact('wasteCollector'));
+        $wasteBanks = WasteBank::orderBy('name')->get();
+        $wasteBankId = $wasteCollector->waste_banks->first()->id ?? -1;
+
+        $data = [
+            'wasteCollector'    => $wasteCollector,
+            'wasteBanks'        => $wasteBanks,
+            'wasteBankId'       => $wasteBankId
+        ];
+
+        return view('admin.wastecollector.edit')->with($data);
     }
 
     /**

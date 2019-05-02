@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\libs\Utilities;
@@ -99,6 +100,8 @@ class WasteCollectorController extends Controller
                     'total_household_done' => 0
                 ], 482);
             }
+
+            Log::info("waste bank: ". $collectorWasteBank->waste_bank_id);
 
             //get current day of week, and compare for wastebank schedule
             //Day of week number (between 1 (monday) and 7 (sunday))
@@ -274,115 +277,129 @@ class WasteCollectorController extends Controller
      */
     public function createTransactionRoutinePickup(Request $request)
     {
-        $rules = array(
-            'user_email'            => 'required',
-            'total_weight'          => 'required',
-            'total_price'           => 'required',
-            'details'               => 'required'
-        );
+        try{
+            $rules = array(
+                'user_email'            => 'required',
+                'total_weight'          => 'required',
+                'total_price'           => 'required'
+            );
 
-        $data = $request->json()->all();
+            $data = $request->json()->all();
 
-        $validator = Validator::make($data, $rules);
+            //Log::info("json: ". $request->getContent());
 
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+            $validator = Validator::make($data, $rules);
 
-        $wasteCollector = auth('waste_collector')->user();
-        $user = User::where('email', $data['email'])->first();
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
 
-        // Generate transaction codes
-        $today = Carbon::today()->format("Ym");
-        $categoryType = $user->company->waste_category_id;
-        if ($categoryType == "1") {
-            $prepend = "TRANS/DWS/" . $today;
-        } else {
-            $prepend = "TRANS/MASARO/" . $today;
-        }
+            $wasteCollector = auth('waste_collector')->user();
+            $user = User::where('email', $data['user_email'])->first();
 
-        $nextNo = Utilities::GetNextTransactionNumber($prepend);
-        $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
+            // Generate transaction codes
+            $today = Carbon::today('Asia/Jakarta')->format("Ym");
+            $categoryType = $user->company->waste_category_id;
+            if ($categoryType == "1") {
+                $prepend = "TRANS/DWS/" . $today;
+            } else {
+                $prepend = "TRANS/MASARO/" . $today;
+            }
 
-        // Convert total weight to kilogram
-        $totalWeight = floatval($data["total_weight"]) * 1000;
+            $nextNo = Utilities::GetNextTransactionNumber($prepend);
+            $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
-        // Create routine transaction
-        $header = TransactionHeader::create([
-            'transaction_no' => $code,
-            'total_weight' => $totalWeight,
-            'total_price' => $data["total_price"],
-            'status_id' => 15,
-            'user_id' => $user->id,
-            'transaction_type_id' => 1,
-            'waste_category_id' => $user->company->waste_category_id,
-            'waste_collector_id' => $wasteCollector->id,
-            'created_at' => Carbon::now('Asia/Jakarta'),
-            'updated_at' => Carbon::now('Asia/Jakarta')
-        ]);
+            // Convert total weight to kilogram
+            $totalWeight = floatval($data["total_weight"]) * 1000;
 
-        //do detail
-        foreach ($data['details'] as $item) {
-            $detailWeight = floatval($data["weight"]) * 1000;
+            // Create routine transaction
+            $header = TransactionHeader::create([
+                'transaction_no' => $code,
+                'date' => Carbon::now('Asia/Jakarta'),
+                'total_weight' => $totalWeight,
+                'total_price' => $data["total_price"],
+                'status_id' => 15,
+                'user_id' => $user->id,
+                'transaction_type_id' => 1,
+                'waste_category_id' => $user->company->waste_category_id,
+                'waste_collector_id' => $wasteCollector->id,
+                'created_at' => Carbon::now('Asia/Jakarta'),
+                'updated_at' => Carbon::now('Asia/Jakarta')
+            ]);
+
+            //do detail
+            $detail = $data['details'];
+            $detailWeight = floatval($detail["weight"]) * 1000;
             if ($user->company->waste_category_id == 1) {
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
-                    'dws_category_id'       => $item['dws_category_id'],
+                    'dws_category_id'       => $detail['dws_category_id'],
                     'weight'                => $detailWeight,
-                    'price'                 => $item['price']
+                    'price'                 => $detail['price']
                 ]);
             } else if ($user->company->waste_category_id == 2) {
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
-                    'masaro_category_id'    => $item['masaro_category_id'],
+                    'masaro_category_id'    => $detail['masaro_category_id'],
                     'weight'                => $detailWeight,
-                    'price'                 => $item['price']
+                    'price'                 => $detail['price']
                 ]);
             }
-        }
-
-        //change record status_id of waste_collector_user_status
-        $wasteCollectorUserDB = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->where('user_id', $user->id)->first();
-        $wasteCollectorUserStatusDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUserDB->id)->first();
-        $wasteCollectorUserStatusDB->status_id = 5;
-        $wasteCollectorUserStatusDB->save();
 
 
-        //Send notification to
-        //Driver, Admin Wastebank
-        $title = "Digital Waste Solution";
-        $body = "Driver Create Transaction Routine Pickup";
-        $data = array(
-            "data" => [
+            Utilities::UpdateTransactionNumber($prepend);
+
+            //change record status_id of waste_collector_user_status
+            $wasteCollectorUserDB = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->where('user_id', $user->id)->first();
+            $wasteCollectorUserStatusDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUserDB->id)->first();
+            $wasteCollectorUserStatusDB->status_id = 5;
+            $wasteCollectorUserStatusDB->save();
+
+            //Send notification to
+            //Driver, Admin Wastebank
+            $title = "Digital Waste Solution";
+            $body = "Driver Create Transaction Routine Pickup";
+            $data = array(
                 "type_id" => "1",
-                "transaction_id" => $header->id,
-                "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
                 "transaction_no" => $header->transaction_no,
-                "name" => $user->first_name . " " . $user->last_name,
-                "waste_category_name" => $body,
-                "total_weight" => $header->total_weight_kg,
-                "total_price" => $header->total_price,
-                "waste_bank" => "-",
-                "waste_collector" => $wasteCollector->phone,
-                "status" => $header->status->description,
-            ]
-        );
+                "data" => [
+                    "transaction_id" => $header->id,
+                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                    "transaction_no" => $header->transaction_no,
+                    "name" => $user->first_name . " " . $user->last_name,
+                    "waste_category_name" => $body,
+                    "total_weight" => $header->total_weight_kg,
+                    "total_price" => $header->total_price,
+                    "waste_bank" => "-",
+                    "waste_collector" => $wasteCollector->phone,
+                    "status" => $header->status->description,
+                ]
+            );
 
-        // Create new waste collector pickup history
-        $pickupHistory = WasteCollectorPickupHistory::create([
-            'waste_collector_user_id' => $wasteCollector->id,
-            'transaction_header_id' => $header->id,
-            'status_id' => 15,
-            'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
-        ]);
+            // Create new waste collector pickup history
+            $pickupHistory = WasteCollectorPickupHistory::create([
+                'waste_collector_user_id' => $wasteCollector->id,
+                'customer_user_id' => $user->id,
+                'transaction_header_id' => $header->id,
+                'status_id' => 15,
+                'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            ]);
 
-        $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
-        //Push Notification to Admin.
+            $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+            //Push Notification to Admin.
 //      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
-        return Response::json([
-            'message' => "Success creating Routine Pickup Transaction!",
-        ], 200);
+            return Response::json([
+                'message' => "Success creating Routine Pickup Transaction!",
+            ], 200);
+        }
+        catch(Exception $ex){
+            Log::error("Api/WasteCollectorController - createTransactionRoutinePickup error: \". $ex");
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
     }
 
     /**

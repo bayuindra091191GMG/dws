@@ -43,7 +43,8 @@ class WasteCollectorPickupHistory extends Eloquent
 		'customer_user_id',
 		'transaction_header_id',
 		'notes',
-		'status_id'
+		'status_id',
+        'created_at'
 	];
 
 	public function user()

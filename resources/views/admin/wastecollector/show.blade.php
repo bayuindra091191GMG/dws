@@ -69,6 +69,16 @@
                                         </div>
                                     </div>
 
+                                        <div class="col-md-12">
+                                            <div class="form-group form-float form-group-lg">
+                                                <div class="form-line">
+                                                    <label class="form-label" for="email">Waste Bank</label>
+                                                    <input id="email" type="text" class="form-control"
+                                                           name="email" value="{{ $wasteBank }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     <div class="col-md-12">
                                         <div class="form-group form-float form-group-lg">
                                             <div class="form-line">

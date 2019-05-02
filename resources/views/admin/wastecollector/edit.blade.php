@@ -108,11 +108,10 @@
                                                         <div class="form-line">
                                                             <label class="form-label" for="wastebank">Wastebank *</label>
                                                             <select id="wastebank" name="wastebank" class="form-control">
-                                                                @if(!empty($wasteCollector->waste_bank))
-                                                                    <option value="{{$wasteCollector->waste_bank_id}}">
-                                                                        {{$wasteCollector->waste_bank->name}}
-                                                                    </option>
-                                                                @endif
+                                                                <option value="-1" @if($wasteBankId == -1) selected @endif> - Pilih Waste Bank - </option>
+                                                                @foreach($wasteBanks as $wasteBank)
+                                                                    <option value="{{ $wasteBank->id }}" @if($wasteBankId === $wasteBank->id) selected @endif>{{ $wasteBank->name }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -121,15 +120,16 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="img_path">Foto *</label>
+                                                            <label class="form-label" for="img_path">Ganti Foto</label>
                                                             {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
+                                                            <img src="{{ asset('storage/admin/wastecollector/'. $wasteCollector->img_path) }}" style="height: 200px; width: auto;"/>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                                <a href="{{ route('admin.wastecollectors.index') }}" class="btn btn-danger">Exit</a>
-                                                <input type="submit" class="btn btn-success" value="Save">
+                                                <a href="{{ route('admin.wastecollectors.index') }}" class="btn btn-danger">BATAL</a>
+                                                <input type="submit" class="btn btn-success" value="SIMPAN">
                                             </div>
                                             <!-- #END# Input -->
                                         </div>
@@ -157,27 +157,6 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
-        $('#wastebank').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Wastebank...'
-            },
-            width: '100%',
-            minimumInputLength: 0,
-            ajax: {
-                url: '{{ route('select.wastebanks') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        $('#wastebank').select2();
     </script>
 @endsection

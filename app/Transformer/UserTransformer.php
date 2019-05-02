@@ -18,7 +18,7 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $user){
 
         try{
-            $createdDate = Carbon::parse($user->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($user->created_at)->toIso8601String();
 
             $action = "<a class='btn btn-xs btn-info' href='users/edit/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $user->id ."' ><i class='fas fa-trash-alt'></i></a>";

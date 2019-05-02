@@ -3,22 +3,31 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @include('partials.admin._messages')
             <div class="card-body">
-                <h2 class="card-title m-b-0">Users</h2>
-                <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>DAFTAR PENGGUNA</h1>
+                        @include('partials.admin._messages')
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -39,10 +48,10 @@
             ajax: '{!! route('datatables.users') !!}',
             order: [ [0, 'asc'] ],
             columns: [
-                { data: 'email', name: 'email', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'email', name: 'email'},
+                { data: 'name', name: 'name', orderable: false, searchable: false},
                 { data: 'phone', name: 'phone', class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center'},
+                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
