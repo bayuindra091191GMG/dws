@@ -143,7 +143,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
             'name'              => $header->user->first_name. " ". $header->user->last_name
         ];
 
-        return view('admin.transaction.on_demand.show')->with($data);
+        return view('admin.transaction.rutin.show')->with($data);
     }
 
     /**
@@ -358,7 +358,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
     public function confirm(Request $request){
         $trxId = $request->input('confirmed_header_id');
         $header = TransactionHeader::find($trxId);
-        if($header->status_id !== 8){
+        if($header->status_id !== 16){
             Session::flash('error', 'Customer harus konfirmasi transaksi terlebih dahulu!');
             return redirect()->back();
         }
@@ -409,9 +409,9 @@ class TransactionHeaderPenjemputanRutinController extends Controller
             'created_at'    => Carbon::now('Asia/Jakarta'),
         ]);
 
-        Session::flash('message', 'Berhasil konfirmasi transaksi On Demand!');
+        Session::flash('message', 'Berhasil konfirmasi transaksi Penjemputan Rutin!');
 
-        return redirect()->route('admin.transactions.on_demand.show', ['id' => $trxId]);
+        return redirect()->route('admin.transactions.penjemputan_rutin.show', ['id' => $trxId]);
     }
 
 }

@@ -196,6 +196,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/transactions/penjemputan_rutin/dws/edit/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@editDws')->name('admin.transactions.dws.penjemputan_rutin.edit');
     Route::get('/transactions/penjemputan_rutin/masaro/edit/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@editMasaro')->name('admin.transactions.penjemputan_rutin.masaro.edit');
     Route::post('/transactions/penjemputan_rutin/update/{id}', 'Admin\TransactionHeaderPenjemputanRutinController@update')->name('admin.transactions.penjemputan_rutin.update');
+    Route::post('/transactions/penjemputan_rutin/confirm', 'Admin\TransactionHeaderPenjemputanRutinController@confirm')->name('admin.transactions.penjemputan_rutin.confirm');
 
 
     Route::get('/transactions/user_penjemputan_rutin', 'Admin\TransactionHeaderPenjemputanRutinController@indexSuscribedUsers')->name('admin.user.penjemputan_rutin.index');

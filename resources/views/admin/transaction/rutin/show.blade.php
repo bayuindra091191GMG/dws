@@ -9,6 +9,9 @@
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row mb-2">
                         <div class="col-12 text-right">
+                            @if($header->status_id === 16)
+                                <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
+                            @endif
 
                             @if($header->waste_category_id == "1")
                                 <a href="{{ route('admin.transactions.penjemputan_rutin.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
@@ -195,6 +198,29 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirm" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ Form::open(['route'=>['admin.transactions.penjemputan_rutin.confirm'],'method' => 'post','id' => 'general-form', 'novalidate']) }}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">KONFIRMASI TRANSAKSI</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin konfirmasi transaksi ini?
+                    <input type="hidden" name="confirmed_header_id" value="{{ $header->id }}"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+                    <input type="submit" class="btn btn-primary" value="KONFIRMASI">
+                </div>
+                {{ Form::close() }}
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('styles')
