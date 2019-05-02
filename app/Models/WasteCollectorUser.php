@@ -38,7 +38,8 @@ class WasteCollectorUser extends Eloquent
 	protected $fillable = [
 		'waste_collector_id',
 		'user_id',
-		'created_by'
+		'created_by',
+        'created_at'
 	];
 
 	public function admin_user()

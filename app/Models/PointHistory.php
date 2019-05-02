@@ -48,7 +48,8 @@ class PointHistory extends Eloquent
 		'type_transaction',
 		'amount',
 		'saldo',
-		'description'
+		'description',
+        'created_at'
 	];
 
     protected $appends = [

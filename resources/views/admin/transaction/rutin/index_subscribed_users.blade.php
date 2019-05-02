@@ -12,6 +12,7 @@
                         <th>Email</th>
                         <th>Name</th>
                         <th>Phone</th>
+                        <th>Waste Collector</th>
                         <th>Status</th>
                         <th>Created At</th>
                         <th></th>
@@ -42,6 +43,7 @@
                 { data: 'email', name: 'email', class: 'text-center'},
                 { data: 'name', name: 'name', class: 'text-center'},
                 { data: 'phone', name: 'phone', class: 'text-center'},
+                { data: 'waste_collector', name: 'waste_collector', class: 'text-center'},
                 { data: 'status', name: 'status', class: 'text-center'},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){

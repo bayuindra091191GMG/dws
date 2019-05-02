@@ -81,17 +81,17 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="waste_bank">Assign Waste Bank</label>
-                                                        <select id="waste_bank" name="waste_bank" class="form-control">
-                                                            <option value="-1" @if($adminUser->waste_bank == null) selected @endif> - Pilih Waste Bank - </option>
-                                                            @foreach($wasteBanks as $wasteBank)
-                                                                <option value="{{ $wasteBank->id }}" @if($adminUser->waste_bank_id === $wasteBank->id) selected @endif>{{ $wasteBank->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
+{{--                                                <div class="col-md-12">--}}
+{{--                                                    <div class="form-group">--}}
+{{--                                                        <label for="waste_bank">Assign Waste Bank</label>--}}
+{{--                                                        <select id="waste_bank" name="waste_bank" class="form-control">--}}
+{{--                                                            <option value="-1" @if($adminUser->waste_bank == null) selected @endif> - Pilih Waste Bank - </option>--}}
+{{--                                                            @foreach($wasteBanks as $wasteBank)--}}
+{{--                                                                <option value="{{ $wasteBank->id }}" @if($adminUser->waste_bank_id === $wasteBank->id) selected @endif>{{ $wasteBank->name }}</option>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </select>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
@@ -155,6 +155,6 @@
     <script type="text/javascript">
 
         $('#role').select2();
-        $('#waste_bank').select2();
+        // $('#waste_bank').select2();
     </script>
 @endsection

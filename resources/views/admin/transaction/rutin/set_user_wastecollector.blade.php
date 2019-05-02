@@ -57,7 +57,7 @@
                                             <select id="wastecollector" name="wastecollector" class="form-control">
                                                 <option value="-1"> - Pilih Waste Collector - </option>
                                                 @foreach($wasteCollectors as $wasteCollector)
-                                                    <option value="{{ $wasteCollector->id }}">{{ $wasteCollector->first_name. ' '. $wasteCollector->last_name }}</option>
+                                                    <option value="{{ $wasteCollector->id }}" @if($userWasteCollectorId === $wasteCollector->id) selected @endif>{{ $wasteCollector->first_name. ' '. $wasteCollector->last_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

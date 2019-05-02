@@ -186,9 +186,9 @@ class WasteCollectorController extends Controller
 
         $image = $request->file('img_path');
 
-        if($image == null){
-            return back()->withErrors("Image required")->withInput($request->all());
-        }
+//        if($image == null){
+//            return back()->withErrors("Image required")->withInput($request->all());
+//        }
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 

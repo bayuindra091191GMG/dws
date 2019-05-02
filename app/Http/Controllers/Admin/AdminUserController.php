@@ -10,6 +10,7 @@ use App\Transformer\AdminUserTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -107,16 +108,16 @@ class AdminUserController extends Controller
 
         //Create Admin
         $user = Auth::guard('admin')->user();
-        $assignedWasteBankId = null;
+//        $assignedWasteBankId = null;
         if($request->filled('is_super_admin')){
             $superAdmin = 1;
         }
         else{
             $superAdmin = 0;
 
-            if($request->input('waste_bank') != '-1'){
-                $assignedWasteBankId = $request->input('waste_bank');
-            }
+//            if($request->input('waste_bank') != '-1'){
+//                $assignedWasteBankId = $request->input('waste_bank');
+//            }
         }
 
         $adminUser = AdminUser::create([
@@ -124,8 +125,8 @@ class AdminUserController extends Controller
             'last_name'     => $request->input('last_name'),
             'email'         => $request->input('email'),
             'role_id'       => $request->input('role'),
-            'waste_bank_id' => $assignedWasteBankId,
-            'password'      => $request->input('password'),
+//            'waste_bank_id' => $assignedWasteBankId,
+            'password'      => Hash::make($request->input('password')),
             'status_id'     => $request->input('status'),
             'is_super_admin'=> $superAdmin,
             'created_by'    => $user->id,
@@ -196,14 +197,18 @@ class AdminUserController extends Controller
         $adminUser = AdminUser::find($request->input('id'));
         if($request->filled('is_super_admin')){
             $superAdmin = 1;
-            $adminUser->waste_bank_id = null;
+//            $adminUser->waste_bank_id = null;
         }
         else{
             $superAdmin = 0;
 
-            if($request->input('waste_bank') != '-1'){
-                $adminUser->waste_bank_id = $request->input('waste_bank');
-            }
+//            if($request->input('waste_bank') != '-1'){
+//                $adminUser->waste_bank_id = $request->input('waste_bank');
+//            }
+        }
+
+        if($request->filled('password')){
+            $adminUser->password = Hash::make($request->input('password'));
         }
 
         $adminUser->first_name = $request->input('first_name');

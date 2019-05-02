@@ -92,7 +92,9 @@ class TransactionHeaderController extends Controller
                     * cos(radians(waste_banks.longitude) - radians(" . $data['longitude'] . ")) 
                     + sin(radians(" .$data['latitude']. ")) 
                     * sin(radians(waste_banks.latitude))) AS distance"))
+                ->orderBy("distance")
                 ->get();
+
             $now = Carbon::now('Asia/Jakarta');
             $radiusDB = Configuration::find(18);
 
@@ -101,6 +103,7 @@ class TransactionHeaderController extends Controller
                 ->where('waste_category_id', $categoryType)
                 ->where('open_hours', '<', $now->toTimeString())
                 ->where('closed_hours', '>', $now->toTimeString());
+
             //return $wasteBanks;
             if($wasteBanks == null || $wasteBanks->count() == 0){
                 return Response::json([

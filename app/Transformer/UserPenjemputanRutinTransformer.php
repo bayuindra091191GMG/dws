@@ -10,6 +10,7 @@ namespace App\Transformer;
 
 
 use App\Models\User;
+use App\Models\WasteCollectorUser;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
@@ -23,10 +24,18 @@ class UserPenjemputanRutinTransformer extends TransformerAbstract
             $editUrl = route('admin.user.penjemputan_rutin.edit', ['id' => $user->id]);
             $action = "<a class='btn btn-xs btn-info' href='". $editUrl. "' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
 
+            $wasteCollectorName = "-";
+
+            $wasteCollectorUser = WasteCollectorUser::where('user_id', $user->id)->first();
+            if(!empty($wasteCollectorUser)){
+                $wasteCollectorName = $wasteCollectorUser->waste_collector->first_name. " ". $wasteCollectorUser->waste_collector->last_name;
+            }
+
             return[
                 'email'             => $user->email,
                 'name'              => $user->first_name . ' ' . $user->last_name,
                 'phone'             => $user->phone,
+                'waste_collector'   => $wasteCollectorName,
                 'status'            => $user->status->description,
                 'created_at'        => $createdDate,
                 'action'            => $action

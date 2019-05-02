@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\AdminUser;
 use App\Models\City;
 use App\Models\WasteBank;
 use App\Models\WasteBankSchedule;
@@ -148,6 +149,10 @@ class WasteBankController extends Controller
             'waste_category_id'=> $request->input('categoryType')
         ]);
 
+        $adminUser = AdminUser::find($request->input('pic'));
+        $adminUser->waste_bank_id = $wasteBank->id;
+        $adminUser->save();
+
         //Wastebank Schedules
         $i = 0;
 
@@ -246,6 +251,18 @@ class WasteBankController extends Controller
         $wastebank->updated_at = Carbon::now('Asia/Jakarta');
         $wastebank->updated_by = $user->id;
         $wastebank->save();
+
+        // Reset old admin wastebank
+        $oldAdminUser = AdminUser::where('waste_bank_id', $request->input('id'))->first();
+        if(!empty($oldAdminUser)){
+            $oldAdminUser->waste_bank_id = null;
+            $oldAdminUser->save();
+        }
+
+        // Update admin wastebank
+        $adminUser = AdminUser::find($request->input('pic'));
+        $adminUser->waste_bank_id = $request->input('id');
+        $adminUser->save();
 
         //Wastebank Schedules
         $schDays = $request->input('schDays');

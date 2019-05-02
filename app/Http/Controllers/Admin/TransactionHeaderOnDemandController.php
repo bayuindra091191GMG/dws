@@ -34,6 +34,7 @@ class TransactionHeaderOnDemandController extends Controller
     {
         return view('admin.transaction.on_demand.index');
     }
+
     public function list()
     {
         $transactions = TransactionHeader::where('transaction_type_id', 3)->orderBy('created_at', 'desc')->get();
@@ -332,10 +333,10 @@ class TransactionHeaderOnDemandController extends Controller
         $header->save();
 
         //add point to user
-        $configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
-        $amount = $configuration->configuration_value;
+        //$configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
+        //$amount = $configuration->configuration_value;
         $userDB = $header->user;
-        $newSaldo = $userDB->point + $amount;
+        $newSaldo = $userDB->point + $header->total_price;
         $userDB->point = $newSaldo;
         $userDB->save();
 
@@ -344,7 +345,7 @@ class TransactionHeaderOnDemandController extends Controller
             'type'   => $header->transaction_type_id,
             'transaction_id'    => $header->id,
             'type_transaction'   => "Kredit",
-            'amount'    => $amount,
+            'amount'    => $header->total_price,
             'saldo'    => $newSaldo,
             'description'    => "Point dari transaksi nomor ".$header->transaction_no,
             'created_at'    => Carbon::now('Asia/Jakarta'),

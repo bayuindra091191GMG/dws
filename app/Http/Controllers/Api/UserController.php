@@ -238,7 +238,7 @@ class UserController extends Controller
                 // Create new address
                 $nAddress = Address::create([
                     'user_id'       => $user->id,
-                    'primary'       => $addresses->count() > 1 ? 0 : 1,
+                    'primary'       => 1,
                     'description'   => $data['description'],
                     'latitude'      => $data['latitude'],
                     'longitude'     => $data['longitude'],
@@ -313,15 +313,13 @@ class UserController extends Controller
             }
 
             $user = auth('api')->user();
-            $profile = User::with('addresses')->where('id', $user->id)->first();
+            $profile = User::with(['addresses', 'company'])->where('id', $user->id)->first();
             $profile->first_name = $data['first_name'];
             $profile->last_name = $data['last_name'];
             $profile->phone = $data['phone'];
             $profile->save();
 
-            return Response::json([
-                'user'   => $profile,
-            ], 200);
+            return Response::json($profile, 200);
         }
         catch (\Exception $ex){
             Log::error("UserController - updateProfile Error: ". $ex);

@@ -307,10 +307,17 @@ class TransactionHeaderPenjemputanRutinController extends Controller
                 $query->where('waste_bank_id', $adminWasteBankId);
             })->get();
 
+        $userWasteCollectorId = -1;
+        $userWasteCollector = WasteCollectorUser::where('user_id', $id)->first();
+        if(!empty($userWasteCollector)){
+            $userWasteCollectorId = $userWasteCollector->waste_collector_id;
+        }
+
         $data = [
             'user'              => $user,
             'address'           => $address,
-            'wasteCollectors'   => $wasteCollectors
+            'wasteCollectors'   => $wasteCollectors,
+            'userWasteCollectorId'  => $userWasteCollectorId
         ];
 
         return view('admin.transaction.rutin.set_user_wastecollector')->with($data);
@@ -372,10 +379,10 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         $header->save();
 
         //add point to user
-        $configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
-        $amount = $configuration->configuration_value;
+        //$configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
+        //$amount = $configuration->configuration_value;
         $userDB = $header->user;
-        $newSaldo = $userDB->point + $amount;
+        $newSaldo = $userDB->point + $header->total_price;
         $userDB->point = $newSaldo;
         $userDB->save();
 
@@ -384,7 +391,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
             'type'   => $header->transaction_type_id,
             'transaction_id'    => $header->id,
             'type_transaction'   => "Kredit",
-            'amount'    => $amount,
+            'amount'    => $header->total_price,
             'saldo'    => $newSaldo,
             'description'    => "Point dari transaksi nomor ".$header->transaction_no,
             'created_at'    => Carbon::now('Asia/Jakarta'),

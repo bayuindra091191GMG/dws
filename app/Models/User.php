@@ -13,7 +13,7 @@ use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User
- * 
+ *
  * @property int $id
  * @property string $first_name
  * @property string $last_name
@@ -33,7 +33,7 @@ use Laravel\Passport\HasApiTokens;
  * @property int $routine_pickup
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * 
+ *
  * @property \App\Models\Status $status
  * @property \App\Models\Company $company
  * @property \Illuminate\Database\Eloquent\Collection $addresses
@@ -53,107 +53,113 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
-    
-	protected $casts = [
-		'status_id' => 'int',
-		'company_id' => 'int',
-		'wallet' => 'float',
-		'point' => 'float',
-		'routine_pickup' => 'int'
-	];
 
-	protected $dates = [
-		'email_verified_at'
-	];
+    protected $casts = [
+        'status_id' => 'int',
+        'company_id' => 'int',
+        'wallet' => 'float',
+        'point' => 'float',
+        'routine_pickup' => 'int'
+    ];
 
-	protected $hidden = [
-		'password',
-		'remember_token'
-	];
+    protected $dates = [
+        'email_verified_at'
+    ];
 
-	protected $fillable = [
-		'first_name',
-		'last_name',
-		'email',
-		'password',
-		'image_path',
-		'company_name',
-		'email_token',
-		'phone',
-		'status_id',
-		'tax_no',
-		'company_id',
-		'email_verified_at',
-		'remember_token',
-		'wallet',
-		'point',
-		'routine_pickup'
-	];
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
 
-	public function status()
-	{
-		return $this->belongsTo(\App\Models\Status::class);
-	}
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'image_path',
+        'company_name',
+        'email_token',
+        'phone',
+        'status_id',
+        'tax_no',
+        'company_id',
+        'email_verified_at',
+        'remember_token',
+        'wallet',
+        'point',
+        'routine_pickup'
+    ];
 
-	public function company()
-	{
-		return $this->belongsTo(\App\Models\Company::class);
-	}
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
 
-	public function addresses()
-	{
-		return $this->hasMany(\App\Models\Address::class);
-	}
+    public function company()
+    {
+        return $this->belongsTo(\App\Models\Company::class);
+    }
 
-	public function orders()
-	{
-		return $this->hasMany(\App\Models\Order::class);
-	}
+    public function addresses()
+    {
+        return $this->hasMany(\App\Models\Address::class);
+    }
 
-	public function point_histories()
-	{
-		return $this->hasMany(\App\Models\PointHistory::class);
-	}
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Order::class);
+    }
 
-	public function product_reviews()
-	{
-		return $this->hasMany(\App\Models\ProductReview::class);
-	}
+    public function point_histories()
+    {
+        return $this->hasMany(\App\Models\PointHistory::class);
+    }
 
-	public function transaction_headers()
-	{
-		return $this->hasMany(\App\Models\TransactionHeader::class);
-	}
+    public function product_reviews()
+    {
+        return $this->hasMany(\App\Models\ProductReview::class);
+    }
 
-	public function user_user_groups()
-	{
-		return $this->hasMany(\App\Models\UserUserGroup::class);
-	}
+    public function transaction_headers()
+    {
+        return $this->hasMany(\App\Models\TransactionHeader::class);
+    }
 
-	public function vouchers()
-	{
-		return $this->belongsToMany(\App\Models\Voucher::class, 'user_vouchers', 'user_id', 'vouchers_id')
-					->withPivot('id', 'redeem_at', 'is_used');
-	}
+    public function user_user_groups()
+    {
+        return $this->hasMany(\App\Models\UserUserGroup::class);
+    }
 
-	public function waste_banks()
-	{
-		return $this->belongsToMany(\App\Models\WasteBank::class, 'user_waste_banks')
-					->withPivot('id');
-	}
+    public function vouchers()
+    {
+        return $this->belongsToMany(\App\Models\Voucher::class, 'user_vouchers', 'user_id', 'vouchers_id')
+            ->withPivot('id', 'redeem_at', 'is_used');
+    }
 
-	public function wallet_histories()
-	{
-		return $this->hasMany(\App\Models\WalletHistory::class);
-	}
+    public function waste_banks()
+    {
+        return $this->belongsToMany(\App\Models\WasteBank::class, 'user_waste_banks')
+            ->withPivot('id');
+    }
 
-	public function wishlists()
-	{
-		return $this->hasMany(\App\Models\Wishlist::class);
-	}
+    public function wallet_histories()
+    {
+        return $this->hasMany(\App\Models\WalletHistory::class);
+    }
 
-	public function fcm_token_apps()
-	{
-		return $this->hasMany(\App\Models\FcmTokenApp::class);
-	}
+    public function wishlists()
+    {
+        return $this->hasMany(\App\Models\Wishlist::class);
+    }
+
+    public function fcm_token_apps()
+    {
+        return $this->hasMany(\App\Models\FcmTokenApp::class);
+    }
+
+    public function waste_collectors()
+    {
+        return $this->belongsToMany(\App\Models\WasteCollector::class, 'waste_collector_users')
+            ->withPivot('id', 'created_by');
+    }
 }
