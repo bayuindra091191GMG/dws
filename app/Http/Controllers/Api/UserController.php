@@ -11,11 +11,13 @@ use App\Models\UserWasteBank;
 use App\Models\WasteCollectorUser;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -43,7 +45,7 @@ class UserController extends Controller
      * Function to change the status of Routine Pickup.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function changeRoutinePickup(Request $request)
     {
@@ -132,7 +134,7 @@ class UserController extends Controller
      * Function to save user token.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function saveUserToken(Request $request)
     {
@@ -158,7 +160,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show()
     {
@@ -179,7 +181,7 @@ class UserController extends Controller
     /**
      * Function to get user Address with Email Posted.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getAddress()
     {
@@ -210,7 +212,7 @@ class UserController extends Controller
      * Function to Set Address with Parameters like Register.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function setAddress(Request $request)
     {
@@ -293,6 +295,11 @@ class UserController extends Controller
     }
 
     // Update customer profile
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function updateProfile(Request $request)
     {
         try{
@@ -302,9 +309,14 @@ class UserController extends Controller
                 'phone'         => 'required'
             );
 
-            Log::info("UserController - updateProfile Content: ". $request->getContent());
 
-            $data = $request->json()->all();
+            Log::info("UserController - updateProfile Content: ". $request->getContent());
+            $jsonData = $request->input('json_string');
+            $data = json_decode($jsonData);
+
+            Log::info("First Name: ". $data['first_name']);
+
+            //$data = $request->json()->all();
             $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
@@ -313,10 +325,24 @@ class UserController extends Controller
 
             $user = auth('api')->user();
             $profile = User::with(['addresses', 'company'])->where('id', $user->id)->first();
-            $profile->first_name = $data['first_name'];
-            $profile->last_name = $data['last_name'];
-            $profile->phone = $data['phone'];
-            $profile->save();
+//            $profile->first_name = $data['first_name'];
+//            $profile->last_name = $data['last_name'];
+//            $profile->phone = $data['phone'];
+//            $profile->save();
+
+            // Update avatar
+            if($request->hasFile('avatar')){
+                if(!empty($profile->image_path)){
+                    $tempImg = public_path('storage/avatars/'. $profile->image_path);
+                    if(file_exists($tempImg)){
+                        unlink($tempImg);
+                    }
+                }
+
+                $avatar = $request->file('avatar');
+                $filename = $profile->id. "_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $avatar->getClientOriginalExtension();
+                Image::make($avatar)->resize(300,300)->save(public_path('storage/avatars/'. $filename));
+            }
 
             return Response::json($profile, 200);
         }
