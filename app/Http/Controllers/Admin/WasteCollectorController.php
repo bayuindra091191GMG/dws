@@ -56,7 +56,19 @@ class WasteCollectorController extends Controller
      */
     public function create()
     {
-        return view('admin.wastecollector.create');
+        $adminUser = Auth::guard('admin')->user();
+        $isSuperAdmin = $adminUser->is_super_admin === 1;
+        $adminWasteBankObj = null;
+        if(!$isSuperAdmin){
+            $adminWasteBankObj = $adminUser->waste_bank;
+        }
+
+        $data = [
+            'isSuperAdmin'          => $isSuperAdmin,
+            'adminWasteBankObj'     => $adminWasteBankObj
+        ];
+
+        return view('admin.wastecollector.create')->with($data);
     }
 
     /**

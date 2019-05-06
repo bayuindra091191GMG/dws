@@ -121,7 +121,11 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="wastebank">Wastebank *</label>
-                                                            <select id="wastebank" name="wastebank" class="form-control"></select>
+                                                            <select id="wastebank" name="wastebank" class="form-control">
+                                                                @if(!$isSuperAdmin)
+                                                                    <option value="{{ $adminWasteBankObj->id }}" selected>{{ $adminWasteBankObj->name }}</option>
+                                                                @endif
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>

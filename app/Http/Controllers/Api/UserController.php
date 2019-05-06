@@ -254,7 +254,6 @@ class UserController extends Controller
             else{
                 // Assume edited address is always primary
                 $address = Address::where('user_id', $user->id)
-                    ->where('primary', 1)
                     ->first();
 
                 $address->description = $data['description'];
