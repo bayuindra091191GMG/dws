@@ -45,14 +45,15 @@ class AdminController extends Controller
         $end = Carbon::now('Asia/Jakarta');
 
         $isSuperAdmin = $userAdmin->is_super_admin === 1 ? true : false;
+        $adminWasteBankId = $userAdmin->waste_bank_id ?? -1;
 
-        if(!$isSuperAdmin){
-            $data = [
-                'isSuperAdmin'                  => $isSuperAdmin
-            ];
-
-            return view('admin.dashboard')->with($data);
-        }
+//        if(!$isSuperAdmin){
+//            $data = [
+//                'isSuperAdmin'                  => $isSuperAdmin
+//            ];
+//
+//            return view('admin.dashboard')->with($data);
+//        }
 
         $transactionDatas = DB::table('transaction_headers')
             ->select(DB::raw('SUM(total_weight) as total_weight, '.
@@ -63,8 +64,13 @@ class AdminController extends Controller
                 'SUM(transaction_type_id = 3) as total_on_demand, '.
                 'YEAR(date) as year, '.
                 'MONTHNAME(date) as month'))
-            ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))
-            ->orderBy('date')
+            ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+
+        if(!$isSuperAdmin){
+            $transactionDatas = $transactionDatas->where('waste_bank_id', $adminWasteBankId);
+        }
+
+        $transactionDatas = $transactionDatas->orderBy('date')
             ->groupBy(DB::raw('MONTHNAME(date)'))
             ->groupBy(DB::raw('YEAR(date)'))
             ->get();
@@ -99,16 +105,42 @@ class AdminController extends Controller
             ->groupBy(DB::raw('YEAR(created_at)'))
             ->get();
 
+//        $rutinStatusDatas = DB::table('waste_collector_user_statuses')
+//            ->select(DB::raw('ifnull(sum(status_id = 20),0) as total_empty_hourse, '.
+//                'ifnull(sum(status_id = 21),0) as total_no_waste, '.
+//                'YEAR(created_at) as year, '.
+//                'MONTHNAME(created_at) as month'))
+//            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
+//            ->orderBy('created_at')
+//            ->groupBy(DB::raw('MONTHNAME(created_at)'))
+//            ->groupBy(DB::raw('YEAR(created_at)'))
+//            ->get();
+
         $rutinStatusDatas = DB::table('waste_collector_user_statuses')
-            ->select(DB::raw('ifnull(sum(status_id = 20),0) as total_empty_hourse, '.
-                'ifnull(sum(status_id = 21),0) as total_no_waste, '.
-                'YEAR(created_at) as year, '.
-                'MONTHNAME(created_at) as month'))
-            ->whereBetween('created_at', array($start->toDateTimeString(), $end->toDateTimeString()))
-            ->orderBy('created_at')
-            ->groupBy(DB::raw('MONTHNAME(created_at)'))
-            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->join('waste_collector_users', 'waste_collector_user_statuses.waste_collector_user_id', '=', 'waste_collector_users.id')
+            ->select(DB::raw('ifnull(sum(waste_collector_user_statuses.status_id = 20),0) as total_empty_hourse, '.
+                'ifnull(sum(waste_collector_user_statuses.status_id = 21),0) as total_no_waste, '.
+                'YEAR(waste_collector_user_statuses.created_at) as year, '.
+                'MONTHNAME(waste_collector_user_statuses.created_at) as month'))
+            ->whereBetween('waste_collector_user_statuses.created_at', array($start->toDateTimeString(), $end->toDateTimeString()));
+
+        if(!$isSuperAdmin){
+            $arrayWasteCollectorIds = DB::table('waste_collector_waste_banks')
+                ->where('waste_bank_id', $adminWasteBankId)
+                ->pluck('waste_collector_id')
+                ->toArray();
+
+            $rutinStatusDatas = $rutinStatusDatas
+                ->whereIn('waste_collector_users.waste_collector_id', $arrayWasteCollectorIds);
+        }
+
+        $rutinStatusDatas = $rutinStatusDatas
+            ->orderBy('waste_collector_user_statuses.created_at')
+            ->groupBy(DB::raw('MONTHNAME(waste_collector_user_statuses.created_at)'))
+            ->groupBy(DB::raw('YEAR(waste_collector_user_statuses.created_at)'))
             ->get();
+
+        //dd($rutinStatusDatas);
 
         $period = CarbonPeriod::create($start, '1 month', $end);
 
@@ -381,6 +413,7 @@ class AdminController extends Controller
 //        }
 
         $data = [
+            'userAdmin'                     => $userAdmin,
             'isSuperAdmin'                  => $isSuperAdmin,
             'dashboardDatas'                => $dashboardDatas
 

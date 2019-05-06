@@ -170,11 +170,11 @@
                         </form>
                         {{--{{ Form::open(['route'=>['admin.logout'],'method' => 'post','id' => 'logout-form']) }}--}}
                         {{--{{ Form::close() }}--}}
-                        <a class="dropdown-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        <a class="dropdown-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();" style="cursor: pointer;">
                             <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
+{{--                        <div class="dropdown-divider"></div>--}}
+{{--                        <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>--}}
                     </div>
                 </li>
                 <!-- ============================================================== -->
