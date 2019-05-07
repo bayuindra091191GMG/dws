@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Digital Waste Solution backend">
+    <meta name="author" content="Generasi Muda Gigih">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/assets/images/favicon.png') }}">
-    <title>Matrix Template - The Ultimate Multipurpose admin template</title>
+    <title>GO 4.0 WASTE BACKEND</title>
     <!-- Custom CSS -->
     <link href="{{ asset('backend/dist/css/style.min.css')}}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

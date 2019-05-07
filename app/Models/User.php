@@ -90,6 +90,10 @@ class User extends Authenticatable
         'routine_pickup'
     ];
 
+    public function getImagePathAttribute($value){
+        return "https://dws-solusi.net/". public_path('storage/avatars/'. $value);
+    }
+
     public function status()
     {
         return $this->belongsTo(\App\Models\Status::class);

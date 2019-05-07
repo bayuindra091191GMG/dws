@@ -309,26 +309,25 @@ class UserController extends Controller
                 'phone'         => 'required'
             );
 
-
             Log::info("UserController - updateProfile Content: ". $request->getContent());
-            $jsonData = $request->input('json_string');
-            $data = json_decode($jsonData);
+            $data = json_decode($request->input('json_string'));
+            //$jsonData = $request->input('apiEditProfileModel');
 
-            Log::info("First Name: ". $data['first_name']);
+            //Log::info("First Name: ". $data->json_string->first_name);
 
             //$data = $request->json()->all();
-            $validator = Validator::make($data, $rules);
+            //$validator = Validator::make($data, $rules);
 
-            if ($validator->fails()) {
-                return response()->json($validator->messages(), 400);
-            }
+//            if ($validator->fails()) {
+//                return response()->json($validator->messages(), 400);
+//            }
 
             $user = auth('api')->user();
             $profile = User::with(['addresses', 'company'])->where('id', $user->id)->first();
-//            $profile->first_name = $data['first_name'];
-//            $profile->last_name = $data['last_name'];
-//            $profile->phone = $data['phone'];
-//            $profile->save();
+            $profile->first_name = $data->first_name;
+            $profile->last_name = $data->last_name;
+            $profile->phone = $data->phone;
+            $profile->save();
 
             // Update avatar
             if($request->hasFile('avatar')){
@@ -339,9 +338,13 @@ class UserController extends Controller
                     }
                 }
 
-                $avatar = $request->file('avatar');
-                $filename = $profile->id. "_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $avatar->getClientOriginalExtension();
-                Image::make($avatar)->resize(300,300)->save(public_path('storage/avatars/'. $filename));
+                $avatar = Image::make($request->file('avatar'));
+//                $filename = $profile->id. "_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $avatar->mime();
+                $extension = $request->file('avatar')->extension();
+                $filename = $profile->id. "_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                $avatar->save(public_path('storage/avatars/'. $filename));
+                $profile->image_path = $filename;
+                $profile->save();
             }
 
             return Response::json($profile, 200);
