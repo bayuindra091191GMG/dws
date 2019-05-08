@@ -309,7 +309,7 @@ class UserController extends Controller
                 'phone'         => 'required'
             );
 
-            Log::info("UserController - updateProfile Content: ". $request->getContent());
+            Log::info("UserController - updateProfile Content: ". $request);
             $data = json_decode($request->input('json_string'));
             //$jsonData = $request->input('apiEditProfileModel');
 
