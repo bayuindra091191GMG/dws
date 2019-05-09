@@ -91,7 +91,12 @@ class User extends Authenticatable
     ];
 
     public function getImagePathAttribute($value){
-        return "https://dws-solusi.net/". public_path('storage/avatars/'. $value);
+        if(!empty($value)){
+            return "https://dws-solusi.net/public/storage/avatars/". $value;
+        }
+        else{
+            return "";
+        }
     }
 
     public function status()
