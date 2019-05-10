@@ -85,13 +85,15 @@ class RegisterController extends Controller
             //Save Address
             $address = Address::create([
                 'user_id'       => $user->id,
+                'primary'       => 1,
                 'description'   => $request->input('description'),
                 'latitude'      => $request->input('latitude'),
                 'longitude'     => $request->input('longitude'),
                 'city'          => (int)$request->input('city'),
                 'province'      => (int)$request->input('province'),
                 'postal_code'   => $request->input('postal_code'),
-                'created_at'    => Carbon::now('Asia/Jakarta')
+                'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                'notes'         => $request->input('notes')
             ]);
 
             //Save user deviceID

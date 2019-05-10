@@ -61,7 +61,7 @@ class WasteBankController extends Controller
      */
     public function createMasaro()
     {
-        $cities = City::all();
+        $cities = City::orderBy('name')->get();
         return view('admin.wastebank.create-masaro', compact('cities'));
     }
 
@@ -72,7 +72,7 @@ class WasteBankController extends Controller
      */
     public function create()
     {
-        $cities = City::all();
+        $cities = City::orderBy('name')->get();
         return view('admin.wastebank.create', compact('cities'));
     }
 
@@ -210,7 +210,7 @@ class WasteBankController extends Controller
     public function edit($id)
     {
         $wasteBank = WasteBank::find($id);
-        $cities = City::all();
+        $cities = City::orderBy('name')->get();
         if($wasteBank->waste_category_id == 1){
             return view('admin.wastebank.edit', compact('wasteBank', 'cities'));
         }

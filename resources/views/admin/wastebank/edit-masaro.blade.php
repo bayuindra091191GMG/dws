@@ -296,7 +296,7 @@
 @endsection
 
 @section('styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
 @endsection
 
 @section('scripts')
@@ -305,6 +305,8 @@
             type="text/javascript"></script>
 
     <script type="text/javascript">
+        $('#city').select2();
+
         $('#pic').select2({
             placeholder: {
                 id: '-1',
