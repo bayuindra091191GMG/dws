@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Detail Transaksi On Demand</h2>
+                <h2 class="card-title m-b-0">Detail Transaksi Jemput Sekarang</h2>
                 <div class="container-fluid relative animatedParent animateOnce">
                     <div class="row mb-2">
                         <div class="col-12 text-right">

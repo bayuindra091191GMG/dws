@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR TRANSAKSI ON DEMAND BARU</h1>
+                        <h1>DAFTAR TRANSAKSI BARU JEMPUT SEKARANG</h1>
                     </div>
                 </div>
                 {{--<div class="row mb-3">--}}

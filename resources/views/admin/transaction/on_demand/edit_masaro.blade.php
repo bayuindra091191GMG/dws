@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Ubah Transaksi On Demand Kategori Masaro</h2>
+                <h2 class="card-title m-b-0">Ubah Transaksi Jemput Sekarang Kategori Masaro</h2>
 
                 {{ Form::open(['route'=>['admin.transactions.on_demand.update', $header->id],'method' => 'post','id' => 'general-form']) }}
 

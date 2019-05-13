@@ -61,12 +61,12 @@
                                 <span class="hide-menu"> Users </span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
-                                <i class="mdi mdi-note-plus"></i>
-                                <span class="hide-menu"> Pendaftar </span>
-                            </a>
-                        </li>
+{{--                        <li class="sidebar-item">--}}
+{{--                            <a href="#" class="sidebar-link">--}}
+{{--                                <i class="mdi mdi-note-plus"></i>--}}
+{{--                                <span class="hide-menu"> Pendaftar </span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
                     </ul>
                 </li>
 
@@ -115,7 +115,7 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-book"></i>
-                        <span class="hide-menu">Transaksi On Demand</span>
+                        <span class="hide-menu">Transaksi Jemput Sekarang</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
@@ -125,7 +125,7 @@
                             </a>
                             <a href="{{ route('admin.transactions.on_demand.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
-                                <span class="hide-menu"> Daftar Transaksi </span>
+                                <span class="hide-menu"> Riwayat Transaksi </span>
                             </a>
                         </li>
                     </ul>
