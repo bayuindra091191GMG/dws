@@ -30,8 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect()->route('admin.dashboard');
-        //return view('frontend.home');
+//        return redirect()->route('admin.dashboard');
+        return view('frontend.home');
     }
 
     public function testNotif(){

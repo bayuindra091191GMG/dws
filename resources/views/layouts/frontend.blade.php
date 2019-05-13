@@ -8,77 +8,48 @@
     <!--IE Compatibility Meta-->
     <meta name="author" content="zytheme"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Multi-purpose Business html5 template">
-    <link href="assets/images/favicon/favicon.png" rel="icon">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <!-- Fonts
-        ============================================= -->
-    {{--<link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i,800,800i%7CPlayfair+Display:400,400i,700,700i,900,900i%7CDroid+Serif" rel="stylesheet" type="text/css">--}}
-    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Work+Sans:400,500" rel="stylesheet" type="text/css">
-
-    <!-- Stylesheets
-        ============================================= -->
-    <link href="{{ asset('css/frontend/external.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/frontend/external.css') }}" rel="stylesheet">
+    <meta name="description" content="Digital Waste Solution">
     <link href="{{ asset('css/frontend/bootstrap.min.css') }}" rel="stylesheet">
-    {{--<link href="{{ asset('css/frontend/style.css') }}" rel="stylesheet">--}}
-    <link href="{{ asset('css/frontend/custom-style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/frontend/custom.css') }}" rel="stylesheet">
-
-    <!-- RS5.0 Main Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('revolution/css/settings.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('revolution/css/layers.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('revolution/css/navigation.css') }}">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-    <!--[if lt IE 9]>
-    <script src="{{ asset('js/frontend/html5shiv.js')}}"></script>
-    <script src="{{ asset('js/frontend/respond.min.js')}}"></script>
+    <style>
+        .img-banner-responsive{
+            height: 150px;
+        }
+        .img-banner-responsive2{
+            height:700px;
+        }
+        .bold{
+            font-weight: bold;
+        }
+        .subfont{
+            font-size: 20px;
+        }
+        .pt-5-custom{
+            margin-top: 3em!important;
+        }
+        .pt-5{
+            margin-top: 5em!important;
+        }
+        @media (min-width: 768px) {
+            .img-banner-responsive{
+                height: 565px;
+            }
+        }
+    </style>
     <![endif]-->
 
     <!-- Document Title
         ============================================= -->
-    <title>league | Multi-purpose Business Html5 Template</title>
+    <title>DWS - Landing Page</title>
 </head>
 <body>
-    <div class="preloader">
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
-    </div><!-- Document Wrapper
-	============================================= -->
-    <div id="wrapper" class="wrapper clearfix">
+    {{--@include('partials.frontend._header')--}}
 
-        @include('partials.frontend._header')
-
-        @yield('content')
-        <!-- Footer #1
-        ============================================= -->
-        @include('partials.frontend._footer')
-    </div><!-- #wrapper end -->
-
+    @yield('content')
+    <!-- Footer #1
+            ============================================= -->
+    @include('partials.frontend._footer')
     <!-- Footer Scripts
     ============================================= -->
-    <script src="{{ asset('js/frontend/jquery-2.2.4.min.js')}}"></script>
-    <script src="{{ asset('js/frontend/plugins.js')}} "></script>
-    <script src=" {{ asset('js/frontend/functions.js')}}"></script>
-    <!-- RS5.0 Core JS Files -->
-    <script type="text/javascript" src="{{ asset('revolution/js/jquery.themepunch.tools.min.js?rev=5.0')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/jquery.themepunch.revolution.min.js?rev=5.0')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.video.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.slideanims.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.actions.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.layeranimation.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.kenburn.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.navigation.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.migration.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('revolution/js/extensions/revolution.extension.parallax.min.js')}}"></script>
-    <!-- RS Configration JS Files -->
-    <script src=" {{ asset('js/frontend/rsconfig.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.min.css') }}" charset="utf-8"></script>
 </body>
 </html>
