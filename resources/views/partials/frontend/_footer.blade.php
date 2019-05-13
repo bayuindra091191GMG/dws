@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-4">
-                    <img src="{{ asset('images/logo-footer.png') }}" alt="harusnya logo-footer" width="150px">
+                    <img src="{{ asset('images/landing/logo-footer.png') }}" alt="harusnya logo-footer" width="150px">
                 </div>
                 <div class="col-2"></div>
                 <div class="col-6">
@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="text-center pb-5">
-                <a href="#"><img src="{{ asset('images/apple-badge.png') }}"></a>
-                <a href="#"><img src="{{ asset('images/google-badge.png') }}"></a>
+                <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a>
+                <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}"></a>
             </div>
             <div class="col-12">
                 <p>Powered by</p>
@@ -42,7 +42,7 @@
         </div>
         <div class="row mb-5">
             <div class="col-12">
-                <img src="{{ asset('images/logo-footer.png') }}" alt="harusnya logo-footer" width="150px">
+                <img src="{{ asset('images/landing/logo-footer.png') }}" alt="harusnya logo-footer" width="150px">
             </div>
         </div>
         <div class="row">
