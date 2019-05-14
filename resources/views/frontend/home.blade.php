@@ -1,16 +1,18 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <section>
+
+<section>
     <div class="container">
         <div class="row my-4">
-            <div>
+            <div class="col-12">
                 <img src="{{ asset('images/landing/logo.png') }}" alt="harusnya logo" width="100px">
             </div>
         </div>
     </div>
 </section>
-<section class= "d-none d-md-block mb-5">
+
+<section class="d-none d-md-block mb-5">
     <div class="w-100 img-banner-responsive" style="background-image: url('{{ asset('images/landing/heroimage.png') }}');
 	background-repeat: no-repeat;
 	background-position: center;
@@ -38,29 +40,27 @@
 <!-- banner mobile start -->
 
 <section class= "d-block d-md-none">
-    <div class="row mb-5 mt-2">
+    <div class="mb-5 mt-2">
         <div class="w-100 img-banner-responsive2" style="background-image: url('{{ asset('images/landing/heroimage-2.png') }}');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
             margin-bottom: -130px;">
-            <div class="row">
-                <div class= "col-12 text-center">
-                    <div class="pt-3">
-                        <span class="font-weight-bolder" style="font-size: 40px;">Go 4.0 Waste</span>
-                    </div>
-                    <p class="font-weight-bolder" style="font-size: 18px;">
-                        Inovasi pengelolaan sampah terpadu
-                    </p>
+            <div class= "col-12 text-center">
+                <div class="pt-3">
+                    <span class="font-weight-bolder" style="font-size: 40px;">Go 4.0 Waste</span>
+                </div>
+                <p class="font-weight-bolder" style="font-size: 18px;">
+                    Inovasi pengelolaan sampah terpadu
+                </p>
 
-                    <div class="text-center py-3">
+                <div class="text-center py-3">
 
-                        <span style="font-size: 15px;">Tersedia di:</span>
-                        <div class="row">
-                            <div class= "col-12">
-                                <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}" style="width: 120px;"></a>
-                                <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}" style="width: 120px;"></a>
-                            </div>
+                    <span style="font-size: 15px;">Tersedia di:</span>
+                    <div class="row">
+                        <div class= "col-12">
+                            <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}" style="width: 120px;"></a>
+                            <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}" style="width: 120px;"></a>
                         </div>
                     </div>
                 </div>
