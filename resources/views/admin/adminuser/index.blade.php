@@ -27,7 +27,7 @@
                                 <th>Email</th>
                                 <th>Nama Lengkap</th>
                                 <th>Super Admin</th>
-                                <th>Waste Bank</th>
+                                <th>Waste Processor</th>
                                 <th>Role</th>
                                 <th>Status</th>
                                 <th>Created At</th>

@@ -6,7 +6,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR WASTEBANK</h1>
+                        <h1>DAFTAR WASTE PROCESSOR</h1>
                         @include('partials.admin._messages')
                     </div>
                 </div>
@@ -29,17 +29,18 @@
                         <table id="waste-bank" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Open Days</th>
-                                <th>Open Hours</th>
+                                <th>Nama</th>
+                                <th>Alamat</th>
+                                <th>Hari Buka</th>
+                                <th>Jam Buka</th>
                                 <th>Latitude</th>
                                 <th>Longitude</th>
                                 <th>PIC</th>
-                                <th>Phone</th>
+                                <th>Nomor Ponsel</th>
+                                <th>Kota</th>
                                 <th>Status</th>
-                                <th>Created At</th>
-                                <th>Created By</th>
+                                <th>Dibuat Pada</th>
+                                <th>Dibuat Oleh</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -77,6 +78,7 @@
                 { data: 'pic', name: 'pic', class: 'text-center', orderable: false, searchable: false },
                 { data: 'phone', name: 'phone', class: 'text-center'},
                 { data: 'city', name: 'city', class: 'text-center', orderable: false, searchable: false },
+                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
@@ -93,14 +95,14 @@
             }
         });
 
-        $(document).on('click', '.delete-modal', function(){
-            $('#deleteModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-
-            $('#deleted-id').val($(this).data('id'));
-        });
+        // $(document).on('click', '.delete-modal', function(){
+        //     $('#deleteModal').modal({
+        //         backdrop: 'static',
+        //         keyboard: false
+        //     });
+        //
+        //     $('#deleted-id').val($(this).data('id'));
+        // });
     </script>
-    @include('partials._deletejs', ['routeUrl' => 'admin.waste-banks.destroy', 'redirectUrl' => 'admin.waste-banks.index'])
+{{--    @include('partials._deletejs', ['routeUrl' => 'admin.waste-banks.destroy', 'redirectUrl' => 'admin.waste-banks.index'])--}}
 @endsection

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Waste Bank Masaro Version</h2>
+                <h2 class="card-title m-b-0">Tambah Baru Waste Processor Kategori Masaro</h2>
 
                 {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}

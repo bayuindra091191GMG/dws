@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Edit Dws Waste Category</h2>
+                <h2 class="card-title m-b-0">Ubah Data Kategori Sampah DWS</h2>
                 {{ Form::open(['route'=>['admin.dws-wastes.update'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
@@ -41,7 +41,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="title">Golongan *</label>
+                                                            <label class="form-label" for="title">Kategori *</label>
                                                             <input id="golongan" type="text" class="form-control"
                                                                    name="golongan" value="{{ $dwsWaste->golongan }}">
                                                         </div>

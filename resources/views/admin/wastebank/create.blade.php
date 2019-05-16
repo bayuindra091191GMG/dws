@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Waste Bank Dws Version</h2>
+                <h2 class="card-title m-b-0">Tambah Baru Waste Processor Kategori DWS</h2>
 
                 {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
@@ -149,6 +149,16 @@
                                                                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                                                                             @endif
                                                                         @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="status">Status</label>
+                                                                    <select id="status" name="status" class="form-control">
+                                                                        <option value="1" selected>Aktif</option>
+                                                                        <option value="2">Non-Aktif</option>
                                                                     </select>
                                                                 </div>
                                                             </div>

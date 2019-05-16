@@ -132,20 +132,21 @@ class WasteBankController extends Controller
 
         $user = Auth::guard('admin')->user();
         $wasteBank = WasteBank::create([
-            'name'      => $request->input('name'),
-            'address'   => $request->input('address'),
-            'phone'     => $request->input('phone'),
-            'pic_id'    => $request->input('pic'),
-            'latitude'  => $request->input('latitude'),
-            'longitude' => $request->input('longitude'),
-            'open_hours'=> $request->input('open_hours'),
-            'closed_hours'=> $request->input('closed_hours'),
-            'open_days' => $dayData,
-            'city_id'   => $request->input('city'),
-            'created_at'=> Carbon::now('Asia/Jakarta'),
-            'created_by'=> $user->id,
-            'updated_at'=> Carbon::now('Asia/Jakarta'),
-            'updated_by'=> $user->id,
+            'name'          => $request->input('name'),
+            'address'       => $request->input('address'),
+            'phone'         => $request->input('phone'),
+            'pic_id'        => $request->input('pic'),
+            'latitude'      => $request->input('latitude'),
+            'longitude'     => $request->input('longitude'),
+            'open_hours'    => $request->input('open_hours'),
+            'closed_hours'  => $request->input('closed_hours'),
+            'open_days'     => $dayData,
+            'city_id'       => $request->input('city'),
+            'status_id'     => $request->input('status'),
+            'created_at'    => Carbon::now('Asia/Jakarta'),
+            'created_by'    => $user->id,
+            'updated_at'    => Carbon::now('Asia/Jakarta'),
+            'updated_by'    => $user->id,
             'waste_category_id'=> $request->input('categoryType')
         ]);
 
@@ -248,6 +249,7 @@ class WasteBankController extends Controller
         $wastebank->latitude = $request->input('latitude');
         $wastebank->longitude = $request->input('longitude');
         $wastebank->city_id = $request->input('city');
+        $wastebank->status_id = $request->input('status');
         $wastebank->updated_at = Carbon::now('Asia/Jakarta');
         $wastebank->updated_by = $user->id;
         $wastebank->save();

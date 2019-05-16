@@ -106,9 +106,9 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="wastebank">Wastebank *</label>
+                                                            <label class="form-label" for="wastebank">Waste Processor *</label>
                                                             <select id="wastebank" name="wastebank" class="form-control">
-                                                                <option value="-1" @if($wasteBankId == -1) selected @endif> - Pilih Waste Bank - </option>
+                                                                <option value="-1" @if($wasteBankId == -1) selected @endif> - Pilih Waste Processor - </option>
                                                                 @foreach($wasteBanks as $wasteBank)
                                                                     <option value="{{ $wasteBank->id }}" @if($wasteBankId === $wasteBank->id) selected @endif>{{ $wasteBank->name }}</option>
                                                                 @endforeach

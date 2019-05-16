@@ -73,7 +73,7 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-book"></i>
-                        <span class="hide-menu">Transaksi Penjemputan Rutin</span>
+                        <span class="hide-menu">Transaksi Penjemputan<br/>Rutin</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
@@ -115,7 +115,7 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-book"></i>
-                        <span class="hide-menu">Transaksi Jemput Sekarang</span>
+                        <span class="hide-menu">Transaksi Penjemputan<br/>Sekarang</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
@@ -201,13 +201,13 @@
                         <li class="sidebar-item">
                             <a href="{{ route('admin.waste-banks.index') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
-                                <span class="hide-menu"> WasteBanks </span>
+                                <span class="hide-menu"> Waste Processor </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ route('admin.wastebanks-radius.setting') }}" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
-                                <span class="hide-menu"> WasteBanks Radius </span>
+                                <span class="hide-menu"> Waste Processor Radius </span>
                             </a>
                         </li>
                         <li class="sidebar-item">

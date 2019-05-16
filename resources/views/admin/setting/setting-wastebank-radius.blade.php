@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Edit Wastebank Radius</h2>
+                <h2 class="card-title m-b-0">Ubah Data Jarak Radius Waste Processor</h2>
 
                 {{ Form::open(['route'=>['admin.setting-wastebank.update'],'method' => 'post','id' => 'general-form']) }}
                 <div class="container-fluid relative animatedParent animateOnce">

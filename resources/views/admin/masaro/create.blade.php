@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Masaro Waste Category</h2>
+                <h2 class="card-title m-b-0">Tambah Baru Kategori Sampah Masaro</h2>
                 {{ Form::open(['route'=>['admin.masaro-wastes.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}

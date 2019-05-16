@@ -29,7 +29,7 @@
                                 <th>Nama</th>
                                 <th>No KTP</th>
                                 <th>No Handphone</th>
-                                <th>Waste Bank</th>
+                                <th>Waste Processor</th>
                                 <th>Status</th>
                                 <th>Dibuat Oleh</th>
                                 <th>Dibuat Pada</th>

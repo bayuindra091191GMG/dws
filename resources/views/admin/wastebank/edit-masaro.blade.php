@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Edit Waste Bank</h2>
+                <h2 class="card-title m-b-0">Ubah Data Waste Processor Kategori Masaro</h2>
 
                 {{ Form::open(['route'=>['admin.waste-banks.update'],'method' => 'post','id' => 'general-form']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
@@ -153,6 +153,16 @@
                                                                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                                                                             @endif
                                                                         @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="status">Status</label>
+                                                                    <select id="status" name="status" class="form-control">
+                                                                        <option value="1" @if($wasteBank->status_id === 1) selected @endif>Aktif</option>
+                                                                        <option value="2" @if($wasteBank->status_id === 2) selected @endif>Non-Aktif</option>
                                                                     </select>
                                                                 </div>
                                                             </div>

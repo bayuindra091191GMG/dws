@@ -9,7 +9,7 @@
             @if($isSuperAdmin)
                 <h3>Selamat Datang Admin DWS</h3>
             @else
-                <h3>Selamat Datang Admin Waste Bank {{ $userAdmin->waste_bank->name }}</h3>
+                <h3>Selamat Datang Admin Pengolahan Sampah {{ $userAdmin->waste_bank->name }}</h3>
             @endif
 
         </div>

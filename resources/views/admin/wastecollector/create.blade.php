@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Buat Waste Collector</h2>
+                <h2 class="card-title m-b-0">Tambah Baru Waste Collector</h2>
 
             {{ Form::open(['route'=>['admin.wastecollectors.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -120,7 +120,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="wastebank">Wastebank *</label>
+                                                            <label class="form-label" for="wastebank">Waste Processor *</label>
                                                             <select id="wastebank" name="wastebank" class="form-control">
                                                                 @if(!$isSuperAdmin)
                                                                     <option value="{{ $adminWasteBankObj->id }}" selected>{{ $adminWasteBankObj->name }}</option>

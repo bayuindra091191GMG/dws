@@ -36,7 +36,7 @@
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Total Berat (gram)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Waste Bank</th>
+                                <th class="text-center">Waste Processor</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center"></th>
                             </tr>

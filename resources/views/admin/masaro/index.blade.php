@@ -4,27 +4,39 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Masaro Waste Category</h2>
-                <div class="ml-auto text-right">
-                    <a href="{{ route('admin.masaro-wastes.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Tambah
-                    </a>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>DAFTAR KATEGORI SAMPAH MASARO</h1>
+                        @include('partials.admin._messages')
+                    </div>
                 </div>
-                @include('partials.admin._messages')
-                <table id="dws-waste" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Image</th>
-                        <th>Created At</th>
-                        <th>Created By</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row mb-3">
+                    <div class="col-12 text-right">
+                        <a href="{{ route('admin.masaro-wastes.create') }}" class="btn btn-success" style="cursor: pointer;">
+                            <i class="fas fa-plus text-white"></i>
+                            <br/>
+                            <span>TAMBAH</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="dws-waste" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Deskripsi</th>
+                                <th>Dibuat Pada</th>
+                                <th>Dibuat Oleh</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

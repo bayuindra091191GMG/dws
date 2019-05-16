@@ -24,12 +24,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $open_hours
  * @property \Carbon\Carbon $closed_hours
  * @property int $waste_category_id
+ * @property int $status_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
  *
  * @property \App\Models\City $city
+ * @property \App\Models\Status $status
  * @property \App\Models\AdminUser $createdBy
  * @property \App\Models\AdminUser $updatedBy
  * @property \App\Models\AdminUser $pic
@@ -47,6 +49,7 @@ class WasteBank extends Eloquent
 		'pic_id' => 'int',
 		'city_id' => 'int',
 		'waste_category_id' => 'int',
+        'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -63,6 +66,7 @@ class WasteBank extends Eloquent
 		'open_hours',
 		'closed_hours',
 		'waste_category_id',
+        'status_id',
 		'created_by',
 		'updated_by'
 	];
@@ -113,4 +117,9 @@ class WasteBank extends Eloquent
 		return $this->belongsToMany(\App\Models\WasteCollector::class, 'waste_collector_waste_banks')
 					->withPivot('id');
 	}
+
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
 }
