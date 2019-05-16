@@ -5,33 +5,44 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Vouchers</h2>
-                <div class="ml-auto text-right">
-                    <a href="{{ route('admin.vouchers.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Tambah
-                    </a>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>DAFTAR VOUCHER</h1>
+                        @include('partials.admin._messages')
+                    </div>
                 </div>
-                @include('partials.admin._messages')
-                <table id="user-admin" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Product</th>
-                        <th>Image</th>
-                        <th>Start Date</th>
-                        <th>Finish Date</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th>Created By</th>
-                        <th>Updated At</th>
-                        <th>Updated By</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row mb-3">
+                    <div class="col-12 text-right">
+                        <a href="{{ route('admin.vouchers.create') }}" class="btn btn-success" style="cursor: pointer;">
+                            <i class="fas fa-plus text-white"></i>
+                            <br/>
+                            <span>TAMBAH</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Deskripsi</th>
+                                <th>Kategori</th>
+                                <th>Produk</th>
+                                <th>Tanggal Berlaku</th>
+                                <th>Tanggal Kedaluarsa</th>
+                                <th>Status</th>
+                                <th>Dibuat Pada</th>
+                                <th>Dibuat Oleh</th>
+                                <th>Diubah Pada</th>
+                                <th>Diubah Oleh</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -46,7 +57,7 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        $('#user-admin').DataTable({
+        $('#table_general').DataTable({
             processing: true,
             serverSide: true,
             pageLength: 25,
@@ -57,7 +68,7 @@
                 { data: 'description', name: 'description', class: 'text-center'},
                 { data: 'category', name: 'category', class: 'text-center'},
                 { data: 'product', name: 'product', class: 'text-center'},
-                { data: 'img_path', name: 'img_path', class: 'text-center'},
+                // { data: 'img_path', name: 'img_path', class: 'text-center'},
                 { data: 'start_date', name: 'start_date', class: 'text-center'},
                 { data: 'finish_date', name: 'finish_date', class: 'text-center'},
                 { data: 'status', name: 'status', class: 'text-center'},

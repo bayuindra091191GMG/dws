@@ -174,7 +174,18 @@ class VoucherController extends Controller
             $product = null;
         }
 
-        return view('admin.voucher.edit', compact('voucher', 'category', 'product'));
+        $startDate = $date = Carbon::parse($voucher->start_date)->format("d M Y");
+        $finishDate = $date = Carbon::parse($voucher->finish_date)->format("d M Y");
+
+        $data = [
+            'voucher'       => $voucher,
+            'product'       => $product,
+            'category'      => $category,
+            'startDate'     => $startDate,
+            'finishDate'    => $finishDate
+        ];
+
+        return view('admin.voucher.edit')->with($data);
     }
 
     /**

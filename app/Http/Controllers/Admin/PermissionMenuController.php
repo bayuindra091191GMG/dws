@@ -196,7 +196,7 @@ class PermissionMenuController extends Controller
         //End Delete Permission Menu
 
         Session::flash('message', 'Berhasil mengubah otorisasi menu!');
-        return redirect(route('admin.permission_menus'));
+        return redirect(route('admin.permission-menus.index'));
     }
 
     /**

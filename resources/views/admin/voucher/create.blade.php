@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Create New Voucher</h2>
+                <h2 class="card-title m-b-0">Tambah Baru Voucher</h2>
 
             {{ Form::open(['route'=>['admin.vouchers.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -84,7 +84,7 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="start_date">Start Date *</label>
-                                                            <input id="start_date" name="start_date" type="text" class="date-time-picker form-control" value="{{ old('start_date') }}"/>
+                                                            <input id="start_date" name="start_date" type="text" class="form-control" value="{{ old('start_date') }}"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,7 +93,7 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="finish_date">Finish Date *</label>
-                                                            <input id="finish_date" type="text" class="date-time-picker form-control"
+                                                            <input id="finish_date" type="text" class="form-control"
                                                                    name="finish_date" value="{{ old('finish_date') }}">
                                                         </div>
                                                     </div>
@@ -119,6 +119,7 @@
 
 @section('styles')
     <link href="{{ asset('css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
     <style>
         .select2-container--default .select2-search--dropdown::before {
             content: "";
@@ -128,7 +129,21 @@
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="{{ asset('backend/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+
+        jQuery('#start_date').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: "dd M yyyy"
+        });
+
+        jQuery('#finish_date').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: "dd M yyyy"
+        });
+
         $('#category').select2({
             placeholder: {
                 id: '-1',

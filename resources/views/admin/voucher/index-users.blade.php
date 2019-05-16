@@ -5,27 +5,29 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Daftar Penggunaan Voucher</h2>
-                {{--<div class="ml-auto text-right">--}}
-                    {{--<a href="{{ route('admin.vouchers.create') }}" class="btn btn-success">--}}
-                        {{--<i class="fas fa-plus"></i> Tambah--}}
-                    {{--</a>--}}
-                {{--</div>--}}
-                @include('partials.admin._messages')
-                <table id="user-admin" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Nama Pengguna</th>
-                        <th>Code Voucher</th>
-                        <th>Tanggal Redeem</th>
-                        <th>Status Voucher</th>
-                        <th>Tanggal Penggunaan</th>
-                        <th>Tanggal Pembuatan</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12">
+                        <h1> PENGGUNAAN VOUCHER</h1>
+                        @include('partials.admin._messages')
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Nama Pengguna</th>
+                                <th>Code Voucher</th>
+                                <th>Tanggal Redeem</th>
+                                <th>Status Voucher</th>
+                                <th>Tanggal Penggunaan</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +42,7 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        $('#user-admin').DataTable({
+        $('#table_general').DataTable({
             processing: true,
             serverSide: true,
             pageLength: 25,
@@ -59,14 +61,6 @@
                 },
                 { data: 'is_used', name: 'is_used', class: 'text-center'},
                 { data: 'used_at', name: 'used_at', class: 'text-center', orderable: false, searchable: false,
-                    render: function ( data, type, row ){
-                        if ( type === 'display' || type === 'filter' ){
-                            return moment(data).format('DD MMM YYYY');
-                        }
-                        return data;
-                    }
-                },
-                { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
                             return moment(data).format('DD MMM YYYY');

@@ -5,27 +5,39 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Voucher Categories</h2>
-                <div class="ml-auto text-right">
-                    <a href="{{ route('admin.voucher-categories.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Tambah
-                    </a>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>DAFTAR KATEGORI VOUCHER</h1>
+                        @include('partials.admin._messages')
+                    </div>
                 </div>
-                @include('partials.admin._messages')
-                <table id="user-admin" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Gambar</th>
-                        <th>Created At</th>
-                        <th>Created By</th>
-                        <th>Updated At</th>
-                        <th>Updated By</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="row mb-3">
+                    <div class="col-12 text-right">
+                        <a href="{{ route('admin.voucher-categories.create') }}" class="btn btn-success" style="cursor: pointer;">
+                            <i class="fas fa-plus text-white"></i>
+                            <br/>
+                            <span>TAMBAH</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Nama</th>
+{{--                                <th>Gambar</th>--}}
+                                <th>Dibuat Pada</th>
+                                <th>Dibuat Oleh</th>
+                                <th>Diubah Pada</th>
+                                <th>Diubah Oleh</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +52,7 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        $('#user-admin').DataTable({
+        $('#table_general').DataTable({
             processing: true,
             serverSide: true,
             pageLength: 25,
@@ -48,7 +60,7 @@
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
-                { data: 'img_path', name: 'img_path', class: 'text-center'},
+                // { data: 'img_path', name: 'img_path', class: 'text-center'},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
