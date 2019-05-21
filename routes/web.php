@@ -217,6 +217,14 @@ Route::prefix('admin')->group(function(){
     Route::post('/vouchers/update', 'Admin\VoucherController@update')->name('admin.vouchers.update');
     Route::post('/vouchers/delete', 'Admin\VoucherController@destroy')->name('admin.vouchers.destroy');
 
+    // Affiliates
+    Route::get('/affiliates', 'Admin\AffiliateController@index')->name('admin.affiliate.index');
+    Route::get('/affiliates/create', 'Admin\AffiliateController@create')->name('admin.affiliate.create');
+    Route::post('/affiliates/store', 'Admin\AffiliateController@store')->name('admin.affiliate.store');
+    Route::get('/affiliates/edit/{item}', 'Admin\AffiliateController@edit')->name('admin.affiliate.edit');
+    Route::post('/affiliates/update', 'Admin\AffiliateController@update')->name('admin.affiliate.update');
+    Route::post('/affiliates/delete', 'Admin\AffiliateController@destroy')->name('admin.affiliate.destroy');
+
     // Voucher Category
     Route::get('/voucher-categories', 'Admin\VoucherCategoryController@index')->name('admin.voucher-categories.index');
     Route::get('/voucher-categories/create', 'Admin\VoucherCategoryController@create')->name('admin.voucher-categories.create');
@@ -253,6 +261,7 @@ Route::get('/datatables-contact-message', 'Admin\ContactMessageController@getInd
 Route::get('/datatables-subscribes', 'Admin\SubscribeController@getIndex')->name('datatables.subscribes');
 Route::get('/datatables-vouchers', 'Admin\VoucherController@getIndex')->name('datatables.vouchers');
 Route::get('/datatables-voucher-users', 'Admin\VoucherController@getIndexUserVoucher')->name('datatables.voucher.users');
+Route::get('/datatables-affiliates', 'Admin\AffiliateController@getIndex')->name('datatables.affiliates');
 Route::get('/datatables-voucher-categories', 'Admin\VoucherCategoryController@getIndex')->name('datatables.voucher-categories');
 Route::get('/datatables-faqs', 'Admin\FaqController@getIndex')->name('datatables.faqs');
 Route::get('/datatables-waste-banks', 'Admin\WasteBankController@getIndex')->name('datatables.waste-banks');
@@ -279,6 +288,8 @@ Route::get('/select-dws-categories', 'Admin\DwsWasteController@getDwsCategories'
 Route::get('/select-masaro-categories', 'Admin\MasaroWasteController@getMasaroCategories')->name('select.masaro-categories');
 Route::get('/select-wastecollector', 'Admin\WasteCollectorController@getWastecollectors')->name('select.wastecollectors');
 Route::get('/select-wastebank', 'Admin\WasteBankController@getWastebanks')->name('select.wastebanks');
+Route::get('/select-voucher-categories', 'Admin\VoucherCategoryController@getCategories')->name('select.voucher-categories');
+Route::get('/select-affiliates', 'Admin\AffiliateController@getAffiliates')->name('select.affiliates');
 
 // Third Party API
 Route::get('/update-currency', 'Admin\CurrencyController@getCurrenciesUpdate')->name('update-currencies');

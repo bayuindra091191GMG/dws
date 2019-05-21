@@ -90,10 +90,15 @@ class VoucherController extends Controller
             'code'          => 'required|max:100|unique:vouchers',
             'description'   => 'required|max:100',
             'start_date'    => 'required',
-            'finish_date'   => 'required'
+            'finish_date'   => 'required',
+            'category'      => 'required',
+            'affiliate'     => 'required',
+            'required_point'=> 'required'
         ]);
+        dd($request->input('required_point'));
         $image = $request->file('img_path');
 
+        if($image == null) return redirect()->back()->withErrors('Harus Upload Image!', 'default')->withInput($request->all());;
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         //Sort out Data
@@ -103,17 +108,19 @@ class VoucherController extends Controller
         //Check DateTime
         if(!$finishDate->greaterThan($startDate)){
             Session::flash('error', 'Finish Date cannot be less than Start Date!');
-            return redirect()->back();
+            return redirect()->back()->withErrors('Finish Date cannot be less than Start Date!', 'default')->withInput($request->all());;
         }
 
         $user = Auth::guard('admin')->user();
         $voucher = Voucher::create([
-            'code'  => $request->input('code'),
+            'code'          => $request->input('code'),
             'description'   => $request->input('description'),
             'start_date'    => $startDate,
             'finish_date'   => $finishDate,
             'category_id'   => $request->input('category'),
-            'product_id'    => $request->input('product'),
+            'affiliate_id'  => $request->input('affiliate'),
+            'required_point'=> $request->input('required_point'),
+            'quantity'      => $request->input('qty'),
             'created_at'    => Carbon::now('Asia/Jakarta'),
             'created_by'    => $user->id,
             'updated_at'    => Carbon::now('Asia/Jakarta'),
@@ -127,8 +134,6 @@ class VoucherController extends Controller
         $ext = explode('/', $extStr, 2);
 
         $filename = $voucher->id.'_main_'.$voucher->code.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
-
-        //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
         $img->save(public_path('storage/admin/vouchers/'. $filename), 75);
 
         $voucher->img_path = $filename;
@@ -159,28 +164,11 @@ class VoucherController extends Controller
     {
         $voucher = Voucher::find($id);
 
-        //More Data to Show
-        if($voucher->category_id != null || $voucher->category_id != 0){
-            $category = Category::find($voucher->category_id);
-        }
-        else{
-            $category = null;
-        }
-
-        if($voucher->product_id != null || $voucher->product_id != 0){
-            $product = Product::find($voucher->product_id);
-        }
-        else{
-            $product = null;
-        }
-
         $startDate = $date = Carbon::parse($voucher->start_date)->format("d M Y");
         $finishDate = $date = Carbon::parse($voucher->finish_date)->format("d M Y");
 
         $data = [
             'voucher'       => $voucher,
-            'product'       => $product,
-            'category'      => $category,
             'startDate'     => $startDate,
             'finishDate'    => $finishDate
         ];
@@ -206,6 +194,7 @@ class VoucherController extends Controller
 
         $image = $request->file('img_path');
 
+        if($image == null) return redirect()->back()->withErrors('Harus Upload Image!', 'default')->withInput($request->all());;
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         //Sort out Data
@@ -215,7 +204,7 @@ class VoucherController extends Controller
         //Check DateTime
         if(!$finishDate->greaterThan($startDate)){
             Session::flash('error', 'Finish Date cannot be less than Start Date!');
-            return redirect()->back();
+            return redirect()->back()->withErrors('Finish Date cannot be less than Start Date!', 'default')->withInput($request->all());;
         }
 
         $user = Auth::guard('admin')->user();
@@ -227,7 +216,9 @@ class VoucherController extends Controller
         $voucher->finish_date = $finishDate;
         $voucher->status_id = $request->input('status');
         $voucher->category_id = $request->input('category');
-        $voucher->product_id = $request->input('product');
+        $voucher->affiliate_id = $request->input('affiliate');
+        $voucher->qty = $request->input('qty');
+        $voucher->required_point = $request->input('required_point');
         $voucher->updated_at = Carbon::now('Asia/Jakarta');
         $voucher->updated_by = $user->id;
         $voucher->save();
@@ -236,7 +227,6 @@ class VoucherController extends Controller
         if($image != null) {
             $img = Image::make($image);
             $filename = $voucher->img_path;
-            //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
             $img->save(public_path('storage/admin/vouchers/'. $filename), 75);
         }
 

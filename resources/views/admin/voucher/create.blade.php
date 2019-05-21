@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card-body">
-                <h2 class="card-title m-b-0">Tambah Baru Voucher</h2>
+                <h2 class="card-title m-b-0">Tambah Voucher Baru</h2>
 
             {{ Form::open(['route'=>['admin.vouchers.store'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -58,6 +58,26 @@
                                                 </div>
 
                                                 <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="qty">Quantity *</label>
+                                                            <input id="qty" type="text" class="form-control"
+                                                                   name="qty" value="{{ old('qty') }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="required_point">Required Point *</label>
+                                                            <input id="required_point" type="text" class="form-control"
+                                                                   name="required_point" value="{{ old('required_point') }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="category">Category *</label>
                                                         <select id="category" name="category" class="form-control"></select>
@@ -66,8 +86,8 @@
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="product">Product *</label>
-                                                        <select id="product" name="product" class="form-control"></select>
+                                                        <label for="affiliate">Affiliate *</label>
+                                                        <select id="affiliate" name="affiliate" class="form-control"></select>
                                                     </div>
                                                 </div>
 
@@ -152,7 +172,7 @@
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.categories') }}',
+                url: '{{ route('select.voucher-categories') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -167,15 +187,15 @@
             }
         });
 
-        $('#product').select2({
+        $('#affiliate').select2({
             placeholder: {
                 id: '-1',
-                text: 'Choose Product...'
+                text: 'Choose Affiliate...'
             },
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.products') }}',
+                url: '{{ route('select.affiliates') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
