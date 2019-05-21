@@ -22,7 +22,7 @@ class WasteCollectorTransactionTransformer extends TransformerAbstract
             $createdDate = Carbon::parse($header->created_at)->toIso8601String();
 
             if($header->transaction_type_id == 1){
-                $showUrl = route('admin.transactions.antar_sendiri.show', ['id' => $header->id]);
+                $showUrl = route('admin.transactions.penjemputan_rutin.show', ['id' => $header->id]);
             }
             elseif($header->transaction_type_id == 2){
                 $showUrl = route('admin.transactions.antar_sendiri.show', ['id' => $header->id]);
