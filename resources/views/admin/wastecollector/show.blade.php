@@ -133,7 +133,8 @@
                                         <div class="form-group form-float form-group-lg">
                                             <div class="form-line">
                                                 <label class="form-label" for="picture">Foto</label>
-                                                <img src="{{ asset('storage/admin/wastecollector/'. $collector->img_path) }}" style="height: 200px; width: auto;"/>
+                                                &nbsp;&nbsp;
+                                                <img src="{{ asset('storage/admin/wastecollector/'. $collector->img_path) }}" style="height: 150px; width: auto;"/>
                                             </div>
                                         </div>
                                     </div>
