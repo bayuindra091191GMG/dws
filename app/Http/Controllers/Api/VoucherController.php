@@ -65,12 +65,21 @@ class VoucherController extends Controller
             $user = User::where('email', $request->input('email'))->first();
             $voucher = Voucher::where('code', $request->input('voucher_code'))->first();
 
+            if($user->point < $voucher->required_point){
+                return Response::json('Not Enough Point', 400);
+            }
+
             UserVoucher::create([
                 'user_id'       => $user->id,
                 'voucher_id'    => $voucher->id,
                 'is_used'       => 0,
                 'created_at'    => Carbon::now('Asia/Jakarta')
             ]);
+
+            $user->point -= $voucher->required_point;
+            $user->save();
+            $voucher->qty--;
+            $voucher->save();
 
             return Response::json('Success Buy Voucher ' . $voucher->code, 200);
         }catch(\Exception $ex){

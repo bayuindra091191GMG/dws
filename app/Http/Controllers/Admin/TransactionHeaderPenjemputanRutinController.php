@@ -65,14 +65,19 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         try{
             $userAdmin = Auth::guard('admin')->user();
             $adminWasteBankId = $userAdmin->waste_bank_id;
-            error_log("wastebank id = ".$adminWasteBankId);
 
-            $subscribedUsers = User::where('routine_pickup', 1)
-                ->whereIn('status_id', [1, 14, 19])
-                ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
-                    $query->where('waste_bank_id', $adminWasteBankId);
-                })->get();
-            error_log("count = ".$subscribedUsers->count());
+            if(!empty($adminWasteBankId)){
+                $subscribedUsers = User::where('routine_pickup', 1)
+                    ->whereIn('status_id', [1, 14, 19])
+                    ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
+                        $query->where('waste_bank_id', $adminWasteBankId);
+                    })->get();
+            }
+            else{
+                $subscribedUsers = User::where('routine_pickup', 1)
+                    ->whereIn('status_id', [1, 14, 19])
+                    ->get();
+            }
 
             return DataTables::of($subscribedUsers)
                 ->setTransformer(new UserPenjemputanRutinTransformer())

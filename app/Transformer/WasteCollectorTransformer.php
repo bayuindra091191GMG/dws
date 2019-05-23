@@ -24,7 +24,7 @@ class WasteCollectorTransformer extends TransformerAbstract
 
             //$action = "<a class='btn btn-xs btn-info' href='wastecollectors/edit/".$data->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action = "<a class='btn btn-xs btn-info' href='". route('admin.wastecollectors.show', ['id' => $data->id]). "'><i class='fas fa-info'></i></a>";
-            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $data->id ."' ><i class='fas fa-trash-alt'></i></a>";
+//            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $data->id ."' ><i class='fas fa-trash-alt'></i></a>";
 
             return[
                 'email'             => $data->email,

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 01 Feb 2019 05:04:32 +0000.
+ * Date: Tue, 21 May 2019 03:48:21 +0000.
  */
 
 namespace App\Models;
@@ -19,10 +19,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- *
+ * 
+ * @property \App\Models\AdminUser $admin_user
  * @property \Illuminate\Database\Eloquent\Collection $vouchers
- * @property \App\Models\AdminUser $createdBy
- * @property \App\Models\AdminUser $updatedBy
  *
  * @package App\Models
  */

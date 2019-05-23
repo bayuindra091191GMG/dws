@@ -68,8 +68,8 @@
                                                     <div class="form-group">
                                                         <label for="category">Category *</label>
                                                         <select id="category" name="category" class="form-control">
-                                                            @if($category != null)
-                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            @if($voucher->category_id != null)
+                                                                <option value="{{ $voucher->category_id }}">{{ $voucher->voucher_category->name }}</option>
                                                             @endif
                                                         </select>
                                                     </div>
@@ -77,10 +77,10 @@
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="product">Product *</label>
-                                                        <select id="product" name="product" class="form-control">
-                                                            @if($product != null)
-                                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                        <label for="affiliate">Affiliate *</label>
+                                                        <select id="affiliate" name="affiliate" class="form-control">
+                                                            @if($voucher->affiliate_id != null)
+                                                                <option value="{{ $voucher->affiliate_id }}">{{ $voucher->affiliate->name }}</option>
                                                             @endif
                                                         </select>
                                                     </div>
@@ -160,7 +160,7 @@
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.categories') }}',
+                url: '{{ route('select.voucher-categories') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -175,15 +175,15 @@
             }
         });
 
-        $('#product').select2({
+        $('#affiliate').select2({
             placeholder: {
                 id: '-1',
-                text: 'Choose Product...'
+                text: 'Choose Affiliate...'
             },
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.products') }}',
+                url: '{{ route('select.affiliates') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

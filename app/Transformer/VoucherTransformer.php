@@ -21,7 +21,6 @@ class VoucherTransformer extends TransformerAbstract
 
         try{
             $createdDate = Carbon::parse($data->created_at)->format('d M Y');
-            $updatedDate = Carbon::parse($data->updated_at)->format('d M Y');
             $startDate = Carbon::parse($data->start_date)->format('d M Y');
             $finishDate = Carbon::parse($data->finish_date)->format('d M Y');
 
@@ -51,11 +50,11 @@ class VoucherTransformer extends TransformerAbstract
                 'description'       => $data->description,
                 'category'          => $category,
                 'product'           => $product,
+                'quantity'          => $data->quantity,
+                'required_point'    => $data->required_point,
                 'img_path'          => $imgPath,
                 'created_at'        => $createdDate,
                 'created_by'        => $data->createdBy->first_name . ' ' . $data->createdBy->last_name,
-                'updated_at'        => $updatedDate,
-                'updated_by'        => $data->updatedBy->first_name . ' ' . $data->updatedBy->last_name,
                 'start_date'        => $startDate,
                 'finish_date'       => $finishDate,
                 'status'            => $data->status->description,

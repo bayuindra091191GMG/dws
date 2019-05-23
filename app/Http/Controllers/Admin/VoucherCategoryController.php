@@ -194,4 +194,25 @@ class VoucherCategoryController extends Controller
             return Response::json(array('errors' => 'INVALID'));
         }
     }
+
+    /**
+     * Function to select2 Voucher Categories
+     *
+     * @param Request $request
+     * @return
+     */
+    public function getCategories(Request $request){
+        $term = trim($request->q);
+        $formatted_tags = [];
+
+        $modelDB = VoucherCategory::where(function ($q) use ($term) {
+            $q->where('name', 'LIKE', '%' . $term . '%');
+        })->get();
+
+        foreach ($modelDB as $model) {
+            $formatted_tags[] = ['id' => $model->id, 'text' => $model->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }
