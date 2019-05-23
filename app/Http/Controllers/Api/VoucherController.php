@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\PointHistory;
 use App\Models\User;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
@@ -62,24 +63,48 @@ class VoucherController extends Controller
      */
     public function buy(Request $request){
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $user = auth('api')->user();
             $voucher = Voucher::where('code', $request->input('voucher_code'))->first();
+
+            //Pembatasan pembelian hanya 1 voucher
+            $userVoucher = UserVoucher::where('voucher_id', $voucher->id)
+                ->where('user_id', $user->id)->first();
+            if($userVoucher != null){
+                return Response::json('User Already Buy this Voucher!', 400);
+            }
 
             if($user->point < $voucher->required_point){
                 return Response::json('Not Enough Point', 400);
+            }
+
+            $letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // selection of a-z
+            $redeemCode='';  // declare empty string
+            for($x=0; $x<3; ++$x){  // loop three times
+                $redeemCode.=$letters[rand(0,25)].rand(0,9);  // concatenate one letter then one number
             }
 
             UserVoucher::create([
                 'user_id'       => $user->id,
                 'voucher_id'    => $voucher->id,
                 'is_used'       => 0,
-                'created_at'    => Carbon::now('Asia/Jakarta')
+                'created_at'    => Carbon::now('Asia/Jakarta'),
+                'redeem_code'   => $redeemCode
+            ]);
+            $voucher->quantity--;
+            $voucher->save();
+
+            //Create Point History
+            PointHistory::create([
+                'user_id'           => $user->id,
+                'type_transaction'  => 'Debit',
+                'amount'            => $voucher->required_point,
+                'saldo'             => $user->point - $voucher->required_point,
+                'description'       => 'Pembelian Voucher ' . $voucher->code,
+                'created_at'        => Carbon::now('Asia/Jakarta')
             ]);
 
             $user->point -= $voucher->required_point;
             $user->save();
-            $voucher->qty--;
-            $voucher->save();
 
             return Response::json('Success Buy Voucher ' . $voucher->code, 200);
         }catch(\Exception $ex){
@@ -99,12 +124,13 @@ class VoucherController extends Controller
     public function redeem(Request $request)
     {
         try{
-            $user = User::where('email', $request->input('email'))->first();
+            $user = auth('api')->user();
             $voucher = Voucher::where('code', $request->input('voucher_code'))->first();
 
             $userVoucher = UserVoucher::where('user_id', $user->id)->where('voucher_id', $voucher->id)->first();
             $userVoucher->redeem_at = Carbon::now('Asia/Jakarta');
             $userVoucher->is_used = 1;
+            $userVoucher->used_at = Carbon::now('Asia/Jakarta');
             $userVoucher->save();
 
             return Response::json("Success Redeeming Voucher " . $voucher->code, 200);

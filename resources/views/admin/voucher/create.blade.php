@@ -79,6 +79,13 @@
 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
+                                                        <label for="company">Company *</label>
+                                                        <select id="company" name="company" class="form-control"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
                                                         <label for="category">Category *</label>
                                                         <select id="category" name="category" class="form-control"></select>
                                                     </div>
@@ -196,6 +203,29 @@
             minimumInputLength: 0,
             ajax: {
                 url: '{{ route('select.affiliates') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('#company').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Choose Company...'
+            },
+            width: '100%',
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route('select.companies') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

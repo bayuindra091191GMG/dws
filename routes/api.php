@@ -67,6 +67,8 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     //Voucher
     Route::get('/voucher-categories', 'Api\VoucherController@getCategories');
     Route::post('/vouchers', 'Api\VoucherController@get');
+    Route::post('/vouchers/buy', 'Api\VoucherController@buy');
+    Route::post('/vouchers/redeem', 'Api\VoucherController@redeem');
 
     //Routine Pickup
     Route::post('/change-routine-pickup', 'Api\UserController@changeRoutinePickup');

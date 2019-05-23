@@ -290,6 +290,7 @@ Route::get('/select-wastecollector', 'Admin\WasteCollectorController@getWastecol
 Route::get('/select-wastebank', 'Admin\WasteBankController@getWastebanks')->name('select.wastebanks');
 Route::get('/select-voucher-categories', 'Admin\VoucherCategoryController@getCategories')->name('select.voucher-categories');
 Route::get('/select-affiliates', 'Admin\AffiliateController@getAffiliates')->name('select.affiliates');
+Route::get('/select-companies', 'Admin\CompanyController@getCompanies')->name('select.companies');
 
 // Third Party API
 Route::get('/update-currency', 'Admin\CurrencyController@getCurrenciesUpdate')->name('update-currencies');

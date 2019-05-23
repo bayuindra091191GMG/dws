@@ -40,10 +40,9 @@ class VoucherController extends Controller
     }
 
     public function getIndexUserVoucher(Request $request){
-        $users = UserVoucher::query();
+        $users = UserVoucher::where('is_used', 1);
         return DataTables::of($users)
-            ->setTransformer(new VoucherUserTransformer())
-            ->addIndexColumn()
+            ->setTransformer(new VoucherUserTransformer)
             ->make(true);
     }
 
@@ -93,9 +92,10 @@ class VoucherController extends Controller
             'finish_date'   => 'required',
             'category'      => 'required',
             'affiliate'     => 'required',
-            'required_point'=> 'required'
+            'required_point'=> 'required',
+            'company_id'    => 'required'
         ]);
-        dd($request->input('required_point'));
+
         $image = $request->file('img_path');
 
         if($image == null) return redirect()->back()->withErrors('Harus Upload Image!', 'default')->withInput($request->all());;
@@ -119,6 +119,7 @@ class VoucherController extends Controller
             'finish_date'   => $finishDate,
             'category_id'   => $request->input('category'),
             'affiliate_id'  => $request->input('affiliate'),
+            'company_id'    => $request->input('company'),
             'required_point'=> $request->input('required_point'),
             'quantity'      => $request->input('qty'),
             'created_at'    => Carbon::now('Asia/Jakarta'),
@@ -194,7 +195,6 @@ class VoucherController extends Controller
 
         $image = $request->file('img_path');
 
-        if($image == null) return redirect()->back()->withErrors('Harus Upload Image!', 'default')->withInput($request->all());;
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         //Sort out Data
@@ -217,7 +217,7 @@ class VoucherController extends Controller
         $voucher->status_id = $request->input('status');
         $voucher->category_id = $request->input('category');
         $voucher->affiliate_id = $request->input('affiliate');
-        $voucher->qty = $request->input('qty');
+        $voucher->quantity = $request->input('qty');
         $voucher->required_point = $request->input('required_point');
         $voucher->updated_at = Carbon::now('Asia/Jakarta');
         $voucher->updated_by = $user->id;
@@ -228,6 +228,8 @@ class VoucherController extends Controller
             $img = Image::make($image);
             $filename = $voucher->img_path;
             $img->save(public_path('storage/admin/vouchers/'. $filename), 75);
+            $voucher->img_path = $filename;
+            $voucher->save();
         }
 
         Session::flash('success', 'Success Updating Voucher ' . $voucher->code . '!');
@@ -245,6 +247,13 @@ class VoucherController extends Controller
         try {
             //Belum melakukan pengecekan hubungan antar Table
             $voucherId = $request->input('id');
+
+            $check = UserVoucher::where('voucher_id', $voucherId)->first();
+            if($check != null){
+                Session::flash('error', 'Voucher sudah digunakan!');
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
             $voucher = Voucher::find($voucherId);
             $voucher->delete();
 

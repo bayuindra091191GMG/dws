@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 21 May 2019 03:50:37 +0000.
+ * Date: Thu, 23 May 2019 08:25:36 +0000.
  */
 
 namespace App\Models;
@@ -14,8 +14,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property int $user_id
- * @property int $vouchers_id
+ * @property int $voucher_id
  * @property \Carbon\Carbon $redeem_at
+ * @property string $redeem_code
  * @property int $is_used
  * @property \Carbon\Carbon $used_at
  * @property \Carbon\Carbon $created_at
@@ -31,7 +32,7 @@ class UserVoucher extends Eloquent
 
 	protected $casts = [
 		'user_id' => 'int',
-		'vouchers_id' => 'int',
+		'voucher_id' => 'int',
 		'is_used' => 'int'
 	];
 
@@ -42,8 +43,9 @@ class UserVoucher extends Eloquent
 
 	protected $fillable = [
 		'user_id',
-		'vouchers_id',
+		'voucher_id',
 		'redeem_at',
+		'redeem_code',
 		'is_used',
 		'used_at'
 	];
@@ -55,6 +57,6 @@ class UserVoucher extends Eloquent
 
 	public function voucher()
 	{
-		return $this->belongsTo(\App\Models\Voucher::class, 'vouchers_id');
+		return $this->belongsTo(\App\Models\Voucher::class);
 	}
 }

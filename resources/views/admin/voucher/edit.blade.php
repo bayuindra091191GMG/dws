@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card-body">
                 <h2 class="card-title m-b-0">Ubah Data Voucher</h2>
-                {{ Form::open(['route'=>['admin.vouchers.update'],'method' => 'post','id' => 'general-form']) }}
+                {{ Form::open(['route'=>['admin.vouchers.update'],'method' => 'post','id' => 'general-form', 'enctype' => 'multipart/form-data']) }}
                 {{--<form method="POST" action="{{ route('admin-users.store') }}">--}}
                 {{--{{ csrf_field() }}--}}
                 <div class="container-fluid relative animatedParent animateOnce">
@@ -65,6 +65,37 @@
                                                 </div>
 
                                                 <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="qty">Quantity *</label>
+                                                            <input id="qty" type="text" class="form-control"
+                                                                   name="qty" value="{{ $voucher->quantity }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="required_point">Required Point *</label>
+                                                            <input id="required_point" type="text" class="form-control"
+                                                                   name="required_point" value="{{ $voucher->required_point }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="company">Company *</label>
+                                                        <select id="company" name="company" class="form-control">
+                                                            @if($voucher->company_id != null)
+                                                                <option value="{{ $voucher->company_id }}">{{ $voucher->company->name }}</option>
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="category">Category *</label>
                                                         <select id="category" name="category" class="form-control">
@@ -83,6 +114,17 @@
                                                                 <option value="{{ $voucher->affiliate_id }}">{{ $voucher->affiliate->name }}</option>
                                                             @endif
                                                         </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="img_path">Image *</label>
+                                                            <br/>
+                                                            <img src="{{ asset('storage/admin/vouchers/'.$voucher->img_path) }}" alt="voucherPicture" width="400px"/>
+                                                            {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading form-control', 'accept' => 'image/*')) !!}
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -184,6 +226,29 @@
             minimumInputLength: 0,
             ajax: {
                 url: '{{ route('select.affiliates') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('#company').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Choose Company...'
+            },
+            width: '100%',
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route('select.companies') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

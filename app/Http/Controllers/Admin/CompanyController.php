@@ -19,12 +19,25 @@ class CompanyController extends Controller
         $this->middleware('auth:admin');
     }
 
-    public function getIndex(Request $request){
-        $users = Company::query();
-        return DataTables::of($users)
-            ->setTransformer(new DwsWasteCategoryTransformer)
-            ->addIndexColumn()
-            ->make(true);
+    /**
+     * Function to select2 Companies
+     *
+     * @param Request $request
+     * @return
+     */
+    public function getCompanies(Request $request){
+        $term = trim($request->q);
+        $formatted_tags = [];
+
+        $modelDB = Company::where(function ($q) use ($term) {
+            $q->where('name', 'LIKE', '%' . $term . '%');
+        })->get();
+
+        foreach ($modelDB as $model) {
+            $formatted_tags[] = ['id' => $model->id, 'text' => $model->name];
+        }
+
+        return \Response::json($formatted_tags);
     }
 
     /**

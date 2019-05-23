@@ -21,7 +21,6 @@
                                 <th>Tanggal Redeem</th>
                                 <th>Status Voucher</th>
                                 <th>Tanggal Penggunaan</th>
-                                <th></th>
                             </tr>
                             </thead>
                             <tbody></tbody>
@@ -49,7 +48,7 @@
             ajax: '{!! route('datatables.voucher.users') !!}',
             order: [ [0, 'asc'] ],
             columns: [
-                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'name', name: 'name', class: 'text-center', orderable: false, searchable: false},
                 { data: 'code', name: 'code', class: 'text-center'},
                 { data: 'redeem_at', name: 'redeem_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
@@ -67,8 +66,7 @@
                         }
                         return data;
                     }
-                },
-                { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                }
             ],
         });
 
