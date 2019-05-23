@@ -20,12 +20,17 @@
         .bold{
             font-weight: bold;
         }
-        .subfont{
+        .font20{
             font-size: 20px;
         }
         .pt-5-custom{
             margin-top: 3em!important;
         }
+
+        .pt-5-c{
+            padding-top: 50px;
+        }
+
         .pt-5{
             margin-top: 5em!important;
         }
@@ -40,6 +45,7 @@
     <!-- Document Title
         ============================================= -->
     <title>DWS - Landing Page</title>
+    @yield('styles')
 </head>
 <body>
     {{--@include('partials.frontend._header')--}}

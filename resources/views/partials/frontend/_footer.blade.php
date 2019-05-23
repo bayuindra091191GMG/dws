@@ -1,5 +1,5 @@
 <footer>
-    <section class="mt-5 pt-5 d-none d-md-block">
+    <section class="d-none d-md-block">
         <div class="container">
             <div class="row">
                 <div class="col-4">
@@ -8,7 +8,7 @@
                 <div class="col-2"></div>
                 <div class="col-6">
                     <div class="mb-3">
-                        <span  style="font-size: 15px;">Untuk pertanyaan lebih lanjut silakan menghubungi kami</span>
+                        <span  style="font-size: 16px;">Untuk pertanyaan lebih lanjut silakan menghubungi kami</span>
                     </div>
                     <div>
                         <h4 style ="color: #3dcc9c; font-weight: bold;">Support@dws-solusi.net</h4>
@@ -18,7 +18,7 @@
             </div>
             <div class="row my-5">
                 <div class="col-12">
-                    <span style="font-size: 10px">2019 Go 4.0 Waste - PT Solusi Digital Limbahan</span>
+                    <span style="font-size: 12px">2019 Go 4.0 Waste - PT Solusi Digital Limbahan</span>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="row mb-4">
                 <div class="col-12 text-center">
                     <div class="text-center">
-                        <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a>
+                        {{--     --}}
                         <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}"></a>
                     </div>
                 </div>

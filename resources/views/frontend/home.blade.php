@@ -12,7 +12,7 @@
     </div>
 </section>
 
-<section class="d-none d-md-block mb-5">
+<section class="d-none d-md-block">
     <div class="w-100 img-banner-responsive" style="background-image: url('{{ asset('images/landing/heroimage.png') }}');
 	background-repeat: no-repeat;
 	background-position: center;
@@ -20,16 +20,16 @@
         <div class="col-1"></div>
         <div class= "col-5" style="padding-left:8%;padding-top:4%">
             <div class="pt-5 mt-5">
-                <span class="font-weight-bolder" style="font-size: 50px;">Go 4.0 Waste</span>
+                <span class="font-weight-bolder open-sans-regular" style="font-size: 50px;">Go 4.0 Waste</span>
             </div>
-            <p class="font-weight-bolder" style="font-size: 18px;">
+            <p class="font-weight-bolder open-sans-regular" style="font-size: 18px;">
                 Inovasi pengelolaan sampah terpadu
             </p>
 
             <div class="pt-5-custom">
-                <span style="font-size: 13px;">Tersedia di:</span>
+                <span class = "open-sans-regular" style="font-size: 13px;">Tersedia di:</span>
                 <div>
-                    <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a>
+                    {{-- <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a> --}}
                     <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}"></a>
                 </div>
             </div>
@@ -48,18 +48,18 @@
             margin-bottom: -130px;">
             <div class= "col-12 text-center">
                 <div class="pt-3">
-                    <span class="font-weight-bolder" style="font-size: 40px;">Go 4.0 Waste</span>
+                    <span class="font-weight-bolder open-sans-regular" style="font-size: 40px;">Go 4.0 Waste</span>
                 </div>
-                <p class="font-weight-bolder" style="font-size: 18px;">
+                <p class="font-weight-bolder open-sans-regular" style="font-size: 18px;">
                     Inovasi pengelolaan sampah terpadu
                 </p>
 
                 <div class="text-center py-3">
 
-                    <span style="font-size: 15px;">Tersedia di:</span>
+                    <span class="open-sans-regular" style="font-size: 15px;">Tersedia di:</span>
                     <div class="row">
                         <div class= "col-12">
-                            <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}" style="width: 120px;"></a>
+                            {{-- <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}" style="width: 120px;"></a> --}}
                             <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}" style="width: 120px;"></a>
                         </div>
                     </div>
@@ -69,43 +69,46 @@
     </div>
 </section>
 <!-- banner mobile end -->
-<section>
+<section class= "mt-5">
     <div class="container">
         <div class="row">
             <div class="col-4 d-none d-md-block">
                 <img src="{{ asset('images/landing/sampah-1.png') }}" alt="harusnya sampah-1" width="100px">
-                <h3 class="bold pt-5-custom">Pilah sampah Anda</h3>
-                <p>Dengan anda mengumpulkan dan memilah sampah berdasarkan kategori, Anda telah berperan untuk mewujudkan lingkungan bersih dan sehat.</p>
+                <p class="bold py-4 font24">Pilah sampah Anda</p>
+                <p class="font20">Dengan anda mengumpulkan dan memilah sampah berdasarkan kategori, Anda telah berperan untuk mewujudkan lingkungan bersih dan sehat.</p>
             </div>
             <div class="col-4 d-none d-md-block">
                 <img src="{{ asset('images/landing/sampah-2.png') }}" alt="harusnya sampah-2" width="100px">
-                <h3 class="bold pt-5-custom">Setor sampah Anda</h3>
-                <p>Anda dapat memilih jadwal penjemputan atau mengantar sampah ke fasilitas pengolahan sampah terdekat dari lokasi Anda.</p>
+                <p class="bold py-4 font24">Setor sampah Anda</p>
+                <p class="font20">Anda dapat memilih jadwal penjemputan atau mengantar sampah ke fasilitas pengolahan sampah terdekat dari lokasi Anda.</p>
             </div>
             <div class="col-4 d-none d-md-block">
                 <img src="{{ asset('images/landing/sampah-3.png') }}" alt="harusnya sampah-3" width="100px">
-                <h3 class="bold pt-5-custom">Dapatkan poin menarik</h3>
-                <p>Setiap sampah yang Anda setorkan akan menghasilkan poin dan keuntungan menarik lainnya.</p>
+                <p class="bold py-4 font24">Dapatkan poin menarik</p>
+                <p class="font20">Setiap sampah yang Anda setorkan akan menghasilkan poin dan keuntungan menarik lainnya.</p>
             </div>
         </div>
 
         <!-- mobile start -->
         <div class="row">
-            <div class="col-12 d-block d-md-none pb-5">
+            <div class="col-11 d-block d-md-none pb-5">
                 <img src="{{ asset('images/landing/sampah-1.png') }}" alt="harusnya sampah-1" width="100px">
-                <h3 class="bold pt-3">Pilah sampah Anda</h3>
-                <p>Dengan anda mengumpulkan dan memilah sampah berdasarkan kategori, Anda telah berperan untuk mewujudkan lingkungan bersih dan sehat.</p>
+                <p class="bold pt-3 font24">Pilah sampah Anda</p>
+                <p class="font-20">Dengan anda mengumpulkan dan memilah sampah berdasarkan kategori, Anda telah berperan untuk mewujudkan lingkungan bersih dan sehat.</p>
             </div>
-            <div class="col-12 d-block d-md-none pb-5">
+            <div class="col-1"></div>
+            <div class="col-11 d-block d-md-none pb-5">
                 <img src="{{ asset('images/landing/sampah-2.png') }}" alt="harusnya sampah-2" width="100px">
-                <h3 class="bold pt-3">Setor sampah Anda</h3>
-                <p>Anda dapat memilih jadwal penjemputan atau mengantar sampah ke fasilitas pengolahan sampah terdekat dari lokasi Anda.</p>
+                <p class="bold pt-3 font24">Setor sampah Anda</p>
+                <p class="font-20">Anda dapat memilih jadwal penjemputan atau mengantar sampah ke fasilitas pengolahan sampah terdekat dari lokasi Anda.</p>
             </div>
-            <div class="col-12 d-block d-md-none pb-5">
+            <div class="col-1"></div>
+            <div class="col-11 d-block d-md-none pb-5">
                 <img src="{{ asset('images/landing/sampah-3.png') }}" alt="harusnya sampah-3" width="100px">
-                <h3 class="bold pt-3">Dapatkan poin menarik</h3>
-                <p>Setiap sampah yang Anda setorkan akan menghasilkan poin dan keuntungan menarik lainnya.</p>
+                <p class="bold pt-3 font24">Dapatkan poin menarik</p>
+                <p class="font-20">Setiap sampah yang Anda setorkan akan menghasilkan poin dan keuntungan menarik lainnya.</p>
             </div>
+            <div class="col-1"></div>
         </div>
         <!-- mobile end -->
     </div>
@@ -115,8 +118,8 @@
     <div class="container pt-5">
         <div class="row d-none d-md-block">
             <div class="col-12 text-center">
-                <h1 class="font-weight-bold">Fitur pengguna aplikasi Go 4.0 Waste</h1>
-                <p>Pada apllikasi pengguna Go 4.0 Waste terdapat tiga jenis fitur dalam penyetoran sampah.</p>
+                <p class="font-weight-bold font48">Fitur pengguna aplikasi Go 4.0 Waste</p>
+                <p class="font20">Pada apllikasi pengguna Go 4.0 Waste terdapat tiga jenis fitur<br> dalam penyetoran sampah.</p>
             </div>
         </div>
         <div class="row d-block d-md-none">
@@ -129,20 +132,27 @@
 </section>
 <section class="d-none d-md-block">
     <div class="container">
-        <div class="row py-4 mb-3">
+        <div class="row mt-5 pt-4 mb-3">
             <div class="col-2"></div>
             <div class="col-5">
-                <p class="pb-3 font-weight-bold" style="font-size: 25px;">Fitur Jemput Rutin</p>
-                <p>Jemput rutin adalah fitur penjemputan <br>sampah rutin sesuai dengan jadwal di<br> dalam aplikasi Anda.</p>
+                <p class="font-weight-bold font32">Fitur Jemput Rutin</p>
+                {{-- <p class="font20">Jemput rutin adalah fitur penjemputan <br>sampah rutin sesuai dengan jadwal di<br> dalam aplikasi Anda.</p> --}}
             </div>
             <div class="col-5"></div>
         </div>
-        <div class="row py-5">
+        <div class="row pb-5 mb-5">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <p class="font20">Jemput rutin adalah fitur penjemputan sampah rutin sesuai dengan<br> jadwal di dalam aplikasi Anda.</p>
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row">
             <div class="col-5"></div>
-            <div class="col-5 text-center">
+            <div class="col-5 text-center" style="margin-bottom: 63px;">
                 <img src="{{ asset('images/landing/number-black-1.png') }}" alt="harusnya number-black-1" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Pilih Fitur Jemput Rutin</p>
-                <p>Fitur ini menyediakan pilihan jadwal <br>penjemputan rutin sampah Anda.</p>
+                <p class="font-weight-bold font24 pt-5-c">Pilih Fitur Jemput Rutin</p>
+                <p class="font20">Fitur ini menyediakan pilihan jadwal <br>penjemputan rutin sampah Anda.</p>
             </div>
             <div class="col-2"></div>
         </div>
@@ -166,8 +176,8 @@
                     <img src="{{ asset('images/landing/number-white-2.png') }}" alt="harusnya number-white-2" width="40px">
                 </div>
                 <div class="text-center text-white">
-                    <p class="pt-3 font-weight-bold subfont">Masukkan alamat anda</p>
-                    <p>Masukkan alamat anda berada agar <br>Petugas Kebersihan dapat mengambil <br>sampah yang Anda setor.</p>
+                    <p class="pt-5-c font-weight-bold font24">Masukkan alamat anda</p>
+                    <p class="font20">Masukkan alamat anda berada agar <br>Petugas Kebersihan dapat mengambil <br>sampah yang Anda setor.</p>
                 </div>
             </div>
             <div class="col-3">
@@ -182,8 +192,8 @@
             </div>
             <div class="col-5 text-center text-white">
                 <img src="{{ asset('images/landing/number-white-3.png') }}" alt="harusnya number-white-3" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Cek jadwal penjemputan rutin</p>
-                <p>Pastikan anda memeriksa jadwal dan <br>kategori sampah yang akan disetor <br>karena Petugas Kebersihan hanya akan <br>menerima sampah sesuai dengan jadwal <br>yang ada.</p>
+                <p class="pt-5-c font-weight-bold font24">Cek jadwal penjemputan rutin</p>
+                <p class="font20">Pastikan anda memeriksa jadwal dan <br>kategori sampah yang akan disetor <br>karena Petugas Kebersihan hanya akan <br>menerima sampah sesuai dengan jadwal <br>yang ada.</p>
             </div>
             <div class="col-2"></div>
         </div>
@@ -194,8 +204,8 @@
                     <img src="{{ asset('images/landing/number-white-4.png') }}" alt="harusnya number-white-4" width="40px">
                 </div>
                 <div class="text-center text-white">
-                    <p class="pt-3 font-weight-bold subfont">Scan kode QR</p>
-                    <p>Petugas Kebersihan akan melakukan <br>scan kode QR Anda sebelum membawa <br>sampah yang Anda setor.</p>
+                    <p class="pt-5-c font-weight-bold font24">Scan kode QR</p>
+                    <p class="font20">Petugas Kebersihan akan melakukan <br>scan kode QR Anda sebelum membawa <br>sampah yang Anda setor.</p>
                 </div>
             </div>
             <div class="col-3">
@@ -266,15 +276,22 @@
     </div>
 </section>
 <!-- jemput rutin mobile end -->
-<section class="mt-5 d-none d-md-block">
+<section class="mt-3 d-none d-md-block">
     <div class="container">
-        <div class="row py-3">
+        <div class="row">
             <div class="col-2"></div>
             <div class="col-4">
-                <p class="pb-3 font-weight-bold" style="font-size: 25px;">Fitur Jemput Sekarang</p>
-                <p>Jemput sekarang adalah fitur <br>penjemputan sampah sesuai dengan <br>permintaan Anda di hari yang sama.</p>
+                <p class="font-weight-bold font32">Fitur Jemput Sekarang</p>
+                {{-- <p class="font20">Jemput sekarang adalah fitur penjemputan sampah sesuai dengan <br>permintaan Anda di hari yang sama.</p> --}}
             </div>
             <div class="col-6"></div>
+        </div>
+        <div class="row pb-5">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <p class="font20">Jemput sekarang adalah fitur penjemputan sampah sesuai dengan <br>permintaan Anda di hari yang sama.</p>
+            </div>
+            <div class="col-2"></div>
         </div>
         <div class="row">
             <div class="col-2"></div>
@@ -283,8 +300,8 @@
             </div>
             <div class="col-5 text-center">
                 <img src="{{ asset('images/landing/number-black-1.png') }}" alt="harusnya number-black-1" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Pilih Fitur Jemput Sekarang</p>
-                <p>Fitur ini menyediakan pilihan jadwal <br>penjemputan sesuai permintaan Anda</p>
+                <p class="pt-5-c font-weight-bold font24">Pilih Fitur Jemput Sekarang</p>
+                <p class="font20">Fitur ini menyediakan pilihan jadwal <br>penjemputan sesuai permintaan Anda</p>
             </div>
             <div class="col-2"></div>
         </div>
@@ -295,8 +312,8 @@
                     <img src="{{ asset('images/landing/number-black-2.png') }}" alt="harusnya number-black-2" width="40px">
                 </div>
                 <div class="text-center">
-                    <p class="pt-3 font-weight-bold subfont">Masukkan alamat Anda</p>
-                    <p>Masukkan alamat anda berada agar <br>Petugas Kebersihan dapat mengambil <br>sampah yang Anda setor.</p>
+                    <p class="pt-5-c font-weight-bold font24">Masukkan alamat Anda</p>
+                    <p class="font20">Masukkan alamat anda berada agar <br>Petugas Kebersihan dapat mengambil <br>sampah yang Anda setor.</p>
                 </div>
             </div>
             <div class="col-3">
@@ -311,8 +328,8 @@
             </div>
             <div class="col-5 text-center">
                 <img src="{{ asset('images/landing/number-black-3.png') }}" alt="harusnya number-black-3" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Masukkan detil sampah Anda</p>
-                <p>Masukkan detil sampah Anda yang akan<br> diangkut berdasarkan informasi detil<br> sampah yang sudah Anda lengkapi.</p>
+                <p class="pt-5-c font-weight-bold font24">Masukkan detil sampah Anda</p>
+                <p class="font20">Masukkan detil sampah Anda yang akan<br> diangkut berdasarkan informasi detil<br> sampah yang sudah Anda lengkapi.</p>
             </div>
             <div class="col-2"></div>
         </div>
@@ -323,8 +340,8 @@
                     <img src="{{ asset('images/landing/number-black-4.png') }}" alt="harusnya number-black-4" width="40px">
                 </div>
                 <div class="text-center">
-                    <p class="pt-3 font-weight-bold subfont">Scan kode QR</p>
-                    <p>Petugas Kebersihan akan melakukan <br>scan kode QR Anda sebelum membawa<br> sampah yang Anda setor.</p>
+                    <p class="pt-5-c font-weight-bold font24">Scan kode QR</p>
+                    <p class="font20">Petugas Kebersihan akan melakukan <br>scan kode QR Anda sebelum membawa<br> sampah yang Anda setor.</p>
                 </div>
             </div>
             <div class="col-3">
@@ -396,34 +413,41 @@
 </div>
 <section class="d-none d-md-block">
     <div class="container">
-        <div class="row py-4">
+        <div class="row pt-4">
             <div class="col-2"></div>
             <div class="col-5 text-center">
-                <p class="pb-3 font-weight-bold" style="font-size: 25px;">Fitur Antar Sendiri</p>
-                <p>Antar sendiri adalah fitur yang <br>diperuntukkan bagi yang ingin <br>menyetor sampah sendiri.</p>
+                <p class="pb-3 font-weight-bold font32">Fitur Antar Sendiri</p>
+                {{-- <p class="font20">Antar sendiri adalah fitur yang diperuntukkan bagi yang ingin <br>menyetor sampah sendiri.</p> --}}
             </div>
             <div class="col-5"></div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-7">
+                <p class="font20">Antar sendiri adalah fitur yang diperuntukkan bagi yang ingin <br>menyetor sampah sendiri.</p>
+            </div>
+            <div class="col-2"></div>
         </div>
         <div class="row py-5">
             <div class="col-2"></div>
             <div class="col-5 text-center">
                 <img src="{{ asset('images/landing/number-black-1.png') }}" alt="harusnya number-black-1" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Fitur Antar Sendiri</p>
-                <p>Fitur ini menyediakan pilihan <br>penyetoran sampah Anda sendiri</p>
+                <p class="pt-5-c font-weight-bold font24">Fitur Antar Sendiri</p>
+                <p class="font20">Fitur ini menyediakan pilihan <br>penyetoran sampah Anda sendiri</p>
             </div>
             <div class="col-5"></div>
         </div>
     </div>
 </section>
 
-<section class="my-5 d-none d-md-block" style="background-color: #3dcc9c;">
+<section class="mt-5 d-none d-md-block" style="background-color: #3dcc9c;">
     <div class="container">
         <div class="row mt-3">
             <div class="col-2"></div>
             <div class="col-5">
             </div>
             <div class="col-3">
-                <img src="{{ asset('images/landing/hp-8.png') }}" alt="harusnya hp-8" width="250px" style="margin-top: -100%;">
+                <img src="{{ asset('images/landing/hp-8.png') }}" alt="harusnya hp-8" width="250px" style="margin-top: -126%;">
             </div>
             <div class="col-2"></div>
         </div>
@@ -434,20 +458,20 @@
             </div>
             <div class="col-5 text-center text-white">
                 <img src="{{ asset('images/landing/number-white-2.png') }}" alt="harusnya number-white-2" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Pilih fasilitas pengolahan sampah</p>
-                <p>Sistem akan memberikan lokasi fasilitas <br>pengolahan sampah terdekat yang dapat <br>Anda kunjungi.</p>
+                <p class="pt-5-c font-weight-bold font24">Pilih fasilitas pengolahan sampah</p>
+                <p class="font20">Sistem akan memberikan lokasi fasilitas <br>pengolahan sampah terdekat yang dapat <br>Anda kunjungi.</p>
             </div>
             <div class="col-2"></div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-5 pt-5">
             <div class="col-2"></div>
             <div class="col-5">
                 <div class="text-center">
                     <img src="{{ asset('images/landing/number-white-3.png') }}" alt="harusnya number-white-3" width="40px">
                 </div>
                 <div class="text-center text-white">
-                    <p class="pt-3 font-weight-bold subfont">Cek jadwal operasional</p>
-                    <p>Cek jadwal operasional dan ketentuan <br>yang ada pada fasilitas pengolahan <br>sampah yang ingin Anda kunjungi.</p>
+                    <p class="pt-5-c font-weight-bold font24">Cek jadwal operasional</p>
+                    <p class="font20">Cek jadwal operasional dan ketentuan <br>yang ada pada fasilitas pengolahan <br>sampah yang ingin Anda kunjungi.</p>
                 </div>
             </div>
             <div class="col-3">
@@ -462,8 +486,8 @@
             </div>
             <div class="col-5 text-center text-white">
                 <img src="{{ asset('images/landing/number-white-4.png') }}" alt="harusnya number-white-4" width="40px">
-                <p class="pt-3 font-weight-bold subfont">Scan kode QR</p>
-                <p>Admin fasilitas pengolahan sampah akan <br>melakukan scan kode QR Anda sebelum <br>menerima sampah yang Anda setor.</p>
+                <p class="pt-5-c font-weight-bold font24">Scan kode QR</p>
+                <p class="font20">Admin fasilitas pengolahan sampah akan <br>melakukan scan kode QR Anda sebelum <br>menerima sampah yang Anda setor.</p>
             </div>
             <div class="col-2"></div>
         </div>
@@ -521,19 +545,65 @@
     </div>
 </section>
 <!-- antar sendiri mobile end -->
-<section class="pt-3" style="margin-top: 25%;">
+<section class="mb-5 pb-5" style="background-color: #F9F9FC; padding-top: 25%;">
     <div class="container">
         <div class="row text-center">
             <div class="col-12 d-none d-md-block">
                 <div class="pb-4">
-                    <h1 class="font-weight-bold ">Download Aplikasi Go 4.0 Waste</h1>
+                    <span class="font-weight-bold " style="font-size: 48px;">Download Aplikasi Go 4.0 Waste</span>
                 </div>
                 <div>
-                    <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a>
+                    {{-- <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a> --}}
                     <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}"></a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+@endsection
+@section('styles')
+<style>
+
+        .font24{
+            font-size:24px;
+        }
+        .font32{
+            font-size:32px;
+        }
+        .font48{
+            font-size:48px;
+        }
+
+        .font-custom-open-sans-regular{
+            font-family: 'open-sans-regular', sans-serif !important;
+            -webkit-font-smoothing: subpixel-antialiased !important;
+        }
+
+        .font-custom-open-sans-bold{
+            font-family: 'open-sans-bold', sans-serif !important;
+            -webkit-font-smoothing: subpixel-antialiased !important;
+        }
+        @font-face {
+            font-family: 'open-sans-regular';
+            src: url('../../fonts/opensans.eot');
+            src: url('../../fonts/opensans.eot?#iefix') format('embedded-opentype'),
+                url('../../fonts/opensans.woff2') format('woff2'),
+                url('../../fonts/opensans.woff') format('woff'),
+                url('../../fonts/opensans.svg#opensans') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'open-sans-bold';
+            src: url('../../fonts/opensans-bold.eot');
+            src: url('../../fonts/opensans-bold.eot?#iefix') format('embedded-opentype'),
+                url('../../fonts/opensans-bold.woff2') format('woff2'),
+                url('../../fonts/opensans-bold.woff') format('woff'),
+                url('../../fonts/opensans-bold.svg#opensans-bold') format('svg');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+</style>
 @endsection
