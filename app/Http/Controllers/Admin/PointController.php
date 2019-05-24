@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class PointController extends Controller
@@ -31,11 +32,17 @@ class PointController extends Controller
     }
 
     public function getIndex(Request $request){
-        $points = PointHistory::query();
-        return DataTables::of($points)
-            ->setTransformer(new PointTransformer())
-            ->addIndexColumn()
-            ->make(true);
+        try{
+            error_log("controller");
+            $points = PointHistory::orderBy('created_at', 'desc')->get();
+            return DataTables::of($points)
+                ->setTransformer(new PointTransformer())
+//                ->addIndexColumn()
+                ->make(true);
+        }
+        catch (\Exception $ex){
+            Log::error("PointController > getIndex error: ". $ex);
+        }
     }
 
     public function getIndexWastecollectors(Request $request){

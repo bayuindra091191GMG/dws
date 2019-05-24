@@ -43,7 +43,7 @@
             serverSide: true,
             pageLength: 25,
             ajax: '{!! route('datatables.points') !!}',
-            order: [ [0, 'desc'] ],
+            // order: [ [0, 'desc'] ],
             columns: [
                 { data: 'date', name: 'date', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){
@@ -57,23 +57,13 @@
                 { data: 'name', name: 'name', class: 'text-center'},
                 { data: 'type', name: 'type', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'amount', name: 'amount', class: 'text-right'},
-                { data: 'saldo', name: 'saldo', class: 'text-right',
-                    render: function ( data, type, row ){
-                        if ( type === 'display' || type === 'filter' ){
-                            return data.toLocaleString(
-                                "de-DE",
-                                {minimumFractionDigits: 2}
-                            );
-                        }
-                        return data;
-                    }
-                },
+                { data: 'saldo', name: 'saldo', class: 'text-right'},
                 { data: 'description', name: 'description', class: 'text-left'},
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
-            language: {
-                url: "{{ asset('indonesian.json') }}"
-            }
+            {{--language: {--}}
+                {{--url: "{{ asset('indonesian.json') }}"--}}
+            {{--}--}}
         });
 
         $(document).on('click', '.delete-modal', function(){
