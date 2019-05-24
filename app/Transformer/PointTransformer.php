@@ -14,6 +14,7 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\Point;
+use Illuminate\Support\Facades\Log;
 use League\Fractal\TransformerAbstract;
 
 class PointTransformer extends TransformerAbstract
@@ -22,21 +23,17 @@ class PointTransformer extends TransformerAbstract
 
         try{
 //            $date = Carbon::parse($point->date)->toIso8601String();
-            $createdDate = Carbon::parse($point->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($point->created_at)->toIso8601String();
             $action = "<a class='btn btn-xs btn-info' href='points/show/".$point->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>";
 
+            $amount = $point->amount;
             if($point->type_transaction == 'debet'){
                 $amount = "(".$point->amount.")";
             }
-            else{
-                $amount = $point->amount;
-            }
 
+            $name = "BELUM ASSIGN";
             if(!empty($point->user_id)){
                 $name = $point->user->first_name. " ". $point->user->last_name;
-            }
-            else{
-                $name = "BELUM ASSIGN";
             }
 
             return[
@@ -51,7 +48,7 @@ class PointTransformer extends TransformerAbstract
             ];
         }
         catch (\Exception $exception){
-            error_log($exception);
+            Log::error("PointTransformer error: ". $exception);
         }
     }
 }
