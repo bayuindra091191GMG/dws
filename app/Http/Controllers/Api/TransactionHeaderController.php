@@ -239,15 +239,16 @@ class TransactionHeaderController extends Controller
             foreach ($header->transaction_details as $detail)
             {
                 foreach ($data['details'] as $item) {
+                    $detailWeight = floatval($item['weight']) * 1000;
                     if($detail->id == $item['id']) {
                         if ($header->user->company->waste_category_id == 1) {
                             $detail->dws_category_id = $item['dws_category_id'];
-                            $detail->weight = $item['weight'];
+                            $detail->weight = $detailWeight;
                             $detail->price = $item['price'];
                             $detail->save();
                         } else if ($header->user->company->waste_category_id == 2) {
                             $detail->masaro_category_id = $item['masaro_category_id'];
-                            $detail->weight = $item['weight'];
+                            $detail->weight = $detailWeight;
                             $detail->price = $item['price'];
                             $detail->save();
                         }
@@ -342,9 +343,13 @@ class TransactionHeaderController extends Controller
         $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
         $data = array(
             'type_id' => '2',
+            'is_confirm' => '1',
             'transaction_no' => $data['transaction_no'],
             'name' => $userName
         );
+
+        // TAMBAH POIN KE WASTE SOURCE
+
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
         return Response::json([

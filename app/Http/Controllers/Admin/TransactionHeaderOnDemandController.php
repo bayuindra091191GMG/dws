@@ -274,8 +274,11 @@ class TransactionHeaderOnDemandController extends Controller
             "type_id" => "31",
             "model" => $transactionDB,
         );
+
+        // MURPHIE BUTUH CEK INI
         $isSuccess = FCMNotification::SendNotification($collectorId, 'collector', $title, $body, $data);
 
+        // TAMBAH NOTIF WASTE COLLECTOR TELAH DITEMUKAN KE WASTE SOURCE
 
         $transaction = TransactionHeader::find($id);
         $transaction->waste_collector_id = $collectorId;

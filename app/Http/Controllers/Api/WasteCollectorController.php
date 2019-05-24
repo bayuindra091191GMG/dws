@@ -499,8 +499,11 @@ class WasteCollectorController extends Controller
         $user = User::where('email', $request->input('email'))->first();
 
         if ($data['is_edit']) {
+            // Convert total weight to kilogram
+            $totalWeight = floatval($data["total_weight"]) * 1000;
+
             $header = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->first();
-            $header->total_weight = $data['total_weight'];
+            $header->total_weight = $totalWeight;
             $header->total_price = $data['total_price'];
             $header->updated_at = Carbon::now('Asia/Jakarta');
             $header->status_id = 7;
@@ -509,8 +512,9 @@ class WasteCollectorController extends Controller
             //do detail
             $i = 0;
             foreach ($data['details'] as $item) {
+                $detailWeight = floatval($item['weight']) * 1000;
                 $detail = $header->transaction_details[$i];
-                $detail->weight = $item['weight'];
+                $detail->weight = $detailWeight;
                 $detail->price = $item['price'];
                 $detail->save();
                 $i++;
