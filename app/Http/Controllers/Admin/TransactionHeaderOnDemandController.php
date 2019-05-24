@@ -37,22 +37,30 @@ class TransactionHeaderOnDemandController extends Controller
 
     public function list()
     {
-        $transactions = TransactionHeader::where('transaction_type_id', 3)->orderBy('created_at', 'desc')->get();
+        $admin = Auth::guard('admin')->user();
+        $transactions = TransactionHeader::where('transaction_type_id', 3);
+        if($admin->is_super_admin === 0){
+            $adminWasteBankId = $admin->waste_bank_id;
+            $transactions = $transactions->where('waste_bank_id', $adminWasteBankId);
+        }
+        $transactions = $transactions->get();
 
         return view('admin.transaction.on_demand.list', compact('transactions'));
     }
 
     public function getIndex(Request $request){
 
-        $user = Auth::guard('admin')->user();
-        if($user->is_super_admin === 1){
+        $admin = Auth::guard('admin')->user();
+        if($admin->is_super_admin === 1){
             $transations = TransactionHeader::where('transaction_type_id', 3);
         }
         else{
-            $adminWasteBankId = $user->waste_bank_id;
+            $adminWasteBankId = $admin->waste_bank_id;
             $transations = TransactionHeader::where('transaction_type_id', 3)
                             ->where('waste_bank_id', $adminWasteBankId);
         }
+
+        //error_log('count: '. $transations->get()->count());
 
         return DataTables::of($transations)
             ->setTransformer(new TransactionTransformer())

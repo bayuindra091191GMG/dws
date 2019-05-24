@@ -6,7 +6,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR WASTE PROCESSOR</h1>
+                        <h3>DAFTAR PENGOLAHAN SAMPAH</h3>
                         @include('partials.admin._messages')
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="waste-bank" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                        <table id="waste-bank" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
                                 <th>Nama</th>

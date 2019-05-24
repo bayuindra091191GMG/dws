@@ -3,36 +3,21 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @include('partials.admin._messages')
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR TRANSAKSI BARU JEMPUT SEKARANG</h1>
+                        <h3>DAFTAR TRANSAKSI BARU JEMPUT SEKARANG</h3>
+                        @include('partials.admin._messages')
                     </div>
                 </div>
-                {{--<div class="row mb-3">--}}
-                    {{--<div class="col-12 text-right">--}}
-                        {{--<a href="{{ route('admin.transactions.on_demand.dws.create') }}" class="btn btn-success">--}}
-                            {{--<i class="fas fa-plus text-white"></i>--}}
-                            {{--<br/>--}}
-                            {{--<span>KATEGORI DWS</span>--}}
-                        {{--</a>--}}
-                        {{--<a href="{{ route('admin.transactions.on_demand.masaro.create') }}" class="btn btn-success">--}}
-                            {{--<i class="fas fa-plus text-white"></i>--}}
-                            {{--<br/>--}}
-                            {{--<span>KATEGORI MASARO</span>--}}
-                        {{--</a>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="card-title m-b-0"></h2>
-                        <table id="datatable-ondemand" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <table id="datatable-ondemand" class="table table-striped table-bordered dt-responsive nowrap">
                             <thead>
                             <tr>
-                                <th class="text-center">Tanggal</th>
+                                <th class="text-center">Tanggal & Waktu</th>
                                 <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Nama User</th>
+                                <th class="text-center">Nama Sumber Sampah</th>
                                 {{--<th class="text-center">Kategori</th>--}}
                                 <th class="text-center">Total Berat (kg)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
@@ -45,7 +30,7 @@
                             <tbody>
                             @foreach($transactions as $transaction)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('j-F-Y H:i:s')}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-F-Y H:i:s')}}</td>
                                     <td>{{ $transaction->transaction_no}}</td>
                                     <td>{{ $transaction->user->first_name}} {{ $transaction->user->last_name}}</td>
                                     {{--<td>{{ $transaction->waste_category->name}}</td>--}}

@@ -7,36 +7,22 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>Daftar Transaksi Penjemputan Rutin</h1>
+                        <h3>DAFTAR TRANSAKSI PENJEMPUTAN RUTIN</h3>
                     </div>
                 </div>
-                {{--<div class="row mb-3">--}}
-                {{--<div class="col-12 text-right">--}}
-                {{--<a href="{{ route('admin.transactions.on_demand.dws.create') }}" class="btn btn-success">--}}
-                {{--<i class="fas fa-plus text-white"></i>--}}
-                {{--<br/>--}}
-                {{--<span>KATEGORI DWS</span>--}}
-                {{--</a>--}}
-                {{--<a href="{{ route('admin.transactions.on_demand.masaro.create') }}" class="btn btn-success">--}}
-                {{--<i class="fas fa-plus text-white"></i>--}}
-                {{--<br/>--}}
-                {{--<span>KATEGORI MASARO</span>--}}
-                {{--</a>--}}
-                {{--</div>--}}
-                {{--</div>--}}
                 <div class="row">
                     <div class="col-12">
-                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap" >
                             <thead>
                             <tr>
                                 <th class="text-center">Tanggal</th>
                                 <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Nama User</th>
+                                <th class="text-center">Nama Sumber Sampah</th>
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Total Berat (kg)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Waste Bank</th>
-                                <th class="text-center">Waste Collector</th>
+                                <th class="text-center">Pengolahan Sampah</th>
+                                <th class="text-center">Petugas Kebersihan</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center"></th>
                             </tr>
@@ -74,7 +60,7 @@
                     }
                 },
                 { data: 'transaction_no', name: 'transaction_no', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'name', name: 'name', class: 'text-center', orderable: false, searchable: false },
                 { data: 'category', name: 'category', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'total_weight', name: 'total_weight', class: 'text-right',
                     render: function ( data, type, row ){
@@ -101,7 +87,7 @@
                 },
                 { data: 'waste_bank', name: 'waste_bank', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'waste_collector', name: 'waste_collector', orderable: false, searchable: false, class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center'},
+                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
             language: {

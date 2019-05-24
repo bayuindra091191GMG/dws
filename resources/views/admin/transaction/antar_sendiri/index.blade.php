@@ -3,11 +3,11 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @include('partials.admin._messages')
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR TRANSAKSI ANTAR SENDIRI</h1>
+                        <h3>DAFTAR TRANSAKSI ANTAR SENDIRI</h3>
+                        @include('partials.admin._messages')
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -26,22 +26,24 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="card-title m-b-0"></h2>
-                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Tanggal</th>
-                                <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Nama User</th>
-                                <th class="text-center">Kategori</th>
-                                <th class="text-center">Total Berat (kg)</th>
-                                <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center"></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive-sm">
+                            <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Tanggal</th>
+                                    <th class="text-center">No Transaksi</th>
+                                    <th class="text-center">Nama Sumber Sampah</th>
+                                    <th class="text-center">Pengolahan Sampah</th>
+                                    <th class="text-center">Kategori</th>
+                                    <th class="text-center">Total Berat (kg)</th>
+                                    <th class="text-center">Total Harga (Rp)</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,8 +74,9 @@
                         return data;
                     }
                 },
-                { data: 'transaction_no', name: 'transaction_no', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'transaction_no', name: 'transaction_no'},
+                { data: 'name', name: 'name', class: 'text-center', orderable: false, searchable: false },
+                { data: 'waste_bank', name: 'waste_bank', class: 'text-center', orderable: false, searchable: false },
                 { data: 'category', name: 'category', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'total_weight', name: 'total_weight', class: 'text-right',
                     render: function ( data, type, row ){
@@ -98,7 +101,7 @@
                         return data;
                     }
                 },
-                { data: 'status', name: 'status', class: 'text-center'},
+                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ],
             language: {

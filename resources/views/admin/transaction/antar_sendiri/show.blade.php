@@ -5,30 +5,59 @@
 <div class="row">
     <div class="col-12">
         <div class="card-body">
-            <h2 class="card-title m-b-0">Detail Transaksi Antar Sendiri</h2>
-            <div class="container-fluid relative animatedParent animateOnce">
-                <div class="row mb-2">
-                    <div class="col-10"></div>
-                    <div class="col-2 text-right">
-
-                        @if($header->waste_category_id == "1")
-                            <a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
-                        @else
-                            <a href="{{ route('admin.transactions.antar_sendiri.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
-                        @endif
-
-                    </div>
+            <div class="row mb-2">
+                <div class="col-md-8 col-12">
+                    <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-outline-primary float-left">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h3 class="mb-0 float-left ml-3">DETAIL TRANSAKSI ANTAR SENDIRI</h3>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body b-b">
+                <div class="col-md-4 col-12 text-right">
+                    @if($header->waste_category_id == "1")
+                        <a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                    @else
+                        <a href="{{ route('admin.transactions.antar_sendiri.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                    @endif
 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body b-b">
+
+                            <div class="col-md-12">
+                                <div id="user-action-confirm" class="form-group form-float form-group-lg" style="display: none;">
+                                    <div class="form-line">
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <strong>Transaksi Dikonfirmasi oleh Sumber Sampah</strong>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div id="user-action-cancel" class="form-group form-float form-group-lg" style="display: none;">
+                                    <div class="form-line">
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong>Transaksi Dibatalkan oleh Sumber Sampah</strong>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(\Illuminate\Support\Facades\Session::has('message'))
                                 <div class="col-md-12">
-                                    <div id="user-action-confirm" class="form-group form-float form-group-lg" style="display: none;">
+                                    <div class="form-group form-float form-group-lg">
                                         <div class="form-line">
                                             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                <strong>Transaksi Dikonfirmasi oleh User</strong>
+                                                <strong>{{ \Illuminate\Support\Facades\Session::get('message') }}</strong>
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -36,117 +65,101 @@
                                         </div>
                                     </div>
                                 </div>
+                            @endif
 
-                                <div class="col-md-12">
-                                    <div id="user-action-cancel" class="form-group form-float form-group-lg" style="display: none;">
-                                        <div class="form-line">
-                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                <strong>Transaksi Dibatalkan oleh User</strong>
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="name">No Transaksi</label>
+                                        <input id="trxNo" type="text" class="form-control"
+                                               name="trxNo" value="{{ $header->transaction_no }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                @if(\Illuminate\Support\Facades\Session::has('message'))
-                                    <div class="col-md-12">
-                                        <div class="form-group form-float form-group-lg">
-                                            <div class="form-line">
-                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                    <strong>{{ \Illuminate\Support\Facades\Session::get('message') }}</strong>
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="name">No Transaksi</label>
-                                            <input id="trxNo" type="text" class="form-control"
-                                                   name="trxNo" value="{{ $header->transaction_no }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="date">Tanggal Transaksi</label>
+                                        <input id="date" type="text" class="form-control"
+                                               name="date" value="{{ $date }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="date">Tanggal Transaksi</label>
-                                            <input id="date" type="text" class="form-control"
-                                                   name="date" value="{{ $date }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="name">Nama Sumber Sampah</label>
+                                        <input id="name" type="text" class="form-control"
+                                               name="name" value="{{ $name }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="name">Nama User</label>
-                                            <input id="name" type="text" class="form-control"
-                                                   name="name" value="{{ $name }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="waste_bank">Pengolahan Sampah</label>
+                                        <input id="waste_bank" type="text" class="form-control"
+                                               name="waste_bank" value="{{ $header->waste_bank->name ?? '-' }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="transaction_type">Jenis Transaksi</label>
-                                            <input id="transaction_type" type="text" class="form-control"
-                                                   name="transaction_type" value="{{ $header->transaction_type->description }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="transaction_type">Jenis Transaksi</label>
+                                        <input id="transaction_type" type="text" class="form-control"
+                                               name="transaction_type" value="{{ $header->transaction_type->description }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="waste_category">Kategori</label>
-                                            <input id="waste_category" type="text" class="form-control"
-                                                   name="waste_category" value="{{ $header->waste_category->name }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="waste_category">Kategori</label>
+                                        <input id="waste_category" type="text" class="form-control"
+                                               name="waste_category" value="{{ $header->waste_category->name }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="total_weight">Berat Total</label>
-                                            <input id="total_weight" type="text" class="form-control"
-                                                   name="total_weight" value="{{ $header->total_weight_string }} kg" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="total_weight">Berat Total</label>
+                                        <input id="total_weight" type="text" class="form-control"
+                                               name="total_weight" value="{{ $header->total_weight_string }} kg" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="total_price">Harga Total</label>
-                                            <input id="total_price" type="text" class="form-control"
-                                                   name="total_price" value="Rp {{ $header->total_price_string }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="total_price">Harga Total</label>
+                                        <input id="total_price" type="text" class="form-control"
+                                               name="total_price" value="Rp {{ $header->total_price_string }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <label class="form-label" for="meta_description">Status</label>
-                                            <input id="status" type="text" class="form-control"
-                                                   name="status" value="{{ $header->status->description }}" readonly>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="form-group form-float form-group-lg">
+                                    <div class="form-line">
+                                        <label class="form-label" for="meta_description">Status</label>
+                                        <input id="status" type="text" class="form-control"
+                                               name="status" value="{{ $header->status->description }}" readonly>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12">
-                                    <table class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered dt-responsive nowrap">
                                         <thead>
                                         <tr>
                                             <th class="text-center">Kode</th>
@@ -179,21 +192,11 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-group form-float form-group-lg">
-                                        <div class="form-line">
-                                            <a href="{{ route('admin.transactions.antar_sendiri.index') }}" class="btn btn-danger">Exit</a>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 

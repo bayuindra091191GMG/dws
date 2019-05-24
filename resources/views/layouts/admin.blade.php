@@ -47,6 +47,14 @@
         .navbar-dark .navbar-nav .nav-link{
             color: rgba(255, 255, 255, 1) !important;
         }
+
+        .card-body h3{
+            line-height: 1.6 !important;
+        }
+
+        .page-wrapper>.container-fluid{
+            padding: 0 !important;
+        }
     </style>
     @yield('styles')
 </head>

@@ -3,40 +3,26 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @include('partials.admin._messages')
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR TRANSAKSI JEMPUT SEKARANG</h1>
+                        <h3>DAFTAR TRANSAKSI JEMPUT SEKARANG</h3>
+                        @include('partials.admin._messages')
                     </div>
                 </div>
-                {{--<div class="row mb-3">--}}
-                    {{--<div class="col-12 text-right">--}}
-                        {{--<a href="{{ route('admin.transactions.on_demand.dws.create') }}" class="btn btn-success">--}}
-                            {{--<i class="fas fa-plus text-white"></i>--}}
-                            {{--<br/>--}}
-                            {{--<span>KATEGORI DWS</span>--}}
-                        {{--</a>--}}
-                        {{--<a href="{{ route('admin.transactions.on_demand.masaro.create') }}" class="btn btn-success">--}}
-                            {{--<i class="fas fa-plus text-white"></i>--}}
-                            {{--<br/>--}}
-                            {{--<span>KATEGORI MASARO</span>--}}
-                        {{--</a>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
                 <div class="row">
                     <div class="col-12">
-                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap">
                             <thead>
                             <tr>
                                 <th class="text-center">Tanggal</th>
                                 <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Nama User</th>
+                                <th class="text-center">Nama Sumber Sampah</th>
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Total Berat (kg)</th>
                                 <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Waste Bank</th>
-                                <th class="text-center">Waste Collector</th>
+                                <th class="text-center">Pengolahan Sampah</th>
+                                <th class="text-center">Petugas Kebersihan</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center"></th>
                             </tr>

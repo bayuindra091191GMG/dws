@@ -30,10 +30,9 @@ class TransactionHeaderController extends Controller
     }
 
     public function getIndex(Request $request){
-        $transations = TransactionHeader::where('transaction_type_id', 2)->get();
+        $transations = TransactionHeader::where('transaction_type_id', 2);
         return DataTables::of($transations)
             ->setTransformer(new TransactionTransformer)
-            ->addIndexColumn()
             ->make(true);
     }
 
@@ -64,10 +63,18 @@ class TransactionHeaderController extends Controller
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
         $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
+        // Check superadmin
+        $admin = Auth::guard('admin')->user();
+        if($admin->is_super_admin === 1){
+            Session::flash('error', 'Superadmin tidak bisa membuat baru transaksi!');
+            return redirect()->back();
+        }
+
         $data = [
             'code'              => $code,
             'dateToday'         => $dateToday,
-            'wasteCategories'   => $wasteCategories
+            'wasteCategories'   => $wasteCategories,
+            'wasteBank'         => $admin->waste_bank->name ?? '-'
         ];
 
         return view('admin.transaction.antar_sendiri.create_dws')->with($data);
@@ -87,15 +94,21 @@ class TransactionHeaderController extends Controller
         // Generate transaction codes
         $today = Carbon::today()->format("Ym");
         $prepend = "TRANS/MASARO/". $today;
-        //dd($prepend);
         $nextNo = Utilities::GetNextTransactionNumber($prepend);
-        //dd($nextNo);
         $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
+
+        // Check superadmin
+        $admin = Auth::guard('admin')->user();
+        if($admin->is_super_admin === 1){
+            Session::flash('error', 'Superadmin tidak bisa membuat baru transaksi!');
+            return redirect()->back();
+        }
 
         $data = [
             'code'              => $code,
             'dateToday'         => $dateToday,
-            'wasteCategories'   => $wasteCategories
+            'wasteCategories'   => $wasteCategories,
+            'wasteBank'         => $admin->waste_bank->name ?? '-'
         ];
 
         return view('admin.transaction.antar_sendiri.create_masaro')->with($data);
@@ -235,17 +248,17 @@ class TransactionHeaderController extends Controller
             Session::flash('message', 'Berhasil membuat transaksi kategori Masaro!');
             $body = "Berhasil membuat transaksi kategori Masaro - Nomor Transaksi ".$code;
         }
+
         $data = array(
             'type_id' => '2',
             'transaction_no' => $code,
             'message' => $body,
         );
-//        dd($data);
+
         //for testing purpose set user and send notif
         //$trxHeader->user_id = 8;
         //$trxHeader->save();
         //$isSuccess = FCMNotification::SendNotification(8, 'app', $title, $body, $data);
-
 
         return redirect()->route('admin.transactions.antar_sendiri.show', ['id' => $trxHeader->id]);
     }

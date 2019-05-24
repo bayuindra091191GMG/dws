@@ -219,7 +219,6 @@ class PermissionMenuController extends Controller
         $permissionMenus = Role::orderBy('name')->get();
         return DataTables::of($permissionMenus)
             ->setTransformer(new PermissionMenuTransformer)
-            ->addIndexColumn()
             ->make(true);
     }
 }

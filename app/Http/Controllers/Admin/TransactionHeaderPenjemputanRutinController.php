@@ -26,10 +26,12 @@ use App\Transformer\TransactionTransformer;
 use App\Transformer\UserPenjemputanRutinTransformer;
 use App\Transformer\UserWasteBankTransformer;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class TransactionHeaderPenjemputanRutinController extends Controller
@@ -93,7 +95,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * Edit dws category type transaction
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function editDws($id)
     {
@@ -114,7 +116,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * Edit Masaro category type transaction
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function editMasaro($id)
     {
@@ -135,7 +137,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * Display on demand transaction detail
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function show($id)
     {
@@ -297,20 +299,26 @@ class TransactionHeaderPenjemputanRutinController extends Controller
     }
 
     /**
-     * Form to assign wastecollector to User rutin pickup
+     * Form to assign waste collector to customer
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function setUserWastecollector($id){
         $adminUser = Auth::guard('admin')->user();
-        $adminWasteBankId = $adminUser->waste_bank_id;
         $user = User::find($id);
         $address = Address::where('user_id', $id)->first();
-        $wasteCollectors = WasteCollector::where('status_id', 1)
-            ->whereHas('waste_banks', function($query) use ($adminWasteBankId){
+        $wasteCollectors = WasteCollector::where('status_id', 1);
+
+        // If super admin, get all waste collectors
+        if($adminUser->is_super_admin === 0){
+            $adminWasteBankId = $adminUser->waste_bank_id;
+            $wasteCollectors = $wasteCollectors->whereHas('waste_banks', function($query) use ($adminWasteBankId){
                 $query->where('waste_bank_id', $adminWasteBankId);
-            })->get();
+            });
+        }
+
+        $wasteCollectors = $wasteCollectors->get();
 
         $userWasteCollectorId = -1;
         $userWasteCollector = WasteCollectorUser::where('user_id', $id)->first();
@@ -319,9 +327,9 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         }
 
         $data = [
-            'user'              => $user,
-            'address'           => $address,
-            'wasteCollectors'   => $wasteCollectors,
+            'user'                  => $user,
+            'address'               => $address,
+            'wasteCollectors'       => $wasteCollectors,
             'userWasteCollectorId'  => $userWasteCollectorId
         ];
 
@@ -332,7 +340,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * Update wastecollector to User rutin pickup
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function updateUserWastecollector(Request $request){
 
@@ -365,7 +373,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
      * Confirm Transaction Penjemputan rutin by wastebank admin
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function confirm(Request $request){
         $trxId = $request->input('confirmed_header_id');
