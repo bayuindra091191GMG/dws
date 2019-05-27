@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\libs\Utilities;
 use App\Models\Configuration;
+use App\Models\PointHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
@@ -342,13 +343,28 @@ class TransactionHeaderController extends Controller
         $title = "Digital Waste Solution";
         $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
         $data = array(
-            'type_id' => '2',
-            'is_confirm' => '1',
-            'transaction_no' => $data['transaction_no'],
-            'name' => $userName
+            'type_id'           => '2',
+            'is_confirm'        => '1',
+            'transaction_no'    => $data['transaction_no'],
+            'name'              => $userName
         );
 
-        // TAMBAH POIN KE WASTE SOURCE
+        // Tambah poin ke waste source
+        $user = $header->user;
+        $newSaldo = $user->point + $header->total_price;
+        $user->point = $newSaldo;
+        $user->save();
+
+        PointHistory::create([
+            'user_id'           => $header->user_id,
+            'type'              => $header->transaction_type_id,
+            'transaction_id'    => $header->id,
+            'type_transaction'  => "Kredit",
+            'amount'            => $header->total_price,
+            'saldo'             => $newSaldo,
+            'description'       => "Point dari transaksi nomor ".$header->transaction_no,
+            'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+        ]);
 
         $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 

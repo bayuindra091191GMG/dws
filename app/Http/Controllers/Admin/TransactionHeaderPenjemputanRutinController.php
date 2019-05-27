@@ -394,20 +394,20 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         //add point to user
         //$configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
         //$amount = $configuration->configuration_value;
-        $userDB = $header->user;
-        $newSaldo = $userDB->point + $header->total_price;
-        $userDB->point = $newSaldo;
-        $userDB->save();
+        $user = $header->user;
+        $newSaldo = $user->point + $header->total_price;
+        $user->point = $newSaldo;
+        $user->save();
 
-        $point = PointHistory::create([
-            'user_id'  => $header->user_id,
-            'type'   => $header->transaction_type_id,
+        PointHistory::create([
+            'user_id'           => $header->user_id,
+            'type'              => $header->transaction_type_id,
             'transaction_id'    => $header->id,
-            'type_transaction'   => "Kredit",
-            'amount'    => $header->total_price,
-            'saldo'    => $newSaldo,
-            'description'    => "Point dari transaksi nomor ".$header->transaction_no,
-            'created_at'    => Carbon::now('Asia/Jakarta'),
+            'type_transaction'  => "Kredit",
+            'amount'            => $header->total_price,
+            'saldo'             => $newSaldo,
+            'description'       => "Point dari transaksi nomor ".$header->transaction_no,
+            'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);
 
         //add point to wastecollector
