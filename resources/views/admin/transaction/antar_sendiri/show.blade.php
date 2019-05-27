@@ -132,7 +132,7 @@
                                     <div class="form-line">
                                         <label class="form-label" for="total_weight">Berat Total</label>
                                         <input id="total_weight" type="text" class="form-control"
-                                               name="total_weight" value="{{ $header->total_weight_string }} kg" readonly>
+                                               name="total_weight" value="{{ $header->total_weight_kg_string }} kg" readonly>
                                     </div>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@
         }
 
         .page-wrapper>.container-fluid{
-            padding: 0 !important;
+            padding: 1em !important;
         }
     </style>
     @yield('styles')

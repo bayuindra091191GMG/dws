@@ -4,7 +4,7 @@
 
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-12">
 
             @if($isSuperAdmin)
                 <h3>Selamat Datang Admin DWS</h3>
