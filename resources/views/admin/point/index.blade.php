@@ -14,7 +14,7 @@
                                 <th class="text-center">Tanggal</th>
                                 <th class="text-center">No Transaksi</th>
                                 <th class="text-center">Nama User</th>
-                                <th class="text-center">Tipe Trasaksi</th>
+                                <th class="text-center">Tipe Transaksi</th>
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Saldo Terakhir</th>
                                 <th class="text-center">Deskripsi</th>
@@ -43,7 +43,7 @@
             serverSide: true,
             pageLength: 25,
             ajax: '{!! route('datatables.points') !!}',
-            // order: [ [0, 'desc'] ],
+            order: [ [0, 'desc'] ],
             columns: [
                 { data: 'date', name: 'date', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){

@@ -24,7 +24,8 @@ class PointTransformer extends TransformerAbstract
         try{
 //            $date = Carbon::parse($point->date)->toIso8601String();
             $createdDate = Carbon::parse($point->created_at)->toIso8601String();
-            $action = "<a class='btn btn-xs btn-info' href='points/show/".$point->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>";
+            $action = "";
+//            $action = "<a class='btn btn-xs btn-info' href='points/show/".$point->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-info'></i></a>";
 
             $amount = $point->amount;
             if($point->type_transaction == 'debet'){
