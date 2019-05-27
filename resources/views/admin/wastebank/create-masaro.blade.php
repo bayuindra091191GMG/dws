@@ -154,6 +154,16 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="status">Status</label>
+                                                                <select id="status" name="status" class="form-control">
+                                                                    <option value="1" selected>Aktif</option>
+                                                                    <option value="2">Non-Aktif</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
                                                         <div class="col-md-12 p-t-20">
