@@ -45,14 +45,24 @@
                                                 </div>
                                             </div>
 
-                                            <input id="id" type="hidden"
-                                                   name="id" value="{{ $wasteCollector->id }}"/>
+                                            <input id="id" type="hidden" name="id" value="{{ $wasteCollector->id }}"/>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group form-float form-group-lg">
+                                                    <div class="form-line">
+                                                        <label class="form-label" for="phone">Nomor Ponsel *</label>
+                                                        <input id="phone" type="text" class="form-control"
+                                                               name="phone" value="{{ $wasteCollector->phone }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-12">
                                                 <div class="form-group form-float form-group-lg">
                                                     <div class="form-line">
                                                         <label class="form-label" for="email">Email *</label>
                                                         <input id="email" type="email" class="form-control"
-                                                               name="email" value="{{ $wasteCollector->email }}"/>
+                                                               name="email" value="{{ $wasteCollector->email ?? "" }}"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -83,16 +93,6 @@
                                                         <label class="form-label" for="identity_number">No Identitas *</label>
                                                         <input id="identity_number" type="text" class="form-control"
                                                                name="identity_number" value="{{ $wasteCollector->identity_number }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <div class="form-group form-float form-group-lg">
-                                                    <div class="form-line">
-                                                        <label class="form-label" for="phone">Nomor Ponsel *</label>
-                                                        <input id="phone" type="text" class="form-control"
-                                                               name="phone" value="{{ $wasteCollector->phone }}">
                                                     </div>
                                                 </div>
                                             </div>

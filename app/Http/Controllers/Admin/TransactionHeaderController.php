@@ -43,7 +43,14 @@ class TransactionHeaderController extends Controller
      */
     public function index()
     {
-        return view('admin.transaction.antar_sendiri.index');
+        // Check superadmin & waste category type
+        $admin = Auth::guard('admin')->user();
+        $adminCategoryType = 'all';
+        if($admin->is_super_admin === 0){
+            $adminCategoryType = $admin->waste_bank->waste_category_id === 1 ? 'dws' : 'masaro';
+        }
+
+        return view('admin.transaction.antar_sendiri.index', compact('adminCategoryType'));
     }
 
     /**
@@ -67,7 +74,20 @@ class TransactionHeaderController extends Controller
         $admin = Auth::guard('admin')->user();
         if($admin->is_super_admin === 1){
             Session::flash('error', 'Superadmin tidak bisa membuat baru transaksi!');
-            return redirect()->back();
+            return redirect()->route('admin.transactions.antar_sendiri.index');
+        }
+        else{
+            if($admin->waste_bank->waste_category_id !== 1){
+                Session::flash('error', 'Jenis kategori admin Anda harus jenis DWS!');
+                return redirect()->route('admin.transactions.antar_sendiri.index');
+            }
+        }
+
+        // Check superadmin & waste category type
+        $admin = Auth::guard('admin')->user();
+        $adminCategoryType = 'all';
+        if($admin->is_super_admin === 0){
+            $adminCategoryType = $admin->waste_bank->waste_category_id === 1 ? 'dws' : 'masaro';
         }
 
         $data = [
@@ -102,6 +122,12 @@ class TransactionHeaderController extends Controller
         if($admin->is_super_admin === 1){
             Session::flash('error', 'Superadmin tidak bisa membuat baru transaksi!');
             return redirect()->back();
+        }
+        else{
+            if($admin->waste_bank->waste_category_id !== 2){
+                Session::flash('error', 'Jenis kategori admin Anda harus jenis Masaro!');
+                return redirect()->route('admin.transactions.antar_sendiri.index');
+            }
         }
 
         $data = [

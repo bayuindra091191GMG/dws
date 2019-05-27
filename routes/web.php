@@ -242,6 +242,11 @@ Route::prefix('admin')->group(function(){
     Route::post('/wastecollectors/update', 'Admin\WasteCollectorController@update')->name('admin.wastecollectors.update');
     Route::post('/wastecollectors/delete', 'Admin\WasteCollectorController@destroy')->name('admin.wastecollectors.destroy');
     Route::get('/wastecollectors/transactions/{id}', 'Admin\WasteCollectorController@indexTransaction')->name('admin.wastecollectors.transactions');
+
+    // Import
+    Route::get('/import/form', 'Admin\ImportController@form')->name('admin.import.form');
+    Route::post('/import/form/submit', 'Admin\ImportController@importExcel')->name('admin.import.submit');
+    Route::get('/import/address/auto', 'Admin\ImportController@autoAddress')->name('admin.import.address.auto');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');

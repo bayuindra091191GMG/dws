@@ -87,7 +87,9 @@ class User extends Authenticatable
         'remember_token',
         'wallet',
         'point',
-        'routine_pickup'
+        'routine_pickup',
+        'created_at',
+        'updated_at'
     ];
 
     public function getImagePathAttribute($value){

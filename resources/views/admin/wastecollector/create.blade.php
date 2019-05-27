@@ -44,6 +44,16 @@
                                             <div class="col-md-12">
                                                 <div class="form-group form-float form-group-lg">
                                                     <div class="form-line">
+                                                        <label class="form-label" for="phone">Nomor Ponsel *</label>
+                                                        <input id="phone" type="text" class="form-control"
+                                                               name="phone" value="{{ old('phone_number') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group form-float form-group-lg">
+                                                    <div class="form-line">
                                                         <label class="form-label" for="email">Email *</label>
                                                         <input id="email" type="email" class="form-control"
                                                                name="email" value="{{ old('email') }}">
@@ -97,16 +107,6 @@
                                                         <label class="form-label" for="identity_number">No Identitas *</label>
                                                         <input id="identity_number" type="text" class="form-control"
                                                                name="identity_number" value="{{ old('identity_number') }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <div class="form-group form-float form-group-lg">
-                                                    <div class="form-line">
-                                                        <label class="form-label" for="phone">No Handphone *</label>
-                                                        <input id="phone" type="text" class="form-control"
-                                                               name="phone" value="{{ old('phone_number') }}">
                                                     </div>
                                                 </div>
                                             </div>
