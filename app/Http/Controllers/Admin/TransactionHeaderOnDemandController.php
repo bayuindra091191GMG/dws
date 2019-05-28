@@ -348,7 +348,7 @@ class TransactionHeaderOnDemandController extends Controller
         $user = Auth::guard('admin')->user();
         $now = Carbon::now();
 
-        $header->status_id = 18;
+        $header->status_id = 9;
         $header->updated_at = $now->toDateTimeString();
         $header->updated_by_admin = $user->id;
         $header->save();
