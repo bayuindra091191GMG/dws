@@ -22,6 +22,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\User $user
  * @property \App\Models\WasteCollector $waste_collector
  * @property \Illuminate\Database\Eloquent\Collection $statuses
+ * @property \App\Models\Status $status
  *
  * @package App\Models
  */
@@ -39,7 +40,8 @@ class WasteCollectorUser extends Eloquent
 		'waste_collector_id',
 		'user_id',
 		'created_by',
-        'created_at'
+        'created_at',
+        'status_id'
 	];
 
 	public function admin_user()
@@ -62,4 +64,9 @@ class WasteCollectorUser extends Eloquent
 		return $this->belongsToMany(\App\Models\Status::class, 'waste_collector_user_statuses')
 					->withPivot('id', 'date', 'created_by');
 	}
+
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
 }

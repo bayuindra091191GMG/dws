@@ -15,9 +15,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $user_id
  * @property int $waste_bank_id
+ * @property int $status_id
  * 
  * @property \App\Models\User $user
  * @property \App\Models\WasteBank $waste_bank
+ * @property \App\Models\Status $status
  *
  * @package App\Models
  */
@@ -32,7 +34,8 @@ class UserWasteBank extends Eloquent
 
 	protected $fillable = [
 		'user_id',
-		'waste_bank_id'
+		'waste_bank_id',
+        'status_id'
 	];
 
 	public function user()
@@ -44,4 +47,9 @@ class UserWasteBank extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\WasteBank::class);
 	}
+
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
 }

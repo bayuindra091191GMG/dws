@@ -101,7 +101,7 @@ class WasteCollectorController extends Controller
                 ], 482);
             }
 
-            Log::info("waste bank: ". $collectorWasteBank->waste_bank_id);
+            //Log::info("waste bank: ". $collectorWasteBank->waste_bank_id);
 
             //get current day of week, and compare for wastebank schedule
             //Day of week number (between 1 (monday) and 7 (sunday))
@@ -119,7 +119,19 @@ class WasteCollectorController extends Controller
             }
 
             //Get Users By Assign Table
-            $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->with('user')->get();
+            $data = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)
+                ->where('status_id', 1)
+                ->with('user')->get();
+
+            if($data->count() === 0){
+                return Response::json([
+                    'routine_pickup_list' => null,
+                    'total_weight' => 0,
+                    'total_point' => 0,
+                    'total_household' => 0,
+                    'total_household_done' => 0
+                ], 482);
+            }
 
             //get Total household
             $totalHousehold = $data->count();
@@ -152,9 +164,9 @@ class WasteCollectorController extends Controller
                     }
                 }
 
-
                 //summary total weight of transaction routine pickup and total household
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('transaction_type_id', 1)
                     ->where('status_id', 16)
                     ->first();
                 if (!empty($transactionDBRoutine)) {
@@ -166,9 +178,11 @@ class WasteCollectorController extends Controller
 
                 //summary total weight of transaction on demand
                 $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('transaction_type_id', 3)
                     ->where('status_id', 8)
                     ->first();
-                if (!empty($transactionDBRoutine)) {
+
+                if (!empty($transactionDBOnDemand)) {
                     $weight = $transactionDBOnDemand->total_weight;
                     $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
                     $totalPoint = $transactionDBRoutine->waste_collector->point;
@@ -201,6 +215,7 @@ class WasteCollectorController extends Controller
             ], 200);
 
         } catch (Exception $ex) {
+            Log::error("WasteCollectorController - getUserListRoutinePickup Error: ". $ex);
             return Response::json([
                 'message' => $ex,
             ], 500);
@@ -312,6 +327,9 @@ class WasteCollectorController extends Controller
             // Convert total weight to kilogram
             $totalWeight = floatval($data["total_weight"]) * 1000;
 
+            // Get waste processor id
+            $wasteCollectorWasteBank = $wasteCollector->waste_banks->first();
+
             // Create routine transaction
             $header = TransactionHeader::create([
                 'transaction_no' => $code,
@@ -321,6 +339,7 @@ class WasteCollectorController extends Controller
                 'status_id' => 15,
                 'user_id' => $user->id,
                 'transaction_type_id' => 1,
+                'waste_bank_id' => $wasteCollectorWasteBank->waste_bank_id,
                 'waste_category_id' => $user->company->waste_category_id,
                 'waste_collector_id' => $wasteCollector->id,
                 'created_at' => Carbon::now('Asia/Jakarta'),

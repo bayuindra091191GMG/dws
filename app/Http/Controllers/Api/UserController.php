@@ -81,7 +81,8 @@ class UserController extends Controller
                     // If calculated waste bank not found
                     $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
                     foreach($userWasteBanks as $userWasteBank){
-                        $userWasteBank->delete();
+                        $userWasteBank->status_id = 2;
+                        $userWasteBank->save();
                     }
 
                     return Response::json([
@@ -94,9 +95,20 @@ class UserController extends Controller
                     if(empty($userWasteBank)){
                         UserWasteBank::create([
                             'user_id'       => $user->id,
-                            'waste_bank_id' => $wasteBankRaws[0]->id
+                            'waste_bank_id' => $wasteBankRaws[0]->id,
+                            'status_id'     => 1
                         ]);
                     }
+                    else{
+                        $userWasteBank->status_id = 1;
+                        $userWasteBank->save();
+                    }
+
+//                    $wasteCollectorUser = WasteCollectorUser::where('user_id', $user->id)->first();
+//                    if(!empty($wasteCollectorUser)){
+//                        $wasteCollectorUser->status_id = 1;
+//                        $wasteCollectorUser->save();
+//                    }
 
                     $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
                     return Response::json($responseJson, 200);
@@ -106,16 +118,18 @@ class UserController extends Controller
                 $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
                 if($userWasteBanks->count() > 0){
                     foreach($userWasteBanks as $userWasteBank){
-                        $userWasteBank->delete();
+                        $userWasteBank->status_id = 2;
+                        $userWasteBank->save();
                     }
                 }
 
-//                $userWasteCollectors = WasteCollectorUser::where('user_id', $user->id)->get();
-//                if($userWasteCollectors->count() > 0){
-//                    foreach ($userWasteCollectors as $userWasteCollector){
-//                        $userWasteCollector->delete();
-//                    }
-//                }
+                $userWasteCollectors = WasteCollectorUser::where('user_id', $user->id)->get();
+                if($userWasteCollectors->count() > 0){
+                    foreach ($userWasteCollectors as $userWasteCollector){
+                        $userWasteCollector->status_id = 2;
+                        $userWasteCollector->save();
+                    }
+                }
 
                 $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
                 return Response::json($responseJson, 200);

@@ -22,6 +22,7 @@ use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorUser;
+use App\Models\WasteCollectorUserStatus;
 use App\Transformer\TransactionTransformer;
 use App\Transformer\UserPenjemputanRutinTransformer;
 use App\Transformer\UserWasteBankTransformer;
@@ -321,7 +322,7 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         $wasteCollectors = $wasteCollectors->get();
 
         $userWasteCollectorId = -1;
-        $userWasteCollector = WasteCollectorUser::where('user_id', $id)->first();
+        $userWasteCollector = WasteCollectorUser::where('user_id', $id)->where('status_id', 1)->first();
         if(!empty($userWasteCollector)){
             $userWasteCollectorId = $userWasteCollector->waste_collector_id;
         }
@@ -350,18 +351,20 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         $wastecollectorId = $request->input('wastecollector');
 
         //check if exist on DB, if exist edit assigned wastecollector, else create new one
-        $wasteCollectorUserDB = WasteCollectorUser::where('user_id', $id)->first();
-        if(empty($wasteCollectorUserDB)){
-            $saveToDb = WasteCollectorUser::create([
-                'user_id'  => $id,
-                'waste_collector_id'   => $wastecollectorId,
-                'created_by'    => $user->id,
-                'created_at'    => Carbon::now('Asia/Jakarta'),
+        $wasteCollectorUser = WasteCollectorUser::where('user_id', $id)->first();
+        if(empty($wasteCollectorUser)){
+            WasteCollectorUser::create([
+                'user_id'               => $id,
+                'waste_collector_id'    => $wastecollectorId,
+                'created_by'            => $user->id,
+                'created_at'            => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                'status_id'             => 1
             ]);
         }
         else{
-            $wasteCollectorUserDB->waste_collector_id = $wastecollectorId;
-            $wasteCollectorUserDB->save();
+            $wasteCollectorUser->waste_collector_id = $wastecollectorId;
+            $wasteCollectorUser->status_id = 1;
+            $wasteCollectorUser->save();
         }
 
         Session::flash('message', 'Berhasil menugaskan waastecollector kepada user!');
@@ -390,6 +393,16 @@ class TransactionHeaderPenjemputanRutinController extends Controller
         $header->updated_at = $now->toDateTimeString();
         $header->updated_by_admin = $user->id;
         $header->save();
+
+        // confirm waste collector pick up status
+        $wasteCollectorUser = WasteCollectorUser::where('user_id', $header->user_id)
+            ->where('waste_collector_id', $header->waste_collector_id)
+            ->first();
+
+        $wasteCollectorUserStatus = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
+            ->first();
+        $wasteCollectorUserStatus->status_id = 18;
+        $wasteCollectorUserStatus->save();
 
         //add point to user
         //$configuration = Configuration::where('configuration_key', 'point_amount_user')->first();

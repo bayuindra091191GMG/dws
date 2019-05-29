@@ -10,6 +10,8 @@ use App\Models\PointHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
+use App\Models\WasteCollectorUser;
+use App\Models\WasteCollectorUserStatus;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -481,6 +483,16 @@ class TransactionHeaderController extends Controller
         $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
         $header->status_id = 16;
         $header->save();
+
+        // Update pickup status
+        $wasteCollectorUser = WasteCollectorUser::where('user_id', $header->user_id)
+            ->where('waste_collector_id', $header->waste_collector_id)
+            ->first();
+
+        $wasteCollectorUserStatus = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
+            ->first();
+        $wasteCollectorUserStatus->status_id = 16;
+        $wasteCollectorUserStatus->save();
 
         //Send notification to
         //Driver, Admin Wastebank
