@@ -6,7 +6,7 @@
     <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
-            <ul id="sidebarnav" class="p-t-30">
+            <ul id="sidebarnav" class="pt-3 mt-3" style="border-top: 1px solid #eeeeee;">
 {{--                <li class="sidebar-item">--}}
 {{--                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.dashboard') }}" aria-expanded="false">--}}
 {{--                        <i class="mdi mdi-view-dashboard"></i>--}}
@@ -17,14 +17,14 @@
                 @foreach($menus as $menu)
                     @if($menu->menu->route != "-")
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route($menu->route) }}" aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link mx-3" href="{{ route($menu->route) }}" aria-expanded="false">
                                 <i class="{{ $menu->icon }}"></i>
                                 <span class="hide-menu">{!! $menu->name !!}</span>
                             </a>
                         </li>
                     @else
                         <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <a class="sidebar-link has-arrow waves-effect waves-dark mx-3" href="javascript:void(0)" aria-expanded="false">
                                 <i class="{{ $menu->icon }}"></i>
                                 <span class="hide-menu">{!! $menu->name !!} </span>
                             </a>

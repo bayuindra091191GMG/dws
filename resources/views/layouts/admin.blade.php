@@ -25,23 +25,25 @@
 
     <style>
         #navbarSupportedContent{
-            background: #28b779 !important;
+            background: #eeeeee !important;
         }
 
         .topbar .navbar-header{
-            background: #28b779 !important;
+            background: #fff !important;
         }
 
         .left-sidebar{
-            background: #28b779 !important;
+            background: #fff !important;
         }
 
         #sidebarnav{
-            background: #28b779 !important;
+            background: #fff !important;
         }
 
         .sidebar-nav ul .sidebar-item .sidebar-link{
             opacity: 1 !important;
+            color: #000;
+            padding: 10px 10px;
         }
 
         .navbar-dark .navbar-nav .nav-link{
@@ -54,6 +56,56 @@
 
         .page-wrapper>.container-fluid{
             padding: 1em !important;
+        }
+
+        #main-wrapper .topbar .navbar-collapse[data-navbarbg=skin5], #main-wrapper .topbar[data-navbarbg=skin5]{
+            background-color: initial;
+        }
+
+        .sidebar-nav ul .sidebar-item .sidebar-link i{
+            color: #000;
+        }
+
+        .sidebar-nav .has-arrow:after{
+            border-color: #000;
+        }
+
+        .sidebar-nav ul .sidebar-item.selected>.sidebar-link{
+            background-color: #3DCC9C;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .sidebar-nav ul .sidebar-item.selected>.sidebar-link i{
+            color: #fff;
+        }
+
+        .sidebar-nav .selected .has-arrow:after{
+            border-color: #fff;
+        }
+
+        .sidebar-nav .has-arrow:after{
+            right: 8px;
+            top: 23px;
+            width: 6px;
+            height: 6px;
+        }
+
+        #main-wrapper .left-sidebar[data-sidebarbg=skin5], #main-wrapper .left-sidebar[data-sidebarbg=skin5] ul{
+            background-color: #fff;
+        }
+
+        .navbar-dark .navbar-nav .nav-link{
+            color: #3DCC9C !important;
+        }
+
+        .topbar{
+            box-shadow: initial !important;
+        }
+
+        .btn-success{
+            background-color: #3DCC9C;
+            border-color: #3DCC9C;
         }
     </style>
     @yield('styles')
