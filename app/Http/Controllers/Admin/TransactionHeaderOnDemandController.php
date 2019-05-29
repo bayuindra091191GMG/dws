@@ -18,7 +18,9 @@ use App\Models\PointHistory;
 use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use App\Models\WasteCollector;
+use App\Models\WasteCollectorWasteBank;
 use App\Notifications\FCMNotification;
 use App\Transformer\TransactionTransformer;
 use Carbon\Carbon;
@@ -267,12 +269,17 @@ class TransactionHeaderOnDemandController extends Controller
 
         //Send notification to
         //Driver, waste source
-        $transactionDB = TransactionHeader::where('id', $id)->with('status', 'user', 'transaction_details')->first();
+
+        $transactionDB = TransactionHeader::where('id', $id)
+            ->with('status', 'user', 'transaction_details', 'waste_collector')
+            ->first();
         $title = "Digital Waste Solution";
         $body = "Admin assign Driver On Demand Pickup";
         $data = array(
             "type_id" => "31",
             "model" => $transactionDB,
+            "open_hour" => $transactionDB->waste_bank->open_hours,
+            "close_hour" => $transactionDB->waste_bank->close_hours,
         );
 
         // MURPHIE BUTUH CEK INI
@@ -283,8 +290,10 @@ class TransactionHeaderOnDemandController extends Controller
 //        $body = "Anda Telah Mendapatkan Driver";
 //        $data = array(
 //            "data" => [
-//                'type_id' => '32',
+//                "type_id" => '32',
 //                "model" => $transactionDB,
+//                "open_hour" => $transactionDB->waste_bank->open_hours,
+//                "close_hour" => $transactionDB->waste_bank->close_hours,
 //            ]
 //        );
 //        //Push Notification to user/ wastesource App.
