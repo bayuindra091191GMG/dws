@@ -2,7 +2,7 @@
 
 @section('content')
 
-<section>
+{{-- <section>
     <div class="container">
         <div class="row my-4">
             <div class="col-12">
@@ -10,31 +10,40 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 <section class="d-none d-md-block">
     <div class="w-100 img-banner-responsive" style="background-image: url('{{ asset('images/landing/heroimage.png') }}');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;">
-        <div class="col-1"></div>
-        <div class= "col-5" style="padding-left:8%;padding-top:4%">
-            <div class="pt-5 mt-5">
-                <span class="font-weight-bolder open-sans-regular" style="font-size: 50px;">Go 4.0 Waste</span>
+        <div>
+            <div class="col-1"></div>
+            <div class="col-5" style="padding-left:10%;padding-top:2%">
+                <img src="{{ asset('images/landing/logo2.png') }}" alt="harusnya logo" width="300px">
             </div>
-            <p class="font-weight-bolder open-sans-regular" style="font-size: 18px;">
-                Inovasi pengelolaan sampah terpadu
-            </p>
+            <div class="col-6"></div>
+        </div>
+        <div>
+            <div class="col-1"></div>
+            <div class= "col-8" style="padding-left:10%">
+                <div class="pt-5 mt-3">
+                    <span class="font-weight-bolder open-sans-regular" style="font-size: 72px;">Go 4.0 Waste</span>
+                </div>
+                <p class="font-weight-bolder open-sans-regular" style="font-size: 24px;">
+                    Inovasi pengelolaan sampah terpadu
+                </p>
 
-            <div class="pt-5-custom">
-                <span class = "open-sans-regular" style="font-size: 13px;">Tersedia di:</span>
-                <div>
-                    {{-- <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a> --}}
-                    <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}"></a>
+                <div class="mt-5 pt-3">
+                    <span class = "open-sans-regular" style="font-size: 13px;">Tersedia di:</span>
+                    <div>
+                        {{-- <a href="#"><img src="{{ asset('images/landing/apple-badge.png') }}"></a> --}}
+                        <a href="#"><img src="{{ asset('images/landing/google-badge.png') }}" width="130px"></a>
+                    </div>
                 </div>
             </div>
+            <div class="col-3"></div>
         </div>
-        <div class="col-6"></div>
     </div>
 </section>
 <!-- banner mobile start -->
