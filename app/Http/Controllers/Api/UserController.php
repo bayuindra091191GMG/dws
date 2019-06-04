@@ -249,6 +249,30 @@ class UserController extends Controller
             }
 
             $user = auth('api')->user();
+
+            // Disable routine pickup
+            if($user->routine_pickup === 1){
+                $userDb = User::find($user->id);
+                $userDb->routine_pickup = 0;
+                $userDb->save();
+
+                $userWasteBanks = UserWasteBank::where('user_id', $user->id)->get();
+                if($userWasteBanks->count() > 0){
+                    foreach($userWasteBanks as $userWasteBank){
+                        $userWasteBank->status_id = 2;
+                        $userWasteBank->save();
+                    }
+                }
+
+                $userWasteCollectors = WasteCollectorUser::where('user_id', $user->id)->get();
+                if($userWasteCollectors->count() > 0){
+                    foreach ($userWasteCollectors as $userWasteCollector){
+                        $userWasteCollector->status_id = 2;
+                        $userWasteCollector->save();
+                    }
+                }
+            }
+
             $addresses = Address::where('user_id', $user->id)->get();
             if($addresses->count() === 0){
                 // Create new address
@@ -283,6 +307,9 @@ class UserController extends Controller
 
                 return Response::json($address, 200);
             }
+
+
+
         }
         catch (\Exception $ex){
             Log::error("Api/UserController - setAddress error: ". $ex);

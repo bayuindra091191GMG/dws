@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserWasteBank;
 use App\Models\WasteBank;
 use App\Models\WasteBankSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -85,6 +86,44 @@ class WasteBankController extends Controller
             else{
                 return Response::json([
                     'message' => "Penjemputan Rutin belum diaktifkan.",
+                ], 482);
+            }
+        }
+        catch (\Exception $ex){
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    /**
+     * Function to get today routine pickup schedule
+     */
+    public function getWasteBankSchedule()
+    {
+        try{
+            $user = auth('api')->user();
+
+            if($user->routine_pickup === 1){
+                $userWastebank = UserWasteBank::where('user_id', $user->id)->first();
+                if(empty($userWastebank)){
+                    return Response::json([
+                        'message' => "Tidak ada jadwal penjemputan rutin hari ini.",
+                    ], 482);
+                }
+                else{
+                    $currentday = Carbon::now('Asia/Jakarta')->dayOfWeekIso;
+                    $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
+                        ->where('day', $currentday)
+                        ->first();
+
+                    return $wasteBankSchedule;
+                }
+            }
+            else{
+                return Response::json([
+                    'message' => "Penjemputan rutin belum diaktifkan.",
                 ], 482);
             }
         }

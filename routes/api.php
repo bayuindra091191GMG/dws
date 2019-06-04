@@ -55,6 +55,7 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     //On Demand
     Route::post('/on-demand/transactions', 'Api\TransactionHeaderOnDemandController@getTransactionOnDemandForCustomer');
     Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
+    Route::post('/on-demand/create/dev', 'Api\TransactionHeaderController@createTransactionDev');
 //    Route::post('/waste-collector/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByDriver');
     Route::post('/on-demand/confirm', 'Api\TransactionHeaderController@confirmTransactionByUser');
     Route::post('/on-demand/reject', 'Api\TransactionHeaderController@cancelTransactionByUserOnDemand');
@@ -73,6 +74,7 @@ Route::middleware('auth:api')->prefix('user')->group(function(){
     //Routine Pickup
     Route::post('/change-routine-pickup', 'Api\UserController@changeRoutinePickup');
     Route::get('/waste-banks/get-schedules', 'Api\WasteBankController@getWasteBankSchedules');
+    Route::get('/waste-banks/get-schedule-today', 'Api\WasteBankController@getWasteBankSchedule');
 
     //Point
     Route::get('/point/get', 'Api\PoinController@getCustomerPoint');

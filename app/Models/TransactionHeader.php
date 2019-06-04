@@ -34,6 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by_user
  * @property int $point_user
  * @property int $point_waste_collector
+ * @property string $image_path
  * 
  * @property \App\Models\AdminUser $admin_user
  * @property \App\Models\User $user
@@ -89,7 +90,8 @@ class TransactionHeader extends Eloquent
 		'updated_by_admin',
 		'updated_by_user',
         'point_user',
-        'point_waste_collector'
+        'point_waste_collector',
+        'image_path'
 	];
 
     protected $appends = [
@@ -98,6 +100,20 @@ class TransactionHeader extends Eloquent
         'total_weight_kg_string',
         'total_price_string'
     ];
+
+    public function getImagePathAttribute($value){
+        if(!empty($value)){
+            if($this->attributes['transaction_type_id'] === 1){
+                return "https://dws-solusi.net/public/storage/transactions/routine/". $value;
+            }
+            else{
+                return "https://dws-solusi.net/public/storage/transactions/ondemand/". $value;
+            }
+        }
+        else{
+            return "";
+        }
+    }
 
     public function getTotalWeightStringAttribute(){
         return number_format($this->attributes['total_weight'], 0, ",", ".");

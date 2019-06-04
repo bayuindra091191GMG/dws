@@ -105,7 +105,7 @@ class WasteCollectorController extends Controller
 
             //get current day of week, and compare for wastebank schedule
             //Day of week number (between 1 (monday) and 7 (sunday))
-            $currentday = Carbon::now()->dayOfWeekIso;
+            $currentday = Carbon::now('Asia/Jakarta')->dayOfWeekIso;
             $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $collectorWasteBank->waste_bank_id)
                 ->where('day', $currentday)->first();
             if (empty($wasteBankSchedule)) {

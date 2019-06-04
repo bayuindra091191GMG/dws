@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 
 class TransactionHeaderController extends Controller
 {
@@ -198,7 +199,167 @@ class TransactionHeaderController extends Controller
             ], 200);
         }
         catch (\Exception $ex){
-            Log::error("TransactionHeaderController - createTransaction Error: ". $ex);
+            Log::error("Api/TransactionHeaderController - createTransaction Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    public function createTransactionDev(Request $request)
+    {
+        try{
+            $rules = array(
+                'total_weight'      => 'required',
+                'total_price'       => 'required',
+                'details'           => 'required',
+                'latitude'          => 'required',
+                'longitude'         => 'required'
+            );
+
+            //$data = $request->json()->all();
+
+            //$validator = Validator::make($data, $rules);
+
+            Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". $request);
+            $data = json_decode($request->input('json_string'));
+
+//            if ($validator->fails()) {
+//                return Response::json([
+//                    'message' => $validator->messages(),
+//                ], 400);
+//            }
+
+            $user = auth('api')->user();
+
+            // Generate transaction codes
+            $today = Carbon::today('Asia/Jakarta')->format("Ym");
+            $categoryType = $user->company->waste_category_id;
+
+            //Check for Nearest Wastebank
+            $wasteBankId = '';
+            $wasteBankPIC = 1;
+            $wasteBankTemp = DB::table("waste_banks")
+                ->select("*"
+                    ,DB::raw("6371 * acos(cos(radians(" . $data->latitude . ")) 
+                    * cos(radians(waste_banks.latitude)) 
+                    * cos(radians(waste_banks.longitude) - radians(" . $data->longitude . ")) 
+                    + sin(radians(" .$data->latitude. ")) 
+                    * sin(radians(waste_banks.latitude))) AS distance"))
+                ->orderBy("distance")
+                ->get();
+
+            $now = Carbon::now('Asia/Jakarta');
+            $radiusDB = Configuration::find(18);
+
+            $wasteBanks = $wasteBankTemp->where('distance', '<=', $radiusDB->configuration_value)
+                ->where('waste_category_id', $categoryType)
+                ->where('open_hours', '<', $now->toTimeString())
+                ->where('closed_hours', '>', $now->toTimeString());
+
+            if($wasteBanks == null || $wasteBanks->count() == 0){
+                return Response::json([
+                    'message' => "No Nearest Wastebank Detected!",
+                ], 400);
+            }
+            else{
+                $tmp = $wasteBanks->first();
+                $wasteBankId = $tmp->id;
+                $wasteBankPIC = $tmp->pic_id;
+            }
+
+            if($categoryType == "1"){
+                $prepend = "TRANS/DWS/". $today;
+            }
+            else{
+                $prepend = "TRANS/MASARO/". $today;
+            }
+
+            $nextNo = Utilities::GetNextTransactionNumber($prepend);
+            $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
+
+            // Convert total weight to kilogram
+            $totalWeight = floatval($data["total_weight"]) * 1000;
+
+            // Create on demand transaction
+            $header = TransactionHeader::create([
+                'transaction_no'        => $code,
+                'total_weight'          => $totalWeight,
+                'total_price'           => $data->total_price,
+                'date'                  => Carbon::now('Asia/Jakarta'),
+                'status_id'             => 6,
+                'user_id'               => $user->id,
+                'transaction_type_id'   => 3,
+                'waste_category_id'     => $user->company->waste_category_id,
+                'latitude'              => $data->latitude,
+                'longitude'             => $data->longitude,
+                'created_at'            => Carbon::now('Asia/Jakarta'),
+                'updated_at'            => Carbon::now('Asia/Jakarta'),
+                'waste_bank_id'         => $wasteBankId,
+                'point_user'            => $data->total_price
+            ]);
+
+            //do detail
+            foreach ($data->details as $item){
+                $detailWeight = floatval($item["weight"]) * 1000;
+                if($user->company->waste_category_id == 1) {
+                    TransactionDetail::create([
+                        'transaction_header_id' => $header->id,
+                        'dws_category_id'       => $item->dws_category_id,
+                        'weight'                => $detailWeight,
+                        'price'                 => $item['price']
+                    ]);
+                }
+                else if($user->company->waste_category_id == 2){
+                    TransactionDetail::create([
+                        'transaction_header_id' => $header->id,
+                        'masaro_category_id'    => $item->masaro_category_id,
+                        'weight'                => $detailWeight,
+                        'price'                 => $item->price
+                    ]);
+                }
+            }
+
+            // Update transaction auto number
+            Utilities::UpdateTransactionNumber($prepend);
+
+            // Save uploaded photo
+            if($request->hasFile('image')){
+                $avatar = Image::make($request->file('image'));
+                $extension = $request->file('image')->extension();
+                $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                $avatar->save(public_path('storage/transactions/ondemand/'. $filename));
+                $header->image_path = $filename;
+                $header->save();
+            }
+
+            // Send notification to Driver & Admin Waste Processor
+            $title = "Digital Waste Solution";
+            $body = "User Membuat Transaksi On Demand";
+            $data = array(
+                "type_id" => "3-1",
+                "transaction_id" => $header->id,
+                "transaction_date" => Carbon::parse($header->created_at)->format('j-F-Y H:i:s'),
+                "transaction_no" => $header->transaction_no,
+                "name" => $user->first_name." ".$user->last_name,
+//                    "waste_category_name" => $body,
+                "total_weight" => $header->total_weight_kg,
+                "total_price" => $header->total_price,
+                "transaction_details" => $header->transaction_details
+//                    "waste_bank" => $wasteBankId,
+//                    "waste_collector" => "-",
+//                    "status" => $header->status->description,
+            );
+
+            $isSuccess = FCMNotification::SendNotification($wasteBankPIC, 'browser', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Success creating On demand Transaction!",
+            ], 200);
+        }
+        catch (\Exception $ex){
+            Log::error("TransactionHeaderController - createTransactionDev Error: ". $ex);
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
