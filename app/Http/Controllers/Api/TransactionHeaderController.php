@@ -300,24 +300,30 @@ class TransactionHeaderController extends Controller
                 'point_user'            => $data->total_price
             ]);
 
+            $arrDetailIds = [];
+
             //do detail
             foreach ($data->details as $item){
                 $detailWeight = floatval($item["weight"]) * 1000;
                 if($user->company->waste_category_id == 1) {
-                    TransactionDetail::create([
+                    $newDetail = TransactionDetail::create([
                         'transaction_header_id' => $header->id,
                         'dws_category_id'       => $item->dws_category_id,
                         'weight'                => $detailWeight,
                         'price'                 => $item['price']
                     ]);
+
+                    array_push($arrDetailIds, $newDetail->id);
                 }
                 else if($user->company->waste_category_id == 2){
-                    TransactionDetail::create([
+                    $newDetail = TransactionDetail::create([
                         'transaction_header_id' => $header->id,
                         'masaro_category_id'    => $item->masaro_category_id,
                         'weight'                => $detailWeight,
                         'price'                 => $item->price
                     ]);
+
+                    array_push($arrDetailIds, $newDetail->id);
                 }
             }
 
@@ -326,12 +332,25 @@ class TransactionHeaderController extends Controller
 
             // Save uploaded photo
             if($request->hasFile('image')){
-                $avatar = Image::make($request->file('image'));
-                $extension = $request->file('image')->extension();
-                $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
-                $avatar->save(public_path('storage/transactions/ondemand/'. $filename));
-                $header->image_path = $filename;
-                $header->save();
+
+                $images = $request->file('image');
+
+                $arrayIdx = 0;
+                foreach($images as $image){
+                    $avatar = Image::make($image);
+                    $extension = $request->file('image')->extension();
+                    $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                    $avatar->save(public_path('storage/transactions/ondemand/'. $filename));
+//                    $header->image_path = $filename;
+//                    $header->save();
+
+                    $detailId = $arrDetailIds[$arrayIdx];
+                    $transactionDetail = TransactionDetail::find($detailId);
+                    $transactionDetail->image_path = $filename;
+                    $transactionDetail->save();
+
+                    $arrayIdx++;
+                }
             }
 
             // Send notification to Driver & Admin Waste Processor

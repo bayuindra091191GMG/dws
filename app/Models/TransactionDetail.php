@@ -18,6 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $masaro_category_id
  * @property float $weight
  * @property float $price
+ * @property string $image_path
  * 
  * @property \App\Models\DwsWasteCategoryData $dws_waste_category_data
  * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
@@ -42,7 +43,8 @@ class TransactionDetail extends Eloquent
 		'dws_category_id',
 		'masaro_category_id',
 		'weight',
-		'price'
+		'price',
+        'image_path'
 	];
 
 	protected $appends = [
@@ -68,6 +70,15 @@ class TransactionDetail extends Eloquent
 
     public function getPriceStringAttribute(){
         return number_format($this->attributes['price'], 0, ",", ".");
+    }
+
+    public function getImagePathAttribute($value){
+        if(!empty($value)){
+            return "https://dws-solusi.net/public/storage/transactions/". $value;
+        }
+        else{
+            return "";
+        }
     }
 
 	public function dws_waste_category_data()
