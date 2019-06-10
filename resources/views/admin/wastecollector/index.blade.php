@@ -22,22 +22,24 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="waste-collectors" class="table table-striped table-bordered dt-responsive nowrap">
-                            <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Nama</th>
-                                <th>No KTP</th>
-                                <th>No Handphone</th>
-                                <th>Pengolahan Sampah</th>
-                                <th>Status</th>
-                                <th>Dibuat Oleh</th>
-                                <th>Dibuat Pada</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive-sm">
+                            <table id="waste-collectors" class="table table-striped table-bordered nowrap" style="width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Nama</th>
+                                    <th>No KTP</th>
+                                    <th>No Handphone</th>
+                                    <th>Pengolahan Sampah</th>
+                                    <th>Status</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th>Dibuat Pada</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,6 +61,7 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
+            responsive: true,
             ajax: '{!! route('datatables.waste-collectors') !!}',
             order: [ [0, 'asc'] ],
             columns: [

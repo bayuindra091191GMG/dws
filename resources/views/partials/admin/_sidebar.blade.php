@@ -17,21 +17,21 @@
                 @foreach($menus as $menu)
                     @if($menu->menu->route != "-")
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link mx-3" href="{{ route($menu->route) }}" aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link mx-2" href="{{ route($menu->route) }}" aria-expanded="false">
                                 <i class="{{ $menu->icon }}"></i>
                                 <span class="hide-menu">{!! $menu->name !!}</span>
                             </a>
                         </li>
                     @else
                         <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark mx-3" href="javascript:void(0)" aria-expanded="false">
+                            <a class="sidebar-link has-arrow waves-effect waves-dark mx-2" href="javascript:void(0)" aria-expanded="false">
                                 <i class="{{ $menu->icon }}"></i>
                                 <span class="hide-menu">{!! $menu->name !!} </span>
                             </a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 @foreach($menu->menu->menu_subs as $sub)
                                     <li class="sidebar-item">
-                                        <a href="{{ route($sub->route) }}" class="sidebar-link">
+                                        <a href="{{ route($sub->route) }}" class="sidebar-link mx-2">
                                             <i class="{{ $sub->icon }}"></i>
                                             <span class="hide-menu"> {{ $sub->name }} </span>
                                         </a>

@@ -12,23 +12,25 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="user" class="table table-striped table-bordered dt-responsive nowrap">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Tanggal</th>
-                                <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Jenis Transaksi</th>
-                                <th class="text-center">Nama User</th>
-                                <th class="text-center">Kategori</th>
-                                <th class="text-center">Total Berat (gram)</th>
-                                <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Waste Processor</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center"></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive-sm">
+                            <table id="user" class="table table-striped table-bordered nowrap" style="width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Tanggal</th>
+                                    <th class="text-center">No Transaksi</th>
+                                    <th class="text-center">Jenis Transaksi</th>
+                                    <th class="text-center">Nama User</th>
+                                    <th class="text-center">Kategori</th>
+                                    <th class="text-center">Total Berat (gram)</th>
+                                    <th class="text-center">Total Harga (Rp)</th>
+                                    <th class="text-center">Waste Processor</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,6 +50,7 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
+            responsive: true,
             ajax: {
                 url: '{!! route('datatables.waste-collectors.transactions') !!}',
                 data: {
