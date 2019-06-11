@@ -89,6 +89,7 @@ Route::middleware('auth:waste_collector')->prefix('waste-collector')->group(func
     Route::get('/routine/list', 'Api\WasteCollectorController@getUserListRoutinePickUp');;
     Route::post('/routine/change-status', 'Api\WasteCollectorController@SaveRoutinePickUpStatus');
     Route::post('/routine/create', 'Api\WasteCollectorController@createTransactionRoutinePickup');
+    Route::post('/routine/create/dev', 'Api\WasteCollectorController@createTransactionRoutinePickupDev');
     Route::get('/transactions', 'Api\WasteCollectorController@getAllTransactions');
     Route::get('/routine/schedule', 'Api\WasteCollectorController@getWasteBankCurrentSchedule');
 

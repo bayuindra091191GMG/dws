@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\libs\Utilities;
+use Intervention\Image\Facades\Image;
 
 class WasteCollectorController extends Controller
 {
@@ -169,6 +170,7 @@ class WasteCollectorController extends Controller
                     ->where('transaction_type_id', 1)
                     ->where('status_id', 16)
                     ->first();
+
                 if (!empty($transactionDBRoutine)) {
                     $totalHouseholdDone++;
                     $weight = $transactionDBRoutine->total_weight;
@@ -187,9 +189,11 @@ class WasteCollectorController extends Controller
                     $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
                     $totalPoint = $transactionDBRoutine->waste_collector->point;
                 }
+
                 $addressDb = Address::where('user_id', $wasteCollectorUser->user_id)
                     ->where('primary', 1)
                     ->first();
+
                 $data = array(
                     "id" => $wasteCollectorUser->id,
                     "img_path" => $wasteCollectorUser->user->image_path,
@@ -201,7 +205,8 @@ class WasteCollectorController extends Controller
                     "weight" => $weight,
                     "point" => $point,
                     "pickup_status" => $pickupStatus,
-                    "user" => $wasteCollectorUser->user
+                    "user" => $wasteCollectorUser->user,
+                    "waste_image_path" => $transactionDBRoutine->image_path ?? ""
                 );
                 array_push($pickUpModel, $data);
             }
@@ -392,6 +397,154 @@ class WasteCollectorController extends Controller
                     "waste_bank" => "-",
                     "waste_collector" => $wasteCollector->phone,
                     "status" => $header->status->description,
+                ]
+            );
+
+            // Create new waste collector pickup history
+            $pickupHistory = WasteCollectorPickupHistory::create([
+                'waste_collector_user_id' => $wasteCollector->id,
+                'customer_user_id' => $user->id,
+                'transaction_header_id' => $header->id,
+                'status_id' => 15,
+                'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            ]);
+
+            $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+            //Push Notification to Admin.
+//      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Success creating Routine Pickup Transaction!",
+            ], 200);
+        }
+        catch(Exception $ex){
+            Log::error("Api/WasteCollectorController - createTransactionRoutinePickup error: \". $ex");
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    public function createTransactionRoutinePickupDev(Request $request)
+    {
+        try{
+//            $rules = array(
+//                'user_email'            => 'required',
+//                'total_weight'          => 'required',
+//                'total_price'           => 'required'
+//            );
+//
+//            $data = $request->json()->all();
+//
+//            $validator = Validator::make($data, $rules);
+//
+//            if ($validator->fails()) {
+//                return response()->json($validator->messages(), 400);
+//            }
+
+            Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". $request);
+            $data = json_decode($request->input('json_string'));
+
+            $wasteCollector = auth('waste_collector')->user();
+            $user = User::where('email', $data->user_email)->first();
+
+            // Generate transaction codes
+            $today = Carbon::today('Asia/Jakarta')->format("Ym");
+            $categoryType = $user->company->waste_category_id;
+            if ($categoryType == "1") {
+                $prepend = "TRANS/DWS/" . $today;
+            } else {
+                $prepend = "TRANS/MASARO/" . $today;
+            }
+
+            $nextNo = Utilities::GetNextTransactionNumber($prepend);
+            $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
+
+            // Convert total weight to kilogram
+            $totalWeight = floatval($data->total_weight) * 1000;
+
+            // Get waste processor id
+            $wasteCollectorWasteBank = $wasteCollector->waste_banks->first();
+
+            // Create routine transaction
+            $header = TransactionHeader::create([
+                'transaction_no' => $code,
+                'date' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                'total_weight' => $totalWeight,
+                'total_price' => $data->total_price,
+                'status_id' => 15,
+                'user_id' => $user->id,
+                'transaction_type_id' => 1,
+                'waste_bank_id' => $wasteCollectorWasteBank->waste_bank_id,
+                'waste_category_id' => $user->company->waste_category_id,
+                'waste_collector_id' => $wasteCollector->id,
+                'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString()
+            ]);
+
+            //do detail
+            $detail = $data->details;
+            $detailWeight = floatval($detail->weight) * 1000;
+            if ($user->company->waste_category_id == 1) {
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'dws_category_id'       => $detail->dws_category_id,
+                    'weight'                => $detailWeight,
+                    'price'                 => $detail->price
+                ]);
+            } else if ($user->company->waste_category_id == 2) {
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'masaro_category_id'    => $detail->masaro_category_id,
+                    'weight'                => $detailWeight,
+                    'price'                 => $detail->price
+                ]);
+            }
+
+            Utilities::UpdateTransactionNumber($prepend);
+
+            // Save uploaded photo
+            $imagePath = "";
+            if($request->hasFile('image')){
+
+                $image = $request->file('image');
+
+                $avatar = Image::make($image);
+                $extension = $request->file('image')->extension();
+                $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                $avatar->save(public_path('storage/transactions/routine/'. $filename));
+
+                $imagePath = $filename;
+                $header->image_path = $filename;
+                $header->save();
+            }
+
+            //change record status_id of waste_collector_user_status
+            $wasteCollectorUserDB = WasteCollectorUser::where('waste_collector_id', $wasteCollector->id)->where('user_id', $user->id)->first();
+            $wasteCollectorUserStatusDB = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUserDB->id)->first();
+            $wasteCollectorUserStatusDB->status_id = 5;
+            $wasteCollectorUserStatusDB->save();
+
+            //Send notification to
+            //Driver, Admin Wastebank
+            $title = "Digital Waste Solution";
+            $body = "Driver Create Transaction Routine Pickup";
+            $data = array(
+                "type_id" => "1",
+                "transaction_no" => $header->transaction_no,
+                "data" => [
+                    "transaction_id" => $header->id,
+                    "transaction_date" => Carbon::parse($header->date)->format('j-F-Y H:i:s'),
+                    "transaction_no" => $header->transaction_no,
+                    "name" => $user->first_name . " " . $user->last_name,
+                    "waste_category_name" => $body,
+                    "total_weight" => $header->total_weight_kg,
+                    "total_price" => $header->total_price,
+                    "waste_bank" => "-",
+                    "waste_collector" => $wasteCollector->phone,
+                    "status" => $header->status->description,
+                    'image_path' => "https://dws-solusi.net/public/storage/transactions/routine/". $imagePath
                 ]
             );
 
