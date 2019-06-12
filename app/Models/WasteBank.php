@@ -29,6 +29,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * @property string $type
  *
  * @property \App\Models\City $city
  * @property \App\Models\Status $status
@@ -68,7 +69,8 @@ class WasteBank extends Eloquent
 		'waste_category_id',
         'status_id',
 		'created_by',
-		'updated_by'
+		'updated_by',
+        'type'
 	];
 
 	public function city()

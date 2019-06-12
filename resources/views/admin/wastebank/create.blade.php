@@ -10,8 +10,16 @@
                     </div>
                 </div>
 
-                {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
 
+                {{ Form::open(['route'=>['admin.waste-banks.store'],'method' => 'post','id' => 'general-form']) }}
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="float-right">
+                            <a href="{{ route('admin.waste-banks.index') }}" class="btn btn-danger">BATAL</a>
+                            <input type="submit" class="btn btn-success" value="SIMPAN">
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -48,6 +56,16 @@
                                                                     <input id="name" type="text" class="form-control"
                                                                            name="name" value="{{ old('name') }}">
                                                                     <input type="hidden" name="categoryType" value="1" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-float form-group-lg">
+                                                                <div class="form-line">
+                                                                    <label class="form-label" for="type">Kategori Pengolahan Sampah (kalau ada)</label>
+                                                                    <input id="type" type="text" class="form-control" style="text-transform: uppercase;"
+                                                                           name="type" value="{{ old('type') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -207,16 +225,14 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <a id="add_row" class="btn btn-success">Tambah</a><a id='delete_row' class="btn btn-danger">Hapus</a>
+                                                            <a id="add_row" class="btn btn-success" style="color: #fff;">Tambah</a>
+                                                            &nbsp;
+                                                            <a id='delete_row' class="btn btn-danger" style="color: #fff;">Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                        </div>
-                                        <div class="col-md-11 col-sm-11 col-xs-12" style="margin: 3% 0 3% 0;">
-                                            <a href="{{ route('admin.waste-banks.index') }}" class="btn btn-danger">BATAL</a>
-                                            <input type="submit" class="btn btn-success" value="SIMPAN">
                                         </div>
                                         <!-- #END# Input -->
                                     </div>
@@ -249,7 +265,7 @@
         $('#pic').select2({
             placeholder: {
                 id: '-1',
-                text: 'Choose Pic...'
+                text: ' - Pilih Admin PIC - '
             },
             width: '100%',
             minimumInputLength: 0,
@@ -334,10 +350,10 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: ' - Pilih DWS Kategori - '
+                text: ' - Pilih Kategori Sampah DWS - '
             },
             width: '100%',
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             ajax: {
                 url: '{{ route('select.dws-categories') }}',
                 dataType: 'json',
@@ -380,10 +396,10 @@
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: ' - Pilih DWS Kategori - '
+                    text: ' - Pilih Kategori Sampah DWS - '
                 },
                 width: '100%',
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 ajax: {
                     url: '{{ route('select.dws-categories') }}',
                     dataType: 'json',

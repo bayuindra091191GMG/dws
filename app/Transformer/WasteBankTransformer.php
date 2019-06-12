@@ -28,6 +28,7 @@ class WasteBankTransformer extends TransformerAbstract
 
             return[
                 'name'              => $wasteBank->name,
+                'type'              => $wasteBank->type ?? ' - ',
                 'address'           => $wasteBank->address,
                 'open_days'         => $days,
                 'open_hours'        => $wasteBank->open_hours . ' - ' . $wasteBank->closed_hours,

@@ -205,8 +205,8 @@ class WasteCollectorController extends Controller
                     "weight" => $weight,
                     "point" => $point,
                     "pickup_status" => $pickupStatus,
-                    "user" => $wasteCollectorUser->user,
-                    "waste_image_path" => $transactionDBRoutine->image_path ?? ""
+                    "user" => $wasteCollectorUser->user
+//                    "waste_image_path" => $transactionDBRoutine->image_path ?? ""
                 );
                 array_push($pickUpModel, $data);
             }

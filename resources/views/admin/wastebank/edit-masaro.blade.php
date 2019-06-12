@@ -57,6 +57,16 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group form-float form-group-lg">
                                                                 <div class="form-line">
+                                                                    <label class="form-label" for="type">Kategori Pengolahan Sampah</label>
+                                                                    <input id="type" type="text" class="form-control" style="text-transform: uppercase;"
+                                                                           name="type" value="{{ $wasteBank->type ?? ""  }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-float form-group-lg">
+                                                                <div class="form-line">
                                                                     <label class="form-label" for="phone">Nomor Kontak *</label>
                                                                     <input id="phone" type="text" class="form-control"
                                                                            name="phone" value="{{ $wasteBank->phone }}">

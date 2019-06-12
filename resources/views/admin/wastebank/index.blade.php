@@ -30,6 +30,7 @@
                             <thead>
                             <tr>
                                 <th>Nama</th>
+                                <th>Kategori/Jenis</th>
                                 <th>Alamat</th>
                                 <th>Hari Buka</th>
                                 <th>Jam Buka</th>
@@ -70,6 +71,7 @@
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'type', name: 'type', class: 'text-center'},
                 { data: 'address', name: 'address', class: 'text-center'},
                 { data: 'open_days', name: 'open_days', class: 'text-center', orderable: false, searchable: false },
                 { data: 'open_hours', name: 'open_hours', class: 'text-center', orderable: false, searchable: false },

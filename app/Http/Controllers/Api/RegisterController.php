@@ -100,8 +100,8 @@ class RegisterController extends Controller
 //            $saveToken = new FCMNotification();
 //            $saveToken->SaveToken($user->id, )
 
-            $emailVerify = new EmailVerification($user, 'api');
-            Mail::to($user->email)->send($emailVerify);
+//            $emailVerify = new EmailVerification($user, 'api');
+//            Mail::to($user->email)->send($emailVerify);
 
             return Response::json([
                 'message' => "Success!"

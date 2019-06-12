@@ -132,22 +132,23 @@ class WasteBankController extends Controller
 
         $user = Auth::guard('admin')->user();
         $wasteBank = WasteBank::create([
-            'name'          => $request->input('name'),
-            'address'       => $request->input('address'),
-            'phone'         => $request->input('phone'),
-            'pic_id'        => $request->input('pic'),
-            'latitude'      => $request->input('latitude'),
-            'longitude'     => $request->input('longitude'),
-            'open_hours'    => $request->input('open_hours'),
-            'closed_hours'  => $request->input('closed_hours'),
-            'open_days'     => $dayData,
-            'city_id'       => $request->input('city'),
-            'status_id'     => $request->input('status'),
-            'created_at'    => Carbon::now('Asia/Jakarta'),
-            'created_by'    => $user->id,
-            'updated_at'    => Carbon::now('Asia/Jakarta'),
-            'updated_by'    => $user->id,
-            'waste_category_id'=> $request->input('categoryType')
+            'name'              => $request->input('name'),
+            'address'           => $request->input('address'),
+            'phone'             => $request->input('phone'),
+            'pic_id'            => $request->input('pic'),
+            'latitude'          => $request->input('latitude'),
+            'longitude'         => $request->input('longitude'),
+            'open_hours'        => $request->input('open_hours'),
+            'closed_hours'      => $request->input('closed_hours'),
+            'open_days'         => $dayData,
+            'city_id'           => $request->input('city'),
+            'status_id'         => $request->input('status'),
+            'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            'created_by'        => $user->id,
+            'updated_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            'updated_by'        => $user->id,
+            'waste_category_id' => $request->input('categoryType'),
+            'type'              => !empty($request->input('type')) ? strtoupper($request->input('type')) : null
         ]);
 
         $adminUser = AdminUser::find($request->input('pic'));
@@ -239,7 +240,7 @@ class WasteBankController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        //Create Wastebank
+        // Update waste processor
         $user = Auth::guard('admin')->user();
         $wastebank = WasteBank::find($request->input('id'));
         $wastebank->name = $request->input('name');
@@ -252,6 +253,7 @@ class WasteBankController extends Controller
         $wastebank->status_id = $request->input('status');
         $wastebank->updated_at = Carbon::now('Asia/Jakarta');
         $wastebank->updated_by = $user->id;
+        $wastebank->type = !empty($request->input('type')) ? strtoupper($request->input('type')) : null;
         $wastebank->save();
 
         // Reset old admin wastebank
