@@ -240,6 +240,8 @@ class UserController extends Controller
                 'postal_code'    => 'required'
             );
 
+            Log::info("UserController - setAddress Content: ". $request);
+
             $data = $request->json()->all();
 
             $validator = Validator::make($data, $rules);

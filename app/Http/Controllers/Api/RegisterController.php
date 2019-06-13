@@ -46,7 +46,7 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'email_token' => base64_encode($data['email']),
-            'status_id' => 4,
+            'status_id' => 1,
             'company_id' => $companyId
         ]);
     }
