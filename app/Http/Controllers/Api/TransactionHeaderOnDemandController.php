@@ -80,7 +80,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'waste_name'        => $detail->dws_waste_category_data->name,
                             'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
-                            'weight_str'        => $detail->weight_kg_string
+                            'weight_str'        => $detail->weight_kg_string,
+                            'note'              => $detail->note
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -91,7 +92,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'waste_name'        => $detail->masaro_waste_category_data->name,
                             'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
-                            'weight_str'        => $detail->weight_kg_string
+                            'weight_str'        => $detail->weight_kg_string,
+                            'note'              => $detail->note
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -206,7 +208,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'masaro_category_id'=> 0,
                             'waste_name'        => $detail->dws_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
-                            'weight_str'        => $detail->weight_kg_string
+                            'weight_str'        => $detail->weight_kg_string,
+                            'note'              => $detail->note
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -216,7 +219,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'dws_category_id'   => 0,
                             'waste_name'        => $detail->masaro_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
-                            'weight_str'        => $detail->weight_kg_string
+                            'weight_str'        => $detail->weight_kg_string,
+                            'note'              => $detail->note
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }

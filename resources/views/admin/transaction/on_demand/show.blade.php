@@ -17,11 +17,11 @@
                             <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
                         @endif
 
-                        @if($header->waste_category_id == "1")
-                            <a href="{{ route('admin.transactions.on_demand.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
-                        @else
-                            <a href="{{ route('admin.transactions.on_demand.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
-                        @endif
+{{--                        @if($header->waste_category_id == "1")--}}
+{{--                            <a href="{{ route('admin.transactions.on_demand.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>--}}
+{{--                        @else--}}
+{{--                            <a href="{{ route('admin.transactions.on_demand.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>--}}
+{{--                        @endif--}}
 
                     </div>
                 </div>
@@ -201,6 +201,7 @@
                                                 <th class="text-center">Nama</th>
                                                 <th class="text-center">Berat (kg)</th>
                                                 <th class="text-center">Harga (Rp)</th>
+                                                <th class="text-center">Catatan</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -211,6 +212,7 @@
                                                         <td>{{ $detail->dws_waste_category_data->name }}</td>
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>
+                                                        <td>{{ $detail->note ?? "" }}</td>
                                                     </tr>
                                                 @endforeach
                                             @elseif($header->waste_category_id == 2)
@@ -221,6 +223,7 @@
                                                         <td>{{ $detail->masaro_waste_category_data->name }}</td>
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>
+                                                        <td>{{ $detail->note ?? "" }}</td>
                                                     </tr>
                                                 @endforeach
                                             @endif

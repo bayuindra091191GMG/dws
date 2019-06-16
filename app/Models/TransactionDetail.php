@@ -44,7 +44,8 @@ class TransactionDetail extends Eloquent
 		'masaro_category_id',
 		'weight',
 		'price',
-        'image_path'
+        'image_path',
+        'note'
 	];
 
 	protected $appends = [

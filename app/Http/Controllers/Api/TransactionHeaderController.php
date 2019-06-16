@@ -310,7 +310,8 @@ class TransactionHeaderController extends Controller
                         'transaction_header_id' => $header->id,
                         'dws_category_id'       => $item->dws_category_id,
                         'weight'                => $detailWeight,
-                        'price'                 => $item['price']
+                        'price'                 => $item->price,
+                        'note'                  => $item->note ?? ""
                     ]);
 
                     array_push($arrDetailIds, $newDetail->id);
@@ -320,7 +321,8 @@ class TransactionHeaderController extends Controller
                         'transaction_header_id' => $header->id,
                         'masaro_category_id'    => $item->masaro_category_id,
                         'weight'                => $detailWeight,
-                        'price'                 => $item->price
+                        'price'                 => $item->price,
+                        'note'                  => $item->note ?? ""
                     ]);
 
                     array_push($arrDetailIds, $newDetail->id);
