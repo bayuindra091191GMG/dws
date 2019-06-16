@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $weight
  * @property float $price
  * @property string $image_path
+ * @property string $note
  * 
  * @property \App\Models\DwsWasteCategoryData $dws_waste_category_data
  * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
