@@ -11,6 +11,7 @@ use App\Models\Voucher;
 use App\Models\VoucherCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class VoucherController extends Controller
@@ -23,7 +24,13 @@ class VoucherController extends Controller
         try{
             $voucherCategories = VoucherCategory::all();
 
-            return new UserResource($voucherCategories);
+            if($voucherCategories->count() === 0){
+                return Response::json([
+                    'message' => "No voucher categories found!",
+                ], 482);
+            }
+
+            return $voucherCategories;
         }
         catch(\Exception $ex){
             return Response::json([
@@ -43,11 +50,19 @@ class VoucherController extends Controller
     {
         try{
             $vouchers = Voucher::where('category_id', $request->input('category_id'))
-                ->where('company_id', $request->input('company_id'))->get();
+                ->where('company_id', $request->input('company_id'))
+                ->get();
 
-            return new UserResource($vouchers);
+            if($vouchers->count() === 0){
+                return Response::json([
+                    'message' => "No transactions found!",
+                ], 482);
+            }
+
+            return $vouchers;
         }
         catch(\Exception $ex){
+            Log::error("Api/VoucherController - get Error: ". $ex);
             return Response::json([
                 'message' => "Sorry Something went Wrong!",
                 'ex' => $ex,
@@ -87,7 +102,7 @@ class VoucherController extends Controller
                 'user_id'       => $user->id,
                 'voucher_id'    => $voucher->id,
                 'is_used'       => 0,
-                'created_at'    => Carbon::now('Asia/Jakarta'),
+                'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'redeem_code'   => $redeemCode
             ]);
             $voucher->quantity--;
@@ -100,7 +115,7 @@ class VoucherController extends Controller
                 'amount'            => $voucher->required_point,
                 'saldo'             => $user->point - $voucher->required_point,
                 'description'       => 'Pembelian Voucher ' . $voucher->code,
-                'created_at'        => Carbon::now('Asia/Jakarta')
+                'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString()
             ]);
 
             $user->point -= $voucher->required_point;
@@ -128,9 +143,9 @@ class VoucherController extends Controller
             $voucher = Voucher::where('code', $request->input('voucher_code'))->first();
 
             $userVoucher = UserVoucher::where('user_id', $user->id)->where('voucher_id', $voucher->id)->first();
-            $userVoucher->redeem_at = Carbon::now('Asia/Jakarta');
+            $userVoucher->redeem_at = Carbon::now('Asia/Jakarta')->toDateTimeString();
             $userVoucher->is_used = 1;
-            $userVoucher->used_at = Carbon::now('Asia/Jakarta');
+            $userVoucher->used_at = Carbon::now('Asia/Jakarta')->toDateTimeString();
             $userVoucher->save();
 
             return Response::json("Success Redeeming Voucher " . $voucher->code, 200);
