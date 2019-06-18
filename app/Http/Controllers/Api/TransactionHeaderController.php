@@ -223,6 +223,8 @@ class TransactionHeaderController extends Controller
             //$validator = Validator::make($data, $rules);
 
             Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". $request);
+            //Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". $request->getContent());
+            //Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". json_encode($request->all()));
             $data = json_decode($request->input('json_string'));
 
 //            if ($validator->fails()) {
@@ -280,22 +282,22 @@ class TransactionHeaderController extends Controller
             $code = Utilities::GenerateTransactionNumber($prepend, $nextNo);
 
             // Convert total weight to kilogram
-            $totalWeight = floatval($data["total_weight"]) * 1000;
+            $totalWeight = floatval($data->total_weight) * 1000;
 
             // Create on demand transaction
             $header = TransactionHeader::create([
                 'transaction_no'        => $code,
                 'total_weight'          => $totalWeight,
                 'total_price'           => $data->total_price,
-                'date'                  => Carbon::now('Asia/Jakarta'),
+                'date'                  => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'status_id'             => 6,
                 'user_id'               => $user->id,
                 'transaction_type_id'   => 3,
                 'waste_category_id'     => $user->company->waste_category_id,
                 'latitude'              => $data->latitude,
                 'longitude'             => $data->longitude,
-                'created_at'            => Carbon::now('Asia/Jakarta'),
-                'updated_at'            => Carbon::now('Asia/Jakarta'),
+                'created_at'            => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                'updated_at'            => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'waste_bank_id'         => $wasteBankId,
                 'point_user'            => $data->total_price
             ]);
@@ -304,7 +306,7 @@ class TransactionHeaderController extends Controller
 
             //do detail
             foreach ($data->details as $item){
-                $detailWeight = floatval($item["weight"]) * 1000;
+                $detailWeight = floatval($item->weight) * 1000;
                 if($user->company->waste_category_id == 1) {
                     $newDetail = TransactionDetail::create([
                         'transaction_header_id' => $header->id,
@@ -334,19 +336,23 @@ class TransactionHeaderController extends Controller
 
             // Save uploaded photo
             if($request->hasFile('image')){
+                //Log::info("check 1: ");
 
                 $images = $request->file('image');
 
                 $arrayIdx = 0;
                 foreach($images as $image){
+
+                    //Log::info("check 2: ");
+                    $detailId = $arrDetailIds[$arrayIdx];
+
                     $avatar = Image::make($image);
-                    $extension = $request->file('image')->extension();
-                    $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                    $extension = $image->extension();
+                    $filename = $header->id. '_ondemand_'. $detailId. '_'. Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
                     $avatar->save(public_path('storage/transactions/ondemand/'. $filename));
 //                    $header->image_path = $filename;
 //                    $header->save();
 
-                    $detailId = $arrDetailIds[$arrayIdx];
                     $transactionDetail = TransactionDetail::find($detailId);
                     $transactionDetail->image_path = $filename;
                     $transactionDetail->save();
