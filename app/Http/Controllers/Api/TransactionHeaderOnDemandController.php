@@ -81,7 +81,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string,
-                            'note'              => $detail->note
+                            'note'              => $detail->note,
+                            'img_path'          => !empty($detail->image_path) ? "https://dws-solusi.net/public/storage/transactions/". $detail->image_path : ""
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -93,7 +94,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'point'             => $detail->price,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string,
-                            'note'              => $detail->note
+                            'note'              => $detail->note,
+                            'img_path'          => !empty($detail->image_path) ? "https://dws-solusi.net/public/storage/transactions/". $detail->image_path : ""
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -209,7 +211,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'waste_name'        => $detail->dws_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string,
-                            'note'              => $detail->note
+                            'note'              => $detail->note,
+                            'img_path'          => !empty($detail->image_path) ? "https://dws-solusi.net/public/storage/transactions/". $detail->image_path : ""
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }
@@ -220,7 +223,8 @@ class TransactionHeaderOnDemandController extends Controller
                             'waste_name'        => $detail->masaro_waste_category_data->name,
                             'weight_double'     => $detail->weight / 1000,
                             'weight_str'        => $detail->weight_kg_string,
-                            'note'              => $detail->note
+                            'note'              => $detail->note,
+                            'img_path'          => !empty($detail->image_path) ? "https://dws-solusi.net/public/storage/transactions/". $detail->image_path : ""
                         ]);
                         $detailResponses->push($newDetailResponse);
                     }

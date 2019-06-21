@@ -10,6 +10,7 @@ use App\Models\UserVoucher;
 use App\Models\Voucher;
 use App\Models\VoucherCategory;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -41,11 +42,11 @@ class VoucherController extends Controller
     }
 
     /**
-     * Function to Show all the Vouchers.
-     *
-     * @param Request $request
-     * @return UserResource|\Illuminate\Http\JsonResponse
-     */
+ * Function to show all the vouchers based on category and  company.
+ *
+ * @param Request $request
+ * @return UserResource|JsonResponse
+ */
     public function get(Request $request)
     {
         try{
@@ -55,7 +56,7 @@ class VoucherController extends Controller
 
             if($vouchers->count() === 0){
                 return Response::json([
-                    'message' => "No transactions found!",
+                    'message' => "No vouchers found!",
                 ], 482);
             }
 
@@ -71,10 +72,39 @@ class VoucherController extends Controller
     }
 
     /**
+     * Function to show all the vouchers based on company.
+     *
+     * @param Request $request
+     * @return UserResource|JsonResponse
+     */
+    public function getAll(Request $request)
+    {
+        try{
+            $vouchers = Voucher::where('company_id', $request->input('company_id'))
+                ->get();
+
+            if($vouchers->count() === 0){
+                return Response::json([
+                    'message' => "No vouchers found!",
+                ], 482);
+            }
+
+            return $vouchers;
+        }
+        catch(\Exception $ex){
+            Log::error("Api/VoucherController - getAll Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
+
+    /**
      * Function to Buy Voucher.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function buy(Request $request){
         try{
@@ -134,7 +164,7 @@ class VoucherController extends Controller
      * Function to Redeem the Voucher.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function redeem(Request $request)
     {
