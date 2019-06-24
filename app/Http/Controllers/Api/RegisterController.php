@@ -76,8 +76,8 @@ class RegisterController extends Controller
             $validator = Validator::make($data, $rules, $messages);
 
             if ($validator->fails()) {
-                Log::error("Validator message: ". $validator->message());
-                return response()->json($validator->messages(), 400);
+                Log::error("Validator message: ". $validator->errors()->first());
+                return response()->json($validator->errors()->first(), 400);
             }
 
             $user = $this->create($request->all());
