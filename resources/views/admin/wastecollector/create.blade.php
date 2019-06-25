@@ -46,7 +46,7 @@
                                                     <div class="form-line">
                                                         <label class="form-label" for="phone">Nomor Ponsel *</label>
                                                         <input id="phone" type="text" class="form-control"
-                                                               name="phone" value="{{ old('phone_number') }}">
+                                                               name="phone" value="{{ old('phone') }}">
                                                     </div>
                                                 </div>
                                             </div>

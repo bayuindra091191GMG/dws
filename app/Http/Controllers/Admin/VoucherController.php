@@ -122,9 +122,9 @@ class VoucherController extends Controller
             'company_id'    => $request->input('company'),
             'required_point'=> $request->input('required_point'),
             'quantity'      => $request->input('qty'),
-            'created_at'    => Carbon::now('Asia/Jakarta'),
+            'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'created_by'    => $user->id,
-            'updated_at'    => Carbon::now('Asia/Jakarta'),
+            'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_by'    => $user->id,
             'status_id'     => $request->input('status')
         ]);
@@ -219,7 +219,7 @@ class VoucherController extends Controller
         $voucher->affiliate_id = $request->input('affiliate');
         $voucher->quantity = $request->input('qty');
         $voucher->required_point = $request->input('required_point');
-        $voucher->updated_at = Carbon::now('Asia/Jakarta');
+        $voucher->updated_at = Carbon::now('Asia/Jakarta')->toDateTimeString();
         $voucher->updated_by = $user->id;
         $voucher->save();
 

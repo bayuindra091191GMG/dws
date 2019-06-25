@@ -74,7 +74,7 @@ class WasteCollectorController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -85,9 +85,12 @@ class WasteCollectorController extends Controller
             'last_name'             => 'required',
             'password'              => 'required|min:6|max:20|same:password',
             'password_confirmation' => 'required|same:password',
-            'phone'                 => 'required',
+            'phone'                 => 'required|unique:waste_collectors',
             'address'               => 'required',
             'identity_number'       => 'required'
+        ],[
+            'email.unique'          => 'Email sudah terdaftar!',
+            'phone.unique'          => 'Nomor ponsel sudah terdaftar!'
         ]);
 
         $image = $request->file('img_path');
@@ -182,7 +185,7 @@ class WasteCollectorController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
