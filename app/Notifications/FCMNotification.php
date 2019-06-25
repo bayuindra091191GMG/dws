@@ -71,40 +71,42 @@ class FCMNotification
             else{
                 $user  = FcmTokenBrowser::where('user_admin_id', $userId)->first();
             }
-//            dd($user);
-            $token = $user->token;
-            $data = array(
-                "to" => $token,
-                "notification" => [
-                    "title"=> $title,
-                    "body"=> $body,
-                ],
-                "data" => $notifData,
-            );
-            $data_string = json_encode($data);
-            //Log::info("JSON: ". $data_string);
-            $client = new Client([
-                'base_uri' => "https://fcm.googleapis.com/fcm/send",
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'key=' .env('FCM_SERVER_KEY'),
-                ],
-            ]);
-//            dd($data_string);
-            $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [
-                'body' => $data_string
-            ]);
-            $responseJSON = json_decode($response->getBody());
-//            dd($responseJSON->results[0]->message_id);
-            //dd($responseJSON);
 
-//            $response = $client->request('GET', $responseJSON->results[0]->message_id);
-            return $responseJSON->results[0]->message_id;
+            if(empty($user)){
+                Log::error("FCMNotification - SendNotification Error: FCM Token Null, userId = ".$userId);
+                return "";
+            }
+            else{
+                $token = $user->token;
+                $data = array(
+                    "to" => $token,
+                    "notification" => [
+                        "title"=> $title,
+                        "body"=> $body,
+                    ],
+                    "data" => $notifData,
+                );
+                $data_string = json_encode($data);
+                $client = new Client([
+                    'base_uri' => "https://fcm.googleapis.com/fcm/send",
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'key=' .env('FCM_SERVER_KEY'),
+                    ],
+                ]);
+//            dd($data_string);
+                $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [
+                    'body' => $data_string
+                ]);
+                $responseJSON = json_decode($response->getBody());
+                //dd($responseJSON);
+
+                return $responseJSON->results[0]->message_id;
+            }
         }
         catch (\Exception $exception){
-            dd($exception);
 //            dd($exception);
-//            error_log($exception);
+            Log::error("FCMNotification - SendNotification Error: ". $exception);
             return "";
         }
     }
