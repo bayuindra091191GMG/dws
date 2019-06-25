@@ -222,7 +222,7 @@ class WasteCollectorController extends Controller
                     ->first();
 
                 if (!empty($transactionDBRoutineWeight)) {
-                    $weight = $transactionDBRoutine->total_weight;
+                    $weight = $transactionDBRoutineWeight->total_weight;
                 }
 
                 $addressDb = Address::where('user_id', $wasteCollectorUser->user_id)
