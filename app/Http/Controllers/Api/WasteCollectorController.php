@@ -182,8 +182,7 @@ class WasteCollectorController extends Controller
                 if ($transactionDBRoutine->count() != 0) {
                     foreach($transactionDBRoutine as $transactionDB){
                         $totalHouseholdDone++;
-                        $weight = $transactionDB->total_weight;
-                        $totalWeight = $totalWeight + $weight;
+                        $totalWeight = $totalWeight + $transactionDB->total_weight;
                         $totalPoint = $transactionDB->waste_collector->point;
                     }
                 }
@@ -202,9 +201,28 @@ class WasteCollectorController extends Controller
 //                }
                 if ($transactionDBOnDemand->count() != 0) {
                     foreach($transactionDBOnDemand as $transactionDB){
-                        $weight = $transactionDB->total_weight;
-                        $totalWeight = $totalWeight + $weight;
+                        $totalWeight = $totalWeight + $transactionDB->total_weight;
                     }
+                }
+
+                //get weight of transaction on demand
+                $transactionDBOnDemandWeight = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('transaction_type_id', 3)
+                    ->where('status_id', 9)
+                    ->first();
+
+                if (!empty($transactionDBOnDemandWeight)) {
+                    $weight = $transactionDBOnDemandWeight->total_weight;
+                }
+
+                //get of transaction routine pickup
+                $transactionDBRoutineWeight = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
+                    ->where('transaction_type_id', 1)
+                    ->where('status_id', 18)
+                    ->first();
+
+                if (!empty($transactionDBRoutineWeight)) {
+                    $weight = $transactionDBRoutine->total_weight;
                 }
 
                 $addressDb = Address::where('user_id', $wasteCollectorUser->user_id)
