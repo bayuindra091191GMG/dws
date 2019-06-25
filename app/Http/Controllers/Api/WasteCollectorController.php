@@ -169,25 +169,42 @@ class WasteCollectorController extends Controller
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 1)
                     ->where('status_id', 18)
-                    ->first();
+//                    ->first();
+                    ->get();
 
-                if (!empty($transactionDBRoutine)) {
-                    $totalHouseholdDone++;
-                    $weight = $transactionDBRoutine->total_weight;
-                    $totalWeight = $totalWeight + $transactionDBRoutine->total_weight;
-                    $totalPoint = $transactionDBRoutine->waste_collector->point;
+//                if (!empty($transactionDBRoutine)) {
+//                    $totalHouseholdDone++;
+//                    $weight = $transactionDBRoutine->total_weight;
+//                    $totalWeight = $totalWeight + $transactionDBRoutine->total_weight;
+//                    $totalPoint = $transactionDBRoutine->waste_collector->point;
+//                }
+
+                if ($transactionDBRoutine->count() != 0) {
+                    foreach($transactionDBRoutine as $transactionDB){
+                        $totalHouseholdDone++;
+                        $weight = $transactionDB->total_weight;
+                        $totalWeight = $totalWeight + $weight;
+                        $totalPoint = $transactionDB->waste_collector->point;
+                    }
                 }
 
                 //summary total weight of transaction on demand
                 $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 3)
                     ->where('status_id', 9)
-                    ->first();
+//                    ->first();
+                    ->get();
 
-                if (!empty($transactionDBOnDemand)) {
-                    $weight = $transactionDBOnDemand->total_weight;
-                    $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
-                    $totalPoint = $transactionDBRoutine->waste_collector->point;
+//                if (!empty($transactionDBOnDemand)) {
+//                    $weight = $transactionDBOnDemand->total_weight;
+//                    $totalWeight = $totalWeight + $transactionDBOnDemand->total_weight;
+//                    $totalPoint = $transactionDBRoutine->waste_collector->point;
+//                }
+                if ($transactionDBOnDemand->count() != 0) {
+                    foreach($transactionDBOnDemand as $transactionDB){
+                        $weight = $transactionDB->total_weight;
+                        $totalWeight = $totalWeight + $weight;
+                    }
                 }
 
                 $addressDb = Address::where('user_id', $wasteCollectorUser->user_id)
