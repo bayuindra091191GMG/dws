@@ -105,7 +105,7 @@ class AdminController extends Controller
                 'name' => $userName
             );
 
-            FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+//            FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
             FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
 
             return Response::json([
