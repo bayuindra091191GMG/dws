@@ -168,7 +168,7 @@ class WasteCollectorController extends Controller
                 //summary total weight of transaction routine pickup and total household
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 1)
-                    ->where('status_id', 16)
+                    ->where('status_id', 18)
                     ->first();
 
                 if (!empty($transactionDBRoutine)) {
@@ -181,7 +181,7 @@ class WasteCollectorController extends Controller
                 //summary total weight of transaction on demand
                 $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 3)
-                    ->where('status_id', 8)
+                    ->where('status_id', 9)
                     ->first();
 
                 if (!empty($transactionDBOnDemand)) {
@@ -213,7 +213,7 @@ class WasteCollectorController extends Controller
 
             return Response::json([
                 'routine_pickup_list' => $pickUpModel,
-                'total_weight' => $totalWeight,
+                'total_weight' => $totalWeight / 1000,
                 'total_point' => $totalPoint,
                 'total_household' => $totalHousehold,
                 'total_household_done' => $totalHouseholdDone
@@ -607,6 +607,12 @@ class WasteCollectorController extends Controller
                 ->orderBy('status_id', 'Asc')
                 ->with('transaction_details')
                 ->get();
+
+            if($transactions->count() === 0){
+                return Response::json([
+                    'message' => "No today on demand found!",
+                ], 482);
+            }
 
             return $transactions;
         } catch (Exception $ex) {

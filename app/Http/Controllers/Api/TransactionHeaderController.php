@@ -34,6 +34,8 @@ class TransactionHeaderController extends Controller
     {
         $transactionHeader = TransactionHeader::where('transaction_no', $request->input('transaction_no'))->with('transaction_details')->first();
 
+
+
         return $transactionHeader;
     }
 
@@ -239,6 +241,8 @@ class TransactionHeaderController extends Controller
             $today = Carbon::today('Asia/Jakarta')->format("Ym");
             $categoryType = $user->company->waste_category_id;
 
+            Log::info("Latitude: ". $data->latitude. " Longitude: ". $data->longitude);
+
             //Check for Nearest Wastebank
             $wasteBankId = '';
             $wasteBankPIC = 1;
@@ -256,9 +260,7 @@ class TransactionHeaderController extends Controller
             $radiusDB = Configuration::find(18);
 
             $wasteBanks = $wasteBankTemp->where('distance', '<=', $radiusDB->configuration_value)
-                ->where('waste_category_id', $categoryType)
-                ->where('open_hours', '<', $now->toTimeString())
-                ->where('closed_hours', '>', $now->toTimeString());
+                ->where('waste_category_id', $categoryType);
 
             if($wasteBanks == null || $wasteBanks->count() == 0){
                 return Response::json([
