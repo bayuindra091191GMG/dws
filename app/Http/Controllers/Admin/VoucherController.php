@@ -32,16 +32,15 @@ class VoucherController extends Controller
     }
 
     public function getIndex(Request $request){
-        $users = Voucher::query();
-        return DataTables::of($users)
+        $vouchers = Voucher::query();
+        return DataTables::of($vouchers)
             ->setTransformer(new VoucherTransformer)
-            ->addIndexColumn()
             ->make(true);
     }
 
     public function getIndexUserVoucher(Request $request){
-        $users = UserVoucher::where('is_used', 1);
-        return DataTables::of($users)
+        $vouchers = UserVoucher::where('is_used', 1);
+        return DataTables::of($vouchers)
             ->setTransformer(new VoucherUserTransformer)
             ->make(true);
     }

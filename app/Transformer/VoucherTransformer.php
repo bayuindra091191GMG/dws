@@ -27,7 +27,7 @@ class VoucherTransformer extends TransformerAbstract
             $action = "<a class='btn btn-xs btn-info' href='vouchers/edit/".$data->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $data->id ."' ><i class='fas fa-trash-alt'></i></a>";
 
-            $imgPath = "<img src='". public_path('storage/admin/vouchers'.$data->img_path) . "' width='50'/>";
+//            $imgPath = "<img src='". public_path('storage/admin/vouchers'.$data->img_path) . "' width='50'/>";
 
             if($data->category_id != null || $data->category_id != 0){
                 $tmpCategory = Category::find($data->category_id);
@@ -37,22 +37,22 @@ class VoucherTransformer extends TransformerAbstract
                 $category = '-';
             }
 
-            if($data->product_id != null || $data->product_id != 0){
-                $tmpProduct = Product::find($data->product_id);
-                $product = $tmpProduct->name;
-            }
-            else{
-                $product = '-';
-            }
+//            if($data->product_id != null || $data->product_id != 0){
+//                $tmpProduct = Product::find($data->product_id);
+//                $product = $tmpProduct->name;
+//            }
+//            else{
+//                $product = '-';
+//            }
 
             return[
                 'code'              => $data->code,
                 'description'       => $data->description,
                 'category'          => $category,
-                'product'           => $product,
+//                'product'           => $product,
                 'quantity'          => $data->quantity,
                 'required_point'    => $data->required_point,
-                'img_path'          => $imgPath,
+//                'img_path'          => $imgPath,
                 'created_at'        => $createdDate,
                 'created_by'        => $data->createdBy->first_name . ' ' . $data->createdBy->last_name,
                 'start_date'        => $startDate,
