@@ -120,8 +120,8 @@ class TransactionHeaderController extends Controller
         // Check superadmin
         $admin = Auth::guard('admin')->user();
         if($admin->is_super_admin === 1){
-            Session::flash('error', 'Superadmin tidak bisa membuat baru transaksi!');
-            return redirect()->back();
+            Session::flash('error', 'Super Admin tidak bisa membuat transaksi Antar Sendiri baru!');
+            return redirect()->route('admin.transactions.antar_sendiri.index');
         }
         else{
             if($admin->waste_bank->waste_category_id !== 2){
@@ -300,8 +300,8 @@ class TransactionHeaderController extends Controller
         $header = TransactionHeader::find($id);
         $date = Carbon::parse($header->date)->format("d M Y");
 
-        if(!empty($header->first_name)){
-            $name = $header->first_name. " ". $header->last_name;
+        if(!empty($header->user_id)){
+            $name = $header->user->first_name. " ". $header->user->last_name;
         }
         else{
             $name = "BELUM ASSIGN";

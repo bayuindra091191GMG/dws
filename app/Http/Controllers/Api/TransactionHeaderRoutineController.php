@@ -166,8 +166,8 @@ class TransactionHeaderRoutineController extends Controller
 
                     // Checking customer address
                     $customerAddress = null;
-                    if($header->user->address->count() > 0){
-                        $addressObj = $header->user->address->first();
+                    if($header->user->addresses->count() > 0){
+                        $addressObj = $header->user->addresses->first();
                         if(!empty($addressObj->description) && !empty($addressObj->latitude) && !empty($addressObj->longitude)){
                             if($header->latitude == $addressObj->latitude && $header->longitude == $addressObj->longitude){
                                 $customerAddress = $addressObj->description;

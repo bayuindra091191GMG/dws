@@ -188,7 +188,7 @@ class WasteBankController extends Controller
             $i++;
         }
 
-        Session::flash('success', 'Success Creating new Waste Bank!');
+        Session::flash('success', 'Sukses membuat Pengolahan Sampah baru!');
         return redirect()->route('admin.waste-banks.index');
     }
 

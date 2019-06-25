@@ -154,9 +154,9 @@ class WasteCollectorController extends Controller
                 if(empty($scheduleDB)){
                     $data = WasteCollectorUserStatus::create([
                         'waste_collector_user_id' => $wasteCollectorUser->id,
-                        'date' => Carbon::now('Asia/Jakarta'),
+                        'date' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                         'status_id' => 4,
-                        'created_at' => Carbon::now('Asia/Jakarta'),
+                        'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                     ]);
                 }
                 else{
@@ -393,7 +393,7 @@ class WasteCollectorController extends Controller
                     "name" => $user->first_name . " " . $user->last_name,
                     "waste_category_name" => $body,
                     "total_weight" => $header->total_weight_kg,
-                    "total_price" => $header->total_price,
+                    "total_price" => $header->total_price_string,
                     "waste_bank" => "-",
                     "waste_collector" => $wasteCollector->phone,
                     "status" => $header->status->description,
@@ -540,7 +540,7 @@ class WasteCollectorController extends Controller
                     "name" => $user->first_name . " " . $user->last_name,
                     "waste_category_name" => $body,
                     "total_weight" => $header->total_weight_kg,
-                    "total_price" => $header->total_price,
+                    "total_price" => $header->total_price_string,
                     "waste_bank" => "-",
                     "waste_collector" => $wasteCollector->phone,
                     "status" => $header->status->description,
@@ -703,8 +703,8 @@ class WasteCollectorController extends Controller
                 "transaction_no" => $header->transaction_no,
                 "name" => $user->first_name . " " . $user->last_name,
                 "waste_category_name" => $body,
-                "total_weight" => $header->total_weight,
-                "total_price" => $header->total_price,
+                "total_weight" => $header->total_weight_kg,
+                "total_price" => $header->total_price_string,
                 "waste_bank" => "-",
                 "waste_collector" => "-",
                 "status" => $header->status->description,

@@ -134,7 +134,7 @@ class WasteCollectorController extends Controller
             'waste_collector_id'          => $wasteCollector->id,
         ]);
 
-        Session::flash('success', 'Sukses Membuat data Waste Collector!');
+        Session::flash('success', 'Sukses membuat Petugas Kebersihan Baru!');
         return redirect()->route('admin.wastecollectors.index');
     }
 

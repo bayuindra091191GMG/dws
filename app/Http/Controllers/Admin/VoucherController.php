@@ -93,7 +93,7 @@ class VoucherController extends Controller
             'category'      => 'required',
             'affiliate'     => 'required',
             'required_point'=> 'required',
-            'company_id'    => 'required'
+            'company'       => 'required'
         ]);
 
         $image = $request->file('img_path');

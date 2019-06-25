@@ -202,6 +202,7 @@
                                                 <th class="text-center">Berat (kg)</th>
                                                 <th class="text-center">Harga (Rp)</th>
                                                 <th class="text-center">Catatan</th>
+                                                <th class="text-center">Foto</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -213,6 +214,7 @@
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>
                                                         <td>{{ $detail->note ?? "" }}</td>
+                                                        <td><a class="fancybox-viewer" href="{{ asset('transactions/ondemand/'. $detail->getOriginal('image_path')) }}"><img src="{{ asset('storage/transactions/ondemand/'. $detail->getOriginal('image_path')) }}" alt=""/></a></td>
                                                     </tr>
                                                 @endforeach
                                             @elseif($header->waste_category_id == 2)
@@ -224,6 +226,7 @@
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>
                                                         <td>{{ $detail->note ?? "" }}</td>
+                                                        <td class="text-center"><a class="fancybox-viewer" href="{{ asset('storage/transactions/ondemand/'. $detail->getOriginal('image_path')) }}"><img src="{{ asset('storage/transactions/ondemand/'. $detail->getOriginal('image_path')) }}" alt=""/></a></td>
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -266,12 +269,19 @@
 @endsection
 
 @section('styles')
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" type="text/css" media="screen" />
+    <style>
+        .fancybox-viewer img{
+            width: 100px;
+            height: auto;
+        }
+    </style>
 @endsection
 
 @section('scripts')
     <script src="{{ asset('backend/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.js"></script>
     <script>
         $(document).ready(function() {
             $('#waste_collector_id').select2();
@@ -279,6 +289,8 @@
             $(document).on('click', '#btn-confirm', function(){
                 $('#modal-confirm').modal('show');
             })
+
+            $("a.fancybox-viewer").fancybox();
         });
     </script>
 @endsection

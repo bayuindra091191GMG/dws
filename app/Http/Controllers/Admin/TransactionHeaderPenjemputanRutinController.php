@@ -21,6 +21,7 @@ use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
 use App\Models\WasteCollector;
+use App\Models\WasteCollectorPickupHistory;
 use App\Models\WasteCollectorUser;
 use App\Models\WasteCollectorUserStatus;
 use App\Transformer\TransactionTransformer;
@@ -403,6 +404,11 @@ class TransactionHeaderPenjemputanRutinController extends Controller
             ->first();
         $wasteCollectorUserStatus->status_id = 18;
         $wasteCollectorUserStatus->save();
+
+        // confirm pickup history
+        $wasteCollectorPickupHistory = WasteCollectorPickupHistory::where('transaction_header_id', $header->id)->first();
+        $wasteCollectorPickupHistory->status_id = 18;
+        $wasteCollectorPickupHistory->save();
 
         //add point to user
         //$configuration = Configuration::where('configuration_key', 'point_amount_user')->first();
