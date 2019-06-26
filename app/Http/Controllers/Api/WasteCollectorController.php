@@ -169,6 +169,7 @@ class WasteCollectorController extends Controller
                 $transactionDBRoutine = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 1)
                     ->where('status_id', 18)
+                    ->where('date', '>=', date('Y-m-d').' 00:00:00')
 //                    ->first();
                     ->get();
 
@@ -191,6 +192,7 @@ class WasteCollectorController extends Controller
                 $transactionDBOnDemand = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 3)
                     ->where('status_id', 9)
+                    ->where('date', '>=', date('Y-m-d').' 00:00:00')
 //                    ->first();
                     ->get();
 
@@ -209,6 +211,7 @@ class WasteCollectorController extends Controller
                 $transactionDBOnDemandWeight = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 3)
                     ->where('status_id', 9)
+                    ->where('date', '>=', date('Y-m-d').' 00:00:00')
                     ->first();
 
                 if (!empty($transactionDBOnDemandWeight)) {
@@ -219,6 +222,7 @@ class WasteCollectorController extends Controller
                 $transactionDBRoutineWeight = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 1)
                     ->where('status_id', 18)
+                    ->where('date', '>=', date('Y-m-d').' 00:00:00')
                     ->first();
 
                 if (!empty($transactionDBRoutineWeight)) {
