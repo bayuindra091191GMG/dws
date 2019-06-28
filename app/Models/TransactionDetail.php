@@ -76,7 +76,13 @@ class TransactionDetail extends Eloquent
 
     public function getImagePathAttribute($value){
         if(!empty($value)){
-            return "https://dws-solusi.net/public/storage/transactions/". $value;
+            if($this->transaction_header->transaction_type_id == 3){
+                return "https://dws-solusi.net/public/storage/transactions/ondemand/". $value;
+            }
+            else if($this->transaction_header->transaction_type_id == 1){
+                return "https://dws-solusi.net/public/storage/transactions/routine/". $value;
+            }
+//            return "https://dws-solusi.net/public/storage/transactions/ondemand/". $value;
         }
         else{
             return "";
