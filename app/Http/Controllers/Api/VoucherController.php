@@ -186,4 +186,24 @@ class VoucherController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Function to Get all the user remaining Vouchers.
+     *
+    */
+    public function getAllUserVoucher(){
+        try{
+            $user = auth('api')->user();
+            $userVouchers = UserVoucher::where('user_id', $user->id)->where('is_used', 0)->with('voucher')->get();
+
+            return $userVouchers;
+        }
+        catch(\Exception $ex){
+            Log::error("Api/VoucherController - getAllUserVoucher Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'ex' => $ex,
+            ], 500);
+        }
+    }
 }
