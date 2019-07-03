@@ -482,7 +482,8 @@ class WasteCollectorController extends Controller
 //                return response()->json($validator->messages(), 400);
 //            }
 
-            Log::info("Api/TransactionHeaderController - createTransactionDev Content: ". $request);
+            Log::info("Api/WasteCollectorController - createTransactionRoutinePickupDev Content: ". $request);
+            Log::info("Api/WasteCollectorController - createTransactionRoutinePickupDev json_string: ". $request->input('json_string'));
             $data = json_decode($request->input('json_string'));
 
             $wasteCollector = auth('waste_collector')->user();
