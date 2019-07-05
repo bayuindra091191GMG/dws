@@ -26,9 +26,13 @@ Route::get('/masaro-category', 'Api\MasaroWasteController@getData');
 //Route::post('/on-demand/create', 'Api\TransactionHeaderController@createTransaction');
 //Route::post('/routine-pickup', 'Api\UserController@changeRoutinePickup');
 
+// Register
 Route::post('/register', 'Api\RegisterController@register');
 Route::get('/verifyemail/{token}', 'Api\RegisterController@verify');
 Route::post('/external-register', 'Api\RegisterController@externalAuth');
+Route::post('/register/exist/email', 'Api\RegisterController@isEmailExist');
+Route::post('/register/exist/phone', 'Api\RegisterController@isPhoneExist');
+
 //User Management
 //Route::group(['namespace' => 'Api', 'middleware' => 'api', 'prefix' => 'user'], function () {
 Route::middleware('auth:api')->prefix('user')->group(function(){

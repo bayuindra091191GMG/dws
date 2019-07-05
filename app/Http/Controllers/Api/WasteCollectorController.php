@@ -221,7 +221,7 @@ class WasteCollectorController extends Controller
                 //get of transaction routine pickup
                 $transactionDBRoutineWeight = TransactionHeader::where('user_id', $wasteCollectorUser->user_id)
                     ->where('transaction_type_id', 1)
-                    ->where('status_id', 18)
+                    ->whereIn('status_id', [15,16,17,18])
                     ->where('date', '>=', date('Y-m-d').' 00:00:00')
                     ->first();
 
@@ -552,7 +552,7 @@ class WasteCollectorController extends Controller
 
                 $avatar = Image::make($image);
                 $extension = $request->file('image')->extension();
-                $filename = $header->id. "_ondemand_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
+                $filename = $header->id. "_routine_". Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $extension;
                 $avatar->save(public_path('storage/transactions/routine/'. $filename));
 
                 $imagePath = $filename;
@@ -597,13 +597,51 @@ class WasteCollectorController extends Controller
                 'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             ]);
 
+            // Update collector user status
+            $wasteCollectorUser = WasteCollectorUser::where('user_id', $user->id)
+                ->where('waste_collector_id', $wasteCollector->id)
+                ->first();
+
+            if(!empty($wasteCollectorUser)){
+                $wasteCollectorUserStatus = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
+                    ->whereDate('date', Carbon::today())
+                    ->first();
+
+                if(!empty($wasteCollectorUserStatus)){
+                    $wasteCollectorUserStatus->status_id = 15;
+                    $wasteCollectorUserStatus->save();
+                }
+                else{
+                    Log::info('Api/WasteCollectorController/createTransactionRoutinePickupDev waste_colector_user_status null');
+                }
+            }
+            else{
+                Log::info('Api/WasteCollectorController/createTransactionRoutinePickupDev waste_colector_user null');
+            }
+
+
             $isSuccess = FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
             //Push Notification to Admin.
 //      $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
 
-            return Response::json([
-                'message' => "Success creating Routine Pickup Transaction!",
-            ], 200);
+            // Return pickup model
+            $address = Address::where('user_id', $user->id)->first();
+
+            $routinePickupModel = array(
+                "id"            => $wasteCollectorUser->id,
+                "img_path"      => $wasteCollectorUser->user->image_path,
+                "first_name"    => $wasteCollectorUser->user->first_name,
+                "last_name"     => $wasteCollectorUser->user->last_name,
+                "description"   => $address->description ?? '',
+                "latitude"      => $address->latitude,
+                "longitude"     => $address->longitude,
+                "weight"        => $header->total_weight,
+                "point"         => $header->total_price,
+                "pickup_status" => 15,
+                "user"          => $wasteCollectorUser->user
+            );
+
+            return Response::json($routinePickupModel, 200);
         }
         catch(Exception $ex){
             Log::error("Api/WasteCollectorController - createTransactionRoutinePickup error: \". $ex");

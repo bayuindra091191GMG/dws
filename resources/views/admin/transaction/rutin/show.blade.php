@@ -161,6 +161,21 @@
                                 </div>
 
                                 <div class="col-md-12">
+                                    <div class="form-group form-float form-group-lg">
+                                        <div class="form-line">
+                                            <label class="form-label" for="meta_description">Gambar/Foto Sampah</label>
+                                            @if(!empty($header->image_path))
+                                                <a class="fancybox-viewer" href="{{ asset('storage/transactions/routine/'. $header->getOriginal('image_path')) }}">
+                                                    <img src="{{ asset('storage/transactions/routine/'. $header->getOriginal('image_path')) }}" alt="" style="height: 150px; width: auto;"/>
+                                                </a>
+                                            @else
+                                                <span>Tidak Ada Foto</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
                                             <thead>
@@ -231,18 +246,21 @@
 @endsection
 
 @section('styles')
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" type="text/css" media="screen" />
 @endsection
 
 @section('scripts')
     <script src="{{ asset('backend/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.js"></script>
     <script>
         $(document).ready(function() {
 
             $(document).on('click', '#btn-confirm', function(){
                 $('#modal-confirm').modal('show');
             })
+
+            $("a.fancybox-viewer").fancybox();
         });
     </script>
 @endsection

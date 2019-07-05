@@ -288,7 +288,7 @@
 
             $(document).on('click', '#btn-confirm', function(){
                 $('#modal-confirm').modal('show');
-            })
+            });
 
             $("a.fancybox-viewer").fancybox();
         });

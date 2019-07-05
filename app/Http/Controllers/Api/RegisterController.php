@@ -210,4 +210,40 @@ class RegisterController extends Controller
         Session::flash('success', 'Your Email Have been Verified, Please Login');
         return Redirect::route('login');
     }
+
+    public function isEmailExist(Request $request){
+        $inputEmail = $request->input('email');
+        $isEmailExists = User::where('email', $inputEmail)
+            ->where('status_id', 1)
+            ->exists();
+
+        if($isEmailExists){
+            return Response::json([
+                'true'
+            ], 200);
+        }
+        else{
+            return Response::json([
+                'false'
+            ], 200);
+        }
+    }
+
+    public function isPhoneExist(Request $request){
+        $inputPhone = $request->input('phone');
+        $isPhoneExists = User::where('phone', $inputPhone)
+            ->where('status_id', 1)
+            ->exists();
+
+        if($isPhoneExists){
+            return Response::json([
+                'true'
+            ], 200);
+        }
+        else{
+            return Response::json([
+                'false'
+            ], 200);
+        }
+    }
 }
