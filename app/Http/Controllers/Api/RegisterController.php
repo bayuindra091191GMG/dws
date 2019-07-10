@@ -218,14 +218,14 @@ class RegisterController extends Controller
             ->exists();
 
         if($isEmailExists){
-            return Response::json([
+            return Response::json(
                 'true'
-            ], 200);
+            , 200);
         }
         else{
-            return Response::json([
+            return Response::json(
                 'false'
-            ], 200);
+            , 200);
         }
     }
 
@@ -236,14 +236,14 @@ class RegisterController extends Controller
             ->exists();
 
         if($isPhoneExists){
-            return Response::json([
+            return Response::json(
                 'true'
-            ], 200);
+            , 200);
         }
         else{
-            return Response::json([
+            return Response::json(
                 'false'
-            ], 200);
+            , 200);
         }
     }
 }

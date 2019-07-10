@@ -247,6 +247,10 @@ Route::prefix('admin')->group(function(){
     Route::get('/import/form', 'Admin\ImportController@form')->name('admin.import.form');
     Route::post('/import/form/submit', 'Admin\ImportController@importExcel')->name('admin.import.submit');
     Route::get('/import/address/auto', 'Admin\ImportController@autoAddress')->name('admin.import.address.auto');
+
+    // Report
+    Route::get('/transaction/report', 'Admin\ReportController@transactionReport')->name('admin.transaction.report');
+    Route::post('/transaction/report/submit', 'Admin\ReportController@transactionReportSubmit')->name('admin.transaction.report.submit');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');

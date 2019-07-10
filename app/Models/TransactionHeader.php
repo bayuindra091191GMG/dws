@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -95,11 +96,16 @@ class TransactionHeader extends Eloquent
 	];
 
     protected $appends = [
+        'date_string',
         'total_weight_string',
         'total_weight_kg',
         'total_weight_kg_string',
         'total_price_string'
     ];
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
 
     public function getImagePathAttribute($value){
         if(!empty($value)){
