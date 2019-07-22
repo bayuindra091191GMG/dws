@@ -78,9 +78,20 @@ class WasteBankController extends Controller
                     ], 482);
                 }
                 else{
-                    $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)->get();
+                    if($user->company_id === 0){
+                        $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
+                            ->whereNull('masaro_waste_category_id')
+                            ->get();
 
-                    return $wasteBankSchedules;
+                        return $wasteBankSchedules;
+                    }
+                    else{
+                        $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
+                            ->whereNull('dws_waste_category_id')
+                            ->get();
+
+                        return $wasteBankSchedules;
+                    }
                 }
             }
             else{
@@ -114,11 +125,23 @@ class WasteBankController extends Controller
                 }
                 else{
                     $currentday = Carbon::now('Asia/Jakarta')->dayOfWeekIso;
-                    $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
-                        ->where('day', $currentday)
-                        ->first();
+                    if($user->company_id === 0){
+                        $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
+                            ->where('day', $currentday)
+                            ->whereNull('masaro_waste_category_id')
+                            ->first();
 
-                    return $wasteBankSchedule;
+                        return $wasteBankSchedule;
+                    }
+                    else{
+                        $wasteBankSchedule = WasteBankSchedule::where('waste_bank_id', $userWastebank->waste_bank_id)
+                            ->where('day', $currentday)
+                            ->whereNull('dws_waste_category_id')
+                            ->first();
+
+                        return $wasteBankSchedule;
+                    }
+
                 }
             }
             else{
