@@ -92,25 +92,32 @@ class AdminController extends Controller
 
             $user = User::where('email', $data['email'])->first();
             $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-            $header->user_id = $user->id;
-            $header->save();
+            if(empty($header->user_id)){
+                $header->user_id = $user->id;
+                $header->save();
 
-            //send notification to admin browser and user device
-            $userName = $header->user->first_name." ".$header->user->last_name;
-            $title = "Digital Waste Solution";
-            $body = "Admin Scan QR Code User";
-            $data = array(
-                'type_id' => '2',
-                'transaction_no' => $header->transaction_no,
-                'name' => $userName
-            );
+                //send notification to admin browser and user device
+                $userName = $header->user->first_name." ".$header->user->last_name;
+                $title = "Digital Waste Solution";
+                $body = "Admin Scan QR Code User";
+                $data = array(
+                    'type_id' => '2',
+                    'transaction_no' => $header->transaction_no,
+                    'name' => $userName
+                );
 
 //            FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
-            FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
+                FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
 
-            return Response::json([
-                'message' => "Success assign " . $user->email . " to " . $header->transaction_no . "!",
-            ], 200);
+                return Response::json([
+                    'message' => "Sukses assign " . $user->email . " ke transaksi " . $header->transaction_no . "!",
+                ], 200);
+            }
+            else{
+                return Response::json([
+                    'message' => "Transaksi sudah di assign ke sumber sampah lain",
+                ], 200);
+            }
         }
         catch (\Exception $ex){
             Log::error("AdminController - setTransactionToUser error: ". $ex);

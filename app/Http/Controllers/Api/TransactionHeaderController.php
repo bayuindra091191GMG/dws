@@ -864,7 +864,9 @@ class TransactionHeaderController extends Controller
             $transactions = TransactionHeader::with(['transaction_details'])
                 ->where('transaction_type_id', 2)
                 ->where('waste_bank_id', $adminUser->waste_bank_id)
-                ->whereNull('user_id')
+//                ->whereNull('user_id')
+                ->where('status_id', '!=', 10)
+                ->where('status_id', '!=', 12)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
