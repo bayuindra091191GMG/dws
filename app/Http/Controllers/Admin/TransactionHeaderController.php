@@ -170,7 +170,7 @@ class TransactionHeaderController extends Controller
         $weights = $request->input('weights');
 
         if(empty($categories || empty($prices || empty($weights)))){
-            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi atau nominal lebih dari 0!', 'default')->withInput($request->all());
         }
 
         $idx = 0;
@@ -182,7 +182,7 @@ class TransactionHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detil kategori, berat dan harga wajib diisi atau nominal lebih dari 0!', 'default')->withInput($request->all());
         }
 
         // Check duplicate categories

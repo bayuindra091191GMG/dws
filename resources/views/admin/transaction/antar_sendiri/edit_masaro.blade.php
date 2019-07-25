@@ -99,8 +99,8 @@
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td><input type="text" id="weight_{{ $idx }}" name="weights[]" class="form-control text-right"/></td>
-                                                <td><input type="text" id="price_{{ $idx }}" name="prices[]" class="form-control text-right"/></td>
+                                                <td><input type="text" id="weight_{{ $idx }}" name="weights[]" class="form-control text-right" autocomplete="off"/></td>
+                                                <td><input type="text" id="price_{{ $idx }}" name="prices[]" class="form-control text-right" autocomplete="off"/></td>
                                                 <td class="text-center"><a class="btn btn-danger" style="cursor: pointer;" onclick="deleteRow('{{ $idx }}')"><i class="fas fa-minus-circle text-white"></i></a></td>
                                             </tr>
                                             @php( $idx++ )

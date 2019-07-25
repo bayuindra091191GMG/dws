@@ -182,8 +182,8 @@
             }
 
             sbAdd += "<select/></td>";
-            sbAdd += "<td><input type='text' id='weight_" + i + "' name='weights[]' class='form-control text-right' /></td>";
-            sbAdd += "<td><input type='text' id='price_" + i + "' name='prices[]' class='form-control text-right' /></td>";
+            sbAdd += "<td><input type='text' id='weight_" + i + "' name='weights[]' class='form-control text-right' autocomplete='off' /></td>";
+            sbAdd += "<td><input type='text' id='price_" + i + "' name='prices[]' class='form-control text-right' autocomplete='off' /></td>";
             sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + i + ")'><i class='fas fa-minus-circle text-white'></a></td>";
 
             $('#category_table').append(sbAdd);

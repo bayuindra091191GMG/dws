@@ -178,7 +178,7 @@ class UserController extends Controller
      */
     public function show()
     {
-        error_log("exception");
+        //error_log("exception");
         try{
             $user = auth('api')->user();
             $users = User::where('email', $user->email)->with('company', 'addresses')->first();
@@ -186,6 +186,7 @@ class UserController extends Controller
             return Response::json($users, 200);
         }
         catch(\Exception $ex){
+            Log::error('Api/UserController - show error EX: '. $ex);
             return Response::json([
                 'error'   => $ex,
             ], 500);
