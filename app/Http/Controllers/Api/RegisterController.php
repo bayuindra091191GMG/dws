@@ -214,7 +214,6 @@ class RegisterController extends Controller
     public function isEmailExist(Request $request){
         $inputEmail = $request->input('email');
         $isEmailExists = User::where('email', $inputEmail)
-            ->where('status_id', 1)
             ->exists();
 
         if($isEmailExists){
@@ -232,7 +231,6 @@ class RegisterController extends Controller
     public function isPhoneExist(Request $request){
         $inputPhone = $request->input('phone');
         $isPhoneExists = User::where('phone', $inputPhone)
-            ->where('status_id', 1)
             ->exists();
 
         if($isPhoneExists){
