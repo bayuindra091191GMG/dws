@@ -9,6 +9,7 @@
     <meta name="author" content="zytheme"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Digital Waste Solution">
+    <meta name="google-site-verification" content="WkXLUkwjH3SQuV57nlekJLEaLjhTbNaC5fNh01rw0N4" />
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         .img-banner-responsive{
