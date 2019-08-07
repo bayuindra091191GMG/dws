@@ -26,7 +26,7 @@ class TransactionHeaderController extends Controller
 {
     /**
      * Function to get the Transaction Data Details.
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -512,57 +512,67 @@ class TransactionHeaderController extends Controller
      */
     public function confirmTransactionByUserAntarSendiri(Request $request)
     {
-        $rules = array(
-            'transaction_no' => 'required'
-        );
+        try{
+            Log::info('User Confirm Transaction Antar Sendiri!');
 
-        $data = $request->json()->all();
+            $rules = array(
+                'transaction_no' => 'required'
+            );
 
-        $validator = Validator::make($data, $rules);
+            $data = $request->json()->all();
 
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
+            $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
+            $header->status_id = 10;
+            $header->save();
+
+            //Send notification to
+            //Admin Wastebank
+            //send notification
+            $userName = $header->user->first_name." ".$header->user->last_name;
+            $title = "Digital Waste Solution";
+            $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
+            $data = array(
+                'type_id'           => '2',
+                'is_confirm'        => '1',
+                'transaction_no'    => $data['transaction_no'],
+                'name'              => $userName
+            );
+
+            // Tambah poin ke waste source
+            $user = $header->user;
+            $newSaldo = $user->point + $header->total_price;
+            $user->point = $newSaldo;
+            $user->save();
+
+            PointHistory::create([
+                'user_id'           => $header->user_id,
+                'type'              => $header->transaction_type_id,
+                'transaction_id'    => $header->id,
+                'type_transaction'  => "Kredit",
+                'amount'            => $header->total_price,
+                'saldo'             => $newSaldo,
+                'description'       => "Point dari transaksi nomor ".$header->transaction_no,
+                'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            ]);
+
+            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+
+            return Response::json([
+                'message' => "Success Confirming Transaction!",
+            ], 200);
         }
-
-        $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-        $header->status_id = 10;
-        $header->save();
-
-        //Send notification to
-        //Admin Wastebank
-        //send notification
-        $userName = $header->user->first_name." ".$header->user->last_name;
-        $title = "Digital Waste Solution";
-        $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
-        $data = array(
-            'type_id'           => '2',
-            'is_confirm'        => '1',
-            'transaction_no'    => $data['transaction_no'],
-            'name'              => $userName
-        );
-
-        // Tambah poin ke waste source
-        $user = $header->user;
-        $newSaldo = $user->point + $header->total_price;
-        $user->point = $newSaldo;
-        $user->save();
-
-        PointHistory::create([
-            'user_id'           => $header->user_id,
-            'type'              => $header->transaction_type_id,
-            'transaction_id'    => $header->id,
-            'type_transaction'  => "Kredit",
-            'amount'            => $header->total_price,
-            'saldo'             => $newSaldo,
-            'description'       => "Point dari transaksi nomor ".$header->transaction_no,
-            'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
-        ]);
-
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
-
-        return Response::json([
-            'message' => "Success Confirming Transaction!",
-        ], 200);
+        catch (\Exception $ex){
+            Log::error("Api/TransactionHeaderController - confirmTransactionByUserAntarSendiri error: ". $ex);
+            return Response::json([
+                'ex' => "ex " . $ex
+            ], 500);
+        }
     }
 
     /**

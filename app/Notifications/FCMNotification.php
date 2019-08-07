@@ -94,6 +94,9 @@ class FCMNotification
                         'Authorization' => 'key=' .env('FCM_SERVER_KEY'),
                     ],
                 ]);
+
+                Log::info($body. ' - userId: '.$userId);
+
 //            dd($data_string);
                 $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [
                     'body' => $data_string

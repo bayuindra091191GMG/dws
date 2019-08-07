@@ -8,6 +8,7 @@ use App\Models\DwsWasteCategoryData;
 use App\Models\MasaroWasteCategoryData;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use App\Notifications\FCMNotification;
 use App\Transformer\TransactionTransformer;
 use Carbon\Carbon;
@@ -30,8 +31,16 @@ class TransactionHeaderController extends Controller
     }
 
     public function getIndex(Request $request){
-        $transations = TransactionHeader::where('transaction_type_id', 2);
-        return DataTables::of($transations)
+        $transactions = TransactionHeader::where('transaction_type_id', 2);
+
+        if(!empty($request->input('waste_bank_id'))){
+            $wasteBankId = intval($request->input('waste_bank_id'));
+            if($wasteBankId !== -1){
+                $transactions = $transactions->where('waste_bank_id', $wasteBankId);
+            }
+        }
+
+        return DataTables::of($transactions)
             ->setTransformer(new TransactionTransformer)
             ->make(true);
     }
@@ -45,12 +54,22 @@ class TransactionHeaderController extends Controller
     {
         // Check superadmin & waste category type
         $admin = Auth::guard('admin')->user();
+        $wasteBank = null;
         $adminCategoryType = 'all';
         if($admin->is_super_admin === 0){
+            if(!empty($admin->waste_bank_id)){
+                $wasteBank = WasteBank::find($admin->waste_bank_id);
+            }
+
             $adminCategoryType = $admin->waste_bank->waste_category_id === 1 ? 'dws' : 'masaro';
         }
 
-        return view('admin.transaction.antar_sendiri.index', compact('adminCategoryType'));
+        $data = [
+            'wasteBank'         => $wasteBank,
+            'adminCategoryType' => $adminCategoryType
+        ];
+
+        return view('admin.transaction.antar_sendiri.index')->with($data);
     }
 
     /**

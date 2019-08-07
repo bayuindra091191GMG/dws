@@ -6,7 +6,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h3>DAFTAR TRANSAKSI ANTAR SENDIRI</h3>
+                        <h3>DAFTAR TRANSAKSI ANTAR SENDIRI @if(!empty($wasteBank))PENGOLAHAN SAMPAH {{ $wasteBank->name }} @endif</h3>
                         @include('partials.admin._messages')
                     </div>
                 </div>
@@ -70,7 +70,12 @@
             processing: true,
             serverSide: true,
             pageLength: 25,
-            ajax: '{!! route('datatables.antar_sendiri.transactions') !!}',
+            ajax: {
+                url: '{!! route('datatables.antar_sendiri.transactions') !!}',
+                data: {
+                    'waste_bank_id': '{{ !empty($wasteBank) ? $wasteBank->id : -1 }}',
+                }
+            },
             order: [ [0, 'desc'] ],
             columns: [
                 { data: 'date', name: 'date', class: 'text-center',

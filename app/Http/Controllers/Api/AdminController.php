@@ -114,6 +114,17 @@ class AdminController extends Controller
                 ], 200);
             }
             else{
+                //send notification to admin browser and user device
+                $userName = $header->user->first_name." ".$header->user->last_name;
+                $title = "Digital Waste Solution";
+                $body = "Admin Scan QR Code User";
+                $data = array(
+                    'type_id' => '2',
+                    'transaction_no' => $header->transaction_no,
+                    'name' => $userName
+                );
+
+                FCMNotification::SendNotification($user->id, 'app', $title, $body, $data);
                 return Response::json([
                     'message' => "Transaksi sudah di assign ke sumber sampah lain",
                 ], 200);
