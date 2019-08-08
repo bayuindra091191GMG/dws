@@ -798,6 +798,7 @@ class TransactionHeaderController extends Controller
                     'transaction_no'    => $header->transaction_no,
                     'waste_bank'        => $header->waste_bank ?? null,
                     'waste_collector'   => $header->waste_collector ?? null,
+                    'waste_source'      => !empty($header->user_id) ? $header->user->first_name. ' '. $header->user->last_name : '',
                     'total_weight'      => $header->total_weight / 1000,
                     'total_point'       => $header->total_price,
                     'status'            => $header->status_id,
