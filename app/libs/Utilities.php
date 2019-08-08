@@ -134,4 +134,15 @@ class Utilities
 
         return (double) $valueStr2;
     }
+
+    public static function removeZeroDigitsFromDecimal($number, $decimal_sep)
+    {
+        $explode_num = explode($decimal_sep, $number);
+        if (is_array($explode_num) && isset($explode_num[count($explode_num)-1]) && intval($explode_num[count($explode_num)-1]) === 0) {
+            unset($explode_num[count($explode_num)-1]);
+            $number = implode($decimal_sep, $explode_num);
+        }
+        unset($explode_num);
+        return (string) $number;
+    }
 }

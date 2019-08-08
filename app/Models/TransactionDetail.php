@@ -7,11 +7,12 @@
 
 namespace App\Models;
 
+use App\libs\Utilities;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class TransactionDetail
- * 
+ *
  * @property int $id
  * @property int $transaction_header_id
  * @property int $dws_category_id
@@ -20,7 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $price
  * @property string $image_path
  * @property string $note
- * 
+ *
  * @property \App\Models\DwsWasteCategoryData $dws_waste_category_data
  * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
  * @property \App\Models\TransactionHeader $transaction_header
@@ -67,11 +68,13 @@ class TransactionDetail extends Eloquent
 
     public function getWeightKgStringAttribute(){
         $kg = $this->attributes['weight'] / 1000;
-        return number_format($kg, 2, ",", ".");
+        $tmp = number_format($kg, 4, ",", ".");
+        return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
     }
 
     public function getPriceStringAttribute(){
-        return number_format($this->attributes['price'], 0, ",", ".");
+        $tmp = number_format($this->attributes['price'], 4, ",", ".");
+        return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
     }
 
     public function getImagePathAttribute($value){

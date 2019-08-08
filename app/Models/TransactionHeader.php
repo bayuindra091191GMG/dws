@@ -12,7 +12,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class TransactionHeader
- * 
+ *
  * @property int $id
  * @property string $transaction_no
  * @property \Carbon\Carbon $date
@@ -36,7 +36,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $point_user
  * @property int $point_waste_collector
  * @property string $image_path
- * 
+ *
  * @property \App\Models\AdminUser $admin_user
  * @property \App\Models\User $user
  * @property \App\Models\Status $status
@@ -130,11 +130,11 @@ class TransactionHeader extends Eloquent
     }
 
     public function getTotalWeightKgStringAttribute(){
-        return number_format($this->attributes['total_weight'] / 1000, 2, ",", ".");
+        return number_format($this->attributes['total_weight'] / 1000, 4, ",", ".");
     }
 
     public function getTotalPriceStringAttribute(){
-        return number_format($this->attributes['total_price'], 0, ",", ".");
+        return number_format($this->attributes['total_price'], 4, ",", ".");
     }
 
 	public function admin_user()

@@ -175,7 +175,8 @@
                 maximumValue: '999999',
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
-                decimalPlaces: 0,
+                decimalPlaces: 4,
+                allowDecimalPadding: false,
                 modifyValueOnWheel: false
             });
 
@@ -184,7 +185,8 @@
                 maximumValue: '9999999999',
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
-                decimalPlaces: 0,
+                decimalPlaces: 4,
+                allowDecimalPadding: false,
                 modifyValueOnWheel: false
             });
 
