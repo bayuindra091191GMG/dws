@@ -65,16 +65,8 @@ class DwsWasteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'golongan'      => 'required',
-            'price'         => 'required',
-            'description'   => 'required',
+            'name'          => 'required'
         ]);
-        $image = $request->file('img_path');
-
-        if($image == null){
-            return back()->withErrors("Image required")->withInput($request->all());
-        }
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
@@ -82,24 +74,28 @@ class DwsWasteController extends Controller
 
         $dwsWaste = DwsWasteCategoryData::create([
             'name'          => $request->input('name'),
-            'golongan'      => $request->input('golongan'),
-            'price'         => $request->input('price'),
-            'description'   => $request->input('description'),
-            'created_at'    => Carbon::now('Asia/Jakarta'),
-            'created_by'    => $user->id
+            'golongan'      => $request->filled('golongan') ? $request->input('golongan') : '',
+            'price'         => $request->filled('price') ? $request->input('price') : 0,
+            'description'   => $request->filled('description') ? $request->input('description') : '',
+            'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            'created_by'    => $user->id,
+            'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+            'updated_by'    => $user->id
         ]);
 
-        //Save Image
-        $img = Image::make($image);
-        $extStr = $img->mime();
-        $ext = explode('/', $extStr, 2);
+        // Save Image
+        if($request->hasFile('img_path')){
+            $img = Image::make($request->file('img_path'));
+            $extStr = $img->mime();
+            $ext = explode('/', $extStr, 2);
 
-        $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+            $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
-        $img->save('../public_html/storage/admin/dwscategory/'. $filename, 75);
+            $img->save('../public_html/storage/admin/dwscategory/'. $filename, 75);
 
-        $dwsWaste->img_path = $filename;
-        $dwsWaste->save();
+            $dwsWaste->img_path = $filename;
+            $dwsWaste->save();
+        }
 
         Session::flash('success', 'Success Creating new Dws Waste Category!');
         return redirect()->route('admin.dws-wastes.index');
@@ -153,12 +149,8 @@ class DwsWasteController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'golongan'      => 'required',
-            'price'         => 'required',
-            'description'   => 'required',
+            'name'          => 'required'
         ]);
-        $image = $request->file('img_path');
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
@@ -166,18 +158,25 @@ class DwsWasteController extends Controller
 
         $dwsWaste = DwsWasteCategoryData::find($request->input('id'));
         $dwsWaste->name = $request->input('name');
-        $dwsWaste->golongan = $request->input('golongan');
-        $dwsWaste->price = $request->input('price');
-        $dwsWaste->description = $request->input('description');
-        $dwsWaste->updated_at = Carbon::now('Asia/Jakarta');
+        $dwsWaste->golongan = $request->filled('golongan') ? $request->input('golongan'): '';
+        $dwsWaste->price = $request->input('price') ? $request->input('price'): 0;
+        $dwsWaste->description = $request->input('description') ? $request->input('description'): '';
+        $dwsWaste->updated_at = Carbon::now('Asia/Jakarta')->toDateTimeString();
         $dwsWaste->updated_by = $user->id;
         $dwsWaste->save();
 
-        //Save Image
-        if($image != null) {
+        // Save Image
+        if($request->hasFile('img_path')){
+            // Delete old image
+            if(!empty($dwsWaste->img_path)){
+                $oldPath = public_path('storage/admin.dwscategory'. $dwsWaste->img_path);
+                if(file_exists($oldPath)) unlink($oldPath);
+            }
+
+            $image = $request->file('img_path');
             $img = Image::make($image);
             $filename = $dwsWaste->img_path;
-            $img->save('../public_html/storage/admin/dwscategory/' . $filename, 75);
+            $img->save(public_path('storage/storage/admin/dwscategory/'. $filename), 75);
         }
 
         Session::flash('success', 'Success Updating new Dws Waste Category!');
