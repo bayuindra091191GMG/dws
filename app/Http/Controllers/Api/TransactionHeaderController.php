@@ -528,40 +528,43 @@ class TransactionHeaderController extends Controller
             }
 
             $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-            $header->status_id = 10;
-            $header->save();
 
-            //Send notification to
-            //Admin Wastebank
-            //send notification
-            $userName = $header->user->first_name." ".$header->user->last_name;
-            $title = "Digital Waste Solution";
-            $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
-            $data = array(
-                'type_id'           => '2',
-                'is_confirm'        => '1',
-                'transaction_no'    => $data['transaction_no'],
-                'name'              => $userName
-            );
+            if($header->status_id === 13){
+                $header->status_id = 10;
+                $header->save();
 
-            // Tambah poin ke waste source
-            $user = $header->user;
-            $newSaldo = $user->point + $header->total_price;
-            $user->point = $newSaldo;
-            $user->save();
+                //Send notification to
+                //Admin Wastebank
+                //send notification
+                $userName = $header->user->first_name." ".$header->user->last_name;
+                $title = "Digital Waste Solution";
+                $body = "User Mengkonfirmasi Transaksi Antar Sendiri";
+                $data = array(
+                    'type_id'           => '2',
+                    'is_confirm'        => '1',
+                    'transaction_no'    => $data['transaction_no'],
+                    'name'              => $userName
+                );
 
-            PointHistory::create([
-                'user_id'           => $header->user_id,
-                'type'              => $header->transaction_type_id,
-                'transaction_id'    => $header->id,
-                'type_transaction'  => "Kredit",
-                'amount'            => $header->total_price,
-                'saldo'             => $newSaldo,
-                'description'       => "Point dari transaksi nomor ".$header->transaction_no,
-                'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
-            ]);
+                // Tambah poin ke waste source
+                $user = $header->user;
+                $newSaldo = $user->point + $header->total_price;
+                $user->point = $newSaldo;
+                $user->save();
 
-            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+                PointHistory::create([
+                    'user_id'           => $header->user_id,
+                    'type'              => $header->transaction_type_id,
+                    'transaction_id'    => $header->id,
+                    'type_transaction'  => "Kredit",
+                    'amount'            => $header->total_price,
+                    'saldo'             => $newSaldo,
+                    'description'       => "Point dari transaksi nomor ".$header->transaction_no,
+                    'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                ]);
+
+                $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+            }
 
             return Response::json([
                 'message' => "Success Confirming Transaction!",
@@ -638,22 +641,25 @@ class TransactionHeaderController extends Controller
         }
 
         $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-        $header->status_id = 12;
-        $header->save();
 
-        //Send notification to
-        //Admin Wastebank
-        //send notification
-        $userName = $header->user->first_name." ".$header->user->last_name;
-        $title = "Digital Waste Solution";
-        $body = "User Membatalkan Transaksi Antar Sendiri";
-        $data = array(
-            'type_id' => '2',
-            'is_confirm' => '0',
-            'transaction_no' => $data['transaction_no'],
-            'name' => $userName
-        );
-        $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+        if($header->status_id === 13){
+            $header->status_id = 12;
+            $header->save();
+
+            //Send notification to
+            //Admin Wastebank
+            //send notification
+            $userName = $header->user->first_name." ".$header->user->last_name;
+            $title = "Digital Waste Solution";
+            $body = "User Membatalkan Transaksi Antar Sendiri";
+            $data = array(
+                'type_id' => '2',
+                'is_confirm' => '0',
+                'transaction_no' => $data['transaction_no'],
+                'name' => $userName
+            );
+            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+        }
 
         return Response::json([
             'message' => "Success Cancelling Transaction!",
