@@ -6,11 +6,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
+use App\Models\TransactionHeader;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -58,19 +60,43 @@ class ReportController extends Controller
         }
 
         $nowExcel = Carbon::now('Asia/Jakarta');
-        $filenameExcel = 'TRANSACTION_REPORT_' . $nowExcel->toDateTimeString(). '.xlsx';
+        $filenameExcel = 'LAPORAN_TRANSAKSI_' . $nowExcel->toDateTimeString(). '.xlsx';
 
         $adminUser = Auth::guard('admin')->user();
+
         $wasteBankId = 0;
         if($adminUser->is_super_admin !== 1 && !empty($adminUser->waste_bank_id)){
             $wasteBankId = $adminUser->waste_bank_id;
         }
 
+        $transactions = DB::table('transaction_headers')
+            ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+
+//        $transactions = TransactionHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+
+        $transactionTypeId = (int) $request->input('transaction_type');
+        if($transactionTypeId != 0){
+            $transactions = $transactions->where('transaction_type_id', $transactionTypeId);
+        }
+
+        $wasteCategoryId = (int) $request->input('waste_category');
+        if($wasteCategoryId != 0){
+            $transactions = $transactions->where('waste_category_id', $wasteCategoryId);
+        }
+
+        if($wasteBankId != 0){
+            $transactions = $transactions->where('waste_bank_id', $wasteBankId);
+        }
+
+        if($transactions->doesntExist()){
+            return redirect()->back()->withErrors('Transaksi tidak ditemukan!', 'default')->withInput($request->all());
+        }
+
         return (new TransactionExport(
             $start->toDateTimeString(),
             $end->toDateTimeString(),
-            (int) $request->input('transaction_type'),
-            (int) $request->input('waste_category'),
+            $transactionTypeId,
+            $wasteCategoryId,
             $wasteBankId
         ))->download($filenameExcel);
     }

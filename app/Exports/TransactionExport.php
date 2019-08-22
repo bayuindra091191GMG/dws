@@ -43,6 +43,8 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
      */
     public function view(): View
     {
+        error_log($this->transactionType. '_'. $this->wasteCategory. '_'. $this->wasteBankId);
+
         $transactions = TransactionHeader::whereBetween('date', array($this->dateStart, $this->dateEnd));
 
         $transactionTypeId = $this->transactionType;
@@ -50,8 +52,8 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
             $transactions = $transactions->where('transaction_type_id', $transactionTypeId);
         }
 
-        $wasteCategoryId = $this->transactionType;
-        if($transactionTypeId != 0){
+        $wasteCategoryId = $this->wasteCategory;
+        if($wasteCategoryId != 0){
             $transactions = $transactions->where('waste_category_id', $wasteCategoryId);
         }
 
@@ -65,6 +67,8 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
         $totalWeight = $totalWeight / 1000;
 
         $totalPrice = $transactions->sum('total_price');
+
+        error_log($transactions->count());
 
         $this->counter = $transactions->count() * 2;
 
