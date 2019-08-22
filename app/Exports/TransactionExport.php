@@ -22,17 +22,20 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
     private $dateEnd;
     private $transactionType;
     private $wasteCategory;
+    private $wasteBankId;
     private $counter = 0;
 
     public function __construct(string $dateStart,
                                 string $dateEnd,
                                 int $transactionType,
-                                int $wasteCategory)
+                                int $wasteCategory,
+                                int $wasteBankId)
     {
         $this->dateStart = $dateStart;
         $this->dateEnd = $dateEnd;
         $this->transactionType = $transactionType;
         $this->wasteCategory = $wasteCategory;
+        $this->wasteBankId = $wasteBankId;
     }
 
     /**
@@ -50,6 +53,10 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
         $wasteCategoryId = $this->transactionType;
         if($transactionTypeId != 0){
             $transactions = $transactions->where('waste_category_id', $wasteCategoryId);
+        }
+
+        if($this->wasteBankId != 0){
+            $transactions = $transactions->where('waste_bank_id', $this->wasteBankId);
         }
 
         $transactions = $transactions->orderByDesc('date')
@@ -92,9 +99,9 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                $this->counter += 10;
+                $this->counter *= 2;
 
-                $column1 = 'D2:F'. $this->counter;
+                $column1 = 'E2:G'. $this->counter;
                 $event->sheet->getDelegate()->getStyle($column1)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             },
         ];

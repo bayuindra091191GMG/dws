@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -59,11 +60,18 @@ class ReportController extends Controller
         $nowExcel = Carbon::now('Asia/Jakarta');
         $filenameExcel = 'TRANSACTION_REPORT_' . $nowExcel->toDateTimeString(). '.xlsx';
 
+        $adminUser = Auth::guard('admin')->user();
+        $wasteBankId = 0;
+        if($adminUser->is_super_admin !== 1 && !empty($adminUser->waste_bank_id)){
+            $wasteBankId = $adminUser->waste_bank_id;
+        }
+
         return (new TransactionExport(
             $start->toDateTimeString(),
             $end->toDateTimeString(),
             (int) $request->input('transaction_type'),
-            (int) $request->input('waste_category')
+            (int) $request->input('waste_category'),
+            $wasteBankId
         ))->download($filenameExcel);
     }
 }
