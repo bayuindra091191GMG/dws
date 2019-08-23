@@ -687,34 +687,37 @@ class TransactionHeaderController extends Controller
         }
 
         $header = TransactionHeader::where('transaction_no', $data['transaction_no'])->first();
-        $header->status_id = 16;
-        $header->save();
 
-        // Update pickup status
-        $wasteCollectorUser = WasteCollectorUser::where('user_id', $header->user_id)
-            ->where('waste_collector_id', $header->waste_collector_id)
-            ->first();
+        if($header->status_id === 15){
+            $header->status_id = 16;
+            $header->save();
 
-        $wasteCollectorUserStatus = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
-            ->first();
-        $wasteCollectorUserStatus->status_id = 16;
-        $wasteCollectorUserStatus->save();
+            // Update pickup status
+            $wasteCollectorUser = WasteCollectorUser::where('user_id', $header->user_id)
+                ->where('waste_collector_id', $header->waste_collector_id)
+                ->first();
 
-        //Send notification to
-        //Driver, Admin Wastebank
-        $title = "Digital Waste Solution";
-        $body = "User Mengkonfirmasi Transaksi Rutin Pickup";
-        $data = array(
-            "data" => [
-                'type_id' => '1',
-                'is_confirm' => '1',
-                'transaction_no' => $data['transaction_no']
-            ]
-        );
-        //Push Notification to Collector App.
-        FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
-        //Push Notification to Admin.
-        FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+            $wasteCollectorUserStatus = WasteCollectorUserStatus::where('waste_collector_user_id', $wasteCollectorUser->id)
+                ->first();
+            $wasteCollectorUserStatus->status_id = 16;
+            $wasteCollectorUserStatus->save();
+
+            //Send notification to
+            //Driver, Admin Wastebank
+            $title = "Digital Waste Solution";
+            $body = "User Mengkonfirmasi Transaksi Rutin Pickup";
+            $data = array(
+                "data" => [
+                    'type_id' => '1',
+                    'is_confirm' => '1',
+                    'transaction_no' => $data['transaction_no']
+                ]
+            );
+            //Push Notification to Collector App.
+            FCMNotification::SendNotification($header->waste_collector_id, 'collector', $title, $body, $data);
+            //Push Notification to Admin.
+            FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+        }
 
         return Response::json([
             'message' => "Success Confirming Transaction!",
