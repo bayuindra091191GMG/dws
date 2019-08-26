@@ -165,7 +165,7 @@
                                             <th class="text-center">Kode</th>
                                             <th class="text-center">Nama</th>
                                             <th class="text-center">Berat (kg)</th>
-                                            <th class="text-center">Harga (Rp)</th>
+                                            <th class="text-center">Harga per kg (Rp)</th>
                                         </tr>
                                         </thead>
                                         <tbody>

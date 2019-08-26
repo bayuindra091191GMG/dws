@@ -309,3 +309,4 @@ Route::get('/request-verification/{email}', 'Auth\RegisterController@RequestVeri
 
 // Script
 Route::get('/script/user/confirm/antar-sendiri/{trx_id}', 'Admin\ScriptController@antarSendiriUserConfirm');
+Route::get('/script/refresh-point', 'Admin\ScriptController@refreshPointTransaction');

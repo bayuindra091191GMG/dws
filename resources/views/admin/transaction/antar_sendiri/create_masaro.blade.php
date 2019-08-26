@@ -93,7 +93,7 @@
                                         <tr>
                                             <th scope="col">Kategori</th>
                                             <th scope="col">Berat (kg)</th>
-                                            <th scope="col">Harga</th>
+                                            <th scope="col">Harga per kg</th>
                                             <th scope="col">Tindakan</th>
                                         </tr>
                                         </thead>

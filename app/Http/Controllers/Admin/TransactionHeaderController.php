@@ -216,9 +216,13 @@ class TransactionHeaderController extends Controller
         $idx = 0;
         foreach ($categories as $category){
             $floatWeight = Utilities::toFloat($weights[$idx]);
+            $grWeight = $floatWeight * 1000;
+            $roundedGrWeight = round($grWeight);
+            $totalWeight += $roundedGrWeight;
+
             $floatPrice = Utilities::toFloat($prices[$idx]);
-            $totalWeight += (double) $floatWeight;
-            $totalPrice += (double) $floatPrice;
+            $subtotalPrice = $floatWeight * $floatPrice;
+            $totalPrice += $subtotalPrice;
             $idx++;
         }
 
@@ -244,7 +248,7 @@ class TransactionHeaderController extends Controller
             'transaction_no'        => $code,
             'date'                  => $date->toDateTimeString(),
             'transaction_type_id'   => 2,
-            'total_weight'          => $totalWeight * 1000,
+            'total_weight'          => $totalWeight,
             'total_price'           => $totalPrice,
             'waste_category_id'     => $categoryType,
             'waste_bank_id'         => $user->waste_bank_id,
@@ -434,9 +438,13 @@ class TransactionHeaderController extends Controller
         $idx = 0;
         foreach ($categories as $category){
             $floatWeight = Utilities::toFloat($weights[$idx]);
+            $grWeight = $floatWeight * 1000;
+            $roundedGrWeight = round($grWeight);
+            $totalWeight += $roundedGrWeight;
+
             $floatPrice = Utilities::toFloat($prices[$idx]);
-            $totalWeight += (double) $floatWeight;
-            $totalPrice += (double) $floatPrice;
+            $subtotalPrice = $floatWeight * $floatPrice;
+            $totalPrice += $subtotalPrice;
             $idx++;
         }
 
@@ -447,7 +455,7 @@ class TransactionHeaderController extends Controller
 
         $trxHeader = TransactionHeader::find($id);
         $trxHeader->date = $date;
-        $trxHeader->total_weight = $totalWeight * 1000;
+        $trxHeader->total_weight = $totalWeight;
         $trxHeader->total_price = $totalPrice;
         $trxHeader->notes = $request->input('notes');
         $trxHeader->updated_at = $now->toDateTimeString();
