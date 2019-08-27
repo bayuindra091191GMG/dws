@@ -41,35 +41,43 @@ class ScriptController extends Controller
     }
 
     public function refreshPointTransaction(){
-        $headers = TransactionHeader::where('created_at', '>', '2019-08-07')->get();
-        foreach ($headers as $header){
-            $oldPrice = $header->total_price;
-            $weight = round($header->total_weight);
-            $newPoint = ($weight / 1000) * $oldPrice;
+        try{
+            $headers = TransactionHeader::where('created_at', '>', '2019-08-07')
+                ->where('waste_bank_id', 6)
+                ->get();
 
-            // Edit history
-            $history = PointHistory::where('transaction_id', $header->id)->first();
-            if(!empty($history)){
-                $oldSaldo = $history->saldo;
-                $oldAmount = $history->amount;
-                $history->saldo = $oldSaldo - $oldAmount + $newPoint;
-                $history->amount = $newPoint;
-                $history->save();
+            foreach ($headers as $header){
+                $oldPrice = $header->total_price;
+                $weight = round($header->total_weight);
+                $newPoint = ($weight / 1000) * $oldPrice;
+
+                // Edit history
+                $history = PointHistory::where('transaction_id', $header->id)->first();
+                if(!empty($history)){
+                    $oldSaldo = $history->saldo;
+                    $oldAmount = $history->amount;
+                    $history->saldo = $oldSaldo - $oldAmount + $newPoint;
+                    $history->amount = $newPoint;
+                    $history->save();
+                }
+
+                $user = $header->user;
+                if(!empty($user)){
+                    $user->point -= $oldPrice;
+                    $user->point += $newPoint;
+                    $user->save();
+                }
+
+                $header->total_weight = round($header->total_weight);
+                $header->total_price = round($newPoint, 4);
+                $header->point_user = $newPoint;
+                $header->save();
             }
 
-            $user = $header->user;
-            if(!empty($user)){
-                $user->point -= $oldPrice;
-                $user->point += $newPoint;
-                $user->save();
-            }
-
-            $header->total_weight = round($header->total_weight);
-            $header->total_price = round($newPoint, 4);
-            $header->point_user = $newPoint;
-            $header->save();
+            return 'SCRIPT SUCCESS!!';
         }
-
-        return 'SCRIPT SUCCESS!!';
+        catch (\Exception $ex){
+            return $ex;
+        }
     }
 }
