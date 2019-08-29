@@ -40,6 +40,42 @@ class ScriptController extends Controller
         return 'SCRIPT SUCCESS!!';
     }
 
+    public function deleteTransactionAntarSendiri(int $trx_id){
+        try{
+            $header = TransactionHeader::find($trx_id);
+            if(empty($header)){
+                return 'ALREADY DELETED';
+            }
+
+            if($header->status_id === 10){
+                // Decrease user point
+                $user = $header->user;
+                $newSaldo = $user->point - $header->total_price;
+                $user->point = $newSaldo;
+                $user->save();
+
+                // Delete history
+                $history = PointHistory::where('transaction_id', $header->id)->first();
+                if(!empty($history)){
+                    $history->delete();
+                }
+            }
+
+            // Delete transaction details
+            foreach ($header->transaction_details as $detail){
+                $detail->delete();
+            }
+
+            // Delete header
+            $header->delete();
+
+            return 'DELETE SUCCESS!!';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
+
     public function refreshPointTransaction(){
         try{
             $headers = TransactionHeader::where('created_at', '>', '2019-08-07')

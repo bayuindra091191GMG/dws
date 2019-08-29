@@ -304,9 +304,10 @@ Route::get('/select-companies', 'Admin\CompanyController@getCompanies')->name('s
 // Third Party API
 Route::get('/update-currency', 'Admin\CurrencyController@getCurrenciesUpdate')->name('update-currencies');
 
-// Email Aauth
+// Email Auth
 Route::get('/request-verification/{email}', 'Auth\RegisterController@RequestVerification')->name('request-verification');
 
 // Script
 Route::get('/script/user/confirm/antar-sendiri/{trx_id}', 'Admin\ScriptController@antarSendiriUserConfirm');
 Route::get('/script/refresh-point', 'Admin\ScriptController@refreshPointTransaction');
+Route::get('/script/delete/antar-sendiri/{trx_id}', 'Admin\ScriptController@deleteTransactionAntarSendiri');
