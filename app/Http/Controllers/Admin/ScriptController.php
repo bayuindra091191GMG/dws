@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PointHistory;
+use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use Carbon\Carbon;
 
@@ -108,6 +109,31 @@ class ScriptController extends Controller
                 $header->total_price = round($newPoint, 4);
                 $header->point_user = $newPoint;
                 $header->save();
+            }
+
+            return 'SCRIPT SUCCESS!!';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function changeMasaroIdIndex(){
+        try{
+            $details = TransactionDetail::all();
+
+            foreach ($details as $detail){
+                if(!empty($detail->masaro_category_id)){
+                    if($detail->masaro_category_id === 3)
+                    {
+                        $detail->masaro_category_id = 4;
+                    }
+                    elseif ($detail->masaro_category_id === 4){
+                        $detail->masaro_category_id = 3;
+                    }
+
+                    $detail->save();
+                }
             }
 
             return 'SCRIPT SUCCESS!!';

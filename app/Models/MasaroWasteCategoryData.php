@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 26 Dec 2018 05:43:16 +0000.
+ * Date: Mon, 02 Sep 2019 09:27:27 +0700.
  */
 
 namespace App\Models;
@@ -11,10 +11,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class MasaroWasteCategoryData
- * 
+ *
  * @property int $id
- * @property string $name
  * @property string $code
+ * @property string $name
+ * @property string $examples
  * @property string $description
  * @property string $img_path
  * @property float $price
@@ -23,8 +24,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  *
- * @property \App\Models\AdminUser $createdBy
- * @property \App\Models\AdminUser $updatedBy
+ * @property \App\Models\AdminUser $admin_user
+ * @property \Illuminate\Database\Eloquent\Collection $masaro_wastes
  *
  * @package App\Models
  */
@@ -37,15 +38,14 @@ class MasaroWasteCategoryData extends Eloquent
 	];
 
 	protected $fillable = [
+		'code',
 		'name',
-        'code',
+		'examples',
 		'description',
 		'img_path',
 		'price',
 		'created_by',
-		'updated_by',
-        'created_at',
-        'updated_at'
+		'updated_by'
 	];
 
     public function createdBy()
@@ -57,4 +57,9 @@ class MasaroWasteCategoryData extends Eloquent
     {
         return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
     }
+
+	public function masaro_wastes()
+	{
+		return $this->hasMany(\App\Models\MasaroWaste::class, 'masaro_waste_category_datas_id');
+	}
 }
