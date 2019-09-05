@@ -34,6 +34,16 @@ class HomeController extends Controller
         return view('frontend.home');
     }
 
+    public function syarat()
+    {
+        return view('frontend.syarat');
+    }
+    public function privasi()
+    {
+        return view('frontend.privasi');
+    }
+
+
     public function testNotif(){
         return view('admin.test-notif');
     }

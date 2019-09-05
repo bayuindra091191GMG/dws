@@ -19,6 +19,8 @@ Auth::routes();
 
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
+Route::get('/syarat', 'Frontend\HomeController@syarat')->name('syarat');
+Route::get('/privasi', 'Frontend\HomeController@privasi')->name('privasi');
 Route::get('/test-email', 'Frontend\HomeController@testEmail')->name('testEmail');
 Route::get('/test-notif', 'Frontend\HomeController@testNotif')->name('testNotif');
 Route::get('/test-notif-send', 'Frontend\HomeController@testNotifSend')->name('testNotifSend');
