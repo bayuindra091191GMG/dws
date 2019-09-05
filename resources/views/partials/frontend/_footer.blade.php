@@ -10,9 +10,10 @@
                     <div class="mb-3">
                         <span  style="font-size: 16px;">Untuk pertanyaan lebih lanjut silakan menghubungi kami</span>
                     </div>
-                    <div>
-                        <h4 style ="color: #3dcc9c; font-weight: bold;">Support@dws-solusi.net</h4>
-                    </div>
+                    <h4 style ="color: #3dcc9c; font-weight: bold;">Support@dws-solusi.net</h4>
+                    <br/>
+                    <a href="{{ route('syarat') }}" style="color: #3dcc9c;">Terms and Condition</a><br/>
+                    <a href="{{ route('privasi') }}" style="color: #3dcc9c;">Privacy Policy</a>
                 </div>
 
             </div>
@@ -55,6 +56,12 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <p style="color: #3dcc9c; font-weight: bold; font-size: 23px;">Support@dws-solusi.net</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <a href="{{ route('syarat') }}" style="color: #3dcc9c;">Terms and Condition</a><br/>
+                    <a href="{{ route('privasi') }}" style="color: #3dcc9c;">Privacy Policy</a>
                 </div>
             </div>
             <div class="row">

@@ -3,15 +3,14 @@
 @section('content')
 
 <section class="mb-5 pb-5">
-    <div class="container text-justify">
+    <div class="container">
         <div class="row my-5">
-            <div class="col-5">
-                <h4>SYARAT & KETENTUAN PENGGUNAAN APLIKASI GO 4.0 WASTE
-                </h4>
+            <div class="col-12 text-center">
+                <h4>SYARAT & KETENTUAN PENGGUNAAN APLIKASI<br/>
+                    GO 4.0 WASTE</h4>
             </div>
-            <div class="col-7"></div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-5 text-justify">
             <div class="col-11">
                 <p>Dengan mengunduh, memasang, dan/atau menggunakan Aplikasi GO 4.0 WASTE (<span
                         class="font-weight-bold">"Aplikasi"</span>), anda setuju

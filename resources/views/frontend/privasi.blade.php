@@ -3,14 +3,13 @@
 @section('content')
 
 <section class="mb-5 pb-5">
-    <div class="container text-justify">
+    <div class="container">
         <div class="row my-5">
-            <div class="col-12">
-                <h4>KEBIJAKAN PRIVASI APLIKASI GO 4.0 ZERO WASTE
-                </h4>
+            <div class="col-12 text-center">
+                <h4>KEBIJAKAN PRIVASI APLIKASI<br/>GO 4.0 ZERO WASTE</h4>
             </div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-5 text-justify">
             <div class="col-11">
                 <p>Kebijakan Privasi berikut ini menjelaskan bagaimana kami, DWS-Digital Waste Solution (PT Solusi
                     Digital Limbahan atau “kami”) mengumpulkan, menyimpan, menggunakan, mengolah, menguasai,
