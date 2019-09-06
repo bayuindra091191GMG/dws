@@ -168,14 +168,18 @@ class DwsWasteController extends Controller
         // Save Image
         if($request->hasFile('img_path')){
             // Delete old image
+            $image = $request->file('img_path');
+            $img = Image::make($image);
+            $extStr = $img->mime();
+            $ext = explode('/', $extStr, 2);
+            $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+
             if(!empty($dwsWaste->img_path)){
                 $oldPath = public_path('storage/admin.dwscategory'. $dwsWaste->img_path);
                 if(file_exists($oldPath)) unlink($oldPath);
+                $filename = $dwsWaste->img_path;
             }
 
-            $image = $request->file('img_path');
-            $img = Image::make($image);
-            $filename = $dwsWaste->img_path;
             $img->resize(48);
             $img->save(public_path('storage/storage/admin/dwscategory/'. $filename), 75);
         }
