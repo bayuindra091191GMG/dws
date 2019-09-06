@@ -108,10 +108,12 @@ class MasaroWasteController extends Controller
         $extStr = $img->mime();
         $ext = explode('/', $extStr, 2);
 
-        $filename = $masaroWaste->id.'_main_'.$masaroWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+        $filename = $masaroWaste->id.'_main_'.str_replace(" ","",$masaroWaste->name).'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
         //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
-        $img->resize(48);
+        $img->resize(48, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
         $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
 
         $masaroWaste->img_path = $filename;
@@ -176,15 +178,19 @@ class MasaroWasteController extends Controller
             $img = Image::make($image);
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
-            $filename = $masaroWaste->id.'_main_'.$masaroWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+            $filename = $masaroWaste->id.'_main_'.str_replace(" ","",$masaroWaste->name).'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
             if(!empty($masaroWaste->img_path)){
-                $oldPath = public_path('storage/admin.masarocategory'. $masaroWaste->img_path);
+                $oldPath = public_path('storage/admin/masarocategory'. $masaroWaste->img_path);
                 if(file_exists($oldPath)) unlink($oldPath);
                 $filename = $masaroWaste->img_path;
             }
-            $img->resize(48);
+            $img->resize(48, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
             $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
+            $masaroWaste->img_path = $filename;
+            $masaroWaste->save();
         }
 
         Session::flash('success', 'Success Updating new Masaro Waste Category!');

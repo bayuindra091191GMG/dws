@@ -17,7 +17,7 @@ class DwsWasteController extends Controller
             $dwsWastes = DwsWasteCategoryData::all();
             $baseUri = URL::to('/');
             foreach ($dwsWastes as $dwsWaste){
-                $dwsWaste->img_path = $baseUri . '/storage/admin/dwscategory/' . $dwsWaste->img_path;
+                $dwsWaste->img_path = $baseUri . '/public/storage/admin/dwscategory/' . $dwsWaste->img_path;
             }
 
             return Response::json($dwsWastes);

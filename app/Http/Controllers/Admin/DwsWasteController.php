@@ -89,9 +89,12 @@ class DwsWasteController extends Controller
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
 
-            $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
-            $img->resize(48);
-            $img->save('../public_html/storage/admin/dwscategory/'. $filename, 75);
+            $filename = $dwsWaste->id.'_main_'.str_replace(" ","",$dwsWaste->name).'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+            $img->resize(48, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save(public_path('storage/admin/dwscategory/'. $filename), 75);
+//            $img->save('../public_html/storage/admin/dwscategory/'. $filename, 75);
 
             $dwsWaste->img_path = $filename;
             $dwsWaste->save();
@@ -172,16 +175,20 @@ class DwsWasteController extends Controller
             $img = Image::make($image);
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
-            $filename = $dwsWaste->id.'_main_'.$dwsWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+            $filename = $dwsWaste->id.'_main_'.str_replace(" ","",$dwsWaste->name).'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
             if(!empty($dwsWaste->img_path)){
-                $oldPath = public_path('storage/admin.dwscategory'. $dwsWaste->img_path);
+                $oldPath = public_path('storage/admin/dwscategory/'. $dwsWaste->img_path);
                 if(file_exists($oldPath)) unlink($oldPath);
                 $filename = $dwsWaste->img_path;
             }
+            $img->resize(48, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save(public_path('storage/admin/dwscategory/'. $filename), 75);
+            $dwsWaste->img_path = $filename;
+            $dwsWaste->save();
 
-            $img->resize(48);
-            $img->save(public_path('storage/storage/admin/dwscategory/'. $filename), 75);
         }
 
         Session::flash('success', 'Success Updating new Dws Waste Category!');
