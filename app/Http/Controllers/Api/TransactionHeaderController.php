@@ -547,8 +547,10 @@ class TransactionHeaderController extends Controller
                 );
 
                 // Tambah poin ke waste source
+                $newPoint = intval($header->total_price);
+
                 $user = $header->user;
-                $newSaldo = $user->point + $header->total_price;
+                $newSaldo = $user->point + $newPoint;
                 $user->point = $newSaldo;
                 $user->save();
 
@@ -557,7 +559,7 @@ class TransactionHeaderController extends Controller
                     'type'              => $header->transaction_type_id,
                     'transaction_id'    => $header->id,
                     'type_transaction'  => "Kredit",
-                    'amount'            => $header->total_price,
+                    'amount'            => $newPoint,
                     'saldo'             => $newSaldo,
                     'description'       => "Point dari transaksi nomor ".$header->transaction_no,
                     'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString(),
@@ -809,7 +811,7 @@ class TransactionHeaderController extends Controller
                     'waste_collector'   => $header->waste_collector ?? null,
                     'waste_source'      => !empty($header->user_id) ? $header->user->first_name. ' '. $header->user->last_name : '',
                     'total_weight'      => $header->total_weight / 1000,
-                    'total_point'       => $header->total_price,
+                    'total_point'       => intval($header->total_price),
                     'status'            => $header->status_id,
                     'created_at'        => Carbon::parse($header->created_at)->format('d M Y')
                 ]);

@@ -258,7 +258,7 @@ class TransactionHeaderController extends Controller
             'updated_at'            => $now->toDateTimeString(),
             'created_by_admin'      => $user->id,
             'updated_by_admin'      => $user->id,
-            'point_user'            => $totalPrice
+            'point_user'            => intval($totalPrice)
         ]);
 
         $idx = 0;
@@ -267,7 +267,7 @@ class TransactionHeaderController extends Controller
             $floatPrice = Utilities::toFloat($prices[$idx]);
 
             if($categoryType == "1"){
-                $trxDetail = TransactionDetail::create([
+                TransactionDetail::create([
                     'transaction_header_id'     => $trxHeader->id,
                     'dws_category_id'           => $category,
                     'weight'                    => $floatWeight * 1000,
@@ -275,7 +275,7 @@ class TransactionHeaderController extends Controller
                 ]);
             }
             else{
-                $trxDetail = TransactionDetail::create([
+                TransactionDetail::create([
                     'transaction_header_id'     => $trxHeader->id,
                     'masaro_category_id'        => $category,
                     'weight'                    => $floatWeight * 1000,

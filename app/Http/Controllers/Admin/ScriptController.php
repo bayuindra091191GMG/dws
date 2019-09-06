@@ -9,6 +9,7 @@ use App\Models\PointHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ScriptController extends Controller
 {
@@ -134,6 +135,56 @@ class ScriptController extends Controller
 
                     $detail->save();
                 }
+            }
+
+            return 'SCRIPT SUCCESS!!';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function refreshSehatiPoint(){
+        try{
+            $headers = TransactionHeader::where('waste_bank_id', 6)
+                ->where('status_id', 10)
+                ->orderBy('created_at')
+                ->get();
+
+            $users = DB::table('transaction_headers')
+                ->where('waste_bank_id', 6)
+                ->where('status_id', 10)
+                ->distinct()
+                ->get(['user_id']);
+
+
+            foreach ($users as $user){
+                DB::table('users')
+                    ->where('id', $user->user_id)
+                    ->update(['point' => 0]);
+            }
+
+            foreach ($headers as $header){
+                $user = $header->user;
+
+                $point = intval($header->total_price);
+                $header->point_user = $point;
+                $header->save();
+
+                // Edit history
+                $history = PointHistory::where('transaction_id', $header->id)->first();
+                if(!empty($history)){
+                    $history->saldo = $user->point + $point;
+                    $history->amount = $point;
+                    $history->save();
+                }
+
+                if(!empty($user)){
+                    $user->point += $point;
+                    $user->save();
+                }
+
+
             }
 
             return 'SCRIPT SUCCESS!!';

@@ -314,3 +314,4 @@ Route::get('/script/user/confirm/antar-sendiri/{trx_id}', 'Admin\ScriptControlle
 Route::get('/script/refresh-point', 'Admin\ScriptController@refreshPointTransaction');
 Route::get('/script/delete/antar-sendiri/{trx_id}', 'Admin\ScriptController@deleteTransactionAntarSendiri');
 Route::get('/script/change-masaro-index', 'Admin\ScriptController@changeMasaroIdIndex');
+Route::get('/script/refresh-sehati-point', 'Admin\ScriptController@refreshSehatiPoint');
