@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -116,14 +117,16 @@ class RegisterController extends Controller
         }
     }
 
+
     public function externalAuth(Request $request){
-
-        $data = $request->json()->all();
-
         $user = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
         if(!empty($user)){
 //            return new UserResource($user);
-            return Response::json($user, 200);
+            $token = $user->createToken('Token Name')->accessToken;
+            return Response::json([
+                'user' => $user,
+                'token'=> $token
+            ], 200);
         }
 //        elseif($data['referral'] == '' ||  $data['phone'] == ''){
         elseif($request->input('referral') == '' ||  $request->input('phone') == ''){
