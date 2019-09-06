@@ -111,6 +111,7 @@ class MasaroWasteController extends Controller
         $filename = $masaroWaste->id.'_main_'.$masaroWaste->name.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
         //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+        $img->resize(48);
         $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
 
         $masaroWaste->img_path = $filename;
@@ -175,6 +176,7 @@ class MasaroWasteController extends Controller
             $img = Image::make($image);
             $filename = $masaroWaste->img_path;
             //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
+            $img->resize(48);
             $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
         }
 
