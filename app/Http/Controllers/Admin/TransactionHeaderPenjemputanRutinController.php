@@ -20,6 +20,7 @@ use App\Models\PointWastecollectorHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
+use App\Models\WasteBank;
 use App\Models\WasteCollector;
 use App\Models\WasteCollectorPickupHistory;
 use App\Models\WasteCollectorUser;
@@ -40,11 +41,36 @@ class TransactionHeaderPenjemputanRutinController extends Controller
 {
     public function index()
     {
-        return view('admin.transaction.rutin.index');
+        // Check superadmin & waste category type
+        $admin = Auth::guard('admin')->user();
+        $wasteBank = null;
+        $adminCategoryType = 'all';
+        if($admin->is_super_admin === 0){
+            if(!empty($admin->waste_bank_id)){
+                $wasteBank = WasteBank::find($admin->waste_bank_id);
+            }
+
+            $adminCategoryType = $admin->waste_bank->waste_category_id === 1 ? 'dws' : 'masaro';
+        }
+
+        $data = [
+            'wasteBank'         => $wasteBank,
+            'adminCategoryType' => $adminCategoryType
+        ];
+
+        return view('admin.transaction.rutin.index')->with($data);
     }
 
     public function getIndex(Request $request){
         $transactions = TransactionHeader::where('transaction_type_id', 1);
+
+        if(!empty($request->input('waste_bank_id'))){
+            $wasteBankId = intval($request->input('waste_bank_id'));
+            if($wasteBankId !== -1){
+                $transactions = $transactions->where('waste_bank_id', $wasteBankId);
+            }
+        }
+
         return DataTables::of($transactions)
             ->setTransformer(new TransactionTransformer)
             ->addIndexColumn()
