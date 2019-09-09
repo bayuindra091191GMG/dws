@@ -113,10 +113,10 @@ class MasaroWasteController extends Controller
         $filename = $masaroWaste->id.'_main_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
 
         //$img->save('../public_html/storage/admin/masarocategory/'. $filename, 75);
-        $img->resize(48, null, function ($constraint) {
+        $img->resize(100, null, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
+        $img->save(public_path('storage/admin/masarocategory/'. $filename));
 
         $masaroWaste->img_path = $filename;
         $masaroWaste->save();
@@ -187,12 +187,11 @@ class MasaroWasteController extends Controller
             if(!empty($masaroWaste->img_path)){
                 $oldPath = public_path('storage/admin/masarocategory'. $masaroWaste->img_path);
                 if(file_exists($oldPath)) unlink($oldPath);
-                $filename = $masaroWaste->img_path;
             }
-            $img->resize(48, null, function ($constraint) {
+            $img->resize(100, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $img->save(public_path('storage/admin/masarocategory/'. $filename), 75);
+            $img->save(public_path('storage/admin/masarocategory/'. $filename));
             $masaroWaste->img_path = $filename;
             $masaroWaste->save();
         }
