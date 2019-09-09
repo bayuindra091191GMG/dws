@@ -92,7 +92,7 @@ class DwsWasteController extends Controller
             $filenameReplace = str_replace(" ","",$dwsWaste->name);
             $filenameReplace = str_replace("/","",$filenameReplace);
             $filename = $dwsWaste->id.'_main_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
-            $img->resize(100, null, function ($constraint) {
+            $img->resize(120, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
             $img->save(public_path('storage/admin/dwscategory/'. $filename));
@@ -185,7 +185,7 @@ class DwsWasteController extends Controller
                 $oldPath = public_path('storage/admin/dwscategory/'. $dwsWaste->img_path);
                 if(file_exists($oldPath)) unlink($oldPath);
             }
-            $img->resize(100, null, function ($constraint) {
+            $img->resize(120, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
             $img->save(public_path('storage/admin/dwscategory/'. $filename));

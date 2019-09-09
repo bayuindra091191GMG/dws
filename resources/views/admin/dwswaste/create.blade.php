@@ -50,7 +50,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group form-float form-group-lg">
                                             <div class="form-line">
-                                                <label class="form-label" for="img_path">Image (48 x 48)</label><br>
+                                                <label class="form-label" for="img_path">Image (120 x 120)</label><br>
                                                 {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
                                             </div>
                                         </div>

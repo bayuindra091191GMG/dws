@@ -89,7 +89,7 @@
                                                                     <label class="form-label" for="searchmap">Lokasi *</label>
                                                                     <input type="text" name="location" id="searchmap" class="form-control"/>
                                                                 </div>
-                                                                <div id="map-canvas" style="height: 200px;"></div>
+                                                                <div id="map-canvas" style="height: 400px;"></div>
                                                             </div>
                                                         </div>
 
