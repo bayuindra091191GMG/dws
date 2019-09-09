@@ -60,6 +60,7 @@ class UserController extends Controller
 
             if($user->routine_pickup === 1){
                 $wasteBankRaws = DB::table("waste_banks")
+                    ->where('waste_category_id', ($user->company_id - 1))
                     ->select("*"
                         ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
                     * cos(radians(waste_banks.latitude)) 
@@ -84,6 +85,10 @@ class UserController extends Controller
                         $userWasteBank->status_id = 2;
                         $userWasteBank->save();
                     }
+
+                    // tidak ketemu wastebank, routine pickup status tetap 0
+                    $user->routine_pickup = 0;
+                    $user->save();
 
                     return Response::json([
                         'message' => "There isn't any Waste Bank near your household address.",
