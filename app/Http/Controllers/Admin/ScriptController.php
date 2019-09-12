@@ -195,7 +195,8 @@ class ScriptController extends Controller
     }
 
     public function deleteCilegonMasaroImportData(){
-        $transactions = TransactionHeader::where('waste_bank_id', 2)
+        $transactions = TransactionHeader::where('waste_bank_id', 1)
+            ->where('created_at', '<', '2019-06-01')
             ->where('total_price', 0)
             ->get();
 
@@ -208,4 +209,6 @@ class ScriptController extends Controller
 
         return 'SCRIPT SUCCESS!!';
     }
+
+
 }
