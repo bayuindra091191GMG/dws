@@ -60,7 +60,7 @@ class UserController extends Controller
 
             if($user->routine_pickup === 1){
                 $wasteBankRaws = DB::table("waste_banks")
-                    ->where('waste_category_id', ($user->company_id - 1))
+                    ->where('waste_category_id', ($user->company_id + 1))
                     ->select("*"
                         ,DB::raw("6371 * acos(cos(radians(" . $request->input('latitude') . ")) 
                     * cos(radians(waste_banks.latitude)) 
@@ -108,6 +108,9 @@ class UserController extends Controller
                         $userWasteBank->status_id = 1;
                         $userWasteBank->save();
                     }
+                    // ketemu wastebank, routine pickup status jadi 1
+                    $user->routine_pickup = 1;
+                    $user->save();
 
 //                    $wasteCollectorUser = WasteCollectorUser::where('user_id', $user->id)->first();
 //                    if(!empty($wasteCollectorUser)){
