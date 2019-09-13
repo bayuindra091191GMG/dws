@@ -83,6 +83,11 @@ class WasteBankController extends Controller
                             ->whereNull('masaro_waste_category_id')
                             ->get();
 
+                        if($wasteBankSchedules->count() == 0){
+                            return Response::json([
+                                'message' => "Connection Error",
+                            ], 483);
+                        }
                         return $wasteBankSchedules;
                     }
                     else{
@@ -90,6 +95,11 @@ class WasteBankController extends Controller
                             ->whereNull('dws_waste_category_id')
                             ->get();
 
+                        if($wasteBankSchedules->count() == 0){
+                            return Response::json([
+                                'message' => "Connection Error",
+                            ], 483);
+                        }
                         return $wasteBankSchedules;
                     }
                 }
