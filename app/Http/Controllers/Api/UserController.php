@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\Configuration;
 use App\Models\User;
 use App\Models\UserWasteBank;
+use App\Models\WasteBankSchedule;
 use App\Models\WasteCollectorUser;
 use App\Notifications\FCMNotification;
 use Carbon\Carbon;
@@ -117,6 +118,30 @@ class UserController extends Controller
 //                        $wasteCollectorUser->status_id = 1;
 //                        $wasteCollectorUser->save();
 //                    }
+
+                    //checking if wastebank have schedule
+                    if($user->company_id === 0){
+                        $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $wasteBankRaws[0]->id)
+                            ->whereNull('masaro_waste_category_id')
+                            ->get();
+
+                        if($wasteBankSchedules->count() == 0){
+                            return Response::json([
+                                'message' => "Connection Error",
+                            ], 483);
+                        }
+                    }
+                    else{
+                        $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $wasteBankRaws[0]->id)
+                            ->whereNull('dws_waste_category_id')
+                            ->get();
+
+                        if($wasteBankSchedules->count() == 0){
+                            return Response::json([
+                                'message' => "Connection Error",
+                            ], 483);
+                        }
+                    }
 
                     $responseJson = User::where('id', $user->id)->with('company', 'addresses')->first();
                     return Response::json($responseJson, 200);
