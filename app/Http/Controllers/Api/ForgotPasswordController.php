@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -36,28 +37,37 @@ class ForgotPasswordController extends Controller
      */
     public function forgotPassword(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-        ]);
-        $user = User::where('email', $request->email)->first();
-        if (!$user)
-            return response()->json([
-                'message' => "We can't find a user with that e-mail address."
-            ], 404);
-        $passwordReset = PasswordReset::updateOrCreate(
-            ['email' => $user->email],
-            [
-                'email' => $user->email,
-                'token' => str_random(60)
-             ]
-        );
-        if ($user && $passwordReset)
-            $user->notify(
-                new PasswordResetRequest($passwordReset->token)
+        try{
+            $request->validate([
+                'email' => 'required|string|email',
+            ]);
+
+            Log::info('LOG forgotPassword email: '. $request->email);
+
+            $user = User::where('email', $request->email)->first();
+            if (!$user)
+                return response()->json([
+                    'message' => "We can't find a user with that e-mail address."
+                ], 404);
+            $passwordReset = PasswordReset::updateOrCreate(
+                ['email' => $user->email],
+                [
+                    'email' => $user->email,
+                    'token' => str_random(60)
+                ]
             );
-        return response()->json([
-            'message' => 'We have e-mailed your password reset link!'
-        ]);
+            if ($user && $passwordReset)
+                $user->notify(
+                    new PasswordResetRequest($passwordReset->token)
+                );
+            return response()->json([
+                'message' => 'We have e-mailed your password reset link!'
+            ]);
+        }
+        catch (\Exception $ex){
+            Log::error("Api/ForgotPasswordController - forgotPassword - error EX: ". $ex);
+            return response()->json(500);
+        }
     }
     /**
      * Find token password reset
@@ -68,19 +78,27 @@ class ForgotPasswordController extends Controller
      */
     public function find($token)
     {
-        $passwordReset = PasswordReset::where('token', $token)->first();
+        try{
+            $passwordReset = PasswordReset::where('token', $token)->first();
 
-        if (!$passwordReset)
-            return response()->json([
-                'message' => 'This password reset token is invalid.'
-            ], 404);
-        if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
-            $passwordReset->delete();
-            return response()->json([
-                'message' => 'This password reset token is invalid.'
-            ], 404);
+            Log::info('LOG find token: '. $token);
+
+            if (!$passwordReset)
+                return response()->json([
+                    'message' => 'This password reset token is invalid.'
+                ], 404);
+            if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
+                $passwordReset->delete();
+                return response()->json([
+                    'message' => 'This password reset token is invalid.'
+                ], 404);
+            }
+            return response()->json($passwordReset);
         }
-        return response()->json($passwordReset);
+        catch (\Exception $ex){
+            Log::error("Api/ForgotPasswordController - find - error EX: ". $ex);
+            return response()->json(500);
+        }
     }
      /**
      * Reset password
@@ -94,31 +112,40 @@ class ForgotPasswordController extends Controller
      */
     public function reset(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string|confirmed',
-            'token' => 'required|string'
-        ]);
+        try{
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string|confirmed',
+                'token' => 'required|string'
+            ]);
 
-        //return $request;
-        $passwordReset = PasswordReset::where([
-            ['token', $request->input('token')],
-            ['email', $request->input('email')]
-        ])->first();
-        if (!$passwordReset)
-            return response()->json([
-                'message' => 'This password reset token is invalid.'
-            ], 404);
-        $user = User::where('email', $passwordReset->email)->first();
-        if (!$user)
-            return response()->json([
-                'message' => "We can't find a user with that e-mail address."
-            ], 404);
+            Log::info('LOG reset email: '. $request->input('email'));
+            Log::info('LOG reset token: '. $request->input('token'));
 
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-        $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess());
-        return response()->json($user);
+            //return $request;
+            $passwordReset = PasswordReset::where([
+                ['token', $request->input('token')],
+                ['email', $request->input('email')]
+            ])->first();
+            if (!$passwordReset)
+                return response()->json([
+                    'message' => 'This password reset token is invalid.'
+                ], 404);
+            $user = User::where('email', $passwordReset->email)->first();
+            if (!$user)
+                return response()->json([
+                    'message' => "We can't find a user with that e-mail address."
+                ], 404);
+
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+            $passwordReset->delete();
+            $user->notify(new PasswordResetSuccess());
+            return response()->json($user);
+        }
+        catch (\Exception $ex){
+            Log::error("Api/ForgotPasswordController - reset - error EX: ". $ex);
+            return response()->json(500);
+        }
     }
 }
