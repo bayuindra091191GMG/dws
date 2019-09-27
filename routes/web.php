@@ -26,6 +26,11 @@ Route::get('/test-notif', 'Frontend\HomeController@testNotif')->name('testNotif'
 Route::get('/test-notif-send', 'Frontend\HomeController@testNotifSend')->name('testNotifSend');
 Route::get('/test-location', 'Frontend\HomeController@getLocation')->name('getLocation');
 Route::get('/test-province', 'Frontend\HomeController@getProvince')->name('getProvince');
+
+// Forgot Password for Browser
+Route::get('/forgotpass/{token}', 'Admin\ForgotPasswordController@findBrowser');
+Route::post('/forgotpass/reset', 'Admin\ForgotPasswordController@reset')->name('forgot_password.reset');
+
 // ADMIN ROUTE
 // ====================================================================================================================
 
