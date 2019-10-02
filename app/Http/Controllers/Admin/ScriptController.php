@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminUser;
 use App\Models\PointHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\UserWasteBank;
+use App\Models\WasteBank;
+use App\Models\WasteBankSchedule;
+use App\Models\WasteCollectorWasteBank;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -210,5 +215,69 @@ class ScriptController extends Controller
         return 'SCRIPT SUCCESS!!';
     }
 
+    public function deleteWasteBank(int $id){
+        try{
+            $wasteBank = WasteBank::find($id);
+            if(empty($wasteBank)){
+                return 'INVALID';
+            }
 
+            // Delete transactions
+            $transactionHeaders = TransactionHeader::with('transaction_details')
+                ->where('waste_bank_id', $id)
+                ->get();
+
+            foreach ($transactionHeaders as $transactionHeader){
+                // Delete trx details
+                foreach ($transactionHeader->transaction_details as $detail){
+                    $detail->delete();
+                }
+
+                // Delete point histories
+                foreach ($transactionHeader->point_histories as $point){
+                    $point->delete();
+                }
+
+                $transactionHeader->delete();
+            }
+
+            // Delete user waste banks
+            $userWasteBanks = UserWasteBank::where('waste_bank_id', $id)
+                ->get();
+
+            foreach ($userWasteBanks as $userWasteBank){
+                $userWasteBank->delete();
+            }
+
+            // Delete waste bank schedules
+            $wasteBankSchedules = WasteBankSchedule::where('waste_bank_id', $id)
+                ->get();
+
+            foreach ($wasteBankSchedules as $wasteBankSchedule){
+                $wasteBankSchedule->delete();
+            }
+
+            // Delete waste collector waste banks
+            $wasteCollectorWasteBanks = WasteCollectorWasteBank::where('waste_bank_id', $id)
+                ->get();
+
+            foreach ($wasteCollectorWasteBanks as $wasteCollectorWasteBank){
+                $wasteCollectorWasteBank->delete();
+            }
+
+            // Check admin user
+            $adminUser = AdminUser::where('waste_bank_id', $id)->first();
+            if(!empty($adminUser)){
+                $adminUser->waste_bank_id = null;
+                $adminUser->save();
+            }
+
+            $wasteBank->delete();
+
+            return 'SCRIPT SUCCESS!!';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
 }

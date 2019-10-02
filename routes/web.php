@@ -321,3 +321,4 @@ Route::get('/script/delete/antar-sendiri/{trx_id}', 'Admin\ScriptController@dele
 Route::get('/script/change-masaro-index', 'Admin\ScriptController@changeMasaroIdIndex');
 Route::get('/script/refresh-sehati-point', 'Admin\ScriptController@refreshSehatiPoint');
 Route::get('/script/delete-cilegon-import-data', 'Admin\ScriptController@deleteCilegonMasaroImportData');
+Route::get('/script/delete/waste-bank/{id}', 'Admin\ScriptController@deleteWasteBank');
