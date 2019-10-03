@@ -51,7 +51,9 @@
                                         <div class="form-group form-float form-group-lg">
                                             <div class="form-line">
                                                 <label class="form-label" for="img_path">Image (120 x 120)</label><br>
-                                                <img src="{{ asset('storage/admin/dwscategory/'.$dwsWaste->img_path) }}" width="100">
+                                                @if(!empty($dwsWaste->img_path))
+                                                    <img src="{{ asset('storage/admin/dwscategory/'.$dwsWaste->img_path) }}" width="100">
+                                                @endif
                                                 {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
                                             </div>
                                         </div>
