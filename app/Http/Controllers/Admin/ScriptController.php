@@ -280,4 +280,28 @@ class ScriptController extends Controller
             return $ex;
         }
     }
+
+    public function deleteUserTransactions(int $id){
+        try{
+            // Delete transactions
+            $transactionHeaders = TransactionHeader::with('transaction_details')
+                ->where('user_id', $id)
+                ->get();
+
+            $count = 0;
+            foreach ($transactionHeaders as $transactionHeader){
+                DB::table('transaction_details')
+                    ->where('transaction_header_id', $transactionHeader->id)
+                    ->delete();
+
+                $transactionHeader->delete();
+                $count++;
+            }
+
+            return 'SCRIPT SUCCESS!! COUNT = '. $count;
+        }
+        catch (\Exception $ex){
+            dd($ex);
+        }
+    }
 }
