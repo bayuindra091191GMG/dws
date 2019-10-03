@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive-sm">
-                            <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap">
+                            <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap w-100">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Tanggal</th>
