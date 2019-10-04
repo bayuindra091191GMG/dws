@@ -47,7 +47,7 @@ class ScriptController extends Controller
         return 'SCRIPT SUCCESS!!';
     }
 
-    public function deleteTransactionAntarSendiri(int $trx_id){
+    public function deleteTransaction(int $trx_id){
         try{
             $header = TransactionHeader::find($trx_id);
             if(empty($header)){

@@ -317,7 +317,7 @@ Route::get('/request-verification/{email}', 'Auth\RegisterController@RequestVeri
 // Script
 Route::get('/script/user/confirm/antar-sendiri/{trx_id}', 'Admin\ScriptController@antarSendiriUserConfirm');
 Route::get('/script/refresh-point', 'Admin\ScriptController@refreshPointTransaction');
-Route::get('/script/delete/antar-sendiri/{trx_id}', 'Admin\ScriptController@deleteTransactionAntarSendiri');
+Route::get('/script/delete/transaction/{trx_id}', 'Admin\ScriptController@deleteTransaction');
 Route::get('/script/change-masaro-index', 'Admin\ScriptController@changeMasaroIdIndex');
 Route::get('/script/refresh-sehati-point', 'Admin\ScriptController@refreshSehatiPoint');
 Route::get('/script/delete-cilegon-import-data', 'Admin\ScriptController@deleteCilegonMasaroImportData');
