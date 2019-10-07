@@ -52,8 +52,8 @@
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
                                                             <label class="form-label" for="img_path">Image (120 x 120)</label><br>
-                                                            @if(!empty($dwsWaste->img_path))
-                                                                <img src="{{ asset('storage/admin/masarocategory/'.$dwsWaste->img_path) }}" width="100">
+                                                            @if(!empty($masaroWaste->img_path))
+                                                                <img src="{{ asset('storage/admin/masarocategory/'.$masaroWaste->img_path) }}" width="100">
                                                             @endif
                                                             {!! Form::file('img_path', array('id' => 'main_image', 'class' => 'file-loading', 'accept' => 'image/*')) !!}
                                                         </div>
@@ -63,9 +63,9 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="description">Description *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $masaroWaste->description }}</textarea>
-                                                            <div id="editor" style="height: 300px;">{!! $masaroWaste->description !!}</div>
+                                                            <label class="form-label" for="description">Contoh *</label>
+                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $masaroWaste->examples }}</textarea>
+                                                            <div id="editor" style="height: 300px;">{!! $masaroWaste->examples !!}</div>
                                                         </div>
                                                     </div>
                                                 </div>

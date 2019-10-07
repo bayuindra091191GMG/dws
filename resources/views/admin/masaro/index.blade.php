@@ -25,9 +25,9 @@
                             <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Kategori</th>
                                 <th>Harga</th>
-                                <th>Deskripsi</th>
+                                <th>Contoh</th>
+                                <th>Gambar</th>
                                 <th>Dibuat Pada</th>
                                 <th>Dibuat Oleh</th>
                                 <th></th>
@@ -60,7 +60,7 @@
             columns: [
                 { data: 'name', name: 'name', class: 'text-center'},
                 { data: 'price', name: 'price', class: 'text-center'},
-                { data: 'description', name: 'description', class: 'text-center'},
+                { data: 'examples', name: 'examples', class: 'text-center'},
                 { data: 'image', name: 'image', class: 'text-center'},
                 { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
                     render: function ( data, type, row ){

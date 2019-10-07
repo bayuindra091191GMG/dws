@@ -23,11 +23,16 @@ class MasaroWasteCategoryTransformer extends TransformerAbstract
             $action = "<a class='btn btn-xs btn-info' href='masaro-wastes/edit/".$masaroWaste->id."' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $masaroWaste->id ."' ><i class='fas fa-trash-alt'></i></a>";
 
+            $image = '-';
+            if(!empty($masaroWaste->img_path)){
+                $path = asset('storage/admin/masarocategory/'.$masaroWaste->img_path);
+                $image = '<img src='.$path.' width=50>';
+            }
             return[
                 'name'              => $masaroWaste->name,
                 'price'             => $masaroWaste->price,
-                'description'       => $masaroWaste->description,
-                'image'             => $masaroWaste->img_path,
+                'examples'          => $masaroWaste->examples,
+                'image'             => $image,
                 'created_at'        => $createdDate,
                 'created_by'        => $masaroWaste->createdBy->first_name . ' ' . $masaroWaste->createdBy->last_name,
                 'action'            => $action
