@@ -9,6 +9,7 @@ use App\Models\AdminUser;
 use App\Models\PointHistory;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\User;
 use App\Models\UserWasteBank;
 use App\Models\WasteBank;
 use App\Models\WasteBankSchedule;
@@ -299,6 +300,54 @@ class ScriptController extends Controller
             }
 
             return 'SCRIPT SUCCESS!! COUNT = '. $count;
+        }
+        catch (\Exception $ex){
+            dd($ex);
+        }
+    }
+
+    public function recountUserPoint(int $id){
+        try{
+            $user = User::find($id);
+            if(empty($user)){
+                return 'INVALID USER!';
+            }
+
+            // Delete point history
+            DB::table('point_histories')
+                ->where('user_id', $id)
+                ->delete();
+
+            $transactions = TransactionHeader::where('user_id', $id)->get();
+
+            $totalPoint = 0;
+            foreach ($transactions as $transaction){
+                if($transaction->transaction_type_id === 2 && $transaction->status_id === 10){
+                    $point = intval($transaction->total_price);
+                    $transaction->point_user = $point;
+                    $transaction->save();
+
+                    $totalPoint += $point;
+
+                    // Create history
+                    PointHistory::create([
+                        'user_id'           => $id,
+                        'type'              => $transaction->type,
+                        'transaction_id'    => $transaction->id,
+                        'is_referral'       => 0,
+                        'type_transaction'  => 'Kredit',
+                        'amount'            => $point,
+                        'saldo'             => $totalPoint,
+                        'description'       => 'Point dari transaksi nomor '. $transaction->transaction_no,
+                        'created_at'        => Carbon::now('Asia/Jakarta')->toDateTimeString()
+                    ]);
+                }
+            }
+
+            $user->point = $totalPoint;
+            $user->save();
+
+            return 'SCRIPT SUCCESS!';
         }
         catch (\Exception $ex){
             dd($ex);

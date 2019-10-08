@@ -468,9 +468,7 @@ class UserController extends Controller
                 $user->password = Hash::make($newPassword);
                 $user->save();
 
-                return Response::json([
-                    'message' => "Berhasil mengubah kata sandi!",
-                ],200);
+                return Response::json(200);
             }
             else{
                 return Response::json([
