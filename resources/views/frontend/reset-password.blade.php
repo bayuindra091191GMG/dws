@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@section('title')
+    <title>DWS - RESET KATA SANDI</title>
+@endsection
+
 @section('content')
 
     {{-- <section>

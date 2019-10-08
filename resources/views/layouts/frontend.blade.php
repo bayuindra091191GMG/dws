@@ -45,7 +45,8 @@
 
     <!-- Document Title
         ============================================= -->
-    <title>DWS - Landing Page</title>
+
+    @yield('title')
     @yield('styles')
 </head>
 <body>

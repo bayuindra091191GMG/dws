@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@section('title')
+    <title>DWS - Landing Page</title>
+@endsection
+
 @section('content')
 
 {{-- <section>

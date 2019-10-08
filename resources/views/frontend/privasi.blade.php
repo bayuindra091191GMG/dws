@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@section('title')
+    <title>DWS - PRIVASI</title>
+@endsection
+
 @section('content')
 
 <section class="mb-5 pb-5">
