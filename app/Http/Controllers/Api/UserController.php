@@ -14,6 +14,7 @@ use App\Notifications\FCMNotification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -425,6 +426,58 @@ class UserController extends Controller
             }
 
             return Response::json($profile, 200);
+        }
+        catch (\Exception $ex){
+            Log::error("UserController - updateProfile Error: ". $ex);
+            return Response::json([
+                'message' => "Sorry Something went Wrong!",
+                'error'   => $ex,
+            ], 500);
+        }
+    }
+
+    public function changePassword(Request $request){
+        try{
+            $currentPassword = trim($request->input('password_current'));
+            $newPassword = trim($request->input('password_new'));
+            $confirmPassword = trim($request->input('password_confirm'));
+
+            if(empty($currentPassword) || empty($newPassword) || empty($confirmPassword)){
+                return Response::json([
+                    'message' => "INVALID PARAMETER!",
+                    'error'   => "",
+                ], 400);
+            }
+
+            if($newPassword !== $confirmPassword){
+                return Response::json([
+                    'message' => "Kata sandi baru tidak sama dengan konfirmasi kata sandi!",
+                    'error'   => "",
+                ], 311);
+            }
+
+            if($currentPassword === $newPassword){
+                return Response::json([
+                    'message' => "Kata sandi baru tidak boleh sama dengan kata sandi sekarang!",
+                    'error'   => "",
+                ], 312);
+            }
+
+            $user = auth('api')->user();
+            if(Hash::check($currentPassword, $user->password)){
+                $user->password = Hash::make($newPassword);
+                $user->save();
+
+                return Response::json([
+                    'message' => "Berhasil mengubah kata sandi!",
+                ],200);
+            }
+            else{
+                return Response::json([
+                    'message' => "Kata sandi sekarang salah!",
+                    'error'   => "",
+                ], 313);
+            }
         }
         catch (\Exception $ex){
             Log::error("UserController - updateProfile Error: ". $ex);

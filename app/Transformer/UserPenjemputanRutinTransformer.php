@@ -20,7 +20,7 @@ class UserPenjemputanRutinTransformer extends TransformerAbstract
     public function transform(User $user){
 
         try{
-            $createdDate = Carbon::parse($user->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($user->created_at)->toIso8601String();
 
             $editUrl = route('admin.user.penjemputan_rutin.edit', ['id' => $user->id]);
             $action = "<a class='btn btn-xs btn-info' href='". $editUrl. "' data-toggle='tooltip' data-placement='top'><i class='fas fa-edit'></i></a>";
@@ -43,7 +43,7 @@ class UserPenjemputanRutinTransformer extends TransformerAbstract
                 'phone'             => $user->phone,
                 'waste_collector'   => $wasteCollectorName,
                 'waste_bank'        => $wasteBankName,
-                'status'            => $user->status->description,
+//                'status'            => $user->status->description,
                 'created_at'        => $createdDate,
                 'action'            => $action
             ];

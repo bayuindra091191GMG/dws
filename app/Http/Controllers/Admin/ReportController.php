@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -99,5 +100,28 @@ class ReportController extends Controller
             $wasteCategoryId,
             $wasteBankId
         ))->download($filenameExcel);
+    }
+
+    public function userWasteBankReport(){
+        // Check superadmin & waste category type
+        $admin = Auth::guard('admin')->user();
+        $adminWasteBank = null;
+        $adminCategoryType = 'all';
+        if($admin->is_super_admin === 0){
+            if(!empty($admin->waste_bank_id)){
+                $adminWasteBank = WasteBank::find($admin->waste_bank_id);
+            }
+
+            $adminCategoryType = $admin->waste_bank->waste_category_id === 1 ? 'dws' : 'masaro';
+        }
+
+        $wasteBanks = WasteBank::orderBy('name')->get();
+
+        $data = [
+            'admin'             => $admin,
+            'wasteBanks'        => $wasteBanks,
+            'adminWasteBank'    => $adminWasteBank,
+            'adminCategoryType' => $adminCategoryType
+        ];
     }
 }

@@ -6,7 +6,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h1>DAFTAR PENGGUNA</h1>
+                        <h3>DAFTAR PENGGUNA</h3>
                         @include('partials.admin._messages')
                     </div>
                 </div>
@@ -16,10 +16,10 @@
                             <thead>
                             <tr>
                                 <th>Email</th>
-                                <th>Name</th>
-                                <th>Phone</th>
+                                <th>Nama</th>
+                                <th>Nomor Ponsel</th>
                                 <th>Status</th>
-                                <th>Created At</th>
+                                <th>Dibuat Pada</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -49,10 +49,10 @@
             order: [ [0, 'asc'] ],
             columns: [
                 { data: 'email', name: 'email'},
-                { data: 'name', name: 'name', orderable: false, searchable: false},
+                { data: 'name', name: 'name'},
                 { data: 'phone', name: 'phone', class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false},
-                { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
+                { data: 'status', name: 'status', class: 'text-center'},
+                { data: 'created_at', name: 'created_at', class: 'text-center',
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
                             return moment(data).format('DD MMM YYYY');

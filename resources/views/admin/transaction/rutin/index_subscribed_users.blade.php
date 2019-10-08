@@ -20,7 +20,7 @@
                                 <th>Nomor Ponsel</th>
                                 <th>Petugas Kebersihan</th>
                                 <th>Pengolahan Sampah</th>
-                                <th>Status</th>
+{{--                                <th>Status</th>--}}
                                 <th>Dibuat Pada</th>
                                 <th></th>
                             </tr>
@@ -49,13 +49,13 @@
             ajax: '{!! route('datatables.rutin.subscribed-users') !!}',
             order: [ [0, 'asc'] ],
             columns: [
-                { data: 'email', name: 'email', class: 'text-center'},
-                { data: 'name', name: 'name', class: 'text-center'},
+                { data: 'email', name: 'email'},
+                { data: 'name', name: 'name'},
                 { data: 'phone', name: 'phone', class: 'text-center'},
                 { data: 'waste_collector', name: 'waste_collector', class: 'text-center', orderable: false, searchable: false },
-                { data: 'waste_bank', name: 'waste_bank', class: 'text-center', orderable: false, searchable: false },
-                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
-                { data: 'created_at', name: 'created_at', class: 'text-center', orderable: false, searchable: false,
+                { data: 'waste_bank', name: 'waste_bank', class: 'text-center' },
+                // { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
+                { data: 'created_at', name: 'created_at', class: 'text-center',
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
                             return moment(data).format('DD MMM YYYY');

@@ -258,6 +258,8 @@ Route::prefix('admin')->group(function(){
     // Report
     Route::get('/transaction/report', 'Admin\ReportController@transactionReport')->name('admin.transaction.report');
     Route::post('/transaction/report/submit', 'Admin\ReportController@transactionReportSubmit')->name('admin.transaction.report.submit');
+    Route::get('/user-waste-bank/report', 'Admin\ReportController@userWasteBankReport')->name('admin.user_waste_bank.report');
+    Route::post('/user-waste-ban/report/submit', 'Admin\ReportController@userWasteBankReportSubmit')->name('admin.user_waste_bank.report.submit');
 });
 
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');

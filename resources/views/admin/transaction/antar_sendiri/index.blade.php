@@ -33,8 +33,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive-sm">
-                            <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap w-100">
+                        <div class="table-responsive">
+                            <table id="transaction_table" class="table table-striped table-bordered nowrap w-100">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Tanggal</th>
@@ -65,11 +65,13 @@
 @section('scripts')
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{ asset('js/doublescroll.js') }}"></script>
     <script>
         $('#transaction_table').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: {
                 url: '{!! route('datatables.antar_sendiri.transactions') !!}',
                 data: {
