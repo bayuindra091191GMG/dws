@@ -12,6 +12,7 @@ namespace App\Transformer;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Voucher;
+use App\Models\VoucherCategory;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
@@ -30,20 +31,12 @@ class VoucherTransformer extends TransformerAbstract
 //            $imgPath = "<img src='". public_path('storage/admin/vouchers'.$data->img_path) . "' width='50'/>";
 
             if($data->category_id != null || $data->category_id != 0){
-                $tmpCategory = Category::find($data->category_id);
+                $tmpCategory = VoucherCategory::find($data->category_id);
                 $category = $tmpCategory->name;
             }
             else{
                 $category = '-';
             }
-
-//            if($data->product_id != null || $data->product_id != 0){
-//                $tmpProduct = Product::find($data->product_id);
-//                $product = $tmpProduct->name;
-//            }
-//            else{
-//                $product = '-';
-//            }
 
             return[
                 'code'              => $data->code,

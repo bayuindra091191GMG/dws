@@ -32,7 +32,7 @@ class VoucherController extends Controller
     }
 
     public function getIndex(Request $request){
-        $vouchers = Voucher::query();
+        $vouchers = Voucher::all();
         return DataTables::of($vouchers)
             ->setTransformer(new VoucherTransformer)
             ->make(true);

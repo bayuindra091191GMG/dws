@@ -326,3 +326,4 @@ Route::get('/script/delete-cilegon-import-data', 'Admin\ScriptController@deleteC
 Route::get('/script/delete/waste-bank/{id}', 'Admin\ScriptController@deleteWasteBank');
 Route::get('/script/delete/user-transaction/{id}', 'Admin\ScriptController@deleteUserTransactions');
 Route::get('/script/recount-user-point/{id}', 'Admin\ScriptController@recountUserPoint');
+Route::get('/script/refresh-antar-sendiri-dws', 'Admin\ScriptController@refreshAntarSendiriTransaction');

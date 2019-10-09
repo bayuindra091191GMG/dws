@@ -353,4 +353,24 @@ class ScriptController extends Controller
             dd($ex);
         }
     }
+
+    public function refreshAntarSendiriTransaction(){
+        try{
+            $transactions = TransactionHeader::where('transaction_type_id', 2)
+                ->where('waste_category_id', 1)
+                ->get();
+
+            foreach ($transactions as $transaction){
+                $transaction->total_price = ($transaction->total_weight / 1000);
+                $point = intval($transaction->total_price);
+                $transaction->point_user = $point;
+                $transaction->save();
+            }
+
+            return 'SCRIPT SUCCESS!';
+        }
+        catch (\Exception $ex){
+            dd($ex);
+        }
+    }
 }

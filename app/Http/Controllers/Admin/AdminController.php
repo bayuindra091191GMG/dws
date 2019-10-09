@@ -8,6 +8,7 @@ use App\Models\DwsWasteCategoryData;
 use App\Models\MasaroWasteCategoryData;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use App\Models\WasteCollector;
 use App\Notifications\FCMNotification;
 use Carbon\CarbonPeriod;
@@ -46,6 +47,7 @@ class AdminController extends Controller
 
         $isSuperAdmin = $userAdmin->is_super_admin === 1 ? true : false;
         $adminWasteBankId = $userAdmin->waste_bank_id ?? -1;
+        $adminWasteBank = WasteBank::find($adminWasteBankId);
 
 //        if(!$isSuperAdmin){
 //            $data = [
@@ -186,69 +188,76 @@ class AdminController extends Controller
 
                     $totalTransaction = $totalRutin + $totalAntarSendiri + $totalOnDemand;
 
-                    foreach ($dwsCategories as $dwsCategory){
+                    if($isSuperAdmin || $adminWasteBank->waste_category_id === 1){
+                        foreach ($dwsCategories as $dwsCategory){
 
-                        $categoryData = DB::table('transaction_details')
-                            ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
-                            ->select(DB::raw(
-                                'SUM(transaction_details.weight) as total_category_weight, '.
-                                'SUM(transaction_details.price) as total_category_price'))
-                            ->where('transaction_details.dws_category_id', $dwsCategory->id)
-                            ->whereMonth('transaction_headers.date', '=', $monthInt)
-                            ->first();
+                            $categoryData = DB::table('transaction_details')
+                                ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                                ->select(DB::raw(
+                                    'SUM(transaction_details.weight) as total_category_weight, '.
+                                    'SUM(transaction_details.price) as total_category_price'))
+                                ->where('transaction_details.dws_category_id', $dwsCategory->id)
+                                ->whereMonth('transaction_headers.date', '=', $monthInt)
+                                ->first();
 
-                        $wasteCategoryItem = collect([
-                            'name'      => $dwsCategory->name,
-                            'weight'    => $categoryData->total_category_weight ?? 0,
-                            'price'     => $categoryData->total_category_price ?? 0,
-                        ]);
+                            $wasteCategoryItem = collect([
+                                'name'      => $dwsCategory->name,
+                                'weight'    => $categoryData->total_category_weight ?? 0,
+                                'price'     => $categoryData->total_category_price ?? 0,
+                            ]);
 
-                        $wasteCategories->push($wasteCategoryItem);
+                            $wasteCategories->push($wasteCategoryItem);
+                        }
                     }
 
-                    foreach ($masaroCategories as $masaroCategory){
+                    if($isSuperAdmin || $adminWasteBank->waste_category_id === 2){
+                        foreach ($masaroCategories as $masaroCategory){
 
-                        $categoryData = DB::table('transaction_details')
-                            ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
-                            ->select(DB::raw(
-                                'SUM(transaction_details.weight) as total_category_weight, '.
-                                'SUM(transaction_details.price) as total_category_price'))
-                            ->where('transaction_details.masaro_category_id', $masaroCategory->id)
-                            ->whereMonth('transaction_headers.date', '=', $monthInt)
-                            ->first();
+                            $categoryData = DB::table('transaction_details')
+                                ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                                ->select(DB::raw(
+                                    'SUM(transaction_details.weight) as total_category_weight, '.
+                                    'SUM(transaction_details.price) as total_category_price'))
+                                ->where('transaction_details.masaro_category_id', $masaroCategory->id)
+                                ->whereMonth('transaction_headers.date', '=', $monthInt)
+                                ->first();
 
-                        $wasteCategoryItem = collect([
-                            'name'      => $masaroCategory->name,
-                            'weight'    => $categoryData->total_category_weight ?? 0,
-                            'price'     => $categoryData->total_category_price ?? 0,
-                        ]);
+                            $wasteCategoryItem = collect([
+                                'name'      => $masaroCategory->name,
+                                'weight'    => $categoryData->total_category_weight ?? 0,
+                                'price'     => $categoryData->total_category_price ?? 0,
+                            ]);
 
-                        $wasteCategories->push($wasteCategoryItem);
+                            $wasteCategories->push($wasteCategoryItem);
+                        }
                     }
-
-                    //dd($wasteCategories);
                 }
                 else{
-                    foreach ($dwsCategories as $dwsCategory){
 
-                        $wasteCategoryItem = collect([
-                            'name'      => $dwsCategory->name,
-                            'weight'    => 0,
-                            'price'     => 0
-                        ]);
+                    if(!$isSuperAdmin && $adminWasteBank->waste_category_id === 1){
+                        foreach ($dwsCategories as $dwsCategory){
 
-                        $wasteCategories->push($wasteCategoryItem);
+                            $wasteCategoryItem = collect([
+                                'name'      => $dwsCategory->name,
+                                'weight'    => 0,
+                                'price'     => 0
+                            ]);
+
+                            $wasteCategories->push($wasteCategoryItem);
+                        }
                     }
 
-                    foreach ($masaroCategories as $masaroCategory){
+                    if(!$isSuperAdmin && $adminWasteBank->waste_category_id === 2){
+                        foreach ($masaroCategories as $masaroCategory){
 
-                        $wasteCategoryItem = collect([
-                            'name'      => $masaroCategory->name,
-                            'weight'    => 0,
-                            'price'     => 0
-                        ]);
+                            $wasteCategoryItem = collect([
+                                'name'      => $masaroCategory->name,
+                                'weight'    => 0,
+                                'price'     => 0
+                            ]);
 
-                        $wasteCategories->push($wasteCategoryItem);
+                            $wasteCategories->push($wasteCategoryItem);
+                        }
                     }
                 }
             }

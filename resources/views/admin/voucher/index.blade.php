@@ -28,8 +28,8 @@
                                 <th>Code</th>
                                 <th>Deskripsi</th>
                                 <th>Kategori</th>
-                                <th>Quantity</th>
-                                <th>Required Point</th>
+                                <th>Jumlah</th>
+                                <th>Poin yang dibutuhkan</th>
                                 <th>Tanggal Berlaku</th>
                                 <th>Tanggal Kedaluarsa</th>
                                 <th>Status</th>

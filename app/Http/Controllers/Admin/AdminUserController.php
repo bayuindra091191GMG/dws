@@ -233,12 +233,11 @@ class AdminUserController extends Controller
     {
         //
         try {
-            //Belum melakukan pengecekan hubungan antar Table
-            $adminUserId = $request->input('id');
+            $adminUserId = $request->input('deleted-id');
             $adminUser = AdminUser::find($adminUserId);
             $adminUser->delete();
 
-            Session::flash('success', 'Success Deleting Admin User ' . $adminUser->email . ' - ' . $adminUser->first_name . ' ' . $adminUser->last_name);
+            Session::flash('success', 'Sukses Menghapus Admin ' . $adminUser->email . ' - ' . $adminUser->first_name . ' ' . $adminUser->last_name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
