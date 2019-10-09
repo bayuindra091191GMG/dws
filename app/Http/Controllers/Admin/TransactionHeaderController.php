@@ -65,6 +65,7 @@ class TransactionHeaderController extends Controller
         }
 
         $data = [
+            'isSuperAdmin'      => $admin->is_super_admin === 1 ? true : false,
             'wasteBank'         => $wasteBank,
             'adminCategoryType' => $adminCategoryType
         ];

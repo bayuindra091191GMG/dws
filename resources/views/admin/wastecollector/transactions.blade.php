@@ -12,8 +12,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive-sm">
-                            <table id="user" class="table table-striped table-bordered nowrap" style="width: 100%;">
+                        <div class="table-responsive">
+                            <table id="user" class="table table-striped table-bordered nowrap w-100">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Tanggal</th>
@@ -49,8 +49,8 @@
         $('#user').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
-            responsive: true,
+            responsive: false,
+            pageLength: 10,
             ajax: {
                 url: '{!! route('datatables.waste-collectors.transactions') !!}',
                 data: {

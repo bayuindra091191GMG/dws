@@ -22,8 +22,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive-sm">
-                            <table id="waste-collectors" class="table table-striped table-bordered nowrap" style="width: 100%;">
+                        <div class="table-responsive">
+                            <table id="waste-collectors" class="table table-striped table-bordered nowrap w-100">
                                 <thead>
                                 <tr>
                                     <th>Email</th>
@@ -60,8 +60,8 @@
         $('#waste-collectors').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
-            responsive: true,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.waste-collectors') !!}',
             order: [ [0, 'asc'] ],
             columns: [

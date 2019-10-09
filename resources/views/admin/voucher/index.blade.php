@@ -22,24 +22,26 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Deskripsi</th>
-                                <th>Kategori</th>
-                                <th>Jumlah</th>
-                                <th>Poin yang dibutuhkan</th>
-                                <th>Tanggal Berlaku</th>
-                                <th>Tanggal Kedaluarsa</th>
-                                <th>Status</th>
-                                <th>Dibuat Pada</th>
-                                <th>Dibuat Oleh</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Deskripsi</th>
+                                    <th>Kategori</th>
+                                    <th>Jumlah</th>
+                                    <th>Poin yang dibutuhkan</th>
+                                    <th>Tanggal Berlaku</th>
+                                    <th>Tanggal Kedaluarsa</th>
+                                    <th>Status</th>
+                                    <th>Dibuat Pada</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +61,8 @@
         $('#table_general').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.vouchers') !!}',
             order: [ [0, 'asc'] ],
             columns: [

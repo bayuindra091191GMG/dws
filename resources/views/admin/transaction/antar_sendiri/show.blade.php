@@ -13,7 +13,7 @@
                     <h3 class="mb-0 float-left ml-3">DETAIL TRANSAKSI ANTAR SENDIRI</h3>
                 </div>
                 <div class="col-md-4 col-12 text-right">
-                    @if($header->waste_category_id == "1")
+                    @if($header->waste_category_id == "1" && $header->status_id === 13)
                         <a href="{{ route('admin.transactions.antar_sendiri.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
                     @else
                         <a href="{{ route('admin.transactions.antar_sendiri.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>

@@ -21,21 +21,23 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="user-admin" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Nama Lengkap</th>
-                                <th>Super Admin</th>
-                                <th>Waste Processor</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="user-admin" class="table table-striped table-bordered nowrap w-100">
+                                <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Super Admin</th>
+                                    <th>Waste Processor</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,7 +57,8 @@
         $('#user-admin').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.admin_users') !!}',
             order: [ [0, 'asc'] ],
             columns: [

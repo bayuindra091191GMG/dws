@@ -21,20 +21,22 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="dws-waste" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Harga</th>
-                                <th>Contoh</th>
-                                <th>Gambar</th>
-                                <th>Dibuat Pada</th>
-                                <th>Dibuat Oleh</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="dws-waste" class="table table-striped table-bordered w-100">
+                                <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Harga</th>
+                                    <th>Contoh</th>
+                                    <th>Gambar</th>
+                                    <th>Dibuat Pada</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,7 +56,8 @@
         $('#dws-waste').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.masaro-wastes') !!}',
             order: [ [0, 'asc'] ],
             columns: [

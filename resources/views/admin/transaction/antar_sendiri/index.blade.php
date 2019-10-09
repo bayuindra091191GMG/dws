@@ -10,33 +10,38 @@
                         @include('partials.admin._messages')
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-12 text-right">
 
-                        @if($adminCategoryType === 'all' || $adminCategoryType === 'dws')
-                            <a href="{{ route('admin.transactions.antar_sendiri.dws.create') }}" class="btn btn-success" style="cursor: pointer;">
-                                <i class="fas fa-plus text-white"></i>
-                                <br/>
-                                <span>KATEGORI DWS</span>
-                            </a>
-                        @endif
+                @if(!$isSuperAdmin)
+                    <div class="row mb-3">
+                        <div class="col-12 text-right">
 
-                        @if($adminCategoryType === 'all' || $adminCategoryType === 'masaro')
-                            <a href="{{ route('admin.transactions.antar_sendiri.masaro.create') }}" class="btn btn-success" style="cursor: pointer;">
-                                <i class="fas fa-plus text-white"></i>
-                                <br/>
-                                <span>KATEGORI MASARO</span>
-                            </a>
-                        @endif
+                            @if($adminCategoryType === 'all' || $adminCategoryType === 'dws')
+                                <a href="{{ route('admin.transactions.antar_sendiri.dws.create') }}" class="btn btn-success" style="cursor: pointer;">
+                                    <i class="fas fa-plus text-white"></i>
+                                    <br/>
+                                    <span>KATEGORI DWS</span>
+                                </a>
+                            @endif
 
+                            @if($adminCategoryType === 'all' || $adminCategoryType === 'masaro')
+                                <a href="{{ route('admin.transactions.antar_sendiri.masaro.create') }}" class="btn btn-success" style="cursor: pointer;">
+                                    <i class="fas fa-plus text-white"></i>
+                                    <br/>
+                                    <span>KATEGORI MASARO</span>
+                                </a>
+                            @endif
+
+                        </div>
                     </div>
-                </div>
+                @endif
+
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
                             <table id="transaction_table" class="table table-striped table-bordered nowrap w-100">
                                 <thead>
                                 <tr>
+                                    <th class="text-center"></th>
                                     <th class="text-center">Tanggal</th>
                                     <th class="text-center">No Transaksi</th>
                                     <th class="text-center">Nama Sumber Sampah</th>
@@ -45,7 +50,6 @@
                                     <th class="text-center">Total Berat (kg)</th>
                                     <th class="text-center">Total Harga (Rp)</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center"></th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -78,8 +82,9 @@
                     'waste_bank_id': '{{ !empty($wasteBank) ? $wasteBank->id : -1 }}',
                 }
             },
-            order: [ [0, 'desc'] ],
+            order: [ [1, 'desc'] ],
             columns: [
+                { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'date', name: 'date', class: 'text-center',
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
@@ -115,8 +120,7 @@
                         return data;
                     }
                 },
-                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false },
-                { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                { data: 'status', name: 'status', class: 'text-center', orderable: false, searchable: false }
             ],
             language: {
                 url: "{{ asset('indonesian.json') }}"

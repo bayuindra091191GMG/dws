@@ -13,18 +13,20 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="table_general" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Nama Pengguna</th>
-                                <th>Code Voucher</th>
-                                <th>Tanggal Redeem</th>
-                                <th>Status Voucher</th>
-                                <th>Tanggal Penggunaan</th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="table_general" class="table table-striped table-bordered nowrap w-100">
+                                <thead>
+                                <tr>
+                                    <th>Nama Pengguna</th>
+                                    <th>Code Voucher</th>
+                                    <th>Tanggal Redeem</th>
+                                    <th>Status Voucher</th>
+                                    <th>Tanggal Penggunaan</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,7 +46,8 @@
         $('#table_general').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.voucher.users') !!}',
             order: [ [0, 'asc'] ],
             columns: [

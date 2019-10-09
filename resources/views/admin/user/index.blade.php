@@ -12,19 +12,21 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Nama</th>
-                                <th>Nomor Ponsel</th>
-                                <th>Status</th>
-                                <th>Dibuat Pada</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="user" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Nama</th>
+                                    <th>Nomor Ponsel</th>
+                                    <th>Status</th>
+                                    <th>Dibuat Pada</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -44,7 +46,8 @@
         $('#user').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.users') !!}',
             order: [ [0, 'asc'] ],
             columns: [

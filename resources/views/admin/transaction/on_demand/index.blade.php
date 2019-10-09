@@ -12,23 +12,25 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="transaction_table" class="table table-striped table-bordered dt-responsive nowrap w-100">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Tanggal</th>
-                                <th class="text-center">No Transaksi</th>
-                                <th class="text-center">Nama Sumber Sampah</th>
-                                <th class="text-center">Kategori</th>
-                                <th class="text-center">Total Berat (kg)</th>
-                                <th class="text-center">Total Harga (Rp)</th>
-                                <th class="text-center">Pengolahan Sampah</th>
-                                <th class="text-center">Petugas Kebersihan</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center"></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="transaction_table" class="table table-striped table-bordered nowrap w-100">
+                                <thead>
+                                <tr>
+                                    <th class="text-center"></th>
+                                    <th class="text-center">Tanggal</th>
+                                    <th class="text-center">No Transaksi</th>
+                                    <th class="text-center">Nama Sumber Sampah</th>
+                                    <th class="text-center">Kategori</th>
+                                    <th class="text-center">Total Berat (kg)</th>
+                                    <th class="text-center">Total Harga (Rp)</th>
+                                    <th class="text-center">Pengolahan Sampah</th>
+                                    <th class="text-center">Petugas Kebersihan</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,10 +49,12 @@
         $('#transaction_table').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.on_demand.transactions') !!}',
             order: [ [0, 'desc'] ],
             columns: [
+                { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'date', name: 'date', class: 'text-center',
                     render: function ( data, type, row ){
                         if ( type === 'display' || type === 'filter' ){
@@ -87,8 +91,7 @@
                 },
                 { data: 'waste_bank', name: 'waste_bank', orderable: false, searchable: false, class: 'text-center'},
                 { data: 'waste_collector', name: 'waste_collector', orderable: false, searchable: false, class: 'text-center'},
-                { data: 'status', name: 'status', class: 'text-center'},
-                { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                { data: 'status', name: 'status', class: 'text-center'}
             ],
             language: {
                 url: "{{ asset('indonesian.json') }}"

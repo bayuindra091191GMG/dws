@@ -209,7 +209,7 @@
                                             @if($header->waste_category_id == 1)
                                                 @foreach($header->transaction_details as $detail)
                                                     <tr>
-                                                        <td>{{ $detail->dws_waste_category_data->code }}</td>
+                                                        <td>{{ $detail->dws_waste_category_data->code ?? '' }}</td>
                                                         <td>{{ $detail->dws_waste_category_data->name }}</td>
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>
@@ -221,7 +221,7 @@
                                                 @foreach($header->transaction_details as $detail)
                                                     <tr>
                                                     <tr>
-                                                        <td>{{ $detail->masaro_waste_category_data->code }}</td>
+                                                        <td>{{ $detail->masaro_waste_category_data->code?? '' }}</td>
                                                         <td>{{ $detail->masaro_waste_category_data->name }}</td>
                                                         <td class="text-right">{{ $detail->weight_kg_string }}</td>
                                                         <td class="text-right">{{ $detail->price_string }}</td>

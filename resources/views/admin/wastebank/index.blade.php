@@ -26,27 +26,29 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="waste-bank" class="table table-striped table-bordered dt-responsive">
-                            <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Kategori/Jenis</th>
-                                <th>Alamat</th>
-                                <th>Hari Buka</th>
-                                <th>Jam Buka</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                                <th>PIC</th>
-                                <th>Nomor Ponsel</th>
-                                <th>Kota</th>
-                                <th>Status</th>
-                                <th>Dibuat Pada</th>
-                                <th>Dibuat Oleh</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="waste-bank" class="table table-striped table-bordered dt-responsive">
+                                <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Kategori/Jenis</th>
+                                    <th>Alamat</th>
+                                    <th>Hari Buka</th>
+                                    <th>Jam Buka</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>PIC</th>
+                                    <th>Nomor Ponsel</th>
+                                    <th>Kota</th>
+                                    <th>Status</th>
+                                    <th>Dibuat Pada</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,7 +68,8 @@
         $('#waste-bank').DataTable({
             processing: true,
             serverSide: true,
-            pageLength: 25,
+            responsive: false,
+            pageLength: 10,
             ajax: '{!! route('datatables.waste-banks') !!}',
             order: [ [0, 'asc'] ],
             columns: [
