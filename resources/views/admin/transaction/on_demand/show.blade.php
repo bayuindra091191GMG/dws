@@ -13,15 +13,16 @@
                         <h3 class="mb-0 float-left ml-3">DETAIL TRANSAKSI PENJEMPUTAN SEKARANG</h3>
                     </div>
                     <div class="col-md-4 col-12 text-right">
+
                         @if($header->status_id === 8)
                             <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
-                        @endif
 
-{{--                        @if($header->waste_category_id == "1")--}}
-{{--                            <a href="{{ route('admin.transactions.on_demand.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>--}}
-{{--                        @else--}}
-{{--                            <a href="{{ route('admin.transactions.on_demand.masaro.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>--}}
-{{--                        @endif--}}
+                            @if($header->waste_category_id === 1)
+                                <a href="{{ route('admin.transactions.dws.on_demand.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                            @else
+                                <a href="{{ route('admin.transactions.masaro.on_demand.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                            @endif
+                        @endif
 
                     </div>
                 </div>

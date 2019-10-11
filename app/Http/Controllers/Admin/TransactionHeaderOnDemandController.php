@@ -147,7 +147,7 @@ class TransactionHeaderOnDemandController extends Controller
         $idx = 0;
         foreach ($categories as $category){
             if(empty($category) || $category == "-1") $valid = false;
-            if(empty($prices[$idx]) || $prices[$idx] === '0') $valid = false;
+//            if(empty($prices[$idx]) || $prices[$idx] === '0') $valid = false;
             if(empty($weights[$idx]) || $weights[$idx] === '0') $valid = false;
             $idx++;
         }
@@ -169,8 +169,8 @@ class TransactionHeaderOnDemandController extends Controller
         foreach ($categories as $category){
             $floatWeight = Utilities::toFloat($weights[$idx]);
             $floatPrice = Utilities::toFloat($prices[$idx]);
-            $totalWeight += (double) $floatWeight;
-            $totalPrice += (double) $floatPrice;
+            $totalWeight += $floatWeight;
+            $totalPrice += ($floatPrice * $floatWeight);
             $idx++;
         }
 
@@ -208,38 +208,44 @@ class TransactionHeaderOnDemandController extends Controller
 
         $idx = 0;
         foreach ($categories as $category){
+            $categoryArr = explode('#', $category);
+            $categoryId = intval($categoryArr[0]);
             $floatWeight = Utilities::toFloat($weights[$idx]);
             $floatPrice = Utilities::toFloat($prices[$idx]);
 
             if($categoryType == "1"){
-                $trxDetail = $trxHeader->transaction_details->where('dws_category_id', $category)->first();
+                $trxDetail = $trxHeader->transaction_details->where('dws_category_id', $categoryId)->first();
                 if(!empty($trxDetail)){
                     $trxDetail->weight = $floatWeight * 1000;
-                    $trxDetail->price = $floatPrice;
+//                    $trxDetail->price = $floatPrice;
+                    $trxDetail->subtotal = $floatWeight * $floatPrice;
                     $trxDetail->save();
                 }
                 else{
                     $trxDetail = TransactionDetail::create([
                         'transaction_header_id'     => $trxHeader->id,
-                        'dws_category_id'           => $category,
+                        'dws_category_id'           => $categoryId,
                         'weight'                    => $floatWeight * 1000,
-                        'price'                     => $floatPrice
+                        'price'                     => $floatPrice,
+                        'subtotal'                  => $floatWeight * $floatPrice
                     ]);
                 }
             }
             else{
-                $trxDetail = $trxHeader->transaction_details->where('masaro_category_id', $category)->first();
+                $trxDetail = $trxHeader->transaction_details->where('masaro_category_id', $categoryId)->first();
                 if(!empty($trxDetail)){
                     $trxDetail->weight = $floatWeight * 1000;
-                    $trxDetail->price = $floatPrice;
+//                    $trxDetail->price = $floatWeight;
+                    $trxDetail->subtotal = $floatWeight * $floatPrice;
                     $trxDetail->save();
                 }
                 else{
                     $trxDetail = TransactionDetail::create([
                         'transaction_header_id'     => $trxHeader->id,
-                        'masaro_category_id'        => $category,
+                        'masaro_category_id'        => $categoryId,
                         'weight'                    => $floatWeight * 1000,
-                        'price'                     => $floatPrice
+                        'price'                     => $floatPrice,
+                        'subtotal'                  => $floatWeight * $floatPrice
                     ]);
                 }
             }

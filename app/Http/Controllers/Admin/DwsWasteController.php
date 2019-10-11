@@ -225,5 +225,19 @@ class DwsWasteController extends Controller
         }
     }
 
+    public function getExtendedDwsCategories(Request $request){
+        $term = trim($request->q);
+        $wastes = DwsWasteCategoryData::where('id', '!=', $request->id)
+            ->where('name', 'LIKE', '%' . $term . '%')
+            ->orderBy('name')
+            ->get();
 
+        $formatted_tags = [];
+
+        foreach ($wastes as $waste) {
+            $formatted_tags[] = ['id' => $waste->id. '#'. $waste->price, 'text' => $waste->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
 }

@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $masaro_category_id
  * @property float $weight
  * @property float $price
+ * @property float $subtotal
  * @property string $image_path
  * @property string $note
  *
@@ -37,7 +38,8 @@ class TransactionDetail extends Eloquent
 		'dws_category_id' => 'int',
 		'masaro_category_id' => 'int',
 		'weight' => 'float',
-		'price' => 'float'
+		'price' => 'float',
+        'subtotal' => 'float'
 	];
 
 	protected $fillable = [
@@ -46,6 +48,7 @@ class TransactionDetail extends Eloquent
 		'masaro_category_id',
 		'weight',
 		'price',
+        'subtotal',
         'image_path',
         'note'
 	];
@@ -54,7 +57,8 @@ class TransactionDetail extends Eloquent
 	    'weight_string',
         'weight_kg',
         'weight_kg_string',
-        'price_string'
+        'price_string',
+        'subtotal_string'
     ];
 
     public function getWeightStringAttribute(){
@@ -74,6 +78,11 @@ class TransactionDetail extends Eloquent
 
     public function getPriceStringAttribute(){
         $tmp = number_format($this->attributes['price'], 4, ",", ".");
+        return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
+    }
+
+    public function getSubtotalStringAttribute(){
+        $tmp = number_format($this->attributes['subtotal'], 4, ",", ".");
         return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
     }
 

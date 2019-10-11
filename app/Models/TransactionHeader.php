@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use App\libs\Utilities;
 use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
@@ -130,11 +131,14 @@ class TransactionHeader extends Eloquent
     }
 
     public function getTotalWeightKgStringAttribute(){
-        return number_format($this->attributes['total_weight'] / 1000, 4, ",", ".");
+        $kg = $this->attributes['total_weight'] / 1000;
+        $tmp = number_format($kg, 4, ",", ".");
+        return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
     }
 
     public function getTotalPriceStringAttribute(){
-        return number_format($this->attributes['total_price'], 4, ",", ".");
+        $tmp = number_format($this->attributes['total_price'], 4, ",", ".");
+        return Utilities::removeZeroDigitsFromDecimal($tmp, ',');
     }
 
 	public function admin_user()

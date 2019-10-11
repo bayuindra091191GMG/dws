@@ -303,6 +303,7 @@ Route::get('/select-categories', 'Admin\CategoryController@getCategories')->name
 Route::get('/select-products', 'Admin\ProductController@getProducts')->name('select.products');
 Route::get('/select-admin-users', 'Admin\AdminUserController@getAdminUsers')->name('select.admin-users');
 Route::get('/select-dws-categories', 'Admin\DwsWasteController@getDwsCategories')->name('select.dws-categories');
+Route::get('/select-dws-categories-extended', 'Admin\DwsWasteController@getExtendedDwsCategories')->name('select.dws-categories.extended');
 Route::get('/select-masaro-categories', 'Admin\MasaroWasteController@getMasaroCategories')->name('select.masaro-categories');
 Route::get('/select-wastecollector', 'Admin\WasteCollectorController@getWastecollectors')->name('select.wastecollectors');
 Route::get('/select-wastebank', 'Admin\WasteBankController@getWastebanks')->name('select.wastebanks');
