@@ -305,6 +305,7 @@ Route::get('/select-admin-users', 'Admin\AdminUserController@getAdminUsers')->na
 Route::get('/select-dws-categories', 'Admin\DwsWasteController@getDwsCategories')->name('select.dws-categories');
 Route::get('/select-dws-categories-extended', 'Admin\DwsWasteController@getExtendedDwsCategories')->name('select.dws-categories.extended');
 Route::get('/select-masaro-categories', 'Admin\MasaroWasteController@getMasaroCategories')->name('select.masaro-categories');
+Route::get('/select-masaro-categories-extended', 'Admin\MasaroWasteController@getExtendedMasaroCategories')->name('select.masaro-categories.extended');
 Route::get('/select-wastecollector', 'Admin\WasteCollectorController@getWastecollectors')->name('select.wastecollectors');
 Route::get('/select-wastebank', 'Admin\WasteBankController@getWastebanks')->name('select.wastebanks');
 Route::get('/select-voucher-categories', 'Admin\VoucherCategoryController@getCategories')->name('select.voucher-categories');
