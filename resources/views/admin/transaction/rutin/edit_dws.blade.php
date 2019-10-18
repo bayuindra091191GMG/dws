@@ -94,13 +94,14 @@
                                             <tr id="row_{{ $idx }}">
                                                 <td>
                                                     <select id="category_{{ $idx }}" name="categories[]" class="form-control">
-                                                        @foreach($wasteCategories as $category)
-                                                            <option value="{{ $category->id }}" {{ $detail->dws_category_id == $category->id ? "selected" : "" }}>{{ $category->name }}</option>
-                                                        @endforeach
+                                                        <option value="{{ $detail->dws_category_id. '#'. $detail->dws_waste_category_data->price }}" selected>{{ $detail->dws_waste_category_data->name }}</option>
                                                     </select>
                                                 </td>
                                                 <td><input type="text" id="weight_{{ $idx }}" name="weights[]" class="form-control text-right"/></td>
-                                                <td><input type="text" id="price_{{ $idx }}" name="prices[]" class="form-control text-right"/></td>
+                                                <td class="text-right">
+                                                    <span id="price_str_{{ $idx }}">{{ $detail->price_string }}</span>
+                                                    <input type="hidden" id="price_{{ $idx }}" name="prices[]" value="{{ $detail->price }}"/>
+                                                </td>
                                                 <td class="text-center"><a class="btn btn-danger" style="cursor: pointer;" onclick="deleteRow('{{ $idx }}')"><i class="fas fa-minus-circle text-white"></i></a></td>
                                             </tr>
                                             @php( $idx++ )
@@ -157,32 +158,57 @@
         // Set autonumeric each row
         @php( $numericIdx = 0 )
         @foreach($header->transaction_details as $detail)
-        new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight_kg }}', {
-            minimumValue: '0',
-            maximumValue: '999999',
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0,
-            modifyValueOnWheel: false
-        });
+            new AutoNumeric('#weight_{{ $numericIdx }}', '{{ $detail->weight_kg }}', {
+                minimumValue: '0',
+                maximumValue: '999999',
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 4,
+                modifyValueOnWheel: false,
+                allowDecimalPadding: false,
+            });
 
-        new AutoNumeric('#price_{{ $numericIdx }}', '{{ $detail->price }}', {
-            minimumValue: '0',
-            maximumValue: '9999999999',
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0,
-            modifyValueOnWheel: false
-        });
-                @php( $numericIdx++ )
-                @endforeach
+            $('#category_{{ $numericIdx }}').select2({
+                placeholder: {
+                    id: '-1',
+                    text: ' - Pilih Kategori Sampah DWS - '
+                },
+                width: '100%',
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{{ route('select.dws-categories.extended') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('#category_{{ $numericIdx }}').on('select2:select', function (e) {
+                let data = e.params.data;
+                let arr = data.id.split('#');
+
+                $('#price_{{ $numericIdx }}').val(arr[1]);
+                $('#price_str_{{ $numericIdx}}').html(rupiahFormat(arr[1]));
+            });
+
+            @php( $numericIdx++ )
+        @endforeach
 
         var i = parseInt("{{ $idx }}");
 
         // Add new category entry
         function addRow(){
-            var sbAdd = "<tr id='row_" + i + "'>";
-            sbAdd += "<td><select id='category_" + i + "' name='categories[]' class='form-control'>";
+            let bufferIdx = i;
+            var sbAdd = "<tr id='row_" + bufferIdx + "'>";
+            sbAdd += "<td><select id='category_" + bufferIdx + "' name='categories[]' class='form-control'>";
             sbAdd += "<option value='-1'> - Pilih Kategori - </option>";
 
             if(categories.length > 0){
@@ -192,28 +218,52 @@
             }
 
             sbAdd += "<select/></td>";
-            sbAdd += "<td><input type='text' id='weight_" + i + "' name='weights[]' class='form-control text-right' /></td>";
-            sbAdd += "<td><input type='text' id='price_" + i + "' name='prices[]' class='form-control text-right' /></td>";
-            sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + i + ")'><i class='fas fa-minus-circle text-white'></i></a></td>";
+            sbAdd += "<td><input type='text' id='weight_" + bufferIdx + "' name='weights[]' class='form-control text-right' /></td>";
+            sbAdd += "<td class='text-right'><span id='price_str_" + bufferIdx + "'></span><input type='hidden' id='price_" + bufferIdx + "' name='prices[]'/></td>";
+            sbAdd += "<td class='text-center'><a class='btn btn-danger' style='cursor: pointer;' onclick='deleteRow(" + bufferIdx + ")'><i class='fas fa-minus-circle text-white'></i></a></td>";
 
             $('#category_table').append(sbAdd);
 
-            new AutoNumeric('#weight_' + i, {
+            window['weight_' + bufferIdx] = new AutoNumeric('#weight_' + bufferIdx, {
                 minimumValue: '0',
                 maximumValue: '999999',
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
-                decimalPlaces: 0,
-                modifyValueOnWheel: false
+                decimalPlaces: 4,
+                modifyValueOnWheel: false,
+                allowDecimalPadding: false,
             });
 
-            new AutoNumeric('#price_' + i, {
-                minimumValue: '0',
-                maximumValue: '9999999999',
-                digitGroupSeparator: '.',
-                decimalCharacter: ',',
-                decimalPlaces: 0,
-                modifyValueOnWheel: false
+            $('#category_' + bufferIdx).select2({
+                placeholder: {
+                    id: '-1',
+                    text: ' - Pilih Kategori Sampah DWS - '
+                },
+                width: '100%',
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{{ route('select.dws-categories.extended') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('#category_' + bufferIdx).on('select2:select', function (e) {
+                let data = e.params.data;
+                let arr = data.id.split('#');
+
+                window['weight_' + bufferIdx].set(1);
+                $('#price_' + bufferIdx).val(arr[1]);
+                $('#price_str_' + bufferIdx).html(rupiahFormat(arr[1]));
             });
 
             i++;
@@ -221,6 +271,12 @@
 
         function deleteRow(rowIdx){
             $('#row_' + rowIdx).remove();
+        }
+
+        function rupiahFormat(nStr) {
+            return nStr.toLocaleString(
+                "de-DE"
+            );
         }
 
     </script>

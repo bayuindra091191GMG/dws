@@ -103,7 +103,7 @@
                                                 <td><input type="text" id="weight_{{ $idx }}" name="weights[]" class="form-control text-right"/></td>
                                                 <td class="text-right">
                                                     <span id="price_str_{{ $idx }}">{{ $detail->price_string }}</span>
-                                                    <input type="hidden" id="price_{{ $idx }}" name="prices[]" value="{{ $detail }}"/>
+                                                    <input type="hidden" id="price_{{ $idx }}" name="prices[]" value="{{ $detail->price }}"/>
                                                 </td>
                                                 <td class="text-center"><a class="btn btn-danger" style="cursor: pointer;" onclick="deleteRow('{{ $idx }}')"><i class="fas fa-minus-circle text-white"></i></a></td>
                                             </tr>
@@ -166,8 +166,9 @@
                 maximumValue: '999999',
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
-                decimalPlaces: 0,
-                modifyValueOnWheel: false
+                decimalPlaces: 4,
+                modifyValueOnWheel: false,
+                allowDecimalPadding: false,
             });
 
             $('#category_{{ $numericIdx }}').select2({
@@ -230,8 +231,9 @@
                 maximumValue: '999999',
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
-                decimalPlaces: 0,
-                modifyValueOnWheel: false
+                decimalPlaces: 4,
+                modifyValueOnWheel: false,
+                allowDecimalPadding: false,
             });
 
             $('#category_' + bufferIdx).select2({

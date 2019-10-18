@@ -18,7 +18,7 @@
                             <button type="button" class="btn btn-primary" id="btn-confirm">KONFIRMASI</button>
 
                             @if($header->waste_category_id === 1)
-                                <a href="{{ route('admin.transactions.dws.on_demand.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
+                                <a href="{{ route('admin.transactions.on_demand.dws.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
                             @else
                                 <a href="{{ route('admin.transactions.masaro.on_demand.edit', ['id' => $header->id]) }}" class="btn btn-primary">UBAH</a>
                             @endif
