@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\DwsWasteCategoryData;
+use App\Models\DwsWasteCategoryImage;
 use App\Transformer\DwsWasteCategoryTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,6 +65,7 @@ class DwsWasteController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $validator = Validator::make($request->all(), [
             'name'          => 'required'
         ]);
@@ -100,6 +102,33 @@ class DwsWasteController extends Controller
 
             $dwsWaste->img_path = $filename;
             $dwsWaste->save();
+        }
+        // Save Example Image
+        $exampleImages = $request->file('example_path');
+        if($request->hasFile('example_path')){
+            //image detail
+            for($i=0;$i<sizeof($exampleImages);$i++){
+                $img = Image::make($exampleImages[$i]);
+                $extStr = $img->mime();
+                $ext = explode('/', $extStr, 2);
+
+                $filenameReplace = str_replace(" ","",$dwsWaste->name);
+                $filenameReplace = str_replace("/","",$filenameReplace);
+                $filename = $dwsWaste->id.'_detail-'.$i.'_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+                $img->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save(public_path('storage/admin/dwscategory/'. $filename));
+
+                $newExampleImage = DwsWasteCategoryImage::create([
+                    'dws_waste_category_id' => $dwsWaste->id,
+                    'img_path' => $filename,
+                    'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'created_by'    => $user->id,
+                    'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'updated_by'    => $user->id
+                ]);
+            }
         }
 
         Session::flash('success', 'Success Creating new Dws Waste Category!');
@@ -153,6 +182,7 @@ class DwsWasteController extends Controller
      */
     public function update(Request $request)
     {
+//        dd($request);
         $validator = Validator::make($request->all(), [
             'name'          => 'required'
         ]);
@@ -191,7 +221,46 @@ class DwsWasteController extends Controller
             $img->save(public_path('storage/admin/dwscategory/'. $filename));
             $dwsWaste->img_path = $filename;
             $dwsWaste->save();
+        }
 
+        // Save Example Image
+        $exampleImages = $request->file('example_path');
+//        dd($exampleImages);
+        if($request->hasFile('example_path')){
+            $exampleImageDBs = DwsWasteCategoryImage::where('dws_waste_category_id', $dwsWaste->id)->get();
+
+            //checking example images and delete database record
+            foreach ($exampleImageDBs as $exampleImageDB){
+                if(!empty($exampleImageDB->img_path)){
+                    $oldPath = public_path('storage/admin/dwscategory/'. $exampleImageDB->img_path);
+                    if(file_exists($oldPath)) unlink($oldPath);
+                }
+                $exampleImageDB->delete();
+            }
+
+            //image detail
+            for($i=0;$i<sizeof($exampleImages);$i++){
+                $img = Image::make($exampleImages[$i]);
+                $extStr = $img->mime();
+                $ext = explode('/', $extStr, 2);
+
+                $filenameReplace = str_replace(" ","",$dwsWaste->name);
+                $filenameReplace = str_replace("/","",$filenameReplace);
+                $filename = $dwsWaste->id.'_detail-'.$i.'_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+                $img->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save(public_path('storage/admin/dwscategory/'. $filename));
+
+                $newExampleImage = DwsWasteCategoryImage::create([
+                    'dws_waste_category_id' => $dwsWaste->id,
+                    'img_path' => $filename,
+                    'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'created_by'    => $user->id,
+                    'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'updated_by'    => $user->id
+                ]);
+            }
         }
 
         Session::flash('success', 'Success Updating new Dws Waste Category!');

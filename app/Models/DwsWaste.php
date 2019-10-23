@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 23 Oct 2019 11:39:24 +0700.
+ * Date: Wed, 23 Oct 2019 11:38:55 +0700.
  */
 
 namespace App\Models;
@@ -10,10 +10,10 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class MasaroWaste
+ * Class DwsWaste
  * 
  * @property int $id
- * @property int $masaro_waste_category_datas_id
+ * @property int $dws_waste_category_datas_id
  * @property string $name
  * @property string $description
  * @property string $other_description
@@ -24,20 +24,20 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\AdminUser $admin_user
- * @property \App\Models\MasaroWasteCategoryData $masaro_waste_category_data
+ * @property \App\Models\DwsWasteCategoryData $dws_waste_category_data
  *
  * @package App\Models
  */
-class MasaroWaste extends Eloquent
+class DwsWaste extends Eloquent
 {
 	protected $casts = [
-		'masaro_waste_category_datas_id' => 'int',
+		'dws_waste_category_datas_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
 	protected $fillable = [
-		'masaro_waste_category_datas_id',
+		'dws_waste_category_datas_id',
 		'name',
 		'description',
 		'other_description',
@@ -51,8 +51,8 @@ class MasaroWaste extends Eloquent
 		return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
 	}
 
-	public function masaro_waste_category_data()
+	public function dws_waste_category_data()
 	{
-		return $this->belongsTo(\App\Models\MasaroWasteCategoryData::class, 'masaro_waste_category_datas_id');
+		return $this->belongsTo(\App\Models\DwsWasteCategoryData::class, 'dws_waste_category_datas_id');
 	}
 }

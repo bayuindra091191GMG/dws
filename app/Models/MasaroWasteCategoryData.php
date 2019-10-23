@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 02 Sep 2019 09:27:27 +0700.
+ * Date: Wed, 23 Oct 2019 11:37:04 +0700.
  */
 
 namespace App\Models;
@@ -25,6 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  *
  * @property \App\Models\AdminUser $admin_user
+ * @property \Illuminate\Database\Eloquent\Collection $masaro_waste_category_images
  * @property \Illuminate\Database\Eloquent\Collection $masaro_wastes
  *
  * @package App\Models
@@ -57,6 +58,11 @@ class MasaroWasteCategoryData extends Eloquent
     {
         return $this->belongsTo(\App\Models\AdminUser::class, 'updated_by');
     }
+
+	public function masaro_waste_category_images()
+	{
+		return $this->hasMany(\App\Models\MasaroWasteCategoryImage::class, 'masaro_waste_category_id');
+	}
 
 	public function masaro_wastes()
 	{

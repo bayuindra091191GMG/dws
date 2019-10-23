@@ -30,7 +30,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="name">Name *</label>
+                                                            <label class="form-label" for="name">Nama *</label>
                                                             <input id="name" type="text" class="form-control"
                                                                    name="name" value="{{ $masaroWaste->name }}">
                                                             <input type="hidden" value="{{ $masaroWaste->id }}" name="id">
@@ -41,7 +41,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="price">Price *</label>
+                                                            <label class="form-label" for="price">Harga *</label>
                                                             <input id="price" type="text" class="form-control"
                                                                    name="price" value="{{ $masaroWaste->price }}">
                                                         </div>
@@ -63,9 +63,32 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-float form-group-lg">
                                                         <div class="form-line">
-                                                            <label class="form-label" for="description">Contoh *</label>
-                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $masaroWaste->examples }}</textarea>
-                                                            <div id="editor" style="height: 300px;">{!! $masaroWaste->examples !!}</div>
+                                                            <label class="form-label" for="img_path">Contoh Image (satu atau banyak)</label><br>
+                                                            @foreach($masaroWaste->masaro_waste_category_images as $masaroExampleImage)
+                                                                @if(!empty($masaroExampleImage->img_path))
+                                                                    <img src="{{ asset('storage/admin/masarocategory/'.$masaroExampleImage->img_path) }}" width="100">
+                                                                @endif
+                                                            @endforeach
+                                                            <br>
+                                                            <input type="file" id="example_path" class="file-loading" name="example_path[]" accept="image/*" multiple>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="example">Contoh *</label>
+                                                            <input type="text" name="example" id="example" class="form-control" value="{{ $masaroWaste->examples }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-float form-group-lg">
+                                                        <div class="form-line">
+                                                            <label class="form-label" for="description">Deskripsi</label>
+                                                            <textarea name="description" id="description" class="form-control" rows="10" style="display: none;">{{ $masaroWaste->description }}</textarea>
+                                                            <div id="editor" style="height: 300px;">{!! $masaroWaste->description !!}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,13 +116,25 @@
 @section('styles')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/libs/quill/dist/quill.snow.css') }}">
+    <link href="{{ asset('backend/assets/libs/bootstrap-fileinput/fileinput.css') }}" rel="stylesheet">
 @endsection
 
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="{{ asset('backend/assets/libs/quill/dist/quill.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/libs/bootstrap-fileinput/fileinput.js') }}"></script>
     <script type="text/javascript">
+        $("#main_image").fileinput({
+            allowedFileExtensions: ["jpg", "jpeg", "png"],
+            showUpload: false,
+        });
+
+        $("#example_path").fileinput({
+            allowedFileExtensions: ["jpg", "jpeg", "png"],
+            showUpload: false,
+        });
+
         var quill = new Quill('#editor', {
             theme: 'snow'
         });

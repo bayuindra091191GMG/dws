@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MasaroWasteCategoryData;
+use App\Models\MasaroWasteCategoryImage;
 use App\Transformer\MasaroWasteCategoryTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -99,6 +100,7 @@ class MasaroWasteController extends Controller
             'name'          => $request->input('name'),
             'price'         => $request->input('price'),
             'description'   => $request->input('description'),
+            'examples'   => $request->input('example'),
             'created_at'    => Carbon::now('Asia/Jakarta'),
             'created_by'    => $user->id
         ]);
@@ -120,6 +122,34 @@ class MasaroWasteController extends Controller
 
         $masaroWaste->img_path = $filename;
         $masaroWaste->save();
+
+        // Save Example Image
+        $exampleImages = $request->file('example_path');
+        if($request->hasFile('example_path')){
+            //image detail
+            for($i=0;$i<sizeof($exampleImages);$i++){
+                $img = Image::make($exampleImages[$i]);
+                $extStr = $img->mime();
+                $ext = explode('/', $extStr, 2);
+
+                $filenameReplace = str_replace(" ","",$masaroWaste->name);
+                $filenameReplace = str_replace("/","",$filenameReplace);
+                $filename = $masaroWaste->id.'_detail-'.$i.'_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+                $img->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save(public_path('storage/admin/masarocategory/'. $filename));
+
+                $newExampleImage = MasaroWasteCategoryImage::create([
+                    'masaro_waste_category_id' => $masaroWaste->id,
+                    'img_path' => $filename,
+                    'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'created_by'    => $user->id,
+                    'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'updated_by'    => $user->id
+                ]);
+            }
+        }
 
         Session::flash('success', 'Success Creating new Masaro Waste Category!');
         return redirect()->route('admin.masaro-wastes.index');
@@ -171,6 +201,7 @@ class MasaroWasteController extends Controller
         $masaroWaste->name = $request->input('name');
         $masaroWaste->price = $request->input('price');
         $masaroWaste->description = $request->input('description');
+        $masaroWaste->examples = $request->input('example');
         $masaroWaste->updated_at = Carbon::now('Asia/Jakarta');
         $masaroWaste->updated_by = $user->id;
         $masaroWaste->save();
@@ -194,6 +225,44 @@ class MasaroWasteController extends Controller
             $img->save(public_path('storage/admin/masarocategory/'. $filename));
             $masaroWaste->img_path = $filename;
             $masaroWaste->save();
+        }
+        // Save Example Image
+        $exampleImages = $request->file('example_path');
+        if($request->hasFile('example_path')){
+            $exampleImageDBs = MasaroWasteCategoryImage::where('masaro_waste_category_id', $masaroWaste->id)->get();
+
+            //checking example images and delete database record
+            foreach ($exampleImageDBs as $exampleImageDB){
+                if(!empty($exampleImageDB->img_path)){
+                    $oldPath = public_path('storage/admin/masarocategory/'. $exampleImageDB->img_path);
+                    if(file_exists($oldPath)) unlink($oldPath);
+                }
+                $exampleImageDB->delete();
+            }
+
+            //image detail
+            for($i=0;$i<sizeof($exampleImages);$i++){
+                $img = Image::make($exampleImages[$i]);
+                $extStr = $img->mime();
+                $ext = explode('/', $extStr, 2);
+
+                $filenameReplace = str_replace(" ","",$masaroWaste->name);
+                $filenameReplace = str_replace("/","",$filenameReplace);
+                $filename = $masaroWaste->id.'_detail-'.$i.'_'.$filenameReplace.'_'.Carbon::now('Asia/Jakarta')->format('Ymdhms'). '.'. $ext[1];
+                $img->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save(public_path('storage/admin/masarocategory/'. $filename));
+
+                $newExampleImage = MasaroWasteCategoryImage::create([
+                    'masaro_waste_category_id' => $masaroWaste->id,
+                    'img_path' => $filename,
+                    'created_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'created_by'    => $user->id,
+                    'updated_at'    => Carbon::now('Asia/Jakarta')->toDateTimeString(),
+                    'updated_by'    => $user->id
+                ]);
+            }
         }
 
         Session::flash('success', 'Success Updating new Masaro Waste Category!');
