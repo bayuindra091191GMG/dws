@@ -264,7 +264,7 @@ class TransactionHeaderController extends Controller
 
             if($wasteBanks == null || $wasteBanks->count() == 0){
                 return Response::json([
-                    'message' => "No Nearest Wastebank Detected!",
+                    'message' => "Tidak Ada Wastebank disekitar Anda!",
                 ], 400);
             }
             else{
