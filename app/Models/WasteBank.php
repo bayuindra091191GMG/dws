@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Carbon\Carbon;
 
 /**
  * Class WasteBank
@@ -72,6 +73,14 @@ class WasteBank extends Eloquent
 		'updated_by',
         'type'
 	];
+
+    public function getOpenHoursAttribute(){
+        return Carbon::parse($this->attributes['open_hours'])->format('H:i');
+    }
+
+    public function getClosedHoursAttribute(){
+        return Carbon::parse($this->attributes['closed_hours'])->format('H:i');
+    }
 
 	public function city()
 	{
