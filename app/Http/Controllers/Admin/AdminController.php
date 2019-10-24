@@ -66,6 +66,11 @@ class AdminController extends Controller
                 'SUM(transaction_type_id = 3) as total_on_demand, '.
                 'YEAR(date) as year, '.
                 'MONTHNAME(date) as month'))
+            ->where(function($q) {
+                $q->where('status_id', 10)
+                    ->orWhere('status_id', 9)
+                    ->orWhere('status_id', 18);
+            })
             ->whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
 
         if(!$isSuperAdmin){
