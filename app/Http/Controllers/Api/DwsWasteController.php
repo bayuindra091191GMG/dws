@@ -34,7 +34,7 @@ class DwsWasteController extends Controller
                     'name'=> $dwsWasteDB->name,
                     'examples'=> $dwsWasteDB->examples,
                     'description'=> $dwsWasteDB->description,
-                    'img_path'=> $dwsWasteDB->img_path,
+                    'img_path'=> asset('storage/admin/dwscategory/'. $dwsWasteDB->img_path),
                     'price' => $dwsWasteDB->price,
                     'examples_img' => $exampleImgPaths
                 ]);
