@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta content="initial-scale=1.0" name="viewport">
     <meta content="telephone=no" name="format-detection">
-    <title>Indofund.id - Prospectus</title>
+    <title>Digital Waste Solution</title>
     <style type="text/css">
         .socialLinks {font-size: 6px;}
         .socialLinks a {display: inline-block;}
@@ -73,7 +73,7 @@
                             <td align="left" valign="top">
                                 <!--[if (gte mso 9)|(lte ie 8)]><table align="center" border="0" cellspacing="0" cellpadding="0" width="166"><tr><td align="center" valign="top"><![endif]-->
                                 <div class="mobile-full" style="display: inline-block; max-width: 166px; vertical-align: top; width: 100%;">
-                                    <a href="http://nama-official.com/" style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; color: #f3f3f3; text-decoration: none;" target="_new"><img alt="" border="0" hspace="0" src="http://nama-official.com/images/icons/logo.jpg" style="border: 0px;display: block;width: 100%;max-width: 166px;" vspace="0" width="166"></a>
+                                    <a href="http://dws-solusi.net/" style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; color: #f3f3f3; text-decoration: none;" target="_new"><img alt="" border="0" hspace="0" src="https://dws-solusi.net/public/images/landing/logo2.png" style="border: 0px;display: block;width: 100%;max-width: 166px;" vspace="0" width="166"></a>
                                 </div><!--[if (gte mso 9)|(lte ie 8)]></td></tr></table><![endif]-->
                             </td>
                         </tr>
@@ -96,132 +96,32 @@
                         <tbody>
                         <tr>
                             <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                @if($order->order_status_id == 3)
-                                    <p>Thank you for your purchase!</p>
-                                    <p>
-                                        Hello {{$user->first_name}} {{$user->last_name}},<br>
-                                        Your payment has been received. We are pleased to inform you that your order has been confirmed and is underway.
-                                        Please allow 2-3 business days before dispatch, while we personalize your order.<br>
-                                        You can check the status of your order by logging into your account.
-                                        If you have any questions regarding your order, please contact us at hi@nama-official.com Monday-Friday, 9am-5pm WIB.
-                                        {{--Your order is now secured and will be processed on the 10th of June since our workshop is closed during the Lebaran Holiday.<br>--}}
-
-                                        {{--You can check the status of your order by logging into your account.--}}
-                                        {{--If you have any questions regarding your order, please contact us at hi@nama-official.com Monday-Friday.--}}
-                                    </p>
-                                @elseif($order->order_status_id == 8)
-                                    <p>Thank you for your purchase!</p>
-                                    <p>
-                                        Hello {{$user->first_name}} {{$user->last_name}},<br>
-                                        Thank you for your order!
-                                        {{--Thank you for your order!<br>--}}
-                                        {{--Your order is now secured and will be processed on the 10th of June since our workshop is closed during the Lebaran Holiday.<br>--}}
-
-                                        {{--You can check the status of your order by logging into your account.--}}
-                                        {{--If you have any questions regarding your order, please contact us at hi@nama-official.com Monday-Friday.--}}
-                                    </p>
-                                @elseif($order->order_status_id == 7)
-                                    <p>
-                                        Hello {{$user->first_name}} {{$user->last_name}},<br>
-                                        Thank you for your order!<br>
-                                        You have selected to pay by bank transfer. Please make the payment to the account below:
-                                    </p>
-                                    <p style="font-size: 20px;text-align: center">
-                                        BANK CENTRAL ASIA (BCA)<br>
-                                        006 999 1515  a.n PT. Nama Karya Bersama
-                                    </p>
-                                @endif
+                                <p>Hello, {{$user->first_name}} {{$user->last_name}}!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
+                                <p>Terima kasih telah mendaftar di Aplikasi Go 4.0 Waste yang dikelola oleh Digital Waste Solution.</p>
                             </td>
                         </tr>
                         <tr>
                             <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; line-height: 1.6;">
-                               <span data-mce-style="color: #EAA2AE;" style="color:#EAA2AE;">
-                                    <strong>
-                                        <a data-mce-style="color: #EAA2AE;" href="http://nama-official.com/orders" style="color: #EAA2AE;text-decoration: underline;" title="Order History">
-                                            View Order Status
-                                        </a>
-                                    </strong>
-                                </span>
-                                <h2>ORDER DETAILS</h2>
-                                <h4>Order {{$order->order_number}}</h4>
-                                @if($order->payment_option == "Credit Card")
-                                    <h4>Payment with Credit Card</h4>
-                                @else
-                                    <h4>Payment with Bank Transfer</h4>
-                                @endif
-                                <span>
-                                    {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y')}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; line-height: 1.6;">
-                                <span>
-                                    <h4>SHIPPING ADDRESS</h4>
-                                    {{$user->first_name}} {{$user->last_name}}<br>
-                                    {{$order->address->description}},
-                                    {{$order->address->street}},<br>
-                                    {{$order->address->city->name}}, {{$order->address->province->name}}, {{$order->address->postal_code}}<br>
-                                    {{$order->address->country->name}} <br>
-                                    Tel: {{$user->phone}} <br>
-
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; line-height: 1.6;">
-
-                                <h2>ITEM DESCRIPTION</h2>
-                                <hr style="margin: 0;"/>
-                                <span>
-                                    <table bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="9" class="vb-container halfpad" style="border-collapse: separate;border-spacing: 9px;padding-left: 9px;padding-right: 9px;width: 100%;max-width: 650px;background-color: #fff;" width="650">
-                                        <tbody>
-                                        @foreach($orderProducts as $orderProduct)
-                                            <tr>
-                                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                <img alt="" border="0" hspace="0" src="http://nama-official.com/storage/products/{{$productImages[$orderProduct->product_id]}}"
-                                                     style="border: 0px;display: block;height:100px;" vspace="0">
-                                            </td>
-                                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                <a href="http://nama-official.com/{{$orderProduct->product->slug}}">{{$orderProduct->Product->name}}</a><br>
-                                            </td>
-                                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                {!! $orderProduct->product_info !!}
-                                            </td>
-                                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                x {{$orderProduct->qty}}
-                                            </td>
-                                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                {{env('KURS_IDR')}} {{$orderProduct->grand_total_string}}
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </span>
-                                <hr style="margin: 0;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; line-height: 1.6;">
-
                                 <span>
                                     <table bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="9" class="vb-container halfpad" style="border-collapse: separate;border-spacing: 9px;padding-left: 9px;padding-right: 9px;width: 100%;max-width: 650px;background-color: #fff;" width="650">
                                         <tbody>
                                         <tr>
-                                            <td bgcolor="#FFFFFF" style="text-align: right;background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                Subtotal :
-                                                <br>
-                                                Shipping :
-                                                <br>
-                                                Total :
+                                            <td bgcolor="#FFFFFF" style="text-align: left;background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
+                                                Akun anda sudah dapat digunakan dan sekarang anda dapat melakukan login di aplikasi Go 4.0 Waste menggunakan detail berikut:
                                             </td>
-                                            <td bgcolor="#FFFFFF" style="text-align: right;background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                                {{env('KURS_IDR')}} {{$order->sub_total_string}}
-                                                <br>
-                                                {{env('KURS_IDR')}} {{$order->shipping_charge_string}}
-                                                <br>
-                                                {{env('KURS_IDR')}} {{$order->grand_total_string}}
+                                        </tr>
+                                        <tr>
+                                            <td bgcolor="#FFFFFF" style="text-align: left;background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
+                                                Nama : {{$user->first_name}} {{$user->last_name}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td bgcolor="#FFFFFF" style="text-align: left;background-color: #ffffff; font-size: 12px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
+                                                Email : {{$user->email}}
                                             </td>
                                         </tr>
                                         </tbody>
@@ -230,24 +130,9 @@
                                 <hr style="margin: 0;"/>
                             </td>
                         </tr>
-                        {{--<tr>--}}
-                        {{--<td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; line-height: 1.6;">--}}
-
-                        {{--<h2>PAYMENT INFO</h2>--}}
-                        {{--<hr style="margin: 0;"/>--}}
-                        {{--<span>--}}
-                        {{--<span>{{$order->payment_option}}</span>--}}
-                        {{--</span>--}}
-                        {{--<hr style="margin: 0;"/>--}}
-                        {{--</td>--}}
-                        {{--</tr>--}}
                         <tr>
-                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 10px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
-                                <p>
-                                    Terms & Conditions<br>
-                                    All of our products are custom made to order, therefore please allow 2-3 business days for production. All sales are final.<br>
-                                    <span style="font-weight: bold">>Notes: Availability of your products will only be secured after you confirm your payment.</span>
-                                </p>
+                            <td bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;line-height: 1.6;">
+                                <p>Kami berharap dapat memberikan pengalaman layanan terbaik bagi Pengelolaan Sampah anda.</p>
                             </td>
                         </tr>
                         </tbody>
@@ -270,7 +155,7 @@
                     <table bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="9" class="vb-container halfpad" style="border-collapse: separate;border-spacing: 9px;padding-left: 9px;padding-right: 9px;width: 100%;max-width: 650px;background-color: #fff;" width="650">
                         <tbody>
                         <tr>
-                            <td align="center" bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; text-align: center; line-height: 1.6;"><span>Contact us: hi@nama-official.com</span></td>
+                            <td align="center" bgcolor="#FFFFFF" style="background-color: #ffffff; font-size: 14px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; text-align: center; line-height: 1.6;"><span>Untuk pertanyaan lebih lanjut silakan hubungi: Support@dws-solusi.net</span></td>
                         </tr>
                         </tbody>
                     </table>

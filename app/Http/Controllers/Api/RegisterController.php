@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Resources\UserResource;
 use App\Mail\EmailVerification;
+use App\Mail\UserRegistered;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\Company;
@@ -104,6 +105,9 @@ class RegisterController extends Controller
 //            $emailVerify = new EmailVerification($user, 'api');
 //            Mail::to($user->email)->send($emailVerify);
 
+            $emailUserRegistered = new UserRegistered($user);
+            Mail::to($user->email)->send($emailUserRegistered);
+
             return Response::json([
                 'message' => "Success!"
             ], 200);
@@ -168,6 +172,9 @@ class RegisterController extends Controller
             try{
                 $user = User::where('email', $request->input('email'))->with('company', 'addresses')->first();
 
+                $emailUserRegistered = new UserRegistered($user);
+                Mail::to($user->email)->send($emailUserRegistered);
+
                 return Response::json($user, 200);
             }
             catch(\Exception $ex){
@@ -211,6 +218,10 @@ class RegisterController extends Controller
 
         Session::put("user-data", $user);
         Session::flash('success', 'Your Email Have been Verified, Please Login');
+
+        $emailUserRegistered = new UserRegistered($user);
+        Mail::to($user->email)->send($emailUserRegistered);
+
         return Redirect::route('login');
     }
 
