@@ -234,7 +234,7 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqhoPugts6VVh4RvBuAvkRqBz7yhdpKnQ&libraries=places"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRY4YnVU5GsEyGTYsP9fq9zLo1AqBe1Js&libraries=places"
             type="text/javascript"></script>
 
     <script type="text/javascript">
