@@ -93,10 +93,10 @@ class TransactionHeaderController extends Controller
             $wasteBankPIC = 1;
             $wasteBankTemp = DB::table("waste_banks")
                 ->select("*"
-                    ,DB::raw("6371 * acos(cos(radians(" . $data['latitude'] . ")) 
-                    * cos(radians(waste_banks.latitude)) 
-                    * cos(radians(waste_banks.longitude) - radians(" . $data['longitude'] . ")) 
-                    + sin(radians(" .$data['latitude']. ")) 
+                    ,DB::raw("6371 * acos(cos(radians(" . $data['latitude'] . "))
+                    * cos(radians(waste_banks.latitude))
+                    * cos(radians(waste_banks.longitude) - radians(" . $data['longitude'] . "))
+                    + sin(radians(" .$data['latitude']. "))
                     * sin(radians(waste_banks.latitude))) AS distance"))
                 ->orderBy("distance")
                 ->get();
@@ -248,10 +248,10 @@ class TransactionHeaderController extends Controller
             $wasteBankPIC = 1;
             $wasteBankTemp = DB::table("waste_banks")
                 ->select("*"
-                    ,DB::raw("6371 * acos(cos(radians(" . $data->latitude . ")) 
-                    * cos(radians(waste_banks.latitude)) 
-                    * cos(radians(waste_banks.longitude) - radians(" . $data->longitude . ")) 
-                    + sin(radians(" .$data->latitude. ")) 
+                    ,DB::raw("6371 * acos(cos(radians(" . $data->latitude . "))
+                    * cos(radians(waste_banks.latitude))
+                    * cos(radians(waste_banks.longitude) - radians(" . $data->longitude . "))
+                    + sin(radians(" .$data->latitude. "))
                     * sin(radians(waste_banks.latitude))) AS distance"))
                 ->orderBy("distance")
                 ->get();
@@ -660,7 +660,7 @@ class TransactionHeaderController extends Controller
                 'transaction_no' => $data['transaction_no'],
                 'name' => $userName
             );
-            $isSuccess = FCMNotification::SendNotification($header->created_by_admin, 'browser', $title, $body, $data);
+            $isSuccess = FCMNotification::SendNotification2($header->created_by_admin, 'browser', $title, $body, $data);
         }
 
         return Response::json([
