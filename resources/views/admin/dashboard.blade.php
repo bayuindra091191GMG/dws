@@ -67,7 +67,7 @@
                                         <span class="text-black font-weight-bold">{{ number_format($wasteCategoryItem->get('weight') / 1000, 2, ",", ".") }}</span>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <span class="text-black font-weight-bold">{{ number_format($wasteCategoryItem->get('price'), 0, ",", ".") }}</span>
+                                        <span class="text-black font-weight-bold">{{ number_format($wasteCategoryItem->get('price') / 1000, 2, ",", ".") }}</span>
                                     </div>
                                 </div>
                             </li>

@@ -193,15 +193,20 @@ class AdminController extends Controller
 
                     $totalTransaction = $totalRutin + $totalAntarSendiri + $totalOnDemand;
 
-                    if($isSuperAdmin || $adminWasteBank->waste_category_id === 1){
+                    if($isSuperAdmin){
                         foreach ($dwsCategories as $dwsCategory){
 
                             $categoryData = DB::table('transaction_details')
                                 ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
                                 ->select(DB::raw(
                                     'SUM(transaction_details.weight) as total_category_weight, '.
-                                    'SUM(transaction_details.price) as total_category_price'))
+                                    'SUM(transaction_details.weight) as total_category_price'))
                                 ->where('transaction_details.dws_category_id', $dwsCategory->id)
+                                ->where(function($q) {
+                                    $q->where('transaction_headers.status_id', 10)
+                                        ->orWhere('transaction_headers.status_id', 9)
+                                        ->orWhere('transaction_headers.status_id', 18);
+                                })
                                 ->whereMonth('transaction_headers.date', '=', $monthInt)
                                 ->first();
 
@@ -213,17 +218,19 @@ class AdminController extends Controller
 
                             $wasteCategories->push($wasteCategoryItem);
                         }
-                    }
 
-                    if($isSuperAdmin || $adminWasteBank->waste_category_id === 2){
                         foreach ($masaroCategories as $masaroCategory){
-
                             $categoryData = DB::table('transaction_details')
                                 ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
                                 ->select(DB::raw(
                                     'SUM(transaction_details.weight) as total_category_weight, '.
-                                    'SUM(transaction_details.price) as total_category_price'))
+                                    'SUM(transaction_details.weight) as total_category_price'))
                                 ->where('transaction_details.masaro_category_id', $masaroCategory->id)
+                                ->where(function($q) {
+                                    $q->where('transaction_headers.status_id', 10)
+                                        ->orWhere('transaction_headers.status_id', 9)
+                                        ->orWhere('transaction_headers.status_id', 18);
+                                })
                                 ->whereMonth('transaction_headers.date', '=', $monthInt)
                                 ->first();
 
@@ -234,6 +241,63 @@ class AdminController extends Controller
                             ]);
 
                             $wasteCategories->push($wasteCategoryItem);
+                        }
+                    }
+                    // If admin is not superadmin and assigned to a waste processor
+                    else{
+                        if($adminWasteBank->waste_category_id === 1){
+                            foreach ($dwsCategories as $dwsCategory){
+                                $categoryData = DB::table('transaction_details')
+                                    ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                                    ->select(DB::raw(
+                                        'SUM(transaction_details.weight) as total_category_weight, '.
+                                        'SUM(transaction_details.weight) as total_category_price'))
+                                    ->where('transaction_details.dws_category_id', $dwsCategory->id)
+                                    ->where('transaction_headers.waste_bank_id', $adminWasteBankId)
+                                    ->where(function($q) {
+                                        $q->where('transaction_headers.status_id', 10)
+                                            ->orWhere('transaction_headers.status_id', 9)
+                                            ->orWhere('transaction_headers.status_id', 18);
+                                    })
+                                    ->whereMonth('transaction_headers.date', '=', $monthInt)
+                                    ->first();
+
+                                $wasteCategoryItem = collect([
+                                    'name'      => $dwsCategory->name,
+                                    'weight'    => $categoryData->total_category_weight ?? 0,
+                                    'price'     => $categoryData->total_category_price ?? 0,
+                                ]);
+
+                                $wasteCategories->push($wasteCategoryItem);
+                            }
+                        }
+
+                        if($adminWasteBank->waste_category_id === 2){
+                            foreach ($masaroCategories as $masaroCategory){
+
+                                $categoryData = DB::table('transaction_details')
+                                    ->join('transaction_headers', 'transaction_details.transaction_header_id', '=', 'transaction_headers.id')
+                                    ->select(DB::raw(
+                                        'SUM(transaction_details.weight) as total_category_weight, '.
+                                        'SUM(transaction_details.weight) as total_category_price'))
+                                    ->where('transaction_details.masaro_category_id', $masaroCategory->id)
+                                    ->where('transaction_headers.waste_bank_id', $adminWasteBankId)
+                                    ->where(function($q) {
+                                        $q->where('transaction_headers.status_id', 10)
+                                            ->orWhere('transaction_headers.status_id', 9)
+                                            ->orWhere('transaction_headers.status_id', 18);
+                                    })
+                                    ->whereMonth('transaction_headers.date', '=', $monthInt)
+                                    ->first();
+
+                                $wasteCategoryItem = collect([
+                                    'name'      => $masaroCategory->name,
+                                    'weight'    => $categoryData->total_category_weight ?? 0,
+                                    'price'     => $categoryData->total_category_price ?? 0,
+                                ]);
+
+                                $wasteCategories->push($wasteCategoryItem);
+                            }
                         }
                     }
                 }
