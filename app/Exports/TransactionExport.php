@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\TransactionHeader;
+use App\Models\WasteBank;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -43,8 +44,7 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
      */
     public function view(): View
     {
-        error_log($this->transactionType. '_'. $this->wasteCategory. '_'. $this->wasteBankId);
-
+        $wasteBank = WasteBank::find($this->wasteBankId);
         $transactions = TransactionHeader::whereBetween('date', array($this->dateStart, $this->dateEnd));
 
         $transactionTypeId = $this->transactionType;
@@ -66,17 +66,20 @@ class TransactionExport implements FromView, ShouldAutoSize, WithStrictNullCompa
         $totalWeight = $transactions->sum('total_weight');
         $totalWeight = $totalWeight / 1000;
 
-        $totalPrice = $transactions->sum('total_price');
-
-        error_log($transactions->count());
+        if($wasteBank->waste_category_id === 1){
+            $totalPrice = $transactions->sum('total_weight') / 1000;
+        }
+        else{
+            $totalPrice = $transactions->sum('total_price');
+        }
 
         $this->counter = $transactions->count() * 2;
 
         $data = [
-            'trxHeaders'    => $transactions,
-            'totalWeight'   => $totalWeight,
-            'totalPrice'    => $totalPrice
-
+            'trxHeaders'        => $transactions,
+            'totalWeight'       => $totalWeight,
+            'totalPrice'        => $totalPrice,
+            'wasteCategoryId'   => $wasteBank->waste_category_id
         ];
 
         return view('documents.transactions.transaction_excel', $data);
