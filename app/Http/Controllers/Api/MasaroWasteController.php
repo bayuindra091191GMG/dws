@@ -27,7 +27,7 @@ class MasaroWasteController extends Controller
                     'name'=> $masaroWasteDB->name,
                     'examples'=> $masaroWasteDB->examples,
                     'description'=> $masaroWasteDB->description,
-                    'img_path'=> asset('storage/admin/dwscategory/'. $masaroWasteDB->img_path),
+                    'img_path'=> asset('storage/admin/masarocategory/'. $masaroWasteDB->img_path),
                     'price' => $masaroWasteDB->price,
                     'examples_img' => $exampleImgPaths
                 ]);
